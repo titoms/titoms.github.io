@@ -21,7 +21,7 @@ const Home = () => {
             <img 
               src='./threejs.png'
               alt='Logo'
-              className='w-8 h-8 object-contain'
+              className='logo w-8 h-8 object-contain'
             />
           </motion.header>
 
