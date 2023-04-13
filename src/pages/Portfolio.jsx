@@ -3,7 +3,21 @@ import {AnimatePresence, motion} from 'framer-motion'
 import { useSnapshot } from 'valtio'
 import state from '../store';
 import {fadeAnimation, slideAnimation} from '../config/motion'
-import {CustomButton} from '../components'
+import {CustomButton, Hero, Who, Works} from '../components'
+import styled from 'styled-components'
+
+const Container = styled.div`
+  height: 100vh;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  overflow-y: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar{
+    display:none;
+  }
+  color: white;
+  background: url("./img/bg.jpg");
+`
 
 const Portfolio = () => {
   const snap = useSnapshot(state);
@@ -16,8 +30,13 @@ const Portfolio = () => {
             className="absolute top-0 left-0 z-10"
             {...slideAnimation('left')}
           >
-            Portfolio
           </motion.div>
+
+          <Container>
+            <Hero />
+            <Who />
+            <Works />
+          </Container>
 
           <motion.div className="absolute z-10 top-5 right-5" {...fadeAnimation}>
             <CustomButton 

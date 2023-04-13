@@ -1,7 +1,11 @@
-import CustomButton from "./CustomButton";
-import Tab from "./Tab";
+import CustomButton from "./CustomButton"
+import Hero from "./Hero"
+import Who from "./Who"
+import Works from "./Works"
 
 export {
-    Tab,
-    CustomButton
+    CustomButton,
+    Hero,
+    Who,
+    Works,
 };
