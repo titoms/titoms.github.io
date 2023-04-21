@@ -15,10 +15,10 @@ import {
   git,
   figma,
   docker,
-  meta,
-  starbucks,
-  tesla,
-  shopify,
+  pano,
+  eventmaker,
+  enovee,
+  dsp,
   carrent,
   jobit,
   tripguide,
@@ -118,7 +118,7 @@ const experiences = [
   {
     title: "Front End Developer",
     company_name: "EventMaker",
-    icon: starbucks,
+    icon: eventmaker,
     iconBg: "#383E56",
     date: "Jan 2016 - Dec 2016",
     points: [
@@ -131,7 +131,7 @@ const experiences = [
   {
     title: "Back End Developer",
     company_name: "Enovee",
-    icon: tesla,
+    icon: enovee,
     iconBg: "#E6DEDD",
     date: "Jan 2017 - Dec 2017",
     points: [
@@ -144,7 +144,7 @@ const experiences = [
   {
     title: "Back End  Developer",
     company_name: "Panorabanques",
-    icon: shopify,
+    icon: pano,
     iconBg: "#383E56",
     date: "Jan 2018 - Dec 2018",
     points: [
@@ -156,7 +156,7 @@ const experiences = [
   {
     title: "Full Stack Developer",
     company_name: "Digital School of Paris",
-    icon: meta,
+    icon: dsp,
     iconBg: "#E6DEDD",
     date: "Jan 2018 - Dec 2018",
     points: [
@@ -169,7 +169,7 @@ const experiences = [
   {
     title: "Web Programming Teacher",
     company_name: "Freelance",
-    icon: meta,
+    icon: dsp,
     iconBg: "#E6DEDD",
     date: "Jan 2019 - today",
     points: [
