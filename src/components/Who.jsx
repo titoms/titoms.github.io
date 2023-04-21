@@ -1,18 +1,10 @@
 import React from 'react'
-import styled from 'styled-components'
 import {Tilt} from 'react-tilt'
 import {motion} from 'framer-motion'
 import {styles} from '../styles'
 import {services} from '../config/constants'
 import {fadeIn, textVariant} from '../config/motion'
 import {SectionWrapper} from '../hoc'
-
-const Section = styled.div`
-    height: 100vh;
-    padding: 1em;
-    color: white;
-    scroll-snap-align: center;
-`
 
 const ServiceCard = ({index, title, icon}) => {
   return (
@@ -40,7 +32,7 @@ const ServiceCard = ({index, title, icon}) => {
 
 const Who = () => {
   return (
-    <Section>
+    <section>
         <motion.div variants={textVariant()}>
           <p className={styles.sectionSubText}>Introduction</p>
           <h2 className={styles.sectionHeadText}>Overview.</h2>
@@ -67,7 +59,7 @@ const Who = () => {
             <ServiceCard key={service.title} index={index} {...service} />
           ))}
         </div>
-    </Section>
+    </section>
   )
 }
 
