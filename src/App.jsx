@@ -1,7 +1,7 @@
 import { BrowserRouter } from 'react-router-dom'
 import { Header, Hero, Contact, Who, Works, Experience, StarCanvas } from './components'
 
-function App() {
+const App = () => {
   return (
       <BrowserRouter>
         <div className="relative z-0 bg-primary">
