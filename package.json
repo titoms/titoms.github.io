@@ -9,8 +9,10 @@
     "preview": "vite preview --port 80"
   },
   "dependencies": {
+    "@emailjs/browser": "^3.11.0",
     "@react-three/drei": "^9.64.0",
     "@react-three/fiber": "^8.12.0",
+    "emailjs": "^4.0.1",
     "framer-motion": "^10.11.3",
     "maath": "^0.5.3",
     "react": "^18.2.0",
