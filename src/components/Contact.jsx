@@ -33,7 +33,7 @@ const Contact = () => {
         to_email: 'christophe.crognier@gmail.com',
         message: form.message
       },
-      "n8b9PifSgQPnNXI3_"
+      process.env.REACT_APP_EMAILJS
     )
     .then(() => {
       setLoading(false);
