@@ -33,6 +33,7 @@ const ProjectCard = ({
               src={image}
               alt='project_image'
               className='w-full h-full object-cover rounded-2xl'
+              loading="lazy"
             />
           ) : (
             <div className='w-full h-full bg-black-200 flex items-center justify-center rounded-2xl'>
@@ -97,83 +98,90 @@ const ProjectModal = ({ project, onClose }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
+      className="fixed inset-0 z-[1000] flex items-center justify-center p-4 sm:p-6 bg-black/90 backdrop-blur-md overflow-hidden"
       onClick={onClose}
     >
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="relative bg-tertiary w-full max-w-6xl max-h-[95vh] overflow-y-auto rounded-3xl flex flex-col md:flex-row gap-8 p-6 md:p-10 shadow-2xl custom-scrollbar"
+        className="relative bg-tertiary w-full max-w-6xl max-h-[90vh] overflow-hidden rounded-3xl flex flex-col md:flex-row shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 w-10 h-10 bg-black-200 rounded-full flex items-center justify-center hover:bg-black-100 transition-all hover:rotate-90 z-20"
+          className="absolute top-4 right-4 w-10 h-10 bg-black/50 hover:bg-black/80 rounded-full flex items-center justify-center transition-all hover:rotate-90 z-30 border border-white/10"
         >
-          <img src={close} alt="close" className="w-6 h-6 object-contain" />
+          <img src={close} alt="close" className="w-5 h-5 object-contain" />
         </button>
 
-        <div className="flex-[2] flex flex-col gap-6">
-          <div 
-            className="w-full h-[300px] md:h-[500px] rounded-2xl overflow-hidden bg-black-200 border border-white/5 relative"
-          >
+        <div className="md:w-3/5 w-full flex flex-col bg-black-200/50">
+          <div className="w-full h-[250px] sm:h-[350px] md:h-full min-h-[250px] overflow-hidden relative border-b md:border-b-0 md:border-r border-white/5">
             {activeImg ? (
                 <img 
                     src={activeImg} 
                     alt={project.name} 
-                    className="w-full h-full object-cover bg-black-100" 
+                    className="w-full h-full object-cover" 
                 />
             ) : (
                 <div className="w-full h-full flex items-center justify-center text-secondary italic text-lg">No preview available</div>
             )}
           </div>
           
-          <div className="flex flex-wrap gap-3 pb-2 custom-scrollbar overflow-x-auto">
-              {project.images?.map((img, idx) => (
-              <div 
-                  key={idx} 
-                  className={`w-28 h-20 flex-shrink-0 rounded-xl overflow-hidden cursor-pointer border-2 transition-all ${activeImg === img ? 'border-[#915eff] scale-105' : 'border-transparent opacity-60 hover:opacity-100'}`}
-                  onClick={() => setActiveImg(img)}
-              >
-                  <img src={img} alt={`${project.name}-${idx}`} className="w-full h-full object-cover" />
-              </div>
-              ))}
-          </div>
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent pointer-events-none md:block hidden" />
         </div>
 
-        <div className="flex-1 flex flex-col">
-          <h2 className="text-white font-bold text-[32px] md:text-[45px] leading-tight">{project.name}</h2>
-          
-          <div className="mt-4 flex flex-wrap gap-2">
-            {project.tags.map((tag) => (
-              <span key={tag.name} className={`text-[15px] font-medium px-3 py-1 bg-black-200 rounded-lg ${tag.color}`}>#{tag.name}</span>
-            ))}
+        <div className="md:w-2/5 w-full flex flex-col p-6 md:p-10 overflow-y-auto custom-scrollbar">
+          <div className="flex-1">
+            <h2 className="text-white font-bold text-[28px] md:text-[40px] leading-tight mb-4">{project.name}</h2>
+            
+            <div className="flex flex-wrap gap-2 mb-6">
+              {project.tags.map((tag) => (
+                <span key={tag.name} className={`text-[13px] font-medium px-2 py-1 bg-white/5 border border-white/10 rounded-md ${tag.color}`}>#{tag.name}</span>
+              ))}
+            </div>
+
+            <div className="mt-2">
+              <h4 className="text-white/50 uppercase tracking-wider text-[12px] font-semibold mb-2">Overview</h4>
+              <p className="text-secondary text-[15px] md:text-[16px] leading-[1.6] font-light">
+                {project.longDescription || project.description}
+              </p>
+            </div>
+
+            {project.images?.length > 1 && (
+              <div className="mt-8">
+                <h4 className="text-white/50 uppercase tracking-wider text-[12px] font-semibold mb-3">Gallery</h4>
+                <div className="flex flex-wrap gap-2">
+                    {project.images?.map((img, idx) => (
+                    <div 
+                        key={idx} 
+                        className={`w-20 h-14 flex-shrink-0 rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${activeImg === img ? 'border-[#915eff]' : 'border-transparent opacity-50 hover:opacity-100'}`}
+                        onClick={() => setActiveImg(img)}
+                    >
+                        <img src={img} alt={`${project.name}-${idx}`} className="w-full h-full object-cover" loading="lazy" />
+                    </div>
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="mt-8 flex-1">
-            <h4 className="text-white font-bold text-[22px] border-b border-white/10 pb-2">Overview</h4>
-            <p className="mt-4 text-secondary text-[17px] leading-[1.8] font-light">
-              {project.longDescription || project.description}
-            </p>
-          </div>
-
-          <div className="mt-10 pt-6 border-t border-white/10 flex flex-wrap gap-4 items-center justify-between">
+          <div className="mt-10 flex flex-col sm:flex-row gap-3 pt-6 border-t border-white/10">
             <button
               onClick={() => window.open(project.source_code_link, "_blank")}
-              className="bg-black-200 py-3 px-8 outline-none w-fit text-white font-bold shadow-md shadow-primary rounded-2xl flex items-center gap-3 hover:bg-black-100 transition-all transform hover:-translate-y-1 active:scale-95"
+              className="flex-1 bg-white/5 border border-white/10 py-3 px-6 outline-none text-white font-semibold rounded-xl flex items-center justify-center gap-2 hover:bg-white/10 transition-all active:scale-95"
             >
-              <img src={github} className="w-6 h-6 object-contain" />
-              Source Code
+              <img src={github} className="w-5 h-5 object-contain opacity-70" />
+              Code
             </button>
 
             {project.live_link && (
                 <button
                     onClick={() => window.open(project.live_link, "_blank")}
-                    className="bg-[#915eff] py-3 px-10 outline-none w-fit text-white font-bold shadow-md shadow-primary rounded-2xl flex items-center gap-3 hover:bg-[#804dee] transition-all transform hover:-translate-y-1 active:scale-95"
+                    className="flex-[1.5] bg-[#915eff] py-3 px-6 outline-none text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-[#804dee] transition-all shadow-lg shadow-[#915eff]/20 active:scale-95 text-center"
                 >
-                    Try it !
-                    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+                    Live Demo
+                    <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
                 </button>
             )}
           </div>

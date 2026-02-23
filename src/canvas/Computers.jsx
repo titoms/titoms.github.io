@@ -3,8 +3,13 @@ import {Canvas} from '@react-three/fiber';
 import {OrbitControls, Preload, useGLTF } from '@react-three/drei'
 import CanvasLoader from '../components/Loader';
 
+useGLTF.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/')
+
+// Set up draco decoder
+useGLTF.preload('./desktop_pc/sceneCompressed.gltf')
+
 const Computers = ({ isMobile }) => {
-  const computer = useGLTF('./desktop_pc/scene.gltf')
+  const computer = useGLTF('./desktop_pc/sceneCompressed.gltf')
 
   return (
     <mesh>
@@ -63,6 +68,8 @@ const ComputersCanvas = () => {
           enableZoom={false}
           maxPolarAngle={Math.PI / 2} 
           minPolarAngle={Math.PI / 2} 
+          autoRotate={true}
+          autoRotateSpeed={0.5}
         />
         <Computers isMobile={isMobile}/>
       </Suspense>

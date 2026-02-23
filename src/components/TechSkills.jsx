@@ -29,6 +29,7 @@ const SkillBadge = ({ icon, name, index }) => {
           src={icon}
           alt={name}
           className="w-full h-full object-contain"
+          loading="lazy"
         />
       </motion.div>
       

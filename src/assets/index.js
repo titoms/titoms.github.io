@@ -1,51 +1,47 @@
 import logo from "./logo.svg";
-import mainlogo from "./mainlogo.png";
-import backend from "./backend.png";
-import creator from "./creator.png";
-import mobile from "./mobile.png";
-import web from "./web.png";
-import github from "./github.png";
+import mainlogo from "./mainlogo.webp";
+import backend from "./backend.webp";
+import creator from "./creator.webp";
+import mobile from "./mobile.webp";
+import web from "./web.webp";
+import github from "./github.webp";
 import menu from "./menu.svg";
 import close from "./close.svg";
 
-import css from "./tech/css.png";
-import docker from "./tech/docker.png";
-import figma from "./tech/figma.png";
-import git from "./tech/git.png";
-import html from "./tech/html.png";
-import javascript from "./tech/javascript.png";
-import mongodb from "./tech/mongodb.png";
-import nodejs from "./tech/nodejs.png";
-import reactjs from "./tech/reactjs.png";
-import redux from "./tech/redux.png";
-import tailwind from "./tech/tailwind.png";
-import typescript from "./tech/typescript.png";
+import css from "./tech/css.webp";
+import docker from "./tech/docker.webp";
+import figma from "./tech/figma.webp";
+import git from "./tech/git.webp";
+import html from "./tech/html.webp";
+import javascript from "./tech/javascript.webp";
+import mongodb from "./tech/mongodb.webp";
+import nodejs from "./tech/nodejs.webp";
+import reactjs from "./tech/reactjs.webp";
+import redux from "./tech/redux.webp";
+import tailwind from "./tech/tailwind.webp";
+import typescript from "./tech/typescript.webp";
 import threejs from "./tech/threejs.svg";
 
-import enovee from "./company/enovee.png";
-import dsp from "./company/dsp.png";
-import pano from "./company/pano.png";
-import eventmaker from "./company/eventmaker.png";
-
-import carrent from "./carrent.png";
-import jobit from "./jobit.png";
-import tripguide from "./tripguide.png";
+import enovee from "./company/enovee.webp";
+import dsp from "./company/dsp.webp";
+import pano from "./company/pano.webp";
+import eventmaker from "./company/eventmaker.webp";
 
 // Edumation
-import edumation from "./projects/Edumation/Dashboard Page.png";
-import edumation_login from "./projects/Edumation/Login Page.png";
-import edumation_schedule from "./projects/Edumation/Schedule Page.png";
-import edumation_profile from "./projects/Edumation/Profile Page.png";
+import edumation from "./projects/Edumation/Dashboard Page.webp";
+import edumation_login from "./projects/Edumation/Login Page.webp";
+import edumation_schedule from "./projects/Edumation/Schedule Page.webp";
+import edumation_profile from "./projects/Edumation/Profile Page.webp";
 
 // Railguessr
-import railguessr from "./projects/Railguessr/railguessr desktop.png";
-import railguessr_home from "./projects/Railguessr/Home Page.png";
-import railguessr_daily from "./projects/Railguessr/Daily Station Page.png";
+import railguessr from "./projects/Railguessr/railguessr desktop.webp";
+import railguessr_home from "./projects/Railguessr/Home Page.webp";
+import railguessr_daily from "./projects/Railguessr/Daily Station Page.webp";
 
 // Fuchibol Hub
-import fuchibol from "./projects/Fuchibol Hub/Home Page.png";
-import fuchibol_prediction from "./projects/Fuchibol Hub/Final Quarters Prediction Page.png";
-import fuchibol_games from "./projects/Fuchibol Hub/Games Page.png";
+import fuchibol from "./projects/Fuchibol Hub/Home Page.webp";
+import fuchibol_prediction from "./projects/Fuchibol Hub/Final Quarters Prediction Page.webp";
+import fuchibol_games from "./projects/Fuchibol Hub/Games Page.webp";
 
 export {
   logo,
@@ -73,9 +69,6 @@ export {
   pano,
   eventmaker,
   enovee,
-  carrent,
-  jobit,
-  tripguide,
   edumation,
   edumation_login,
   edumation_schedule,

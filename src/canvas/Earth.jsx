@@ -3,8 +3,10 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Preload, useGLTF } from '@react-three/drei'
 import CanvasLoader from '../components/Loader'
 
+useGLTF.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/')
+
 const Earth = () => {
-  const earth = useGLTF('./planet/scene.gltf')
+  const earth = useGLTF('./planet/sceneCompressed.gltf')
 
   return (
     <primitive
