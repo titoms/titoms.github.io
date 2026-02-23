@@ -1,4 +1,5 @@
 import logo from "./logo.svg";
+import mainlogo from "./mainlogo.png";
 import backend from "./backend.png";
 import creator from "./creator.png";
 import mobile from "./mobile.png";
@@ -30,6 +31,22 @@ import carrent from "./carrent.png";
 import jobit from "./jobit.png";
 import tripguide from "./tripguide.png";
 
+// Edumation
+import edumation from "./projects/Edumation/Dashboard Page.png";
+import edumation_login from "./projects/Edumation/Login Page.png";
+import edumation_schedule from "./projects/Edumation/Schedule Page.png";
+import edumation_profile from "./projects/Edumation/Profile Page.png";
+
+// Railguessr
+import railguessr from "./projects/Railguessr/railguessr desktop.png";
+import railguessr_home from "./projects/Railguessr/Home Page.png";
+import railguessr_daily from "./projects/Railguessr/Daily Station Page.png";
+
+// Fuchibol Hub
+import fuchibol from "./projects/Fuchibol Hub/Home Page.png";
+import fuchibol_prediction from "./projects/Fuchibol Hub/Final Quarters Prediction Page.png";
+import fuchibol_games from "./projects/Fuchibol Hub/Games Page.png";
+
 export {
   logo,
   backend,
@@ -59,4 +76,15 @@ export {
   carrent,
   jobit,
   tripguide,
+  edumation,
+  edumation_login,
+  edumation_schedule,
+  edumation_profile,
+  railguessr,
+  railguessr_home,
+  railguessr_daily,
+  fuchibol,
+  fuchibol_prediction,
+  fuchibol_games,
+  mainlogo,
 };

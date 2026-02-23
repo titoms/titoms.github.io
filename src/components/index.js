@@ -5,7 +5,9 @@ import Works from "./Works"
 import Contact from "./Contact"
 import Header from "./Header"
 import Experience from "./Experience"
+import Projects from "./Projects"
 import Stars from "./Stars"
+import TechSkills from "./TechSkills"
 
 export {
     CustomButton,
@@ -15,5 +17,7 @@ export {
     Contact,
     Header,
     Experience,
-    Stars
+    Projects,
+    Stars,
+    TechSkills
 };

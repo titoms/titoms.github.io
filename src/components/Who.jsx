@@ -41,17 +41,9 @@ const Who = () => {
           variants={fadeIn('', '', 0.1, 1)}
           className="mt-8 text-secondary text-[17px] max-w-3xl leading-[30px]"
         >
-          Hey! I'm a skilled Full Stack Web Developer specializing in ReactJS and NodeJS, 
-          and a Programming Teacher for Bachelor's and Master's degrees.<br /> 
-          I possess both the technical expertise and pedagogical experience 
-          required to develop and teach complex web applications that deliver 
-          outstanding user experiences. <br /> 
-          My portfolio showcases my proficiency 
-          in front-end and back-end development using these popular frameworks, 
-          as well as other programming languages, frameworks, and platforms.<br />
-          I am committed to delivering high-quality, scalable, and user-friendly 
-          web solutions that meet the needs of my clients, while also sharing my 
-          knowledge and passion for programming with the next generation of developers.
+          I'm a Full-Stack Web Developer with experience building scalable web applications using React, Node.js and modern DevOps practices.
+          With a background both in professional software development and higher-education teaching (+7000 hours of training), I bring a strong ability to structure complex ideas, design clear architectures, and communicate efficiently with technical and non-technical stakeholders.
+          I specialize in developing production-ready platforms, interactive applications, and AI-assisted systems, combining robust engineering principles with modern development workflows to deliver reliable and maintainable products.
         </motion.p>
 
         <div className="mt-20 flex justify-center items-center flex-wrap gap-10">

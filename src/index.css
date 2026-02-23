@@ -114,7 +114,24 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* canvas- styles */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #1d1836;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #804dee;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #915eff;
+}
+
 .canvas-loader {
   font-size: 10px;
   width: 1em;
