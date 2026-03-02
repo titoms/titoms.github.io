@@ -4,8 +4,7 @@ import { styles } from '../styles'
 import { EarthCanvas } from '../canvas'
 import { SectionWrapper } from '../hoc'
 import { slideIn } from '../config/motion'
-
-const CALENDLY_URL = "https://calendly.com/christophe-crognier/30min";
+import { CALENDLY_URL } from '../config/constants'
 
 const Contact = () => {
   return (

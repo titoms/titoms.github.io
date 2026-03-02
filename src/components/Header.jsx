@@ -2,9 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { styles } from '../styles'
 import { logo, menu, close } from '../assets'
-import { navLinks } from '../config/constants'
-
-const CALENDLY_URL = "https://calendly.com/christophe-crognier/30min";
+import { navLinks, CALENDLY_URL } from '../config/constants'
 
 const Header = () => {
   const [active, setActive] = useState("");

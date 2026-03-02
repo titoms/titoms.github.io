@@ -135,7 +135,7 @@ const Projects = () => {
       <style>{`
         @keyframes loop-scroll {
           from { transform: translateX(0); }
-          to { transform: translateX(calc(-360px * ${projects.length} - 1.75rem * ${projects.length})); }
+          to { transform: translateX(calc(-360px * ${projects.length} - 1.75rem * ${projects.length - 1})); }
         }
         .animate-loop-scroll {
           animation: loop-scroll 40s linear infinite;

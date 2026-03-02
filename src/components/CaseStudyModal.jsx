@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { close, github } from "../assets";
-
-const CALENDLY_URL = "https://calendly.com/christophe-crognier/30min";
+import { CALENDLY_URL } from "../config/constants";
 
 const SectionTitle = ({ label }) => (
   <h4 className="text-[#915eff] uppercase tracking-widest text-[11px] font-semibold mb-3">
@@ -12,11 +11,19 @@ const SectionTitle = ({ label }) => (
 
 const CaseStudyModal = ({ project, onClose }) => {
   useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "auto";
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") onClose();
     };
-  }, []);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
 
   if (!project) return null;
 

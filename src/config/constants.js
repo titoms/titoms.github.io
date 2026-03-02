@@ -421,4 +421,5 @@ const projects = [
   },
 ];
 
+export const CALENDLY_URL = "https://calendly.com/christophe-crognier/30min";
 export { services, technologies, experiences, testimonials, projects };
