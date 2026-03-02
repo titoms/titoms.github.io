@@ -131,6 +131,13 @@
   background: #915eff;
 }
 
+/* Calendly iframe — remove default border and white padding */
+.calendly-inline-widget,
+.calendly-inline-widget iframe {
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
 .canvas-loader {
   font-size: 10px;
   width: 1em;

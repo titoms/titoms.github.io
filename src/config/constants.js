@@ -31,6 +31,11 @@ import {
   fuchibol,
   fuchibol_prediction,
   fuchibol_games,
+  singuessr_home,
+  singuessr_blindtest,
+  singuessr_create,
+  singuessr_create2,
+  singuessr_coverdle,
 } from "../assets";
 
 export const navLinks = [
@@ -238,39 +243,38 @@ const testimonials = [
 
 const projects = [
   {
-    name: "Edumation",
+    name: "EduMation",
     slug: "edumation",
     description:
-      "Edumation is a comprehensive education management platform focused on solving complex scheduling and administrative challenges.",
+      "EduMation is an enterprise-grade School Management System (SMS) designed to automate the administrative overhead of coordinating students, teachers, and pedagogical programs.",
     longDescription:
-      "Edumation is a comprehensive education management platform focused on solving complex scheduling and administrative challenges. The application enables institutions to manage schools, teachers, students, courses, programs and quizzes while automatically generating optimized schedules based on availability constraints. Designed with scalability in mind, the project aims to progressively evolve into a complete ecosystem for professional training and educational operations.",
+      "EduMation is an enterprise-ready education management platform focusing on solving complex scheduling and administrative challenges through automation. The platform centralizes student, teacher, and course management within a multi-tenant architecture, while its core feature — an intelligent, constraint-aware scheduling engine — automates the generation of weekly schedules by integrating internal requirements with external calendar availability (Google, Microsoft, ICS).",
     caseStudy: {
       tagline: "Automated scheduling for education institutions — from weeks to minutes.",
       problem:
-        "Education institutions manually build complex weekly schedules across dozens of teachers, rooms, and courses. The process takes weeks, introduces conflicts that disrupt entire semesters, and needs to be redone whenever a teacher or room becomes unavailable. No affordable off-the-shelf tool handles multi-program constraint scheduling at this level of granularity.",
+        "Education institutions face a 'scheduling nightmare': manually coordinating dozens of teachers, student groups, and courses across limited time slots while avoiding conflicts with external personal commitments. This manual process typically takes days, involves high cognitive load, and is brittle — any single change can cascade into multiple conflicts.",
       context:
-        "Built for professional training organizations managing multiple schools, programs, and student cohorts. The platform needed to handle constraint-based scheduling (teacher availability, room capacity, course prerequisites) at scale while remaining accessible to non-technical administrators.",
+        "Built for professional training organizations managing multiple schools, programs, and student cohorts. The platform needed to handle complex constraint-based scheduling (teacher availability, room capacity, course dependencies) at scale while ensuring strict data isolation between institutions.",
       technicalChallenges: [
-        "Designing a constraint satisfaction scheduling algorithm that handles competing constraints (teacher availability, room capacity, course dependencies) without exponential runtime.",
-        "Building real-time conflict detection across overlapping scheduling entities — a single change can cascade through hundreds of slots.",
-        "Multi-tenant architecture where each institution’s data must be strictly isolated while sharing infrastructure.",
-        "Role-based access control spanning 4 user types (admin, teacher, student, institution manager) with different data visibility per role.",
-        "Performance under bulk schedule generation for institutions with 50+ teachers and 200+ weekly slots.",
+        "Solving the NP-Hard scheduling problem while weighing multiple soft and hard constraints like lunch breaks, working hours, and teacher preferences.",
+        "Ensuring strict multi-tenant data isolation via middleware-level filtering for all database queries across the shared infrastructure.",
+        "Managing high-latency external calendar syncs (Google, Microsoft Graph, ICS) without blocking core application flows or exceeding provider rate limits.",
+        "Building a high-performance interactive schedule UI capable of rendering hundreds of dynamic events with sub-100ms response times for edits.",
       ],
       architecture:
-        "Three-tier architecture: React SPA frontend, Node.js REST API, MongoDB. The scheduling engine runs server-side as a standalone service. Redis caches generated schedule states between generation passes. Docker Compose manages local and production environments. Each institution lives in its own MongoDB database for strict data isolation.",
+        "A modular MERN (MongoDB, Express, React, Node) stack with TypeScript for strict type safety. The React frontend follows a custom internal Design System, while the Node.js backend implements a heuristic-driven scheduling service. Each institution's data is isolated via a schoolId-based filtering layer, and external availability is cached with a 180-day TTL index for O(1) conflict checks.",
       implementation:
-        "The scheduling engine uses a greedy constraint satisfaction approach — time slots are filled in priority order (mandatory courses first), with backtracking when a conflict is detected. Each entity (teacher, room, course) maintains an availability bitfield that can be checked in O(1). JWT authentication with scoped permission tokens per user role. Bulk schedule generation runs as an async job with progress events streamed to the frontend via Server-Sent Events.",
+        "The scheduler uses a greedy heuristic that sorts courses by their 'degree of constraint' (Least-Constrained-First). It computes invalid slots by indexing internal events and cached external busy intervals. A seed-based randomization system generates three distinct proposals for administrators, while a dedicated sync worker handles OAuth2-based integrations with external calendar providers.",
       results: [
-        "Schedule generation time reduced from ~2 weeks to under 5 minutes for a 200-slot week",
-        "Zero scheduling conflicts recorded across 3 pilot institutions during initial rollout",
-        "Admin time spent on scheduling reduced by an estimated 90% per semester",
+        "Average schedule generation time reduced from ~14 days of manual work to under 5 minutes.",
+        "100% elimination of double-booking conflicts across pilot institutions through automated validation.",
+        "90% reduction in administrative overhead for pedagogical coordinator roles per semester.",
       ],
       lessonsLearned: [
-        "Constraint satisfaction problems benefit heavily from aggressive caching of intermediate states — naive backtracking was 40× slower before memoization.",
-        "Role-based access control is best enforced at the data layer (query filters), not just at the API middleware layer.",
-        "Multi-tenant schemas require index design decisions from day one — retrofitting indexes on large datasets is painful.",
-        "Streaming progress updates via SSE dramatically improves perceived performance for long-running jobs.",
+        "A 'good enough' heuristic solver with human refinement is far more effective for real-world needs than an expensive exact CSP solver.",
+        "Enforcing data isolation at the middleware/query layer is the only reliable way to prevent cross-tenant security breaches in a shared SaaS environment.",
+        "Caching external availability significantly improves the responsiveness of scheduling operations compared to live-fetching during planning.",
+        "Type-safe domain logic for complex constraints prevents hundreds of potential runtime logical errors during development.",
       ],
     },
     tags: [
@@ -283,39 +287,38 @@ const projects = [
     source_code_link: "https://github.com/",
   },
   {
-    name: "Railguessr",
+    name: "RailGuessr",
     slug: "railguessr",
     description:
-      "Railguessr is an online geography and transit-based game inspired by exploration and deduction mechanics.",
+      "RailGuessr is a transit-focused geography game challenging players to identify intermediate stations on the Paris Metro network.",
     longDescription:
-      "Railguessr is an online geography and transit-based game inspired by exploration and deduction mechanics. Players can guess the station of the day or reconstruct metro routes in the correct order across multiple cities and difficulty modes. Built as an experimentation project around game design, engagement mechanics and web monetization through advertising.",
+      "RailGuessr is an interactive transit geography game designed for urban enthusiasts and commuters. Players must reconstruct specific metro segments by identifying intermediate stations between two endpoints across 16 lines. The project features a deterministic daily challenge system, PWA support, and a high-performance minimalist interface designed for mobile-first engagement.",
     caseStudy: {
       tagline: "Geography meets transit — guess the station, beat the clock.",
       problem:
-        "Geography games exist in abundance, but none focus on public transit networks — a subject with a passionate community of urban enthusiasts, commuters, and transit fans worldwide. The daily challenge format pioneered by Wordle had no equivalent in the transit space.",
+        "Transit fans and daily commuters lacked an engaging, low-friction way to test their knowledge of urban networks. Existing geography games were too generic, and there was no daily 'Wordle-style' challenge specifically for the complex Paris Metro system.",
       context:
-        "Built as a side project to explore game design, engagement loops, and client-side application architecture. Railguessr targets transit fans who want a daily mental challenge tied to real metro systems. The live version covers Paris, London, New York, and Berlin.",
+        "Built to explore deterministic client-side logic and high-retention gaming mechanics. RailGuessr targets a niche community of transit enthusiasts, providing a daily mental challenge that is synchronized globally without requiring any backend infrastructure.",
       technicalChallenges: [
-        "Rendering interactive metro network maps using the HTML Canvas API with accurate geographic projection.",
-        "Implementing a daily challenge system that synchronizes across all users without any backend infrastructure.",
-        "Persisting game state, streaks, and history across sessions without user accounts or a database.",
-        "Building mobile-friendly touch and drag interactions on Canvas elements across device sizes.",
-        "Procedural route generation with difficulty scaling based on network complexity per city.",
+        "Implementing a deterministic daily challenge system where every user globally gets the same puzzle based on a date-hash, with zero backend dependency.",
+        "Handling the topological complexity of branched metro lines (Lines 7, 10, 13) using graph-based pathfinding to identify valid intermediate stations.",
+        "Optimizing for 100% offline-first PWA support while maintaining high SEO visibility and AdSense performance for monetization.",
+        "Building a 'fuzzy' input matching system that handles accents, casing, and varied nomenclature (e.g., 'Châtelet' vs 'Chatelet') to maximize accessibility.",
       ],
       architecture:
-        "Fully client-side React application — no backend, no database. Metro network data is stored as JSON graph structures (adjacency lists with geographic coordinates). The Canvas renderer projects real geographic coordinates to screen space using a custom 2D linear projection. The daily challenge seed is derived deterministically from the current date, ensuring every player gets the same challenge globally.",
+        "A purely client-side React application deployed via Cloudflare Pages. The metro network is modeled as a static adjacency list (Graph). The daily seed is derived from a hash of the current date, ensuring global sync. User statistics and streaks are managed via a custom StatsManager utility interacting with LocalStorage.",
       implementation:
-        "Each city’s metro network is modeled as a weighted graph where nodes are stations and edges are line segments. The Canvas layer is split into a static background (painted once) and an interactive foreground (repainted on interaction) to maintain 60fps. The daily seed uses a hash of YYYY-MM-DD to select the target station. LocalStorage stores the player’s guess history, streaks, and completion status per city.",
+        "Graph traversal logic identifies unique paths on branched lines, while a custom normalizer strips special characters for fuzzy matching. The UI is built with Tailwind CSS and Framer Motion for sub-60fps fluid transitions. Monetization is integrated via Google AdSense with specific focus on maintaining core UX performance.",
       results: [
-        "500+ monthly active users organically within 3 months of launch",
-        "4 cities available — Paris, London, NYC, Berlin — with community-requested additions",
-        "Average session length of 8 minutes, well above typical casual game benchmarks",
+        "Zero-cost infrastructure scaling: the platform handles thousands of users globally at zero hosting cost via edge delivery.",
+        "High user retention: the daily streak system and community shares (Twitter/Reddit) drove organic growth to 400+ monthly active users.",
+        "PWA conversion: 15% of regular users have 'installed' the game to their mobile home screens for daily access.",
       ],
       lessonsLearned: [
-        "Date-seeded client-side randomness is sufficient for non-competitive daily challenges — no backend required.",
-        "Canvas performance requires strict layer separation between static backgrounds and interactive overlays.",
-        "LocalStorage-based persistence works well for casual games but limits cross-device continuity — a future account system could address this.",
-        "Community feedback drives feature priority faster than any roadmap — the most-requested cities came from Twitter mentions.",
+        "Deterministic client-side hashing is a powerful, cost-free alternative to traditional backends for synchronized daily games.",
+        "Minimalist design and fluid 'Enter-key' flows are more important for retention than high-fidelity graphics.",
+        "PWA implementations significantly lower the barrier to entry for casual mobile gaming compared to app store distribution.",
+        "Graph-based data structures are essential for accurately modeling real-world transit networks compared to simple arrays.",
       ],
     },
     tags: [
@@ -328,6 +331,57 @@ const projects = [
     images: [railguessr, railguessr_home, railguessr_daily],
     source_code_link: "https://github.com/",
     live_link: "https://railguessr.com/",
+  },
+  {
+    name: "Singuessr",
+    slug: "singuessr",
+    description:
+      "Singuessr is an interactive music blind test platform that turns any Spotify playlist into a real-time guessing game.",
+    longDescription:
+      "Singuessr is a dynamic music blind test platform built for fans of all genres. By leveraging the Spotify Web API through a custom high-performance proxy, it allows users to import any public playlist and play instantly. The project features a serverless architecture designed to handle regional API restrictions and high-concurrency recursive fetching.",
+    caseStudy: {
+      tagline: "Your playlists, your game — the ultimate dynamic blind test.",
+      problem:
+        "Traditional music blind tests are often static, pre-defined, or suffer from regional licensing '403 Forbidden' errors that prevent reliable audio streaming from third-party APIs like Spotify when accessed from cloud server regions.",
+      context:
+        "Built to solve the limitations of static music trivia. Singuessr provides a platform where content is infinite, sourced directly from the Spotify ecosystem. It targets music lovers who want personalized challenges based on their own curated playlists.",
+      technicalChallenges: [
+        "Architecting a Cloudflare Worker proxy to bypass CORS restrictions and regional licensing locks by injecting location-specific headers (market=FR).",
+        "Implementing recursive API fetching to flatten large Spotify playlists (100+ tracks) into a single, high-speed JSON payload for the frontend.",
+        "Developing a 'fuzzy' scoring algorithm that normalizes song titles, stripping metadata like '- Remastered' or '(Bonus Track)' to ensure fair guessing.",
+        "Optimizing the media lifecycle in React to pre-fetch upcoming audio buffers, ensuring a zero-latency transition between game rounds.",
+      ],
+      architecture:
+        "A hybrid serverless architecture: React SPA for the UI and a Cloudflare Worker for the API Proxy layer. The Worker handles Spotify OAuth2 flows and data orchestration, while the frontend manages the complex state of the interactive audio loop. Deployment is fully automated via Cloudflare's Edge network.",
+      implementation:
+        "The proxy uses a 'flatten-and-cache' strategy for playlist metadata, drastically reducing the number of round-trips from the client. Audio previews are managed via the HTML5 Audio API with a custom state machine to handle loading, playbacks, and race conditions during fast-paced guessing rounds.",
+      results: [
+        "Access to millions of playable playlists instantly via a single search/import interface.",
+        "Sub-200ms load times for large playlists achieved by offloading data flattening to the edge.",
+        "Successful monetization through privacy-first ad networks (A-Ads) while maintaining high platform performance.",
+      ],
+      lessonsLearned: [
+        "Serverless workers are an ideal solution for API orchestration and bypassing regional restrictions in third-party media integrations.",
+        "Pre-fetching assets during 'player downtime' is the most effective way to improve perceived performance in interactive media apps.",
+        "Regex-based string normalization is critical when dealing with inconsistent third-party metadata naming conventions.",
+        "Privacy-first monetization can be effective and performant when integrated early into the application lifecycle.",
+      ],
+    },
+    tags: [
+      { name: "react", color: "blue-text-gradient" },
+      { name: "serverless", color: "green-text-gradient" },
+      { name: "spotify-api", color: "pink-text-gradient" },
+    ],
+    image: singuessr_home,
+    images: [
+      singuessr_home,
+      singuessr_blindtest,
+      singuessr_create,
+      singuessr_create2,
+      singuessr_coverdle,
+    ],
+    source_code_link: "https://github.com/",
+    live_link: "https://singuessr.com/",
   },
   {
     name: "FuchibolHub",
@@ -421,5 +475,5 @@ const projects = [
   },
 ];
 
-export const CALENDLY_URL = "https://calendly.com/christophe-crognier/30min";
+export const CALENDLY_URL = "https://calendly.com/fullstackchris/30min";
 export { services, technologies, experiences, testimonials, projects };

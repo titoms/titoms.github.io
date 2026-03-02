@@ -8,19 +8,11 @@ import { CALENDLY_URL } from '../config/constants'
 
 const Contact = () => {
   return (
-    <div className="relative min-h-[900px] flex flex-col items-center overflow-hidden">
-      {/* Earth as full background */}
-      <motion.div
-        variants={slideIn('right', "tween", 0.2, 1)}
-        className="absolute inset-0 opacity-70"
-      >
-        <EarthCanvas />
-      </motion.div>
-
-      {/* Calendly panel — centered on top of the Earth */}
+    <div className="flex flex-col lg:flex-row items-start gap-0">
+      {/* Calendly panel — left on desktop, full width on mobile */}
       <motion.div
         variants={slideIn('left', "tween", 0.2, 1)}
-        className="relative z-10 w-full max-w-3xl mx-auto mt-8 bg-[#100d25]/90 backdrop-blur-sm p-8 rounded-2xl border border-white/5 shadow-2xl"
+        className="relative z-10 w-full lg:w-[62%] lg:flex-shrink-0 bg-[#100d25]/90 backdrop-blur-sm p-8 rounded-2xl border border-white/5 shadow-2xl"
       >
         <p className={styles.sectionSubText}>Let's work together</p>
         <h3 className={styles.sectionHeadText}>Book a Call.</h3>
@@ -29,15 +21,23 @@ const Contact = () => {
         </p>
         <InlineWidget
           url={CALENDLY_URL}
-          styles={{ height: "660px", width: "100%" }}
+          styles={{ height: "600px", width: "100%" }}
           pageSettings={{
             backgroundColor: "100d25",
-            hideEventTypeDetails: false,
-            hideLandingPageDetails: false,
+            hideEventTypeDetails: true,
+            hideLandingPageDetails: true,
             primaryColor: "915eff",
             textColor: "ffffff",
           }}
         />
+      </motion.div>
+
+      {/* Earth canvas — right on desktop (with overlap), below on mobile */}
+      <motion.div
+        variants={slideIn('right', "tween", 0.2, 1)}
+        className="w-full h-[400px] lg:flex-1 lg:-ml-[8%] lg:h-[800px] opacity-80"
+      >
+        <EarthCanvas />
       </motion.div>
     </div>
   )
