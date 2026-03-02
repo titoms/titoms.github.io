@@ -44,11 +44,11 @@ import fuchibol_prediction from "./projects/Fuchibol Hub/Final Quarters Predicti
 import fuchibol_games from "./projects/Fuchibol Hub/Games Page.webp";
 
 // Singuessr
-import singuessr_home from "./projects/Singuessr/Home.png";
-import singuessr_blindtest from "./projects/Singuessr/Blindtest.png";
-import singuessr_create from "./projects/Singuessr/Create Blindtest.png";
-import singuessr_create2 from "./projects/Singuessr/Create Blindtest 2.png";
-import singuessr_coverdle from "./projects/Singuessr/Coverdle.png";
+import singuessr_home from "./projects/Singuessr/Home.webp";
+import singuessr_blindtest from "./projects/Singuessr/Blindtest.webp";
+import singuessr_create from "./projects/Singuessr/Create Blindtest.webp";
+import singuessr_create2 from "./projects/Singuessr/Create Blindtest 2.webp";
+import singuessr_coverdle from "./projects/Singuessr/Coverdle.webp";
 
 export {
   logo,
