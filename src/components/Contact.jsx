@@ -8,10 +8,19 @@ import { CALENDLY_URL } from '../config/constants'
 
 const Contact = () => {
   return (
-    <div className="xl:mt-12 xl:flex-row flex-col-reverse flex gap-10 overflow-hidden">
+    <div className="relative min-h-[900px] flex flex-col items-center overflow-hidden">
+      {/* Earth as full background */}
+      <motion.div
+        variants={slideIn('right', "tween", 0.2, 1)}
+        className="absolute inset-0 opacity-70"
+      >
+        <EarthCanvas />
+      </motion.div>
+
+      {/* Calendly panel — centered on top of the Earth */}
       <motion.div
         variants={slideIn('left', "tween", 0.2, 1)}
-        className="flex-[0.5] bg-black-100 p-8 rounded-2xl"
+        className="relative z-10 w-full max-w-3xl mx-auto mt-8 bg-[#100d25]/90 backdrop-blur-sm p-8 rounded-2xl border border-white/5 shadow-2xl"
       >
         <p className={styles.sectionSubText}>Let's work together</p>
         <h3 className={styles.sectionHeadText}>Book a Call.</h3>
@@ -20,21 +29,15 @@ const Contact = () => {
         </p>
         <InlineWidget
           url={CALENDLY_URL}
-          styles={{ height: "660px", minWidth: "320px" }}
+          styles={{ height: "660px", width: "100%" }}
           pageSettings={{
-            backgroundColor: "050816",
+            backgroundColor: "100d25",
             hideEventTypeDetails: false,
             hideLandingPageDetails: false,
             primaryColor: "915eff",
             textColor: "ffffff",
           }}
         />
-      </motion.div>
-      <motion.div
-        variants={slideIn('right', "tween", 0.2, 1)}
-        className="xl:flex-1 xl:h-auto md:h-[550px] h-[350px]"
-      >
-        <EarthCanvas />
       </motion.div>
     </div>
   )
