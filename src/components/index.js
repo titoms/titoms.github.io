@@ -8,6 +8,7 @@ import Experience from "./Experience"
 import Projects from "./Projects"
 import Stars from "./Stars"
 import TechSkills from "./TechSkills"
+import CaseStudyModal from "./CaseStudyModal"
 
 export {
     CustomButton,
@@ -19,5 +20,6 @@ export {
     Experience,
     Projects,
     Stars,
-    TechSkills
+    TechSkills,
+    CaseStudyModal
 };
