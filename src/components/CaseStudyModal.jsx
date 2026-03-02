@@ -37,7 +37,18 @@ const CaseStudyModal = ({ project, onClose }) => {
       transition={{ duration: 0.3, ease: "easeOut" }}
       className="fixed inset-0 z-[1000] bg-primary overflow-y-auto custom-scrollbar"
     >
-      {/* Sticky close button */}
+      {/* Back button — fixed top-left, always visible while scrolling */}
+      <button
+        onClick={onClose}
+        className="fixed top-4 left-4 z-[1010] flex items-center gap-2 bg-black/70 hover:bg-white/10 backdrop-blur-sm text-white text-[14px] font-semibold px-4 py-2.5 rounded-full border border-white/10 transition-all hover:-translate-x-0.5 active:scale-95"
+      >
+        <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current flex-shrink-0">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        Back
+      </button>
+
+      {/* Close button — top-right for convention */}
       <button
         onClick={onClose}
         className="fixed top-4 right-4 w-10 h-10 bg-black/60 hover:bg-black/90 rounded-full flex items-center justify-center z-[1010] border border-white/10 transition-all hover:rotate-90"
