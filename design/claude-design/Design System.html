@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design System — fullstackchris.dev</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* Reference-page-only scaffolding */
+  .ds-shell { display: grid; grid-template-columns: 248px 1fr; min-height: 100vh; }
+  .ds-side {
+    position: sticky; top: 0; align-self: start; height: 100vh; overflow-y: auto;
+    border-right: 1px solid var(--border); padding: var(--sp-6) var(--sp-5); background: var(--bg-1);
+  }
+  .ds-side .brand { margin-bottom: var(--sp-6); }
+  .ds-nav { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 2px; }
+  .ds-nav a { display: block; padding: 8px 12px; border-radius: var(--r-sm); color: var(--text-mid); font-size: 0.9rem; font-weight: 500; }
+  .ds-nav a:hover { background: var(--bg-2); color: var(--text-hi); }
+  .ds-nav .grp { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-low); padding: var(--sp-4) 12px 6px; }
+  .ds-main { padding: var(--sp-7) var(--sp-8); max-width: 1080px; }
+  .ds-sec { padding: var(--sp-7) 0; border-top: 1px solid var(--border); scroll-margin-top: 24px; }
+  .ds-sec:first-of-type { border-top: none; padding-top: var(--sp-5); }
+  .ds-sec > .ds-head { margin-bottom: var(--sp-6); }
+  .ds-head h2 { font-size: 1.9rem; margin-bottom: var(--sp-2); }
+  .ds-head p { color: var(--text-mid); max-width: 60ch; }
+  .ds-subhead { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-low); margin: var(--sp-6) 0 var(--sp-4); }
+
+  /* swatch grid */
+  .sw-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--sp-4); }
+  .sw { border: 1px solid var(--border); border-radius: var(--r-md); overflow: hidden; }
+  .sw .chip { height: 76px; }
+  .sw .meta { padding: 10px 12px; background: var(--bg-2); }
+  .sw .meta .nm { font-size: 0.82rem; font-weight: 600; color: var(--text-hi); }
+  .sw .meta .hex { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-low); }
+
+  /* type specimen */
+  .spec { display: flex; align-items: baseline; gap: var(--sp-5); padding: var(--sp-4) 0; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .spec .lab { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-low); width: 130px; flex-shrink: 0; }
+
+  /* spacing ruler */
+  .sp-row { display: flex; align-items: center; gap: var(--sp-4); padding: 7px 0; }
+  .sp-row .bar { background: var(--accent-soft-2); border: 1px solid var(--border-accent); height: 18px; border-radius: 3px; }
+  .sp-row .tag { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-mid); width: 110px; }
+
+  .demo { background: var(--bg-1); border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--sp-6); }
+  .demo-grid { display: flex; gap: var(--sp-4); flex-wrap: wrap; align-items: center; }
+
+  .radius-demo { display: flex; gap: var(--sp-5); flex-wrap: wrap; }
+  .radius-demo .rb { width: 96px; height: 72px; background: var(--bg-3); border: 1px solid var(--border-strong); display: grid; place-items: end center; padding-bottom: 8px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-low); }
+
+  .elev-demo { display: flex; gap: var(--sp-6); flex-wrap: wrap; }
+  .elev-demo .eb { width: 150px; height: 96px; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-md); display: grid; place-items: center; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-mid); }
+
+  @media (max-width: 860px) {
+    .ds-shell { grid-template-columns: 1fr; }
+    .ds-side { display: none; }
+    .ds-main { padding: var(--sp-6) var(--sp-5); }
+  }
+</style>
+</head>
+<body>
+<div class="ds-shell">
+  <!-- SIDEBAR -->
+  <aside class="ds-side">
+    <div class="brand"><span class="glyph">▍</span>fullstackchris<span class="text-low">/ds</span></div>
+    <nav>
+      <ul class="ds-nav">
+        <li class="grp">Foundations</li>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#color">Color</a></li>
+        <li><a href="#type">Typography</a></li>
+        <li><a href="#spacing">Spacing</a></li>
+        <li><a href="#radius">Radius &amp; elevation</a></li>
+        <li class="grp">Components</li>
+        <li><a href="#buttons">Buttons</a></li>
+        <li><a href="#badges">Badges &amp; tags</a></li>
+        <li><a href="#cards">Cards</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#faq">FAQ accordion</a></li>
+        <li><a href="#forms">Forms</a></li>
+        <li><a href="#code">Code &amp; steps</a></li>
+        <li><a href="#chrome">Header &amp; footer</a></li>
+        <li class="grp">Applied</li>
+        <li><a href="Homepage.html">Homepage →</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="ds-main">
+
+    <!-- OVERVIEW -->
+    <section class="ds-sec" id="overview" style="border:none;">
+      <span class="eyebrow">Design System · v1</span>
+      <h1 class="t-h1" style="margin:18px 0 14px; max-width:18ch;">A premium, developer-grade system for selling clarity and building products.</h1>
+      <p class="t-lead" style="max-width:62ch;">Dark-only and confident. Mono-accented for developer credibility, with a single violet accent doing the persuading. Built to scale a portfolio site into a services tunnel — coaching, dev days, MVP workshops and custom builds.</p>
+      <div class="demo-grid" style="margin-top:28px;">
+        <span class="badge badge-accent"><span class="dot"></span>Dark-only</span>
+        <span class="badge">True charcoal</span>
+        <span class="badge">Violet accent</span>
+        <span class="badge">Space Grotesk · Hanken · JetBrains Mono</span>
+        <span class="badge">Subtle radius · hairline borders</span>
+      </div>
+    </section>
+
+    <!-- COLOR -->
+    <section class="ds-sec" id="color">
+      <div class="ds-head"><h2>Color</h2><p>A neutral charcoal canvas in five layered surfaces, hairline borders for structure, and one violet accent reserved for action and emphasis. Saturation stays low everywhere except the accent.</p></div>
+
+      <p class="ds-subhead">Surfaces &amp; borders</p>
+      <div class="sw-grid">
+        <div class="sw"><div class="chip" style="background:var(--bg-0)"></div><div class="meta"><div class="nm">bg-0 · page</div><div class="hex">#0d0d10</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--bg-1)"></div><div class="meta"><div class="nm">bg-1 · base</div><div class="hex">#131318</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--bg-2)"></div><div class="meta"><div class="nm">bg-2 · card</div><div class="hex">#1a1a20</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--bg-3)"></div><div class="meta"><div class="nm">bg-3 · raised</div><div class="hex">#22222a</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--bg-4)"></div><div class="meta"><div class="nm">bg-4 · inset</div><div class="hex">#2c2c35</div></div></div>
+        <div class="sw"><div class="chip" style="background:#2e2e38; border-bottom:1px solid var(--border-strong)"></div><div class="meta"><div class="nm">border-strong</div><div class="hex">rgba(255 · .14)</div></div></div>
+      </div>
+
+      <p class="ds-subhead">Accent · violet</p>
+      <div class="sw-grid">
+        <div class="sw"><div class="chip" style="background:var(--accent-200)"></div><div class="meta"><div class="nm">accent-200</div><div class="hex">#ddd2fe</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--accent-300)"></div><div class="meta"><div class="nm">accent-300</div><div class="hex">#c4b5fd</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--accent-400)"></div><div class="meta"><div class="nm">accent-400 · primary</div><div class="hex">#a78bfa</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--accent-500)"></div><div class="meta"><div class="nm">accent-500</div><div class="hex">#8f6ef3</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--accent-600)"></div><div class="meta"><div class="nm">accent-600</div><div class="hex">#7c5ce8</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--accent-700)"></div><div class="meta"><div class="nm">accent-700</div><div class="hex">#6846d6</div></div></div>
+      </div>
+
+      <p class="ds-subhead">Text &amp; semantic</p>
+      <div class="sw-grid">
+        <div class="sw"><div class="chip" style="background:var(--text-hi)"></div><div class="meta"><div class="nm">text-hi</div><div class="hex">#f4f4f6</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--text-mid)"></div><div class="meta"><div class="nm">text-mid</div><div class="hex">#a4a4af</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--text-low)"></div><div class="meta"><div class="nm">text-low</div><div class="hex">#6c6c78</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--positive)"></div><div class="meta"><div class="nm">positive</div><div class="hex">#5fd99a</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--negative)"></div><div class="meta"><div class="nm">negative</div><div class="hex">#f47373</div></div></div>
+      </div>
+    </section>
+
+    <!-- TYPE -->
+    <section class="ds-sec" id="type">
+      <div class="ds-head"><h2>Typography</h2><p>Three families, clear jobs. <b style="color:var(--text-hi)">Space Grotesk</b> for display and headings, <b style="color:var(--text-hi)">Hanken Grotesk</b> for comfortable body copy, and <b style="color:var(--text-hi)">JetBrains Mono</b> for eyebrows, labels, prices, badges and code — the developer signal.</p></div>
+
+      <div class="spec"><span class="lab">Display / 700</span><span class="t-display">Build it.</span></div>
+      <div class="spec"><span class="lab">H1 / 600</span><span class="t-h1">Turn ideas into products</span></div>
+      <div class="spec"><span class="lab">H2 / 600</span><span class="t-h2">One-on-one technical coaching</span></div>
+      <div class="spec"><span class="lab">H3 / 600</span><span class="t-h3">What you get from a session</span></div>
+      <div class="spec"><span class="lab">Lead / Hanken</span><span class="t-lead">I help founders, freelancers and small teams clarify and launch web projects.</span></div>
+      <div class="spec"><span class="lab">Body / Hanken</span><span class="t-body" style="max-width:50ch;">Focused development time for a clear task, bug or feature — with delivery notes so you understand exactly what changed and what's next.</span></div>
+      <div class="spec"><span class="lab">Eyebrow / Mono</span><span class="eyebrow no-rule">AI-ASSISTED WORKFLOWS</span></div>
+      <div class="spec"><span class="lab">Mono / label</span><span class="mono text-mid" style="font-size:0.85rem;">starts at €4,500 · staged scope</span></div>
+    </section>
+
+    <!-- SPACING -->
+    <section class="ds-sec" id="spacing">
+      <div class="ds-head"><h2>Spacing</h2><p>A 4px base scale. Sections breathe at 96px; cards group at 24–32px; inline elements sit at 8–16px.</p></div>
+      <div>
+        <div class="sp-row"><span class="tag">sp-1 · 4px</span><span class="bar" style="width:4px;"></span></div>
+        <div class="sp-row"><span class="tag">sp-2 · 8px</span><span class="bar" style="width:8px;"></span></div>
+        <div class="sp-row"><span class="tag">sp-3 · 12px</span><span class="bar" style="width:12px;"></span></div>
+        <div class="sp-row"><span class="tag">sp-4 · 16px</span><span class="bar" style="width:16px;"></span></div>
+        <div class="sp-row"><span class="tag">sp-5 · 24px</span><span class="bar" style="width:24px;"></span></div>
+        <div class="sp-row"><span class="tag">sp-6 · 32px</span><span class="bar" style="width:32px;"></span></div>
+        <div class="sp-row"><span class="tag">sp-7 · 48px</span><span class="bar" style="width:48px;"></span></div>
+        <div class="sp-row"><span class="tag">sp-8 · 64px</span><span class="bar" style="width:64px;"></span></div>
+        <div class="sp-row"><span class="tag">sp-9 · 96px</span><span class="bar" style="width:96px;"></span></div>
+      </div>
+    </section>
+
+    <!-- RADIUS + ELEV -->
+    <section class="ds-sec" id="radius">
+      <div class="ds-head"><h2>Radius &amp; elevation</h2><p>Subtly rounded and crisp. Depth comes from hairline borders and an accent glow far more than from heavy shadows.</p></div>
+      <p class="ds-subhead">Corner radius</p>
+      <div class="radius-demo">
+        <div class="rb" style="border-radius:var(--r-sm)">6 · sm</div>
+        <div class="rb" style="border-radius:var(--r-md)">10 · md</div>
+        <div class="rb" style="border-radius:var(--r-lg)">16 · lg</div>
+        <div class="rb" style="border-radius:var(--r-xl)">22 · xl</div>
+        <div class="rb" style="border-radius:var(--r-pill); width:120px;">pill</div>
+      </div>
+      <p class="ds-subhead">Elevation</p>
+      <div class="elev-demo">
+        <div class="eb" style="box-shadow:var(--shadow-sm)">shadow-sm</div>
+        <div class="eb" style="box-shadow:var(--shadow-md)">shadow-md</div>
+        <div class="eb" style="box-shadow:var(--shadow-lg)">shadow-lg</div>
+        <div class="eb" style="box-shadow:var(--glow); border-color:var(--border-accent)">accent glow</div>
+      </div>
+    </section>
+
+    <!-- BUTTONS -->
+    <section class="ds-sec" id="buttons">
+      <div class="ds-head"><h2>Buttons</h2><p>Primary carries the accent and the only fill. Secondary and ghost stay quiet so CTAs always win the eye. Three sizes.</p></div>
+      <div class="demo">
+        <div class="demo-grid" style="margin-bottom:24px;">
+          <a class="btn btn-primary" href="#">Book a project call <span class="arrow">→</span></a>
+          <a class="btn btn-secondary" href="#">Explore services</a>
+          <a class="btn btn-ghost" href="#">Read a free sample</a>
+        </div>
+        <div class="demo-grid">
+          <a class="btn btn-primary btn-sm" href="#">Subscribe</a>
+          <a class="btn btn-primary" href="#">Request a quote</a>
+          <a class="btn btn-primary btn-lg" href="#">Start a project <span class="arrow">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BADGES -->
+    <section class="ds-sec" id="badges">
+      <div class="ds-head"><h2>Badges &amp; tags</h2><p>Mono tech badges signal the stack. Accent and positive variants flag highlights and availability.</p></div>
+      <div class="demo">
+        <div class="demo-grid">
+          <span class="badge">React</span>
+          <span class="badge">Next.js</span>
+          <span class="badge">TypeScript</span>
+          <span class="badge">Node.js</span>
+          <span class="badge">PostgreSQL</span>
+          <span class="badge">Docker</span>
+          <span class="badge badge-accent"><span class="dot"></span>AI-assisted</span>
+          <span class="badge badge-positive">● Available</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARDS -->
+    <section class="ds-sec" id="cards">
+      <div class="ds-head"><h2>Service cards</h2><p>The workhorse of the site. Icon, title, one-line value, and a footer pinning price to a quiet CTA. Hover lifts and brightens the border.</p></div>
+      <div class="grid grid-2">
+        <article class="card card-hover svc-card">
+          <div class="svc-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 9h8M8 13h5"/><path d="M21 12a9 9 0 1 1-3.5-7.1L21 4l-1 4h-4"/></svg>
+          </div>
+          <h3 class="t-h3">Web Project Coaching</h3>
+          <p class="t-body">Get unstuck on React, Node or AI-generated code with one-on-one sessions. Diagnosis, action plan, next steps.</p>
+          <div class="svc-foot">
+            <span class="price-tag">€90 <span class="unit">/ 1h</span></span>
+            <span class="accent mono" style="font-size:0.85rem;">Learn more →</span>
+          </div>
+        </article>
+        <article class="card card-hover svc-card">
+          <div class="svc-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3M7 9l2 2-2 2M13 13h4"/></svg>
+          </div>
+          <h3 class="t-h3">Full-Stack Development Day</h3>
+          <p class="t-body">A focused half- or full-day block for a clear feature, bug or refactor on your existing codebase.</p>
+          <div class="svc-foot">
+            <span class="price-tag">€350 <span class="unit">/ half-day</span></span>
+            <span class="accent mono" style="font-size:0.85rem;">Learn more →</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="ds-sec" id="pricing">
+      <div class="ds-head"><h2>Pricing cards</h2><p>Tiered plans with a featured state — accent border, gradient wash and glow — to steer toward the recommended option.</p></div>
+      <div class="grid grid-3">
+        <article class="card pricing">
+          <div><span class="eyebrow no-rule">SOLO BUILDER</span></div>
+          <div class="amount">€9<span class="per">/mo</span></div>
+          <ul class="feature-list">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Monthly AI web-dev briefing</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Tool updates &amp; workflows</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Prompt of the month</li>
+          </ul>
+          <a class="btn btn-secondary" href="#">Subscribe</a>
+        </article>
+        <article class="card pricing featured">
+          <div class="row" style="justify-content:space-between;"><span class="eyebrow no-rule">PRO BUILDER</span><span class="badge badge-accent">Popular</span></div>
+          <div class="amount">€19<span class="per">/mo</span></div>
+          <ul class="feature-list">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Everything in Solo</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Deep-dive issues + sources</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>MVP ideas worth testing</li>
+          </ul>
+          <a class="btn btn-primary" href="#">Subscribe</a>
+        </article>
+        <article class="card pricing">
+          <div><span class="eyebrow no-rule">TEAM / COMPANY</span></div>
+          <div class="amount">€99<span class="per">/mo</span></div>
+          <ul class="feature-list">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Everything in Pro</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Internal team sharing</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Priority Q&amp;A</li>
+          </ul>
+          <a class="btn btn-secondary" href="#">Subscribe</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="ds-sec" id="faq">
+      <div class="ds-head"><h2>FAQ accordion</h2><p>Crawlable, LLM-friendly Q&amp;A. The "+" rotates to an "×" on open; answers animate in.</p></div>
+      <div class="demo" style="padding-top:8px; padding-bottom:8px;">
+        <div class="faq-item open">
+          <button class="faq-q">Do I need to be technical? <span class="chev">＋</span></button>
+          <div class="faq-a"><p>No. Sessions adapt to non-technical founders, beginners or developers — the goal is that you leave understanding what to build and why.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Can you help with AI-generated code? <span class="chev">＋</span></button>
+          <div class="faq-a"><p>Yes. I help you understand, debug and clean code generated by ChatGPT, Claude, Cursor or Copilot.</p></div>
+        </div>
+        <div class="faq-item" style="border-bottom:none;">
+          <button class="faq-q">How much does an MVP cost? <span class="chev">＋</span></button>
+          <div class="faq-a"><p>MVP development starts at €4,500, with most projects between €6,000 and €15,000 depending on scope.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORMS -->
+    <section class="ds-sec" id="forms">
+      <div class="ds-head"><h2>Forms &amp; inputs</h2><p>For contact and lead qualification. Inset surface, mono labels, accent focus ring.</p></div>
+      <div class="demo">
+        <div class="grid grid-2" style="gap:var(--sp-5);">
+          <div class="field"><label class="label">Name</label><input class="input" placeholder="Jane Founder"></div>
+          <div class="field"><label class="label">Email</label><input class="input" placeholder="jane@company.com"></div>
+          <div class="field"><label class="label">Service needed</label>
+            <select class="select"><option>Web Project Coaching</option><option>Full-Stack Development Day</option><option>MVP Bootstrapping Workshop</option><option>Custom MVP Development</option></select>
+          </div>
+          <div class="field"><label class="label">Budget range</label>
+            <select class="select"><option>&lt; €500</option><option>€500 – €1,500</option><option>€1,500 – €5,000</option><option>€5,000 – €15,000</option><option>€15,000+</option></select>
+          </div>
+          <div class="field" style="grid-column:1/-1;"><label class="label">Project description</label><textarea class="textarea" placeholder="What are you building, and what's the blocker?"></textarea></div>
+        </div>
+        <div style="margin-top:20px;"><a class="btn btn-primary" href="#">Start a project <span class="arrow">→</span></a></div>
+      </div>
+    </section>
+
+    <!-- CODE + STEPS -->
+    <section class="ds-sec" id="code">
+      <div class="ds-head"><h2>Code block &amp; process steps</h2><p>Editor-style snippets carry the developer credibility; numbered steps map any service's process.</p></div>
+      <div class="grid grid-2" style="align-items:start;">
+        <div class="code-block">
+          <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-title">workflow.ts</span></div>
+          <div class="code-body"><span class="ln">1</span><span class="tok-com">// clarify → scope → build → ship</span><br><span class="ln">2</span><span class="tok-key">const</span> mvp = <span class="tok-fn">scope</span>({<br><span class="ln">3</span>&nbsp;&nbsp;idea: <span class="tok-str">"unclear"</span>,<br><span class="ln">4</span>&nbsp;&nbsp;stack: [<span class="tok-str">"React"</span>, <span class="tok-str">"Node"</span>],<br><span class="ln">5</span>&nbsp;&nbsp;ai: <span class="tok-key">true</span>,<br><span class="ln">6</span>});</div>
+        </div>
+        <div class="steps" style="padding-top:4px;">
+          <div class="step"><div class="step-num">1</div><div><h4 class="t-h4">Send the task</h4><p class="t-small">You describe the goal and what "done" means.</p></div></div>
+          <div class="step"><div class="step-num">2</div><div><h4 class="t-h4">Validate scope</h4><p class="t-small">We confirm it's realistic for the block.</p></div></div>
+          <div class="step"><div class="step-num">3</div><div><h4 class="t-h4">Focused build</h4><p class="t-small">I work in a dedicated session.</p></div></div>
+          <div class="step"><div class="step-num">4</div><div><h4 class="t-h4">Delivery notes</h4><p class="t-small">What changed, and what's next.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHROME -->
+    <section class="ds-sec" id="chrome">
+      <div class="ds-head"><h2>Header &amp; footer</h2><p>Sticky blurred header with a permanent CTA; structured footer for SEO-friendly internal linking.</p></div>
+      <div class="demo" style="padding:0; overflow:hidden;">
+        <div class="site-header" style="position:relative;">
+          <div class="container">
+            <div class="nav">
+              <div class="brand"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></div>
+              <ul class="nav-links"><li><a href="#">Services</a></li><li><a href="#">Projects</a></li><li><a href="#">Blog</a></li><li><a href="#">About</a></li></ul>
+              <a class="btn btn-primary btn-sm" href="#">Book a call</a>
+            </div>
+          </div>
+        </div>
+        <div style="padding:32px; color:var(--text-low); font-family:var(--font-mono); font-size:0.78rem;">↑ sticky header · blur · permanent CTA</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.faq-q').forEach(function (q) {
+    q.addEventListener('click', function () {
+      q.parentElement.classList.toggle('open');
+    });
+  });
+</script>
+</body>
+</html>

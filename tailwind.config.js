@@ -1,19 +1,30 @@
+import { colors, shadows } from './src/config/tokens.js'
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: ["./src/**/*.{js,jsx}"],
   mode: "jit",
   theme: {
     extend: {
       colors: {
-        primary: "#050816",
-        secondary: "#aaa6c3",
-        tertiary: "#151030",
-        "black-100": "#100d25",
-        "black-200": "#090325",
-        "white-100": "#f3f3f3",
+        // Preserved names — already used across components
+        primary:        colors.bgPrimary,
+        secondary:      colors.textSecondary,
+        tertiary:       colors.bgTertiary,
+        "black-100":    colors.bgSurface,
+        "black-200":    colors.bgDeep,
+        "white-100":    colors.textLight,
+
+        // Semantic names — replace all hardcoded hex classes
+        brand:          colors.brand,
+        "brand-hover":  colors.brandHover,
+        surface:        colors.bgSurface,
+        "surface-deep": colors.bgDeep,
+        timeline:       colors.bgTimeline,
+        subtle:         colors.textSubtle,
       },
       boxShadow: {
-        card: "0px 35px 120px -15px #211e35",
+        card: shadows.card,
       },
       screens: {
         xs: "450px",
@@ -24,4 +35,4 @@ module.exports = {
     },
   },
   plugins: [],
-};
+}

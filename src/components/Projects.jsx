@@ -37,7 +37,7 @@ const ProjectCard = ({
               loading="lazy"
             />
           ) : (
-            <div className="w-full h-full bg-[#090325] flex items-center justify-center rounded-2xl">
+            <div className="w-full h-full bg-surface-deep flex items-center justify-center rounded-2xl">
               <p className="text-secondary text-[14px] italic">No image available</p>
             </div>
           )}
@@ -75,7 +75,7 @@ const ProjectCard = ({
               </p>
             ))}
           </div>
-          <span className="text-[#915eff] text-[13px] font-semibold whitespace-nowrap">
+          <span className="text-brand text-[13px] font-semibold whitespace-nowrap">
             Case Study →
           </span>
         </div>

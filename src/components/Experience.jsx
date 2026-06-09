@@ -8,11 +8,12 @@ import {styles} from '../styles'
 import {SectionWrapper} from '../hoc'
 import {experiences} from '../config/constants'
 import {textVariant} from '../config/motion'
+import { colors } from '../config/tokens'
 
 const ExperienceCard = ({ experience }) => (
   <VerticalTimelineElement
-    contentStyle={{background: '#1d1836', color: '#fff'}}
-    contentArrowStyle={{borderRight: '7px solid #232631'}}
+    contentStyle={{background: colors.bgTimeline, color: colors.textPrimary}}
+    contentArrowStyle={{borderRight: `7px solid ${colors.bgTimelineArrow}`}}
     date={experience.date}
     iconStyle={{background: experience.iconBg}}
     icon={

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christophe Crognier — Full-stack development, AI workflows & coaching</title>
+<meta name="description" content="I help founders, freelancers and small teams clarify, build and launch web projects using React, Node.js, TypeScript and practical AI-assisted development workflows.">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* Homepage-only composition */
+  .hero { padding: var(--sp-9) 0 var(--sp-8); position: relative; }
+  .hero-inner { max-width: 860px; }
+  .hero h1 { font-size: clamp(2.5rem, 5.4vw, 4.4rem); line-height: 1.0; letter-spacing: -0.03em; margin: var(--sp-5) 0 var(--sp-5); }
+  .hero h1 .accent { color: var(--accent-400); }
+  .hero .t-lead { max-width: 60ch; }
+  .hero-cta { display: flex; gap: var(--sp-4); flex-wrap: wrap; margin-top: var(--sp-6); }
+  .hero-meta { display: flex; gap: var(--sp-6); flex-wrap: wrap; margin-top: var(--sp-7); padding-top: var(--sp-6); border-top: 1px solid var(--border); }
+  .hero-meta .stat .n { font-family: var(--font-display); font-size: 1.7rem; font-weight: 700; color: var(--text-hi); letter-spacing: -0.02em; }
+  .hero-meta .stat .l { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-low); }
+
+  .sec-head { max-width: 620px; margin-bottom: var(--sp-7); }
+  .sec-head h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); margin: var(--sp-3) 0 var(--sp-3); }
+  .sec-head p { color: var(--text-mid); }
+
+  .why-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--sp-5); }
+  .why-item { padding: var(--sp-5) 0; }
+  .why-item .ic { width: 40px; height: 40px; border-radius: var(--r-md); background: var(--accent-soft); border: 1px solid var(--border-accent); color: var(--accent-300); display: grid; place-items: center; margin-bottom: var(--sp-4); }
+  .why-item h4 { margin-bottom: var(--sp-2); font-size: 1.1rem; }
+
+  .proj-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: var(--sp-5); }
+  .proj { padding: 0; overflow: hidden; }
+  .proj .shot { aspect-ratio: 16/9; }
+  .proj .body { padding: var(--sp-5); }
+  .proj .body h4 { font-size: 1.15rem; margin-bottom: 6px; }
+
+  .news { background: linear-gradient(135deg, var(--accent-soft) 0%, var(--bg-2) 55%); border: 1px solid var(--border-accent); border-radius: var(--r-xl); padding: var(--sp-8); display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--sp-8); align-items: center; box-shadow: var(--glow); }
+  .news-form { display: flex; gap: var(--sp-3); margin-top: var(--sp-5); }
+  .news-form .input { flex: 1; }
+  .news-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--sp-3); }
+  .news-list li { display: flex; gap: var(--sp-3); align-items: center; font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-mid); }
+  .news-list li .b { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-400); flex-shrink: 0; }
+
+  .final-cta { text-align: center; }
+  .final-cta h2 { font-size: clamp(2rem, 4.5vw, 3.5rem); max-width: 16ch; margin: 0 auto var(--sp-5); }
+
+  @media (max-width: 900px) {
+    .why-grid { grid-template-columns: 1fr; gap: 0; }
+    .proj-grid { grid-template-columns: 1fr; }
+    .news { grid-template-columns: 1fr; padding: var(--sp-6); }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" data-screen-label="Header">
+      <a class="brand" href="#"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></a>
+      <ul class="nav-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#newsletter">Newsletter</a></li>
+        <li><a href="Design System.html">Design system</a></li>
+      </ul>
+      <a class="btn btn-primary btn-sm" href="#contact">Book a call</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero glow-bg grid-bg" data-screen-label="Hero">
+  <div class="container">
+    <div class="hero-inner">
+      <span class="eyebrow">FULL-STACK · AI WORKFLOWS · COACHING</span>
+      <h1>Turn unclear web ideas into <span class="accent">clear, buildable</span> products.</h1>
+      <p class="t-lead">I help founders, freelancers and small teams clarify, build and launch web projects using React, Node.js, TypeScript and practical AI-assisted development workflows.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary btn-lg" href="#contact">Book a project call <span class="arrow">→</span></a>
+        <a class="btn btn-secondary btn-lg" href="#services">Explore services</a>
+      </div>
+      <div class="hero-meta">
+        <div class="stat"><div class="n">~7,000h</div><div class="l">Teaching web dev</div></div>
+        <div class="stat"><div class="n">5</div><div class="l">Shipped projects</div></div>
+        <div class="stat"><div class="n">€90 → €15k</div><div class="l">Coaching to MVP</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section" id="services" data-screen-label="Services">
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow">WHAT I OFFER</span>
+      <h2>One ladder, from first call to launched product.</h2>
+      <p>Start wherever you are. Each service hands off cleanly to the next — clarity, then focused build, then a full MVP.</p>
+    </div>
+    <div class="grid grid-3">
+      <article class="card card-hover svc-card">
+        <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5a2 2 0 0 1 2-2h10l4 4v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M8 9h6M8 13h8M8 17h5"/></svg></div>
+        <h3 class="t-h3">AI Web Dev Newsletter</h3>
+        <p class="t-body">A monthly, no-hype briefing on AI tools, coding workflows and MVP ideas worth testing.</p>
+        <div class="svc-foot"><span class="price-tag">from €9 <span class="unit">/mo</span></span><span class="accent mono" style="font-size:0.85rem;">Subscribe →</span></div>
+      </article>
+      <article class="card card-hover svc-card">
+        <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-3.5-7.1L21 4l-1 4h-4"/><path d="M8 12h6"/></svg></div>
+        <h3 class="t-h3">Web Project Coaching</h3>
+        <p class="t-body">One-on-one sessions to debug, clarify and structure your React / Node / AI-generated project.</p>
+        <div class="svc-foot"><span class="price-tag">€90 <span class="unit">/ 1h</span></span><span class="accent mono" style="font-size:0.85rem;">Learn more →</span></div>
+      </article>
+      <article class="card card-hover svc-card">
+        <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="7 8 3 12 7 16"/><polyline points="17 8 21 12 17 16"/><line x1="14" y1="5" x2="10" y2="19"/></svg></div>
+        <h3 class="t-h3">Full-Stack Dev Day</h3>
+        <p class="t-body">Focused half- or full-day blocks for a clear feature, bug fix, dashboard or refactor.</p>
+        <div class="svc-foot"><span class="price-tag">from €350 <span class="unit">/ day</span></span><span class="accent mono" style="font-size:0.85rem;">Learn more →</span></div>
+      </article>
+      <article class="card card-hover svc-card">
+        <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 14l3-4 3 3 4-6"/></svg></div>
+        <h3 class="t-h3">MVP Bootstrapping Workshop</h3>
+        <p class="t-body">Turn an idea into a realistic MVP plan: scope, user flows, stack, roadmap and budget.</p>
+        <div class="svc-foot"><span class="price-tag">from €650 <span class="unit">/ day</span></span><span class="accent mono" style="font-size:0.85rem;">Learn more →</span></div>
+      </article>
+      <article class="card card-hover svc-card">
+        <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/><path d="M3 9h6M15 9h6M9 3v6M9 15v6"/></svg></div>
+        <h3 class="t-h3">Custom MVP Development</h3>
+        <p class="t-body">A working web app from scope to deployment — frontend, backend, database and handover.</p>
+        <div class="svc-foot"><span class="price-tag">from €4,500</span><span class="accent mono" style="font-size:0.85rem;">Request quote →</span></div>
+      </article>
+      <article class="card card-hover svc-card" style="background:linear-gradient(160deg,var(--accent-soft),var(--bg-2) 60%); border-color:var(--border-accent);">
+        <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M2 12h20"/></svg></div>
+        <h3 class="t-h3">Not sure where to start?</h3>
+        <p class="t-body">Book a free 15-minute call. We'll figure out the right next step for your project.</p>
+        <div class="svc-foot" style="border:none;"><a class="btn btn-primary btn-sm" href="#contact">Book a call <span class="arrow">→</span></a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="section" style="background:var(--bg-1); border-block:1px solid var(--border);" data-screen-label="Why">
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow">WHY WORK WITH ME</span>
+      <h2>Developer execution, teaching clarity, AI without the bullshit.</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
+        <h4 class="t-h4">I can explain it</h4>
+        <p class="t-body">~7,000 hours teaching web development means I cut through jargon and help non-technical founders make confident decisions.</p>
+      </div>
+      <div class="why-item">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg></div>
+        <h4 class="t-h4">I can scope it</h4>
+        <p class="t-body">I turn a vague idea into a prioritized MVP and a realistic budget — so you don't burn weeks building the wrong thing.</p>
+      </div>
+      <div class="why-item">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <h4 class="t-h4">I can build it</h4>
+        <p class="t-body">React, Next.js, Node, TypeScript and Postgres — shipped to production, with AI-assisted workflows where they genuinely help.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="section" id="projects" data-screen-label="Projects">
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow">PROOF</span>
+      <h2>Recent projects.</h2>
+      <p>Real products, not portfolio filler. Each one is a small case study in scoping and shipping.</p>
+    </div>
+    <div class="proj-grid">
+      <article class="card proj card-hover">
+        <div class="ph shot">screenshot · keevo.app</div>
+        <div class="body">
+          <div class="row gap-2" style="margin-bottom:10px;"><span class="badge">Electron</span><span class="badge">React</span><span class="badge badge-accent"><span class="dot"></span>AI</span></div>
+          <h4 class="t-h4">Keevo</h4>
+          <p class="t-small">Local-first desktop app for video creators — transcription, subtitle workflow and AI-assisted productivity.</p>
+        </div>
+      </article>
+      <article class="card proj card-hover">
+        <div class="ph shot">screenshot · edumation</div>
+        <div class="body">
+          <div class="row gap-2" style="margin-bottom:10px;"><span class="badge">Node.js</span><span class="badge">PostgreSQL</span><span class="badge">React</span></div>
+          <h4 class="t-h4">Edumation</h4>
+          <p class="t-small">School scheduling system with constraint logic, calendar sync and planning automation.</p>
+        </div>
+      </article>
+      <article class="card proj card-hover">
+        <div class="ph shot">screenshot · singuessr</div>
+        <div class="body">
+          <div class="row gap-2" style="margin-bottom:10px;"><span class="badge">TypeScript</span><span class="badge">Web Audio</span></div>
+          <h4 class="t-h4">Singuessr</h4>
+          <p class="t-small">A music guessing game with a web interface, real-time game logic and a focus on UX.</p>
+        </div>
+      </article>
+      <article class="card proj card-hover">
+        <div class="ph shot">screenshot · railguessr</div>
+        <div class="body">
+          <div class="row gap-2" style="margin-bottom:10px;"><span class="badge">React</span><span class="badge">Maps API</span></div>
+          <h4 class="t-h4">Railguessr</h4>
+          <p class="t-small">A geolocation-inspired web game with interactive maps and scoring logic.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="section" style="padding-top:0;" data-screen-label="Stack">
+  <div class="container">
+    <div class="card" style="display:flex; align-items:center; justify-content:space-between; gap:var(--sp-6); flex-wrap:wrap;">
+      <div style="min-width:200px;"><span class="eyebrow no-rule">THE STACK</span><p class="t-body" style="margin-top:10px; max-width:30ch;">Modern, boring-in-a-good-way tools that ship and scale.</p></div>
+      <div class="row wrap gap-3" style="flex:1; justify-content:flex-end;">
+        <span class="badge">React</span><span class="badge">Next.js</span><span class="badge">TypeScript</span><span class="badge">Node.js</span><span class="badge">Express</span><span class="badge">PostgreSQL</span><span class="badge">Supabase</span><span class="badge">Docker</span><span class="badge">Cloudflare</span><span class="badge badge-accent"><span class="dot"></span>Claude · Cursor</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="section" id="newsletter" data-screen-label="Newsletter">
+  <div class="container">
+    <div class="news">
+      <div>
+        <span class="eyebrow">FREE + PAID</span>
+        <h2 class="t-h2" style="margin:14px 0 12px;">Stay ahead of AI web dev without the noise.</h2>
+        <p class="t-body">A practical monthly briefing for builders. What's worth testing, what to ignore, and the prompts and workflows I actually use.</p>
+        <div class="news-form">
+          <input class="input" type="email" placeholder="you@example.com">
+          <button class="btn btn-primary">Subscribe</button>
+        </div>
+        <p class="t-small" style="margin-top:10px; color:var(--text-low);">Free sample available · Solo €9/mo · Pro €19/mo · cancel anytime</p>
+      </div>
+      <div class="code-block">
+        <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-title">june-issue.md</span></div>
+        <div class="code-body" style="font-family:var(--font-mono);">
+          <ul class="news-list">
+            <li><span class="b"></span>Claude Code workflows for React</li>
+            <li><span class="b"></span>Cursor vs Claude Code — when to use what</li>
+            <li><span class="b"></span>AI agents for solo founders</li>
+            <li><span class="b"></span>3 AI-powered MVP ideas worth testing</li>
+            <li><span class="b"></span>Tool of the month · Prompt of the month</li>
+            <li><span class="b"></span>What to ignore this month</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" style="background:var(--bg-1); border-top:1px solid var(--border);" data-screen-label="FAQ">
+  <div class="container" style="max-width:840px;">
+    <div class="sec-head" style="margin-bottom:var(--sp-5);">
+      <span class="eyebrow">QUESTIONS</span>
+      <h2>Before you reach out.</h2>
+    </div>
+    <div class="faq-item open"><button class="faq-q">Do I need to be technical? <span class="chev">＋</span></button><div class="faq-a"><p>No. Every service adapts to non-technical founders, beginners or developers. The goal is that you always leave knowing what to build and why.</p></div></div>
+    <div class="faq-item"><button class="faq-q">How much does an MVP cost? <span class="chev">＋</span></button><div class="faq-a"><p>MVP development starts at €4,500, with most projects landing between €6,000 and €15,000 depending on scope. We confirm a fixed quote after a short discovery.</p></div></div>
+    <div class="faq-item"><button class="faq-q">Can you help with AI-generated code? <span class="chev">＋</span></button><div class="faq-a"><p>Yes — understanding, debugging and cleaning up code from ChatGPT, Claude, Cursor or Copilot is one of the most common reasons people book a session.</p></div></div>
+    <div class="faq-item" style="border-bottom:none;"><button class="faq-q">Can coaching turn into a full build? <span class="chev">＋</span></button><div class="faq-a"><p>Often. If the scope becomes clear, we move from coaching to development days or a custom MVP project — no need to start over with someone new.</p></div></div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="section glow-bg" id="contact" data-screen-label="Final CTA">
+  <div class="container final-cta">
+    <span class="eyebrow no-rule" style="justify-content:center;">START HERE</span>
+    <h2 style="margin-top:18px;">Bring me your idea, blocker or product goal.</h2>
+    <p class="t-lead" style="max-width:54ch; margin:0 auto var(--sp-6);">I'll help you clarify it, understand it, build it and launch it. Start with a call — we'll find the right next step.</p>
+    <div class="hero-cta" style="justify-content:center;">
+      <a class="btn btn-primary btn-lg" href="#">Book a project call <span class="arrow">→</span></a>
+      <a class="btn btn-secondary btn-lg" href="#services">See all services</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand" style="margin-bottom:14px;"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></div>
+        <p class="t-small" style="max-width:34ch;">Full-stack web development, AI-assisted workflows and technical coaching for builders.</p>
+      </div>
+      <div class="footer-col"><h5>Services</h5><ul><li><a href="#">Newsletter</a></li><li><a href="#">Coaching</a></li><li><a href="#">Dev day</a></li><li><a href="#">MVP workshop</a></li><li><a href="#">MVP build</a></li></ul></div>
+      <div class="footer-col"><h5>Explore</h5><ul><li><a href="#">Projects</a></li><li><a href="#">Blog</a></li><li><a href="#">About</a></li><li><a href="Design System.html">Design system</a></li></ul></div>
+      <div class="footer-col"><h5>Connect</h5><ul><li><a href="#">LinkedIn</a></li><li><a href="#">GitHub</a></li><li><a href="#">Email</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Christophe Crognier · fullstackchris.dev</span>
+      <span class="row gap-4"><a href="#">Privacy</a><a href="#">Legal</a><a href="#">Sitemap</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.faq-q').forEach(function (q) {
+    q.addEventListener('click', function () { q.parentElement.classList.toggle('open'); });
+  });
+</script>
+</body>
+</html>

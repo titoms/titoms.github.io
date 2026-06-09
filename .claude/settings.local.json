@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\DEV\\\\titoms.github.io\\\\src\" -Recurse -Force)",
+      "Bash(Select-Object FullName)",
+      "Bash(Sort-Object FullName)"
+    ]
+  }
+}

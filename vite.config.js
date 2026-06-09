@@ -7,12 +7,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          three: ['three'],
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'framer-motion': ['framer-motion'],
-          'drei': ['@react-three/drei'],
-          'fiber': ['@react-three/fiber'],
+        manualChunks: (id) => {
+          if (id.includes('node_modules/three')) return 'three'
+          if (id.includes('node_modules/react-dom') || id.includes('node_modules/react-router-dom')) return 'react-vendor'
+          if (id.includes('node_modules/framer-motion')) return 'framer-motion'
+          if (id.includes('node_modules/@react-three/drei')) return 'drei'
+          if (id.includes('node_modules/@react-three/fiber')) return 'fiber'
         }
       }
     },

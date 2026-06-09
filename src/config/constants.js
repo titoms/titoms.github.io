@@ -37,6 +37,7 @@ import {
   singuessr_create2,
   singuessr_coverdle,
 } from "../assets";
+import { colors } from "./tokens";
 
 export const navLinks = [
   {
@@ -140,7 +141,7 @@ const experiences = [
     title: "Front End Developer",
     company_name: "EventMaker",
     icon: eventmaker,
-    iconBg: "#383E56",
+    iconBg: colors.iconBgDark,
     date: "Jan 2016 - Dec 2016",
     points: [
       "Developing and maintaining web pages for major European Events",
@@ -153,7 +154,7 @@ const experiences = [
     title: "Back End Developer",
     company_name: "Enovee",
     icon: enovee,
-    iconBg: "#E6DEDD",
+    iconBg: colors.iconBgLight,
     date: "Jan 2017 - Dec 2017",
     points: [
       "Developing and maintaining web applications using AngularJS, CakePHP and other related technologies.",
@@ -166,7 +167,7 @@ const experiences = [
     title: "Back End  Developer",
     company_name: "Panorabanques",
     icon: pano,
-    iconBg: "#383E56",
+    iconBg: colors.iconBgDark,
     date: "Jan 2018 - Dec 2018",
     points: [
       "Creation and maintaining of automation bots",
@@ -178,7 +179,7 @@ const experiences = [
     title: "Full Stack Developer",
     company_name: "Digital School of Paris",
     icon: dsp,
-    iconBg: "#E6DEDD",
+    iconBg: colors.iconBgLight,
     date: "Jan 2018 - Dec 2018",
     points: [
       "Developing a activity reservation Progressive Web App using ReactJS",
@@ -191,7 +192,7 @@ const experiences = [
     title: "Freelance Web Developer",
     company_name: "Independent",
     icon: mainlogo,
-    iconBg: "#383E56",
+    iconBg: colors.iconBgDark,
     date: "Jan 2019 - today",
     points: [
       "As a Freelance Full Stack Developer, I design and build custom web applications from concept to production.",
@@ -204,7 +205,7 @@ const experiences = [
     title: "Freelance Programming Teacher",
     company_name: "Independent",
     icon: mainlogo,
-    iconBg: "#1d1836",
+    iconBg: colors.bgTimeline,
     date: "Jan 2019 - today",
     points: [
       "As an Independent Programming Instructor, I have delivered over 7,000 hours of technical training in private higher-education institutions, teaching students from Bachelor to Master level.",

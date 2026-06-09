@@ -1,7 +1,12 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --color-brand: #915eff;
+  --color-brand-hover: #804dee;
+  --color-bg-timeline: #1d1836;
+}
 
 * {
   margin: 0;
@@ -33,11 +38,11 @@
 }
 
 .violet-gradient {
-  background: #804dee;
-  background: linear-gradient(-90deg, #804dee 0%, rgba(60, 51, 80, 0) 100%);
+  background: var(--color-brand-hover);
+  background: linear-gradient(-90deg, var(--color-brand-hover) 0%, rgba(60, 51, 80, 0) 100%);
   background: -webkit-linear-gradient(
     -90deg,
-    #804dee 0%,
+    var(--color-brand-hover) 0%,
     rgba(60, 51, 80, 0) 100%
   );
 }
@@ -122,17 +127,17 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #1d1836;
+  background: var(--color-bg-timeline);
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #804dee;
+  background: var(--color-brand-hover);
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #915eff;
+  background: var(--color-brand);
 }
 
 /* Calendly iframe — remove default border and white padding */

@@ -5,7 +5,7 @@ import { close, github } from "../assets";
 import { CALENDLY_URL } from "../config/constants";
 
 const SectionTitle = ({ label }) => (
-  <h4 className="text-[#915eff] uppercase tracking-widest text-[11px] font-semibold mb-3">
+  <h4 className="text-brand uppercase tracking-widest text-[11px] font-semibold mb-3">
     {label}
   </h4>
 );
@@ -88,7 +88,7 @@ const CaseStudyModal = ({ project, onClose }) => {
                 {name}
               </h1>
               {caseStudy?.tagline && (
-                <p className="mt-2 text-[#dfd9ff] text-[16px] sm:text-[18px] font-light">
+                <p className="mt-2 text-subtle text-[16px] sm:text-[18px] font-light">
                   {caseStudy.tagline}
                 </p>
               )}
@@ -116,9 +116,9 @@ const CaseStudyModal = ({ project, onClose }) => {
                 <SectionTitle label="Technical Challenges" />
                 <div className="grid sm:grid-cols-2 gap-4 mt-4">
                   {caseStudy.technicalChallenges.map((challenge, i) => (
-                    <div key={i} className="bg-[#090325]/60 border border-white/5 rounded-xl p-5">
-                      <div className="w-7 h-7 rounded-full bg-[#915eff]/20 flex items-center justify-center mb-3">
-                        <span className="text-[#915eff] text-[12px] font-bold">{i + 1}</span>
+                    <div key={i} className="bg-surface-deep/60 border border-white/5 rounded-xl p-5">
+                      <div className="w-7 h-7 rounded-full bg-brand/20 flex items-center justify-center mb-3">
+                        <span className="text-brand text-[12px] font-bold">{i + 1}</span>
                       </div>
                       <p className="text-secondary text-[14px] leading-[1.7]">{challenge}</p>
                     </div>
@@ -146,7 +146,7 @@ const CaseStudyModal = ({ project, onClose }) => {
                 <SectionTitle label="Results" />
                 <div className="grid sm:grid-cols-3 gap-4 mt-4">
                   {caseStudy.results.map((result, i) => (
-                    <div key={i} className="bg-[#090325]/60 border border-[#915eff]/20 rounded-xl p-5 flex items-center justify-center">
+                    <div key={i} className="bg-surface-deep/60 border border-brand/20 rounded-xl p-5 flex items-center justify-center">
                       <p className="text-white text-[14px] leading-[1.7] font-medium text-center">{result}</p>
                     </div>
                   ))}
@@ -160,7 +160,7 @@ const CaseStudyModal = ({ project, onClose }) => {
                 <ul className="space-y-3 mt-4">
                   {caseStudy.lessonsLearned.map((lesson, i) => (
                     <li key={i} className="flex gap-3 text-secondary text-[15px] leading-[1.7]">
-                      <span className="text-[#915eff] mt-1 flex-shrink-0">→</span>
+                      <span className="text-brand mt-1 flex-shrink-0">→</span>
                       <span>{lesson}</span>
                     </li>
                   ))}
@@ -193,7 +193,7 @@ const CaseStudyModal = ({ project, onClose }) => {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setSelectedImage(img)}
-                      className="group relative overflow-hidden rounded-xl border border-white/10 bg-[#090325] aspect-video cursor-zoom-in"
+                      className="group relative overflow-hidden rounded-xl border border-white/10 bg-surface-deep aspect-video cursor-zoom-in"
                     >
                       <img
                         src={img}
@@ -216,13 +216,13 @@ const CaseStudyModal = ({ project, onClose }) => {
               <SectionTitle label="Interested in a similar project?" />
               <h2 className="text-white font-black text-[32px] sm:text-[48px] leading-tight mb-4">
                 Let's build something<br />
-                <span className="text-[#915eff]">together.</span>
+                <span className="text-brand">together.</span>
               </h2>
               <p className="text-secondary text-[17px] mb-8 max-w-lg">
                 Book a free 30-minute discovery call. No commitment — just a conversation about what you're building.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="bg-[#915eff] py-4 px-8 text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-[#804dee] transition-all shadow-lg shadow-[#915eff]/20 active:scale-95">
+                <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="bg-brand py-4 px-8 text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-brand-hover transition-all shadow-lg shadow-brand/20 active:scale-95">
                   Book a Call
                   <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                     <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM7 11h5v5H7z" />

@@ -5,6 +5,7 @@ import { EarthCanvas } from '../canvas'
 import { SectionWrapper } from '../hoc'
 import { slideIn } from '../config/motion'
 import { CALENDLY_URL } from '../config/constants'
+import { colors } from '../config/tokens'
 
 const Contact = () => {
   return (
@@ -12,7 +13,7 @@ const Contact = () => {
       {/* Calendly panel — left on desktop, full width on mobile */}
       <motion.div
         variants={slideIn('left', "tween", 0.2, 1)}
-        className="relative z-10 w-full lg:w-[62%] lg:flex-shrink-0 bg-[#100d25]/90 backdrop-blur-sm p-8 rounded-2xl border border-white/5 shadow-2xl"
+        className="relative z-10 w-full lg:w-[62%] lg:flex-shrink-0 bg-surface/90 backdrop-blur-sm p-8 rounded-2xl border border-white/5 shadow-2xl"
       >
         <p className={styles.sectionSubText}>Let's work together</p>
         <h3 className={styles.sectionHeadText}>Book a Call.</h3>
@@ -23,11 +24,11 @@ const Contact = () => {
           url={CALENDLY_URL}
           styles={{ height: "600px", width: "100%" }}
           pageSettings={{
-            backgroundColor: "100d25",
+            backgroundColor: colors.bgSurface.slice(1),
             hideEventTypeDetails: true,
             hideLandingPageDetails: true,
-            primaryColor: "915eff",
-            textColor: "ffffff",
+            primaryColor: colors.brand.slice(1),
+            textColor: colors.textPrimary.slice(1),
           }}
         />
       </motion.div>

@@ -46,7 +46,7 @@ const Header = () => {
               href={CALENDLY_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#915eff] text-white font-semibold px-5 py-2 rounded-xl hover:bg-[#804dee] transition-all text-[15px] whitespace-nowrap shadow-lg shadow-[#915eff]/20"
+              className="bg-brand text-white font-semibold px-5 py-2 rounded-xl hover:bg-brand-hover transition-all text-[15px] whitespace-nowrap shadow-lg shadow-brand/20"
             >
               Book a Call
             </a>
@@ -86,7 +86,7 @@ const Header = () => {
                   href={CALENDLY_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-[#915eff] text-white font-bold px-8 py-3 rounded-xl hover:bg-[#804dee] transition-all text-[22px] shadow-lg shadow-[#915eff]/20"
+                  className="bg-brand text-white font-bold px-8 py-3 rounded-xl hover:bg-brand-hover transition-all text-[22px] shadow-lg shadow-brand/20"
                   onClick={() => setToggle(false)}
                 >
                   Book a Call
