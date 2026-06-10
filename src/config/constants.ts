@@ -61,6 +61,7 @@ export const navLinks: NavLink[] = [
   {
     id: "about",
     title: "About",
+    href: "/about",
   },
   {
     id: "services",
@@ -70,14 +71,17 @@ export const navLinks: NavLink[] = [
   {
     id: "projects",
     title: "Projects",
+    href: "/projects",
   },
   {
     id: "blog",
     title: "Blog",
+    href: "/blog",
   },
   {
     id: "contact",
     title: "Contact",
+    href: "/contact",
   },
 ];
 
@@ -313,19 +317,19 @@ export const footerGroups: FooterGroup[] = [
   {
     title: "Projects",
     links: [
-      { id: "projects", title: "EduMation" },
-      { id: "projects", title: "RailGuessr" },
-      { id: "projects", title: "Singuessr" },
-      { id: "projects", title: "Fresh.win" },
+      { id: "projects", title: "EduMation", href: "/projects/edumation" },
+      { id: "projects", title: "RailGuessr", href: "/projects/railguessr" },
+      { id: "projects", title: "Singuessr", href: "/projects/singuessr" },
+      { id: "projects", title: "Fresh.win", href: "/projects/fresh-win" },
     ],
   },
   {
     title: "Blog / resources",
     links: [
-      { id: "blog", title: "AI web development" },
-      { id: "blog", title: "MVP with AI" },
-      { id: "blog", title: "React Node TypeScript" },
-      { id: "blog", title: "Claude Code workflows" },
+      { id: "blog", title: "AI web development", href: "/blog/ai-web-development" },
+      { id: "blog", title: "MVP with AI", href: "/blog/building-mvp-with-ai" },
+      { id: "blog", title: "React Node TypeScript", href: "/blog/react-node-typescript" },
+      { id: "blog", title: "Claude Code workflows", href: "/blog/claude-code-workflows" },
     ],
   },
   {

@@ -2,6 +2,12 @@ import { useMemo, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import ServicesIndexPage from "./pages/services/ServicesIndexPage";
 import ServicePageTemplate from "./pages/services/ServicePageTemplate";
+import ProjectIndexPage from "./pages/projects/ProjectIndexPage";
+import ProjectCaseStudyPage from "./pages/projects/ProjectCaseStudyPage";
+import AboutPage from "./pages/about/AboutPage";
+import ContactPage from "./pages/contact/ContactPage";
+import BlogIndexPage from "./pages/blog/BlogIndexPage";
+import BlogArticlePage from "./pages/blog/BlogArticlePage";
 import CaseStudyModal from "./components/CaseStudyModal";
 import {
   Badge,
@@ -494,6 +500,12 @@ const App = () => (
           <Route path="/" element={<HomePage />} />
           <Route path="/services" element={<ServicesIndexPage />} />
           <Route path="/services/:slug" element={<ServicePageTemplate />} />
+          <Route path="/projects" element={<ProjectIndexPage />} />
+          <Route path="/projects/:slug" element={<ProjectCaseStudyPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/blog" element={<BlogIndexPage />} />
+          <Route path="/blog/:slug" element={<BlogArticlePage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
