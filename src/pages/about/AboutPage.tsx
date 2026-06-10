@@ -4,10 +4,14 @@ import { Badge, Button, Card, SectionHeader } from "../../components/ui";
 
 const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
 
+// Entries that already exist in `technologies` (constants.ts) under different names are omitted here:
+// "React" → "React JS", "TypeScript" → "TypeScript" (exact), "Node.js" → "Node JS", "Docker" → "docker"
 const coreStack = [
-  "React", "Next.js", "TypeScript", "Node.js", "Express", "PostgreSQL",
-  "Supabase", "Docker", "Cloudflare", "OpenAI API", "Claude API",
+  "Next.js", "Express", "PostgreSQL",
+  "Supabase", "Cloudflare", "OpenAI API", "Claude API",
 ];
+
+const AI_TOOL_BADGES = new Set(["OpenAI API", "Claude API"]);
 
 const AboutPage = () => {
   const allTech = Array.from(
@@ -91,11 +95,7 @@ const AboutPage = () => {
               {allTech.map((tech) => (
                 <Badge
                   key={tech}
-                  variant={
-                    tech.includes("API") || tech.includes("OpenAI") || tech.includes("Claude")
-                      ? "accent"
-                      : "default"
-                  }
+                  variant={AI_TOOL_BADGES.has(tech) ? "accent" : "default"}
                   dot
                 >
                   {tech}
@@ -122,8 +122,8 @@ const AboutPage = () => {
                 <Badge variant="default">{exp.date}</Badge>
               </div>
               <ul className="space-y-2">
-                {exp.points.map((point, i) => (
-                  <li key={i} className="flex items-start gap-3 text-sm leading-6 text-secondary">
+                {exp.points.map((point) => (
+                  <li key={point} className="flex items-start gap-3 text-sm leading-6 text-secondary">
                     <span className="mt-1 shrink-0 text-accent">›</span>
                     {point}
                   </li>
