@@ -1,4 +1,6 @@
 ---
+import '../../styles/global.css';
+
 interface Props {
   title: string;
   description: string;
@@ -45,8 +47,6 @@ const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
     <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-
-    <!-- Fonts via CSS -->
 
     <!-- JSON-LD structured data -->
     {schemas.map((schema) => (
