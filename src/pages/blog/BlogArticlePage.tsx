@@ -58,34 +58,36 @@ const BlogArticlePage = () => {
           <p className="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary">
             {article.description}
           </p>
-          <Button href="/blog" variant="ghost" size="sm" className="mt-8">
-            ← All articles
+          <Button href="/blog" variant="ghost" size="sm" className="mt-8" aria-label="Back to all articles">
+            <span aria-hidden="true">←</span> All articles
           </Button>
         </div>
       </section>
 
-      <section className={sectionClass}>
-        <Card className="mx-auto max-w-3xl p-10 sm:p-14">
-          <div className="flex flex-col items-center gap-6 py-10 text-center">
-            <Badge variant="accent">Coming soon</Badge>
-            <h2 className="font-display text-2xl font-semibold text-white">
-              This article is in progress.
-            </h2>
-            <p className="max-w-prose text-secondary">
-              I am working on this article. Subscribe to the AI web development newsletter to get notified when it
-              publishes.
-            </p>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Button href="/services/ai-web-development-newsletter" variant="primary" size="lg">
-                Join the newsletter
-              </Button>
-              <Button href="/blog" variant="secondary" size="lg">
-                Back to blog
-              </Button>
+      {article.comingSoon && (
+        <section className={sectionClass}>
+          <Card className="mx-auto max-w-3xl p-10 sm:p-14">
+            <div className="flex flex-col items-center gap-6 py-10 text-center">
+              <Badge variant="accent">Coming soon</Badge>
+              <h2 className="font-display text-2xl font-semibold text-white">
+                This article is in progress.
+              </h2>
+              <p className="max-w-prose text-secondary">
+                I am working on this article. Subscribe to the AI web development newsletter to get notified when it
+                publishes.
+              </p>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Button href="/services/ai-web-development-newsletter" variant="primary" size="lg">
+                  Join the newsletter
+                </Button>
+                <Button href="/blog" variant="secondary" size="lg">
+                  Back to blog
+                </Button>
+              </div>
             </div>
-          </div>
-        </Card>
-      </section>
+          </Card>
+        </section>
+      )}
 
       <section className="border-t border-border bg-surface/55">
         <div className={sectionClass}>
