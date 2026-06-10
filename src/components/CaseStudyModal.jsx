@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { close, github } from "../assets";
 import { CALENDLY_URL } from "../config/constants";
 
+const imgSrc = (img) => img ? (typeof img === "string" ? img : img.src) : undefined;
+
 const SectionTitle = ({ label }) => (
   <h4 className="text-brand uppercase tracking-widest text-[11px] font-semibold mb-3">
     {label}
@@ -60,7 +62,7 @@ const CaseStudyModal = ({ project, onClose }) => {
             onClick={onClose}
             className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/10 transition-all hover:rotate-90"
           >
-            <img src={close} alt="close" className="w-4 h-4 object-contain" />
+            <img src={imgSrc(close)} alt="close" className="w-4 h-4 object-contain" />
           </button>
         </div>
 
@@ -69,7 +71,7 @@ const CaseStudyModal = ({ project, onClose }) => {
           {/* HERO */}
           <div className="relative w-full h-[50vh] min-h-[280px] overflow-hidden">
             {image ? (
-              <img src={image} alt={name} className="w-full h-full object-cover" />
+              <img src={imgSrc(image)} alt={name} className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full bg-[#090325]" />
             )}
@@ -197,7 +199,7 @@ const CaseStudyModal = ({ project, onClose }) => {
                       className="group relative overflow-hidden rounded-xl border border-white/10 bg-surface-deep aspect-video cursor-zoom-in"
                     >
                       <img
-                        src={img}
+                        src={imgSrc(img)}
                         alt={`${name} preview ${i + 1}`}
                         className="w-full h-full object-cover"
                       />
@@ -230,7 +232,7 @@ const CaseStudyModal = ({ project, onClose }) => {
                   </svg>
                 </a>
                 <button onClick={() => window.open(source_code_link, "_blank")} className="bg-white/5 border border-white/10 py-4 px-6 text-white font-semibold rounded-xl flex items-center justify-center gap-2 hover:bg-white/10 transition-all active:scale-95">
-                  <img src={github} className="w-5 h-5 opacity-70" alt="github" />
+                  <img src={imgSrc(github)} className="w-5 h-5 opacity-70" alt="github" />
                   View Code
                 </button>
                 {live_link && (
@@ -263,7 +265,7 @@ const CaseStudyModal = ({ project, onClose }) => {
               onClick={(e) => e.stopPropagation()}
             >
               <img
-                src={selectedImage}
+                src={imgSrc(selectedImage)}
                 alt="Enlarged view"
                 className="w-auto h-auto max-w-[95vw] max-h-[90vh] object-contain shadow-2xl rounded-lg"
               />
@@ -271,7 +273,7 @@ const CaseStudyModal = ({ project, onClose }) => {
                 onClick={() => setSelectedImage(null)}
                 className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-black/50 hover:bg-black/80 text-white transition-all border border-white/10"
               >
-                <img src={close} alt="close" className="w-4 h-4" />
+                <img src={imgSrc(close)} alt="close" className="w-4 h-4" />
               </button>
             </motion.div>
           </motion.div>

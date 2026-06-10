@@ -4,8 +4,10 @@ export type NavLink = {
   href?: string;
 };
 
+import type { ImageMetadata } from 'astro';
+
 export type IconAsset = string;
-export type ImageAsset = string;
+export type ImageAsset = ImageMetadata | string;
 
 export type Service = {
   title: string;

@@ -1,4 +1,4 @@
-import type { Project } from "../../types";
+import type { ImageAsset, Project } from "../../types";
 import { Badge } from "./Badge";
 import { Button } from "./Button";
 import { Card } from "./Card";
@@ -6,6 +6,11 @@ import { Card } from "./Card";
 type ProjectCardProps = {
   project: Project;
   onOpen?: (project: Project) => void;
+};
+
+const imgSrc = (img: ImageAsset | null): string | undefined => {
+  if (!img) return undefined;
+  return typeof img === 'string' ? img : img.src;
 };
 
 export const ProjectCard = ({ project, onOpen }: ProjectCardProps) => (
@@ -17,7 +22,7 @@ export const ProjectCard = ({ project, onOpen }: ProjectCardProps) => (
       aria-label={`Open ${project.name} case study`}
     >
       {project.image ? (
-        <img src={project.image} alt={project.name} className="aspect-video w-full object-cover" loading="lazy" />
+        <img src={imgSrc(project.image)} alt={project.name} className="aspect-video w-full object-cover" loading="lazy" />
       ) : (
         <div className="grid aspect-video w-full place-items-center bg-surface-deep text-sm text-secondary">
           No image available
