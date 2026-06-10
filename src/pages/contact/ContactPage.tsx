@@ -4,7 +4,19 @@ import { Badge, Button, Card, SectionHeader } from "../../components/ui";
 
 const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
 
-const callSteps = [
+type CallStep = {
+  label: string;
+  title: string;
+  description: string;
+};
+
+type ServiceLink = {
+  slug: string;
+  title: string;
+  description: string;
+};
+
+const callSteps: CallStep[] = [
   {
     label: "01",
     title: "Describe your situation",
@@ -23,7 +35,7 @@ const callSteps = [
   },
 ];
 
-const serviceLinks = [
+const serviceLinks: ServiceLink[] = [
   {
     slug: "ai-web-development-newsletter",
     title: "AI newsletter",
