@@ -755,10 +755,10 @@ const projects: Project[] = [
 
 export const CALENDLY_URL = "https://calendly.com/fullstackchris/30min";
 
-// Beehiiv — replace with your Publication ID (Beehiiv dashboard > Settings > Publication)
-export const BEEHIIV_PUBLICATION_ID = "pub_REPLACE_WITH_YOUR_ID";
+// Sourced from .env (PUBLIC_BEEHIIV_PUBLICATION_ID) — set in Cloudflare Pages for production
+export const BEEHIIV_PUBLICATION_ID = import.meta.env.PUBLIC_BEEHIIV_PUBLICATION_ID as string ?? "";
 
-// Stripe Payment Links — replace with links from Stripe dashboard > Payment Links
+// Stripe Payment Links — set from Stripe dashboard > Payment Links (public URLs, safe to commit)
 export const STRIPE_PAYMENT_LINKS = {
   newsletter: "https://buy.stripe.com/REPLACE_newsletter",
   coaching1h: "https://buy.stripe.com/REPLACE_coaching_1h",
@@ -767,7 +767,7 @@ export const STRIPE_PAYMENT_LINKS = {
   mvpWorkshop: "https://buy.stripe.com/REPLACE_mvp_workshop",
 } as const;
 
-// Cloudflare Web Analytics — replace with token from CF dashboard > Analytics > Web Analytics
-export const CF_ANALYTICS_TOKEN = "REPLACE_WITH_YOUR_CF_TOKEN";
+// Sourced from .env (PUBLIC_CF_ANALYTICS_TOKEN) — set in Cloudflare Pages for production
+export const CF_ANALYTICS_TOKEN = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN as string ?? "";
 
 export { services, technologies, experiences, testimonials, projects };
