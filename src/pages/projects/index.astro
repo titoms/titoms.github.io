@@ -1,5 +1,6 @@
 ---
 import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
 import PageLayout from '../../components/layout/PageLayout.astro';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
@@ -8,8 +9,6 @@ import { SectionHeader } from '../../components/ui/SectionHeader';
 import { projects, CALENDLY_URL } from '../../config/constants';
 
 const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
-const imgSrc = (img: ImageMetadata | string | null): string | undefined =>
-  img ? (typeof img === 'string' ? img : img.src) : undefined;
 ---
 
 <PageLayout
@@ -36,12 +35,11 @@ const imgSrc = (img: ImageMetadata | string | null): string | undefined =>
         <Card hover class="flex h-full flex-col gap-4">
           {project.image && (
             <div class="aspect-video overflow-hidden rounded-md border border-border">
-              <img
-                src={imgSrc(project.image)}
-                alt={project.name}
-                class="h-full w-full object-cover"
-                loading="lazy"
-              />
+              {typeof project.image === 'string' ? (
+                <img src={project.image} alt={project.name} class="h-full w-full object-cover" loading="lazy" />
+              ) : (
+                <Image src={project.image as ImageMetadata} alt={project.name} class="h-full w-full object-cover" loading="lazy" />
+              )}
             </div>
           )}
           <div class="flex flex-wrap gap-2">

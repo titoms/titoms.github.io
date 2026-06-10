@@ -71,7 +71,7 @@ const CaseStudyModal = ({ project, onClose }) => {
           {/* HERO */}
           <div className="relative w-full h-[50vh] min-h-[280px] overflow-hidden">
             {image ? (
-              <img src={imgSrc(image)} alt={name} className="w-full h-full object-cover" />
+              <img src={imgSrc(image)} alt={name} className="w-full h-full object-cover" loading="eager" />
             ) : (
               <div className="w-full h-full bg-[#090325]" />
             )}
@@ -202,6 +202,7 @@ const CaseStudyModal = ({ project, onClose }) => {
                         src={imgSrc(img)}
                         alt={`${name} preview ${i + 1}`}
                         className="w-full h-full object-cover"
+                        loading="lazy"
                       />
                       <div className="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
                         <span className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-white text-[12px] border border-white/20">
@@ -268,6 +269,7 @@ const CaseStudyModal = ({ project, onClose }) => {
                 src={imgSrc(selectedImage)}
                 alt="Enlarged view"
                 className="w-auto h-auto max-w-[95vw] max-h-[90vh] object-contain shadow-2xl rounded-lg"
+                loading="eager"
               />
               <button
                 onClick={() => setSelectedImage(null)}

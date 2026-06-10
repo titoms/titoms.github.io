@@ -224,7 +224,7 @@ Migration acceptance criteria:
 [ ] Choose newsletter provider: Buttondown, Beehiiv, or MailerLite.
 [ ] Add real newsletter signup.
 [ ] Add Stripe Payment Links for productized offers.
-[ ] Add Calendly or Cal.com booking links.
+[x] Add Calendly booking link with dark-themed inline embed on /contact (background_color, text_color, primary_color params).
 [ ] Add Plausible or Umami analytics.
 [ ] Add Google Search Console.
 [ ] Track email capture.
