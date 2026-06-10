@@ -164,31 +164,31 @@ Each page includes:
 [ ] JSON-LD breadcrumb data after framework migration.
 ```
 
-## Phase 6 - Project Pages
+## Phase 6 - Project Pages ✅
 
 ```txt
-[ ] Create /projects.
-[ ] Create full Keevo case study page.
-[ ] Create full Edumation case study page.
-[ ] Create full Singuessr case study page.
-[ ] Create full Railguessr case study page.
-[ ] Create full FreshWin case study page.
-[ ] Reuse existing rich caseStudy data from constants.
-[ ] Keep modal on homepage as a fast preview.
-[ ] Add project CTA linking to coaching, MVP workshop, or custom MVP development.
+[x] Create /projects.
+[x] Create full Keevo case study page.
+[x] Create full Edumation case study page.
+[x] Create full Singuessr case study page.
+[x] Create full Railguessr case study page.
+[x] Create full FreshWin case study page.
+[x] Reuse existing rich caseStudy data from constants.
+[x] Keep modal on homepage as a fast preview.
+[x] Add project CTA linking to coaching, MVP workshop, or custom MVP development.
 ```
 
-## Phase 7 - Additional Core Pages
+## Phase 7 - Additional Core Pages ✅
 
 ```txt
-[ ] Create /about.
-[ ] Create /contact.
-[ ] Create /blog placeholder index.
-[ ] Add future blog article placeholder: /blog/ai-web-development.
-[ ] Add future blog article placeholder: /blog/building-mvp-with-ai.
-[ ] Add future blog article placeholder: /blog/react-node-typescript.
-[ ] Add future blog article placeholder: /blog/claude-code-workflows.
-[ ] Add future blog article placeholder: /blog/how-much-does-an-mvp-cost.
+[x] Create /about.
+[x] Create /contact.
+[x] Create /blog placeholder index.
+[x] Add future blog article placeholder: /blog/ai-web-development.
+[x] Add future blog article placeholder: /blog/building-mvp-with-ai.
+[x] Add future blog article placeholder: /blog/react-node-typescript.
+[x] Add future blog article placeholder: /blog/claude-code-workflows.
+[x] Add future blog article placeholder: /blog/how-much-does-an-mvp-cost.
 ```
 
 ## Phase 8 - Framework Migration For SEO
