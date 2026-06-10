@@ -754,4 +754,20 @@ const projects: Project[] = [
 ];
 
 export const CALENDLY_URL = "https://calendly.com/fullstackchris/30min";
+
+// Beehiiv — replace with your Publication ID (Beehiiv dashboard > Settings > Publication)
+export const BEEHIIV_PUBLICATION_ID = "pub_REPLACE_WITH_YOUR_ID";
+
+// Stripe Payment Links — replace with links from Stripe dashboard > Payment Links
+export const STRIPE_PAYMENT_LINKS = {
+  newsletter: "https://buy.stripe.com/REPLACE_newsletter",
+  coaching1h: "https://buy.stripe.com/REPLACE_coaching_1h",
+  coaching4h: "https://buy.stripe.com/REPLACE_coaching_4h",
+  developmentDay: "https://buy.stripe.com/REPLACE_dev_day",
+  mvpWorkshop: "https://buy.stripe.com/REPLACE_mvp_workshop",
+} as const;
+
+// Cloudflare Web Analytics — replace with token from CF dashboard > Analytics > Web Analytics
+export const CF_ANALYTICS_TOKEN = "REPLACE_WITH_YOUR_CF_TOKEN";
+
 export { services, technologies, experiences, testimonials, projects };

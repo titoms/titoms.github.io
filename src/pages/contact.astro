@@ -26,6 +26,10 @@ const serviceLinks = [
   title="Contact — fullstackchris.dev"
   description="Book a free 30-minute call to discuss your project, blocker, or product idea. No commitment required."
 >
+  <Fragment slot="head">
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
+    <script is:inline async src="https://assets.calendly.com/assets/external/widget.js"></script>
+  </Fragment>
   <!-- Hero -->
   <section class="glow-bg grid-bg relative overflow-hidden border-b border-border pt-32 pb-20">
     <div class={sectionClass}>
@@ -53,20 +57,16 @@ const serviceLinks = [
     </div>
   </section>
 
-  <!-- Calendly inline embed -->
+  <!-- Calendly inline embed — uses widget.js to apply dark-theme colour params -->
   <section class="border-y border-border bg-surface/40">
     <div class={sectionClass}>
       <SectionHeader eyebrow="Schedule" title="Pick a time that works for you." />
       <div class="mt-8 overflow-hidden rounded-xl border border-border bg-[#131318]">
-        <iframe
-          src="https://calendly.com/fullstackchris/30min?background_color=131318&text_color=f4f4f6&primary_color=a78bfa&hide_gdpr_banner=1"
-          width="100%"
-          height="700"
-          frameborder="0"
-          loading="lazy"
-          title="Book a 30-minute call with Christophe"
-          class="block"
-        ></iframe>
+        <div
+          class="calendly-inline-widget"
+          data-url="https://calendly.com/fullstackchris/30min?background_color=131318&text_color=f4f4f6&primary_color=a78bfa&hide_gdpr_banner=1"
+          style="min-width:320px;height:700px;"
+        ></div>
       </div>
       <p class="mt-4 text-center text-sm text-secondary">
         Can't see the calendar?

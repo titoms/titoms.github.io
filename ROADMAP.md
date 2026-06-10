@@ -221,14 +221,14 @@ Migration acceptance criteria:
 ## Phase 9 - Newsletter, Payments, Analytics
 
 ```txt
-[ ] Choose newsletter provider: Buttondown, Beehiiv, or MailerLite.
-[ ] Add real newsletter signup.
-[ ] Add Stripe Payment Links for productized offers.
-[x] Add Calendly booking link with dark-themed inline embed on /contact (background_color, text_color, primary_color params).
-[ ] Add Plausible or Umami analytics.
-[ ] Add Google Search Console.
-[ ] Track email capture.
-[ ] Track CTA clicks.
+[x] Choose newsletter provider: Beehiiv.
+[x] Add real newsletter signup (NewsletterForm posts to Beehiiv embed endpoint; set BEEHIIV_PUBLICATION_ID in constants.ts).
+[x] Add Stripe Payment Links for productized offers (set STRIPE_PAYMENT_LINKS in constants.ts; "Buy now" buttons appear on service pages when links are filled in).
+[x] Add Calendly booking link with dark-themed inline embed on /contact (widget.js approach with background_color, text_color, primary_color params).
+[x] Cloudflare Web Analytics beacon added to BaseLayout (set CF_ANALYTICS_TOKEN in constants.ts).
+[x] Added Google Search Console meta tag support in BaseLayout (pass gscVerification prop if using meta tag method; DNS method needs no code change).
+[x] Track email capture (trackEvent("newsletter_signup") fires on successful Beehiiv submit).
+[x] Track CTA clicks (data-track attributes + inline script on service pages fires __cfBeacon events for stripe_click and cta_click).
 ```
 
 ## Phase 10 - Lead Qualification And Forms

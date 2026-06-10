@@ -143,6 +143,7 @@ export type ServicePageData = {
   included: ServiceIncludedItem[];
   pricing: ServicePricingRow[];
   pricingNote?: string;
+  stripeLink?: string;
   goodFit?: string[];
   notAFit?: string[];
   processSteps?: { title: string; description: string }[];

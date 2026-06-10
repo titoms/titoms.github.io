@@ -166,10 +166,31 @@ const jsonLd = {
         <p class="mt-6 text-sm text-low">{service.pricingNote}</p>
       )}
       <div class="mt-8 flex flex-wrap gap-4">
-        <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
+        {service.stripeLink && !service.stripeLink.includes('REPLACE') && (
+          <Button
+            href={service.stripeLink}
+            variant="primary"
+            size="lg"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-track="stripe_click"
+            data-service={service.slug}
+          >
+            Buy now
+          </Button>
+        )}
+        <Button
+          href={CALENDLY_URL}
+          variant={service.stripeLink && !service.stripeLink.includes('REPLACE') ? "secondary" : "primary"}
+          size="lg"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-track="cta_click"
+          data-service={service.slug}
+        >
           Book a session
         </Button>
-        <Button href="/contact" variant="secondary" size="lg">
+        <Button href="/contact" variant="ghost" size="lg">
           Ask a question
         </Button>
       </div>
@@ -191,10 +212,43 @@ const jsonLd = {
         <h2 class="max-w-xl font-display text-[clamp(1.8rem,3.5vw,2.8rem)] font-semibold leading-tight text-white">
           Ready to get started?
         </h2>
-        <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
-          {service.hero.primaryCta}
-        </Button>
+        <div class="flex flex-wrap justify-center gap-4">
+          {service.stripeLink && !service.stripeLink.includes('REPLACE') && (
+            <Button
+              href={service.stripeLink}
+              variant="primary"
+              size="lg"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track="stripe_click"
+              data-service={service.slug}
+            >
+              Buy now
+            </Button>
+          )}
+          <Button
+            href={CALENDLY_URL}
+            variant={service.stripeLink && !service.stripeLink.includes('REPLACE') ? "secondary" : "primary"}
+            size="lg"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-track="cta_click"
+            data-service={service.slug}
+          >
+            {service.hero.primaryCta}
+          </Button>
+        </div>
       </div>
     </div>
   </section>
 </PageLayout>
+
+<script is:inline>
+  document.querySelectorAll('[data-track]').forEach(function(el) {
+    el.addEventListener('click', function() {
+      var name = el.dataset.track || 'click';
+      var service = el.dataset.service || '';
+      if (window.__cfBeacon) window.__cfBeacon.push({ type: 'event', name: name, service: service });
+    });
+  });
+</script>

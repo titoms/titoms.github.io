@@ -1,5 +1,6 @@
 ---
 import '../../styles/global.css';
+import { CF_ANALYTICS_TOKEN } from '../../config/constants';
 
 interface Props {
   title: string;
@@ -7,6 +8,7 @@ interface Props {
   canonical?: string;
   ogImage?: string;
   jsonLd?: object | object[];
+  gscVerification?: string;
 }
 
 const {
@@ -15,9 +17,11 @@ const {
   canonical = Astro.url.href,
   ogImage = 'https://fullstackchris.dev/og-image.png',
   jsonLd,
+  gscVerification,
 } = Astro.props;
 
 const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const cfToken = CF_ANALYTICS_TOKEN.startsWith('REPLACE') ? null : CF_ANALYTICS_TOKEN;
 ---
 
 <!doctype html>
@@ -48,12 +52,28 @@ const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
+    <!-- Google Search Console verification (pass gscVerification prop if using meta tag method) -->
+    {gscVerification && <meta name="google-site-verification" content={gscVerification} />}
+
     <!-- JSON-LD structured data -->
     {schemas.map((schema) => (
       <script type="application/ld+json" set:html={JSON.stringify(schema)} />
     ))}
+
+    <!-- Page-specific head content (scripts, stylesheets, etc.) -->
+    <slot name="head" />
   </head>
   <body>
     <slot />
+
+    <!-- Cloudflare Web Analytics -->
+    {cfToken && (
+      <script
+        is:inline
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={JSON.stringify({ token: cfToken })}
+      />
+    )}
   </body>
 </html>

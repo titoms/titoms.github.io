@@ -9,12 +9,14 @@ interface Props {
   canonical?: string;
   ogImage?: string;
   jsonLd?: object | object[];
+  gscVerification?: string;
 }
 
 const props = Astro.props;
 ---
 
 <BaseLayout {...props}>
+  <slot name="head" slot="head" />
   <SiteHeader client:load />
   <main>
     <slot />

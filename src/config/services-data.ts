@@ -1,4 +1,5 @@
 import type { ServicePageData } from "../types";
+import { STRIPE_PAYMENT_LINKS } from "./constants";
 
 const newsletter: ServicePageData = {
   slug: "ai-web-development-newsletter",
@@ -61,6 +62,7 @@ const newsletter: ServicePageData = {
     { label: "Pro builder", price: "19 EUR / mo", featured: true },
     { label: "Team / School / Company", price: "99 EUR / mo" },
   ],
+  stripeLink: STRIPE_PAYMENT_LINKS.newsletter,
   faqs: [
     {
       question: "What is this newsletter about?",
@@ -152,6 +154,7 @@ const coaching: ServicePageData = {
     { label: "Half-day coaching", price: "300 EUR", featured: true },
     { label: "Full-day coaching", price: "550 EUR" },
   ],
+  stripeLink: STRIPE_PAYMENT_LINKS.coaching1h,
   faqs: [
     {
       question: "Do I need to be technical?",
@@ -280,6 +283,7 @@ const devDay: ServicePageData = {
       description: "If the scope needs more time, we schedule a follow-up with a refined task.",
     },
   ],
+  stripeLink: STRIPE_PAYMENT_LINKS.developmentDay,
   faqs: [
     {
       question: "Can you build a full app in one day?",
@@ -384,6 +388,7 @@ const mvpWorkshop: ServicePageData = {
     "You have a full in-house technical team",
     "You need a marketing or business plan, not a product roadmap",
   ],
+  stripeLink: STRIPE_PAYMENT_LINKS.mvpWorkshop,
   faqs: [
     {
       question: "Do I need a technical background?",
