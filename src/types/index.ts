@@ -146,3 +146,11 @@ export type ServicePageData = {
   processSteps?: { title: string; description: string }[];
   faqs: { question: string; answer: string }[];
 };
+
+export type BlogArticle = {
+  slug: string;
+  title: string;
+  description: string;
+  tags: string[];
+  comingSoon?: boolean;
+};
