@@ -6,7 +6,7 @@ export type NavLink = {
 
 import type { ImageMetadata } from 'astro';
 
-export type IconAsset = string;
+export type IconAsset = ImageMetadata | string;
 export type ImageAsset = ImageMetadata | string;
 
 export type Service = {
