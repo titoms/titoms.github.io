@@ -1,0 +1,200 @@
+---
+import PageLayout from '../../components/layout/PageLayout.astro';
+import { Badge } from '../../components/ui/Badge';
+import { Button } from '../../components/ui/Button';
+import { Card } from '../../components/ui/Card';
+import { SectionHeader } from '../../components/ui/SectionHeader';
+import FAQAccordion from '../../components/islands/FAQAccordion';
+import { servicePages } from '../../config/services-data';
+import { CALENDLY_URL } from '../../config/constants';
+import type { FAQ } from '../../types';
+
+export async function getStaticPaths() {
+  return servicePages.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }));
+}
+
+const { service } = Astro.props;
+const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
+
+const serviceFaqs: FAQ[] = service.faqs.map((f) => ({ question: f.question, answer: f.answer }));
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: service.hero.h1,
+  description: service.meta.description,
+  provider: {
+    "@type": "Person",
+    name: "Christophe Crognier",
+    url: "https://fullstackchris.dev",
+  },
+  url: `https://fullstackchris.dev/services/${service.slug}`,
+};
+---
+
+<PageLayout
+  title={`${service.meta.title} — fullstackchris.dev`}
+  description={service.meta.description}
+  canonical={`https://fullstackchris.dev/services/${service.slug}`}
+  jsonLd={jsonLd}
+>
+  <!-- Hero -->
+  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border pt-32 pb-20">
+    <div class={sectionClass}>
+      <Badge variant="accent">{service.badge}</Badge>
+      <h1 class="mt-6 max-w-4xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white">
+        {service.hero.h1}
+      </h1>
+      <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary">
+        {service.hero.subtitle}
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <Button
+          href={service.hero.primaryCtaHref ?? CALENDLY_URL}
+          variant="primary"
+          size="lg"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {service.hero.primaryCta}
+        </Button>
+        {service.hero.secondaryCta && (
+          <Button href={service.hero.secondaryCtaHref ?? '/contact'} variant="secondary" size="lg">
+            {service.hero.secondaryCta}
+          </Button>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- Pain points -->
+  <section class={sectionClass}>
+    <div class="grid gap-10 lg:grid-cols-2">
+      <div>
+        <SectionHeader eyebrow="Pain points" title="Does this sound familiar?" />
+        <ul class="mt-8 space-y-3">
+          {service.painPoints.map((point) => (
+            <li class="flex items-start gap-3 text-secondary">
+              <span class="mt-1 font-mono text-sm text-accent">›</span>
+              <span class="text-[0.95rem] leading-7">{point}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <SectionHeader eyebrow="Outcomes" title="What you get." />
+        <ul class="mt-8 space-y-3">
+          {service.outcomes.map((outcome) => (
+            <li class="flex items-start gap-3 text-secondary">
+              <span class="mt-1 text-positive">✓</span>
+              <span class="text-[0.95rem] leading-7">{outcome}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Included -->
+  <section class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <SectionHeader eyebrow="What's included" title="Every session includes." />
+      <div class="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        {service.included.map((item) => (
+          <Card class="flex flex-col gap-2">
+            <h3 class="font-display text-[1.05rem] font-semibold text-white">{item.title}</h3>
+            <p class="text-[0.9rem] leading-6 text-secondary">{item.description}</p>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Good fit / Not a fit -->
+  {(service.goodFit || service.notAFit) && (
+    <section class={sectionClass}>
+      <div class="grid gap-8 lg:grid-cols-2">
+        {service.goodFit && (
+          <div>
+            <SectionHeader eyebrow="Good fit" title="This is for you if…" />
+            <ul class="mt-6 space-y-3">
+              {service.goodFit.map((item) => (
+                <li class="flex items-start gap-3 text-secondary">
+                  <span class="mt-1 text-positive">✓</span>
+                  <span class="text-[0.95rem] leading-7">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {service.notAFit && (
+          <div>
+            <SectionHeader eyebrow="Not a fit" title="This is not for you if…" />
+            <ul class="mt-6 space-y-3">
+              {service.notAFit.map((item) => (
+                <li class="flex items-start gap-3 text-secondary">
+                  <span class="mt-1 font-mono text-accent">✕</span>
+                  <span class="text-[0.95rem] leading-7">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+
+  <!-- Pricing -->
+  <section class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <SectionHeader eyebrow="Pricing" title="Simple pricing." />
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {service.pricing.map((row) => (
+          <Card
+            class={`flex flex-col gap-2 ${row.featured ? 'border-accent bg-gradient-to-b from-brand/10 shadow-glow' : ''}`}
+          >
+            {row.featured && <Badge variant="accent">Recommended</Badge>}
+            <p class="font-display text-sm font-medium text-secondary">{row.label}</p>
+            <p class="font-display text-2xl font-bold text-white">{row.price}</p>
+          </Card>
+        ))}
+      </div>
+      {service.pricingNote && (
+        <p class="mt-6 text-sm text-low">{service.pricingNote}</p>
+      )}
+      <div class="mt-8 flex flex-wrap gap-4">
+        <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
+          Book a session
+        </Button>
+        <Button href="/contact" variant="secondary" size="lg">
+          Ask a question
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class={sectionClass}>
+    <div class="grid gap-12 lg:grid-cols-[1fr_1.5fr]">
+      <SectionHeader eyebrow="Questions" title="Common questions." />
+      <FAQAccordion faqs={serviceFaqs} client:visible />
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="glow-bg grid-bg relative overflow-hidden border-t border-border">
+    <div class={sectionClass}>
+      <div class="flex flex-col items-center gap-6 py-10 text-center">
+        <h2 class="max-w-xl font-display text-[clamp(1.8rem,3.5vw,2.8rem)] font-semibold leading-tight text-white">
+          Ready to get started?
+        </h2>
+        <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
+          {service.hero.primaryCta}
+        </Button>
+      </div>
+    </div>
+  </section>
+</PageLayout>

@@ -1,0 +1,23 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import SiteFooter from './SiteFooter.astro';
+import SiteHeader from '../islands/SiteHeader';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  jsonLd?: object | object[];
+}
+
+const props = Astro.props;
+---
+
+<BaseLayout {...props}>
+  <SiteHeader client:load />
+  <main>
+    <slot />
+  </main>
+  <SiteFooter />
+</BaseLayout>

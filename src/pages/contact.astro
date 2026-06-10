@@ -1,0 +1,78 @@
+---
+import PageLayout from '../components/layout/PageLayout.astro';
+import { Badge } from '../components/ui/Badge';
+import { Button } from '../components/ui/Button';
+import { Card } from '../components/ui/Card';
+import { SectionHeader } from '../components/ui/SectionHeader';
+import { CALENDLY_URL } from '../config/constants';
+
+const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
+
+const callSteps = [
+  { step: "1", label: "Choose a time", description: "Pick a 30-minute slot that works for you." },
+  { step: "2", label: "Describe your project", description: "Brief context on what you are building or what is blocked." },
+  { step: "3", label: "Join the call", description: "We will talk through the situation and define a path forward." },
+];
+
+const serviceLinks = [
+  { title: "Web project coaching", href: "/services/web-project-coaching", description: "Review, unblock, and get written next steps." },
+  { title: "Full-stack development day", href: "/services/full-stack-development-day", description: "Focused implementation sessions." },
+  { title: "MVP bootstrapping workshop", href: "/services/mvp-bootstrapping-workshop", description: "Turn your idea into a build plan." },
+  { title: "AI web development newsletter", href: "/services/ai-web-development-newsletter", description: "Monthly briefing on AI tools and workflows." },
+];
+---
+
+<PageLayout
+  title="Contact — fullstackchris.dev"
+  description="Book a free 30-minute call to discuss your project, blocker, or product idea. No commitment required."
+>
+  <!-- Hero -->
+  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border pt-32 pb-20">
+    <div class={sectionClass}>
+      <Badge variant="accent">Contact</Badge>
+      <h1 class="mt-6 max-w-3xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white">
+        Let's talk about your project.
+      </h1>
+      <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary">
+        Book a free 30-minute call. Bring your project, blocker, or idea — we'll figure out if and how I can help.
+      </p>
+    </div>
+  </section>
+
+  <!-- Call steps -->
+  <section class={sectionClass}>
+    <SectionHeader eyebrow="How it works" title="Book a call in 3 steps." />
+    <div class="mt-10 grid gap-5 sm:grid-cols-3">
+      {callSteps.map((s) => (
+        <Card class="flex flex-col gap-3">
+          <span class="font-mono text-3xl font-bold text-accent">{s.step}</span>
+          <h3 class="font-display text-lg font-semibold text-white">{s.label}</h3>
+          <p class="text-sm leading-6 text-secondary">{s.description}</p>
+        </Card>
+      ))}
+    </div>
+    <div class="mt-10 flex justify-center">
+      <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
+        Book a free 30-minute call
+      </Button>
+    </div>
+  </section>
+
+  <!-- Services links -->
+  <section class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <SectionHeader eyebrow="Or browse services" title="Know what you need?" description="Skip the call and go straight to the right offer." />
+      <div class="mt-10 grid gap-4 sm:grid-cols-2">
+        {serviceLinks.map((link) => (
+          <Card hover class="flex flex-col gap-2">
+            <h3 class="font-display text-lg font-semibold text-white">{link.title}</h3>
+            <p class="text-sm leading-6 text-secondary">{link.description}</p>
+            <Button href={link.href} variant="ghost" size="sm" class="mt-2 w-fit">
+              Learn more
+            </Button>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+</PageLayout>

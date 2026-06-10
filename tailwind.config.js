@@ -1,8 +1,8 @@
-import { colors, shadows } from './src/config/tokens.js'
+import { colors, fonts, layout, radii, shadows } from './src/config/tokens.js'
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./src/**/*.{js,jsx}"],
+  content: ["./src/**/*.{js,jsx,ts,tsx,astro}"],
   mode: "jit",
   theme: {
     extend: {
@@ -20,11 +20,43 @@ export default {
         "brand-hover":  colors.brandHover,
         surface:        colors.bgSurface,
         "surface-deep": colors.bgDeep,
+        raised:         colors.bgRaised,
+        inset:          colors.bgInset,
         timeline:       colors.bgTimeline,
         subtle:         colors.textSubtle,
+        accent:         colors.brand,
+        low:            colors.textLow,
+        border:         colors.border,
+        positive:       colors.positive,
+        negative:       colors.negative,
+      },
+      borderColor: {
+        DEFAULT: colors.border,
+        strong: colors.borderStrong,
+        accent: colors.borderAccent,
       },
       boxShadow: {
+        sm: shadows.sm,
+        md: shadows.md,
+        lg: shadows.lg,
         card: shadows.card,
+        glow: shadows.glow,
+      },
+      borderRadius: {
+        sm: radii.sm,
+        md: radii.md,
+        lg: radii.lg,
+        xl: radii.xl,
+        pill: radii.pill,
+      },
+      fontFamily: {
+        display: fonts.display,
+        body: fonts.body,
+        mono: fonts.mono,
+      },
+      maxWidth: {
+        site: layout.maxw,
+        prose: layout.prose,
       },
       screens: {
         xs: "450px",

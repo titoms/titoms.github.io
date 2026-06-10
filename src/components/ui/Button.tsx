@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "./utils";
 
@@ -47,19 +46,10 @@ export const Button = (props: ButtonProps) => {
   const buttonClassName = cn(base, variants[variant], sizes[size], className);
 
   if ("href" in props && typeof props.href === "string") {
-    const { variant: _v, size: _s, className: _c, children: _ch, href, ...rest } = props as AnchorButtonProps;
-    const isInternal = href.startsWith("/") && !href.startsWith("//");
-
-    if (isInternal) {
-      return (
-        <Link to={href} className={buttonClassName} {...rest}>
-          {children}
-        </Link>
-      );
-    }
+    const { variant: _v, size: _s, className: _c, children: _ch, ...rest } = props as AnchorButtonProps;
 
     return (
-      <a href={href} className={buttonClassName} {...rest}>
+      <a className={buttonClassName} {...rest}>
         {children}
       </a>
     );

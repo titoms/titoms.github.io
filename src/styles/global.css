@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-0: #0d0d10;
+  --bg-1: #131318;
+  --bg-2: #1a1a20;
+  --bg-3: #22222a;
+  --bg-4: #2c2c35;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --border-accent: rgba(167, 139, 250, 0.40);
+
+  --text-hi: #f4f4f6;
+  --text-mid: #a4a4af;
+  --text-low: #6c6c78;
+  --text-on-accent: #15101f;
+
+  --color-brand: #a78bfa;
+  --color-brand-hover: #c4b5fd;
+  --accent-soft: rgba(167, 139, 250, 0.12);
+  --accent-soft-2: rgba(167, 139, 250, 0.20);
+  --accent-glow: rgba(167, 139, 250, 0.35);
+  --color-bg-timeline: var(--bg-2);
+
+  --positive: #5fd99a;
+  --positive-soft: rgba(95, 217, 154, 0.14);
+  --negative: #f47373;
+  --negative-soft: rgba(244, 115, 115, 0.12);
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Hanken Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+  --r-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.55);
+  --glow: 0 0 48px var(--accent-glow);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--font-body);
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg-0);
+  color: var(--text-hi);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  letter-spacing: 0;
+}
+
+.glow-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-bg::before {
+  content: "";
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  width: 900px;
+  height: 600px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(167, 139, 250, 0.18) 0%, rgba(167, 139, 250, 0.06) 35%, transparent 70%);
+  filter: blur(20px);
+}
+
+.grid-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+}
+
+.violet-gradient {
+  background: var(--color-brand-hover);
+  background: linear-gradient(-90deg, var(--color-brand-hover) 0%, rgba(167, 139, 250, 0) 100%);
+  background: -webkit-linear-gradient(
+    -90deg,
+    var(--color-brand-hover) 0%,
+    rgba(167, 139, 250, 0) 100%
+  );
+}
+
+.green-pink-gradient {
+  background: var(--positive);
+  background: linear-gradient(90.13deg, var(--positive) 1.9%, var(--color-brand) 97.5%);
+  background: -webkit-linear-gradient(-90.13deg, var(--positive) 1.9%, var(--color-brand) 97.5%);
+}
+
+.orange-text-gradient {
+  background: #f12711;
+  background: -webkit-linear-gradient(to top, #f12711, #f5af19);
+  background: linear-gradient(to top, #f12711, #f5af19);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.green-text-gradient {
+  background: #11998e;
+  background: -webkit-linear-gradient(to top, #11998e, #38ef7d);
+  background: linear-gradient(to top, #11998e, #38ef7d);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.blue-text-gradient {
+  background: #56ccf2;
+  background: -webkit-linear-gradient(to top, #2f80ed, #56ccf2);
+  background: linear-gradient(to top, #2f80ed, #56ccf2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.pink-text-gradient {
+  background: #ec008c;
+  background: -webkit-linear-gradient(to top, #ec008c, #fc6767);
+  background: linear-gradient(to top, #ec008c, #fc6767);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--color-bg-timeline);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-brand-hover);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand);
+}

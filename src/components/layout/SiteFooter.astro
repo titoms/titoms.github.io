@@ -1,0 +1,48 @@
+---
+import { footerGroups, CALENDLY_URL } from '../../config/constants';
+---
+
+<footer class="border-t border-border bg-surface/30">
+  <div class="mx-auto w-full max-w-site px-6 py-16 sm:px-8 lg:px-10">
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      {footerGroups.map((group) => (
+        <div>
+          <p class="mb-4 font-mono text-xs uppercase tracking-[0.18em] text-accent">{group.title}</p>
+          <ul class="space-y-2">
+            {group.links.map((link) => {
+              const href = link.href
+                ? link.href
+                : link.title === 'Book a call'
+                ? CALENDLY_URL
+                : link.title === 'LinkedIn'
+                ? 'https://linkedin.com/in/christophe-crognier'
+                : link.title === 'GitHub'
+                ? 'https://github.com/titoms'
+                : '/contact';
+              const isExternal = href.startsWith('http');
+              return (
+                <li>
+                  <a
+                    href={href}
+                    target={isExternal ? '_blank' : undefined}
+                    rel={isExternal ? 'noopener noreferrer' : undefined}
+                    class="text-sm text-secondary transition-colors hover:text-white"
+                  >
+                    {link.title}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
+      <p class="text-sm text-low">
+        &copy; {new Date().getFullYear()} fullstackchris.dev — Christophe Crognier
+      </p>
+      <p class="text-sm text-low">Built with Astro + React + Tailwind</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,205 @@
+---
+import PageLayout from '../../components/layout/PageLayout.astro';
+import { Badge } from '../../components/ui/Badge';
+import { Button } from '../../components/ui/Button';
+import { Card } from '../../components/ui/Card';
+import { SectionHeader } from '../../components/ui/SectionHeader';
+import { projects, CALENDLY_URL } from '../../config/constants';
+
+export async function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: project.caseStudy.tagline,
+    description: project.description,
+    author: {
+      "@type": "Person",
+      name: "Christophe Crognier",
+      url: "https://fullstackchris.dev",
+    },
+    url: `https://fullstackchris.dev/projects/${project.slug}`,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Projects", item: "https://fullstackchris.dev/projects" },
+      { "@type": "ListItem", position: 2, name: project.name, item: `https://fullstackchris.dev/projects/${project.slug}` },
+    ],
+  },
+];
+---
+
+<PageLayout
+  title={`${project.name} Case Study — fullstackchris.dev`}
+  description={project.description}
+  canonical={`https://fullstackchris.dev/projects/${project.slug}`}
+  jsonLd={jsonLd}
+>
+  <!-- Hero -->
+  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border pt-32 pb-20">
+    <div class={sectionClass}>
+      <div class="flex flex-wrap gap-2">
+        {project.tags.map((tag) => (
+          <Badge variant="default">{tag.name}</Badge>
+        ))}
+      </div>
+      <h1 class="mt-6 max-w-4xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white">
+        {project.name}
+      </h1>
+      <p class="mt-4 max-w-prose text-xl leading-8 text-accent italic">
+        "{project.caseStudy.tagline}"
+      </p>
+      <p class="mt-4 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary">
+        {project.longDescription}
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <Button href="/projects" variant="ghost" size="sm">
+          <span aria-hidden="true">←</span> All projects
+        </Button>
+        {project.live_link && (
+          <Button href={project.live_link} variant="secondary" size="sm" target="_blank" rel="noopener noreferrer">
+            View live →
+          </Button>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- Main image -->
+  {project.image && (
+    <section class="border-b border-border">
+      <div class={sectionClass}>
+        <div class="overflow-hidden rounded-xl border border-border">
+          <img
+            src={project.image}
+            alt={`${project.name} screenshot`}
+            class="w-full object-cover"
+            loading="eager"
+          />
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Problem + Context -->
+  <section class={sectionClass}>
+    <div class="grid gap-10 lg:grid-cols-2">
+      <div>
+        <SectionHeader eyebrow="Problem" title="The challenge." />
+        <p class="mt-6 text-[0.95rem] leading-7 text-secondary">{project.caseStudy.problem}</p>
+      </div>
+      <div>
+        <SectionHeader eyebrow="Context" title="Background." />
+        <p class="mt-6 text-[0.95rem] leading-7 text-secondary">{project.caseStudy.context}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical challenges -->
+  <section class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <SectionHeader eyebrow="Technical challenges" title="Hard problems solved." />
+      <ul class="mt-8 space-y-4">
+        {project.caseStudy.technicalChallenges.map((challenge, i) => (
+          <li class="flex items-start gap-4">
+            <span class="mt-1 grid h-6 w-6 shrink-0 place-items-center rounded-full border border-accent font-mono text-xs text-accent">
+              {i + 1}
+            </span>
+            <p class="text-[0.95rem] leading-7 text-secondary">{challenge}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Architecture + Implementation -->
+  <section class={sectionClass}>
+    <div class="grid gap-10 lg:grid-cols-2">
+      <div>
+        <SectionHeader eyebrow="Architecture" title="How it's built." />
+        <p class="mt-6 text-[0.95rem] leading-7 text-secondary">{project.caseStudy.architecture}</p>
+      </div>
+      <div>
+        <SectionHeader eyebrow="Implementation" title="Key decisions." />
+        <p class="mt-6 text-[0.95rem] leading-7 text-secondary">{project.caseStudy.implementation}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <SectionHeader eyebrow="Results" title="Outcomes delivered." />
+      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {project.caseStudy.results.map((result) => (
+          <Card class="flex items-start gap-3">
+            <span class="mt-0.5 text-positive text-lg">✓</span>
+            <p class="text-[0.95rem] leading-7 text-secondary">{result}</p>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Lessons learned -->
+  <section class={sectionClass}>
+    <SectionHeader eyebrow="Lessons learned" title="What I'd do differently." />
+    <ul class="mt-8 space-y-4">
+      {project.caseStudy.lessonsLearned.map((lesson) => (
+        <li class="flex items-start gap-3 text-secondary">
+          <span class="mt-1 font-mono text-accent">›</span>
+          <p class="text-[0.95rem] leading-7">{lesson}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Additional images -->
+  {project.images.length > 1 && (
+    <section class="border-t border-border bg-surface/40">
+      <div class={sectionClass}>
+        <SectionHeader eyebrow="Gallery" title="Screenshots." />
+        <div class="mt-8 grid gap-4 sm:grid-cols-2">
+          {project.images.slice(1).map((img, i) => (
+            <div class="overflow-hidden rounded-lg border border-border">
+              <img
+                src={img}
+                alt={`${project.name} screenshot ${i + 2}`}
+                class="w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CTA -->
+  <section class="border-t border-border">
+    <div class={sectionClass}>
+      <div class="flex flex-col items-center gap-6 py-6 text-center">
+        <p class="text-secondary">Want to build something similar?</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
+            Book a free call
+          </Button>
+          <Button href="/services/mvp-development" variant="secondary" size="lg">
+            Custom MVP development
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+</PageLayout>

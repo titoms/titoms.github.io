@@ -1,0 +1,81 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '../../components/layout/PageLayout.astro';
+import { Badge } from '../../components/ui/Badge';
+import { Button } from '../../components/ui/Button';
+import { Card } from '../../components/ui/Card';
+import { SectionHeader } from '../../components/ui/SectionHeader';
+
+const articles = await getCollection('blog');
+const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
+---
+
+<PageLayout
+  title="Blog — fullstackchris.dev"
+  description="Practical articles on AI-assisted web development, MVP building, React and Node.js for founders and developers."
+>
+  <!-- Hero -->
+  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border pt-32 pb-20">
+    <div class={sectionClass}>
+      <Badge variant="accent">Blog</Badge>
+      <h1 class="mt-6 max-w-4xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white">
+        AI and web development resources for builders.
+      </h1>
+      <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary">
+        Practical articles on AI-assisted development, MVP building, React, Node.js and TypeScript for founders, freelancers and developers.
+      </p>
+    </div>
+  </section>
+
+  <!-- Articles -->
+  <section class={sectionClass}>
+    <SectionHeader
+      eyebrow="Articles"
+      title="Coming soon."
+      description="These articles are in progress. Subscribe to the newsletter to get notified when they publish."
+    />
+    <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+      {articles.map((article) => (
+        <Card hover class="flex h-full flex-col gap-4">
+          <div class="flex flex-wrap gap-2">
+            {article.data.tags.map((tag: string) => (
+              <Badge variant="default">{tag}</Badge>
+            ))}
+            {article.data.comingSoon && <Badge variant="accent">Coming soon</Badge>}
+          </div>
+          <h2 class="font-display text-[1.15rem] font-semibold leading-tight text-white">
+            {article.data.title}
+          </h2>
+          <p class="text-[0.95rem] leading-7 text-secondary">{article.data.description}</p>
+          <div class="mt-auto border-t border-border pt-4">
+            <Button href={`/blog/${article.id}`} variant="ghost" size="sm">
+              Read article
+            </Button>
+          </div>
+        </Card>
+      ))}
+    </div>
+  </section>
+
+  <!-- Newsletter CTA -->
+  <section class="border-t border-border bg-surface/55">
+    <div class={sectionClass}>
+      <Card glow class="overflow-hidden p-8 sm:p-10 lg:p-12">
+        <div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
+            <p class="font-mono text-xs uppercase tracking-[0.18em] text-accent">Get notified</p>
+            <h2 class="mt-4 max-w-2xl font-display text-[clamp(1.8rem,3.5vw,3rem)] font-semibold leading-tight text-white">
+              New articles in your inbox.
+            </h2>
+            <p class="mt-4 max-w-prose text-lg leading-8 text-secondary">
+              The AI web development newsletter covers tools, workflows and product ideas for developers and founders.
+            </p>
+          </div>
+          <Button href="/services/ai-web-development-newsletter" variant="primary" size="lg">
+            Join the newsletter
+          </Button>
+        </div>
+      </Card>
+    </div>
+  </section>
+</PageLayout>

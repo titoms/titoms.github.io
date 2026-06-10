@@ -1,0 +1,270 @@
+---
+import PageLayout from '../components/layout/PageLayout.astro';
+import {
+  heroStats, workModes, buildStats, serviceOffers, processSteps,
+  pricingPlans, newsletterIssue, feedbackCards, faqs, CALENDLY_URL,
+} from '../config/constants';
+import { technologies } from '../config/constants';
+import { Badge } from '../components/ui/Badge';
+import { Button } from '../components/ui/Button';
+import { Card } from '../components/ui/Card';
+import { SectionHeader } from '../components/ui/SectionHeader';
+import { ServiceCard } from '../components/ui/ServiceCard';
+import { PricingCard } from '../components/ui/PricingCard';
+import { ProcessStep } from '../components/ui/ProcessStep';
+import ProjectsModal from '../components/islands/ProjectsModal';
+import FAQAccordion from '../components/islands/FAQAccordion';
+import NewsletterForm from '../components/islands/NewsletterForm';
+
+const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
+
+const serviceCtaMap: Record<string, string> = {
+  "AI Web Dev Newsletter": "/services/ai-web-development-newsletter",
+  "Web Project Coaching": "/services/web-project-coaching",
+  "Full-stack Development Day": "/services/full-stack-development-day",
+  "MVP Bootstrapping Workshop": "/services/mvp-bootstrapping-workshop",
+  "Custom MVP Development": "/services/mvp-development",
+};
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Christophe Crognier",
+    url: "https://fullstackchris.dev",
+    jobTitle: "Full-Stack Developer",
+    sameAs: [
+      "https://linkedin.com/in/christophe-crognier",
+      "https://github.com/titoms",
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "fullstackchris.dev",
+    url: "https://fullstackchris.dev",
+    description: "Full-stack development, coaching, and MVP services for founders and developers.",
+  },
+];
+---
+
+<PageLayout
+  title="fullstackchris.dev — Full-Stack Development, Coaching & MVP Services"
+  description="Full-stack React and Node.js development, project coaching, MVP workshops and an AI web development newsletter for founders, freelancers and developers."
+  jsonLd={jsonLd}
+>
+  <!-- Hero -->
+  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border pt-32 pb-20">
+    <div class={sectionClass}>
+      <Badge variant="accent">React · Node.js · TypeScript · AI workflows</Badge>
+      <h1 class="mt-6 max-w-4xl font-display text-[clamp(2.8rem,6vw,5rem)] font-bold leading-[1.02] tracking-[-0.02em] text-white">
+        Build faster. Ship cleaner.<br />
+        <span class="text-accent">Understand what you build.</span>
+      </h1>
+      <p class="mt-6 max-w-prose text-[clamp(1rem,1.8vw,1.25rem)] leading-8 text-secondary">
+        Full-stack development, coaching, and MVP services for founders, freelancers and developers who want to move faster with React, Node.js, TypeScript and AI-assisted workflows.
+      </p>
+      <div class="mt-10 flex flex-wrap gap-4">
+        <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
+          Book a free call
+        </Button>
+        <Button href="/services" variant="secondary" size="lg">
+          See all services
+        </Button>
+      </div>
+      <div class="mt-16 grid gap-6 sm:grid-cols-3">
+        {heroStats.map((stat) => (
+          <div class="space-y-1">
+            <p class="font-display text-3xl font-bold text-white">{stat.value}</p>
+            <p class="font-mono text-xs uppercase tracking-widest text-accent">{stat.label}</p>
+            <p class="text-sm leading-6 text-secondary">{stat.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Three ways to work -->
+  <section class={sectionClass}>
+    <SectionHeader eyebrow="How we work" title="Three ways to engage." />
+    <div class="mt-10 grid gap-5 md:grid-cols-3">
+      {workModes.map((mode) => (
+        <Card hover class="flex flex-col gap-3">
+          <h3 class="font-display text-xl font-semibold text-white">{mode.title}</h3>
+          <p class="text-[0.95rem] leading-7 text-secondary">{mode.description}</p>
+          <p class="mt-auto border-t border-border pt-4 text-sm text-accent">{mode.outcome}</p>
+        </Card>
+      ))}
+    </div>
+  </section>
+
+  <!-- What gets built here -->
+  <section class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <SectionHeader eyebrow="What gets built here" title="Practical delivery across the full stack." />
+      <div class="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        {buildStats.map((stat) => (
+          <Card class="flex flex-col gap-2">
+            <p class="font-display text-4xl font-bold text-accent">{stat.value}</p>
+            <p class="font-mono text-xs uppercase tracking-widest text-white">{stat.label}</p>
+            <p class="text-sm leading-6 text-secondary">{stat.description}</p>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class={sectionClass}>
+    <SectionHeader eyebrow="Services" title="Five ways to work together." description="All offers are scoped to specific outcomes. No vague retainers, no endless commitments." />
+    <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+      {serviceOffers.map((offer) => (
+        <ServiceCard
+          title={offer.title}
+          description={offer.description}
+          price={offer.price}
+          priceUnit={offer.priceUnit}
+          badge={offer.badge}
+          featured={offer.featured}
+          ctaHref={serviceCtaMap[offer.title] ?? '/services'}
+          ctaLabel="See details"
+          ctaVariant={offer.featured ? 'primary' : 'ghost'}
+        />
+      ))}
+    </div>
+    <div class="mt-8 flex justify-center">
+      <Button href="/services" variant="secondary" size="lg">All services</Button>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <SectionHeader eyebrow="Recent work" title="Projects shipped end-to-end." description="Click any project to read the full case study." />
+      <ProjectsModal client:load />
+    </div>
+  </section>
+
+  <!-- How we work -->
+  <section class={sectionClass}>
+    <SectionHeader eyebrow="Process" title="How a session works." />
+    <div class="mt-10 max-w-xl">
+      {processSteps.map((step, i) => (
+        <ProcessStep number={i + 1} title={step.title} isLast={i === processSteps.length - 1}>
+          {step.description}
+        </ProcessStep>
+      ))}
+    </div>
+  </section>
+
+  <!-- Tech stack -->
+  <section class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <SectionHeader eyebrow="Tech stack" title="Tools used daily." />
+      <div class="mt-8 flex flex-wrap gap-2">
+        {technologies.map((tech) => (
+          <Badge variant="default">{tech.name}</Badge>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class={sectionClass}>
+    <SectionHeader eyebrow="Pricing" title="Pick your plan." description="All sessions include clear deliverables. Book a call if you need a custom quote." />
+    <div class="mt-10 grid gap-5 md:grid-cols-3">
+      {pricingPlans.map((plan) => (
+        <PricingCard
+          title={plan.title}
+          description={plan.description}
+          price={plan.price}
+          period={plan.period}
+          features={plan.features}
+          ctaLabel="Book a call"
+          ctaHref={CALENDLY_URL}
+          featured={plan.featured}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Newsletter CTA -->
+  <section class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <Card glow class="overflow-hidden p-8 sm:p-10 lg:p-14">
+        <div class="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-start">
+          <div>
+            <SectionHeader
+              eyebrow="AI Web Dev Newsletter"
+              title="What to build with AI this month."
+              description="A practical monthly briefing for developers, founders and freelancers on AI tools, workflows and product opportunities."
+            />
+            <div class="mt-8">
+              <NewsletterForm client:visible />
+            </div>
+          </div>
+          <div class="hidden rounded-xl border border-border bg-surface p-5 font-mono text-sm text-secondary lg:block min-w-[260px]">
+            <p class="mb-3 text-xs uppercase tracking-widest text-accent">Issue preview</p>
+            <ul class="space-y-2">
+              {newsletterIssue.map((item) => (
+                <li class="flex items-start gap-2">
+                  <span class="mt-0.5 text-positive">›</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </Card>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class={sectionClass}>
+    <SectionHeader eyebrow="Real feedback" title="What clients say." />
+    <div class="mt-10 grid gap-5 md:grid-cols-3">
+      {feedbackCards.map((fb) => (
+        <Card class="flex flex-col gap-4">
+          <p class="text-[0.95rem] leading-7 text-secondary italic">"{fb.testimonial}"</p>
+          <div class="mt-auto border-t border-border pt-4">
+            <p class="font-display text-sm font-semibold text-white">{fb.name}</p>
+            <p class="text-xs text-low">{fb.designation} · {fb.company}</p>
+          </div>
+        </Card>
+      ))}
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <div class="grid gap-12 lg:grid-cols-[1fr_1.5fr]">
+        <SectionHeader eyebrow="Questions" title="Common questions answered." description="Still not sure? Book a free 30-minute call." />
+        <FAQAccordion client:visible />
+      </div>
+    </div>
+  </section>
+
+  <!-- Book a call CTA -->
+  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border">
+    <div class={sectionClass}>
+      <div class="flex flex-col items-center gap-6 py-10 text-center">
+        <Badge variant="accent">Book a call</Badge>
+        <h2 class="max-w-2xl font-display text-[clamp(2rem,4vw,3.4rem)] font-semibold leading-tight text-white">
+          Ready to build something?
+        </h2>
+        <p class="max-w-prose text-lg leading-8 text-secondary">
+          Book a free 30-minute call to discuss your project, blocker or product idea. No commitment required.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
+            Book a free call
+          </Button>
+          <Button href="/contact" variant="secondary" size="lg">
+            Send a message
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+</PageLayout>

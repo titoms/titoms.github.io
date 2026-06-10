@@ -14,6 +14,7 @@ const CaseStudyModal = ({ project, onClose }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
+    if (!project) return;
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
@@ -29,7 +30,7 @@ const CaseStudyModal = ({ project, onClose }) => {
       document.body.style.overflow = originalOverflow;
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [onClose, selectedImage]);
+  }, [onClose, selectedImage, project]);
 
   if (!project) return null;
 

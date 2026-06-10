@@ -1,0 +1,80 @@
+---
+import PageLayout from '../../components/layout/PageLayout.astro';
+import { Badge } from '../../components/ui/Badge';
+import { Button } from '../../components/ui/Button';
+import { Card } from '../../components/ui/Card';
+import { SectionHeader } from '../../components/ui/SectionHeader';
+import { projects, CALENDLY_URL } from '../../config/constants';
+
+const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
+---
+
+<PageLayout
+  title="Projects — fullstackchris.dev"
+  description="Full-stack case studies: scheduling systems, geography games, music platforms and football prediction apps built with React, Node.js and TypeScript."
+>
+  <!-- Hero -->
+  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border pt-32 pb-20">
+    <div class={sectionClass}>
+      <Badge variant="accent">Projects</Badge>
+      <h1 class="mt-6 max-w-3xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white">
+        Projects shipped end-to-end.
+      </h1>
+      <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary">
+        Full-stack case studies covering architecture decisions, technical challenges, implementation details and results.
+      </p>
+    </div>
+  </section>
+
+  <!-- Project grid -->
+  <section class={sectionClass}>
+    <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {projects.map((project) => (
+        <Card hover class="flex h-full flex-col gap-4">
+          {project.image && (
+            <div class="aspect-video overflow-hidden rounded-md border border-border">
+              <img
+                src={project.image}
+                alt={project.name}
+                class="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          )}
+          <div class="flex flex-wrap gap-2">
+            {project.tags.map((tag) => (
+              <Badge variant="default">{tag.name}</Badge>
+            ))}
+          </div>
+          <h2 class="font-display text-xl font-semibold text-white">{project.name}</h2>
+          <p class="text-[0.95rem] leading-7 text-secondary">{project.description}</p>
+          <div class="mt-auto border-t border-border pt-4">
+            <Button href={`/projects/${project.slug}`} variant="secondary" size="sm">
+              Read case study
+            </Button>
+          </div>
+        </Card>
+      ))}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="border-t border-border bg-surface/40">
+    <div class={sectionClass}>
+      <Card glow class="p-8 sm:p-12">
+        <div class="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
+            <SectionHeader
+              eyebrow="Have a project?"
+              title="Let's build yours."
+              description="Book a free call to discuss your idea, current project or blocker."
+            />
+          </div>
+          <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
+            Book a free call
+          </Button>
+        </div>
+      </Card>
+    </div>
+  </section>
+</PageLayout>

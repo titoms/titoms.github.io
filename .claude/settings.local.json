@@ -3,7 +3,26 @@
     "allow": [
       "Bash(Get-ChildItem -Path \"C:\\\\DEV\\\\titoms.github.io\\\\src\" -Recurse -Force)",
       "Bash(Select-Object FullName)",
-      "Bash(Sort-Object FullName)"
+      "Bash(Sort-Object FullName)",
+      "Bash(C:\\\\Users\\\\Tito\\\\.claude\\\\plugins\\\\cache\\\\superpowers-dev\\\\superpowers\\\\5.0.7\\\\skills\\\\brainstorming\\\\scripts\\\\start-server.sh *)",
+      "Bash(bash *)",
+      "Bash(pnpm add *)",
+      "Bash(cmd.exe *)",
+      "Bash(powershell.exe *)",
+      "Read(//c/Users/Tito/AppData/Local/pnpm//**)",
+      "Read(//c/ProgramData/**)",
+      "Read(//c/Program Files/nodejs//**)",
+      "Bash(pnpm *)",
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "Bash(node_modules/.bin/vite build *)",
+      "Bash(git -C \"C:\\\\DEV\\\\titoms.github.io\" add src/config/services-data.ts)",
+      "Bash(git -C \"C:\\\\DEV\\\\titoms.github.io\" commit -m \"feat: add service page content data for all 5 services\")",
+      "Bash(Start-Sleep -Seconds 4)",
+      "Bash(Get-Content \"C:\\\\Users\\\\Tito\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--DEV-titoms-github-io\\\\492e072a-9387-4644-a47e-ede9174ccf3e\\\\tasks\\\\bfy0fqoxl.output\" -ErrorAction SilentlyContinue)",
+      "Bash(Select-Object -First 20)",
+      "Bash(git *)",
+      "Bash(Remove-Item \"C:/DEV/titoms.github.io/src/vite-env.d.ts\" -Force)",
+      "Bash(Remove-Item \"C:/DEV/titoms.github.io/vite.config.ts\" -Force)"
     ]
   }
 }
