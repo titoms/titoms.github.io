@@ -37,59 +37,59 @@ Immediate product direction:
 ## Phase 0 - Foundation And Migration
 
 ```txt
-[ ] Migrate package management from npm to pnpm.
-[ ] Import existing lockfile with pnpm import.
-[ ] Remove package-lock.json and regenerate dependencies through pnpm-lock.yaml.
-[ ] Add TypeScript with strict config.
-[ ] Rename Vite config to vite.config.ts.
-[ ] Rename React entry files from .jsx to .tsx.
-[ ] Create src/types/index.ts.
-[ ] Rewrite src/config/constants.js as typed src/config/constants.ts.
-[ ] Rename src/config/motion.js to src/config/motion.ts.
-[ ] Remove Three.js dependencies: three, @react-three/fiber, @react-three/drei, maath.
-[ ] Delete src/canvas/.
-[ ] Remove unused legacy structure: src/store/, src/pages/, src/styles.js, old HOC wrapper if replaced.
-[ ] Add Google Fonts: Space Grotesk, Hanken Grotesk, JetBrains Mono.
-[ ] Replace legacy purple/Poppins token system with Claude Design CSS variables.
-[ ] Update Tailwind config to expose Claude Design colors, fonts, radius, shadows, and max widths.
+[x] Migrate package management from npm to pnpm.
+[x] Import existing lockfile with pnpm import.
+[x] Remove package-lock.json and regenerate dependencies through pnpm-lock.yaml.
+[x] Add TypeScript with strict config.
+[x] Rename Vite config to vite.config.ts.
+[x] Rename React entry files from .jsx to .tsx.
+[x] Create src/types/index.ts.
+[x] Rewrite src/config/constants.js as typed src/config/constants.ts.
+[x] Rename src/config/motion.js to src/config/motion.ts.
+[x] Remove Three.js dependencies: three, @react-three/fiber, @react-three/drei, maath.
+[x] Delete src/canvas/.
+[x] Remove unused legacy structure: src/store/, src/pages/, src/styles.js, old HOC wrapper if replaced.
+[x] Add Google Fonts: Space Grotesk, Hanken Grotesk, JetBrains Mono.
+[x] Replace legacy purple/Poppins token system with Claude Design CSS variables.
+[x] Update Tailwind config to expose Claude Design colors, fonts, radius, shadows, and max widths.
 ```
 
 ## Phase 1 - Design System And UI Primitives
 
 ```txt
-[ ] Add reusable Badge primitive.
-[ ] Add reusable Button primitive.
-[ ] Add reusable SectionHeader primitive.
-[ ] Add reusable Card primitive.
-[ ] Add reusable ServiceCard primitive.
-[ ] Add reusable PricingCard primitive.
-[ ] Add reusable ProjectCard primitive.
-[ ] Add reusable ProcessStep primitive.
-[ ] Add reusable FAQItem primitive.
-[ ] Support primary / secondary / ghost button variants.
-[ ] Support default / accent / positive badge variants.
-[ ] Support featured pricing card variant.
-[ ] Support card hover and glow states.
-[ ] Keep styling aligned with design/claude-design/styles.css.
+[x] Add reusable Badge primitive.
+[x] Add reusable Button primitive.
+[x] Add reusable SectionHeader primitive.
+[x] Add reusable Card primitive.
+[x] Add reusable ServiceCard primitive.
+[x] Add reusable PricingCard primitive.
+[x] Add reusable ProjectCard primitive.
+[x] Add reusable ProcessStep primitive.
+[x] Add reusable FAQItem primitive.
+[x] Support primary / secondary / ghost button variants.
+[x] Support default / accent / positive badge variants.
+[x] Support featured pricing card variant.
+[x] Support card hover and glow states.
+[x] Keep styling aligned with design/claude-design/styles.css.
 ```
 
 ## Phase 2 - Layout Shell
 
 ```txt
-[ ] Create sticky blurred Header.
-[ ] Add desktop nav item: Home.
-[ ] Add desktop nav item: Services.
-[ ] Add desktop nav item: Projects.
-[ ] Add desktop nav item: Blog.
-[ ] Add desktop nav item: About.
-[ ] Add desktop nav item: Contact.
-[ ] Add persistent Book a call CTA using CALENDLY_URL.
-[ ] Add responsive hamburger below 900px.
-[ ] Create 4-column Footer with Services.
-[ ] Create 4-column Footer with Projects.
-[ ] Create 4-column Footer with Blog / resources.
-[ ] Create 4-column Footer with Contact / social / legal.
-[ ] Rewrite App.tsx to compose the new homepage sections.
+[x] Create sticky blurred Header.
+[x] Add desktop nav item: Home.
+[x] Add desktop nav item: Services.
+[x] Add desktop nav item: Projects.
+[x] Add desktop nav item: Blog.
+[x] Add desktop nav item: About.
+[x] Add desktop nav item: Contact.
+[x] Add persistent Book a call CTA using CALENDLY_URL.
+[x] Add responsive hamburger below 900px.
+[x] Create 4-column Footer with Services.
+[x] Create 4-column Footer with Projects.
+[x] Create 4-column Footer with Blog / resources.
+[x] Create 4-column Footer with Contact / social / legal.
+[x] Rewrite App.tsx to compose the new homepage sections.
 ```
 
 ## Phase 3 - Homepage Sections
@@ -97,69 +97,67 @@ Immediate product direction:
 Build the homepage in this exact order:
 
 ```txt
-[ ] Sticky header.
-[ ] Hero with headline, subtitle, two CTAs, three meta stats, glow-bg, and grid-bg.
-[ ] Three ways to work: coaching, development, MVP.
-[ ] What gets built here: stats mosaic.
-[ ] Five services: all priced service cards.
-[ ] Recent projects: full project grid with modal.
-[ ] How we work: numbered process timeline.
-[ ] Tech stack: badge cluster.
-[ ] Pick your plan: pricing tiers.
-[ ] Newsletter CTA: email capture UI and issue preview code block.
-[ ] Real feedback: placeholder testimonial cards.
-[ ] Questions: FAQ accordion.
-[ ] Book a call: final Calendly CTA section.
-[ ] Footer.
+[x] Sticky header.
+[x] Hero with headline, subtitle, two CTAs, three meta stats, glow-bg, and grid-bg.
+[x] Three ways to work: coaching, development, MVP.
+[x] What gets built here: stats mosaic.
+[x] Five services: all priced service cards.
+[x] Recent projects: full project grid with modal.
+[x] How we work: numbered process timeline.
+[x] Tech stack: badge cluster.
+[x] Pick your plan: pricing tiers.
+[x] Newsletter CTA: email capture UI and issue preview code block.
+[x] Real feedback: placeholder testimonial cards.
+[x] Questions: FAQ accordion.
+[x] Book a call: final Calendly CTA section.
+[x] Footer.
 ```
 
 Acceptance criteria:
 
 ```txt
-[ ] No Three.js scenes remain.
-[ ] No old #050816, #915eff, or Poppins usage remains.
-[ ] Hero and CTA visual effects are CSS-based.
-[ ] Project cards open the reskinned CaseStudyModal.
-[ ] Escape closes the modal.
+[x] No Three.js scenes remain.
+[x] No old #050816, #915eff, or Poppins usage remains.
+[x] Hero and CTA visual effects are CSS-based.
+[x] Project cards open the reskinned CaseStudyModal.
+[x] Escape closes the modal.
 ```
 
 ## Phase 4 - SEO Baseline For Current SPA
 
 ```txt
-[ ] Update index.html title and meta description.
-[ ] Add OpenGraph tags.
-[ ] Add Twitter card tags.
-[ ] Add canonical URL for homepage.
-[ ] Add JSON-LD Person schema for Christophe.
-[ ] Create public/sitemap.xml.
-[ ] Create public/robots.txt.
-[ ] Include all planned URLs from REFONTE_COMPLETE.md in sitemap even before routes exist.
-[ ] Confirm /sitemap.xml is served by Vite and Cloudflare Pages.
-[ ] Confirm /robots.txt is served by Vite and Cloudflare Pages.
+[x] Update index.html title and meta description.
+[x] Add OpenGraph tags.
+[x] Add Twitter card tags.
+[x] Add canonical URL for homepage.
+[x] Add JSON-LD Person schema for Christophe.
+[x] Create public/sitemap.xml.
+[x] Create public/robots.txt.
+[x] Include all planned URLs from REFONTE_COMPLETE.md in sitemap even before routes exist.
+[x] Confirm /sitemap.xml is served by Vite and Cloudflare Pages.
+[x] Confirm /robots.txt is served by Vite and Cloudflare Pages.
 ```
 
-## Phase 5 - Service Landing Pages
+## Phase 5 - Service Landing Pages ✅
 
-Blocked by the routing/framework decision unless the project intentionally stays SPA temporarily.
-
-Pages to create later:
+Implemented as React Router routes within the SPA. JSON-LD deferred to Phase 8 (framework migration).
 
 ```txt
-[ ] /services
-[ ] /services/ai-web-development-newsletter
-[ ] /services/web-project-coaching
-[ ] /services/full-stack-development-day
-[ ] /services/mvp-bootstrapping-workshop
-[ ] /services/mvp-development
+[x] /services
+[x] /services/ai-web-development-newsletter
+[x] /services/web-project-coaching
+[x] /services/full-stack-development-day
+[x] /services/mvp-bootstrapping-workshop
+[x] /services/mvp-development
 ```
 
-Each page must include:
+Each page includes:
 
 ```txt
-[ ] Unique title and meta description.
-[ ] One clear H1.
-[ ] Problem / outcome / offer / proof / FAQ / CTA structure.
-[ ] Pricing visible without excessive scrolling.
+[x] Unique title and meta description.
+[x] One clear H1.
+[x] Problem / outcome / offer / proof / FAQ / CTA structure.
+[x] Pricing visible without excessive scrolling.
 [ ] JSON-LD Service data after framework migration.
 [ ] JSON-LD Offer data after framework migration.
 [ ] JSON-LD FAQPage data after framework migration.
@@ -285,8 +283,8 @@ Budget ranges to preserve:
 [ ] Case study modal opens, closes, and uses new styling.
 [ ] No Three.js dependencies or canvas imports remain.
 [ ] No legacy Poppins or old purple background/accent tokens remain.
-[ ] Sitemap includes all planned URLs.
-[ ] Robots file references https://fullstackchris.dev/sitemap.xml.
+[x] Sitemap includes all planned URLs.
+[x] Robots file references https://fullstackchris.dev/sitemap.xml.
 ```
 
 Assumptions:
