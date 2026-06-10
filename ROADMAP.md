@@ -191,27 +191,31 @@ Each page includes:
 [x] Add future blog article placeholder: /blog/how-much-does-an-mvp-cost.
 ```
 
-## Phase 8 - Framework Migration For SEO
+## Phase 8 - Framework Migration For SEO ✅
 
-Decision to make after Phases 0-7 content is stable:
+Migrated from React/Vite SPA to Astro + React islands on branch `feat/astro-migration`.
 
-- Preferred: Astro + React islands.
-- Alternative: Next.js static export.
-- Avoid long-term pure React SPA for service pages and blog.
+Choices made:
+- Framework: Astro (static output, `output: 'static'`)
+- React islands: SiteHeader (client:load), ProjectsModal (client:load), FAQAccordion (client:visible), NewsletterForm (client:visible)
+- Blog: Astro content collections with MDX, Zod-validated frontmatter
+- Deployment: Cloudflare Pages unchanged (`pnpm build` → `dist/`)
 
 Migration acceptance criteria:
 
 ```txt
-[ ] Static HTML for homepage.
-[ ] Static HTML for services.
-[ ] Static HTML for projects.
-[ ] Static HTML for about.
-[ ] Static HTML for contact.
-[ ] Static HTML for blog.
-[ ] Per-page metadata.
-[ ] MDX support for blog and case studies.
-[ ] Cloudflare Pages-compatible build output.
-[ ] React retained only where interactivity is needed.
+[x] Static HTML for homepage.
+[x] Static HTML for services.
+[x] Static HTML for projects.
+[x] Static HTML for about.
+[x] Static HTML for contact.
+[x] Static HTML for blog.
+[x] Per-page metadata.
+[x] MDX support for blog and case studies.
+[x] Cloudflare Pages-compatible build output.
+[x] React retained only where interactivity is needed.
+[x] JSON-LD structured data for all page types.
+[x] 21 static pages built in under 4 seconds.
 ```
 
 ## Phase 9 - Newsletter, Payments, Analytics

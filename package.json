@@ -4,34 +4,33 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "typecheck": "tsc --noEmit",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview --port 80"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
   },
   "dependencies": {
+    "@astrojs/mdx": "^6.0.2",
+    "@astrojs/react": "^5.0.7",
+    "@astrojs/tailwind": "^6.0.2",
+    "astro": "^6.4.4",
     "framer-motion": "^10.11.3",
     "react": "^18.2.0",
-    "react-calendly": "^4.4.0",
-    "react-dom": "^18.2.0",
-    "react-helmet-async": "^3.0.0",
-    "react-router-dom": "^6.10.0",
-    "react-tilt": "^1.0.2",
-    "react-vertical-timeline-component": "^3.6.0"
+    "react-dom": "^18.2.0"
   },
   "pnpm": {
-    "ignoredBuiltDependencies": ["react-vertical-timeline-component", "sharp"]
+    "ignoredBuiltDependencies": [
+      "react-vertical-timeline-component",
+      "sharp"
+    ]
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
-    "@vitejs/plugin-react": "^6.0.2",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.21",
     "sharp": "^0.34.5",
     "tailwindcss": "^3.3.1",
-    "typescript": "^5.9.3",
-    "vite": "^8.0.16"
+    "typescript": "^5.9.3"
   }
 }

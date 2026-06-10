@@ -1,0 +1,96 @@
+---
+import PageLayout from '../components/layout/PageLayout.astro';
+import { Badge } from '../components/ui/Badge';
+import { Button } from '../components/ui/Button';
+import { Card } from '../components/ui/Card';
+import { SectionHeader } from '../components/ui/SectionHeader';
+import { experiences, technologies, CALENDLY_URL } from '../config/constants';
+
+const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
+---
+
+<PageLayout
+  title="About — Christophe Crognier | fullstackchris.dev"
+  description="Full-stack developer and programming instructor with 7,000+ hours of teaching experience. Building React and Node.js products for founders, freelancers and developers."
+>
+  <!-- Hero -->
+  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border pt-32 pb-20">
+    <div class={sectionClass}>
+      <Badge variant="accent">About</Badge>
+      <h1 class="mt-6 max-w-3xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white">
+        Developer who teaches. Teacher who ships.
+      </h1>
+      <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary">
+        I build React and Node.js products and have spent over 7,000 hours teaching web development. Both inform how I work: clean delivery, clear explanations, realistic scoping.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
+          Book a call
+        </Button>
+        <Button href="/services" variant="secondary" size="lg">
+          See services
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience timeline -->
+  <section class={sectionClass}>
+    <SectionHeader eyebrow="Experience" title="Career timeline." />
+    <div class="mt-10 space-y-0">
+      {experiences.map((exp, i) => (
+        <div class="relative flex gap-6 pb-8">
+          {i < experiences.length - 1 && (
+            <span class="absolute bottom-0 left-[17px] top-[38px] w-px bg-white/15" aria-hidden="true" />
+          )}
+          <span class="z-10 grid h-9 w-9 shrink-0 place-items-center rounded-full border border-accent bg-tertiary font-mono text-xs font-medium text-subtle">
+            {i + 1}
+          </span>
+          <div class="space-y-1 pb-2">
+            <p class="font-display text-[1.05rem] font-semibold text-white">{exp.title}</p>
+            <p class="text-sm text-accent">{exp.company_name} · {exp.date}</p>
+            <ul class="mt-2 list-disc space-y-1 pl-4">
+              {exp.points.map((point) => (
+                <li class="text-[0.9rem] leading-6 text-secondary">{point}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Tech stack -->
+  <section class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <SectionHeader eyebrow="Tech stack" title="Tools used daily." />
+      <div class="mt-8 flex flex-wrap gap-2">
+        {technologies.map((tech) => (
+          <Badge variant="default">{tech.name}</Badge>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class={sectionClass}>
+    <Card glow class="p-8 sm:p-12">
+      <div class="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+        <div>
+          <p class="font-mono text-xs uppercase tracking-[0.18em] text-accent">Work with me</p>
+          <h2 class="mt-3 font-display text-[clamp(1.8rem,3.5vw,2.8rem)] font-semibold leading-tight text-white">
+            Have a project in mind?
+          </h2>
+          <p class="mt-3 max-w-prose text-lg leading-7 text-secondary">
+            Book a free 30-minute call to talk through your idea, blocker or project.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-4">
+          <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
+            Book a free call
+          </Button>
+        </div>
+      </div>
+    </Card>
+  </section>
+</PageLayout>
