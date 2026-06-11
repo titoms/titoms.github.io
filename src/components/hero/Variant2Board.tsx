@@ -18,7 +18,7 @@ const VIcon = ({ name, s = 18 }: { name: string; s?: number }) => {
 };
 
 export default function Variant2Board() {
-  const { ref, n } = useStagedReveal(6, { start: 650, step: 900 });
+  const { ref, n } = useStagedReveal(6, { start: 650, step: 900, loop: true, loopDelay: 3000 });
 
   const cardCls = (i: number) =>
     `bcard${i < n ? ' done' : ''}${i === n - 1 ? ' active' : ''}`;

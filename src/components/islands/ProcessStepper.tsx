@@ -23,6 +23,13 @@ const CheckIcon = () => (
   </svg>
 );
 
+const ArrowRightIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M5 12h14" />
+    <path d="m13 6 6 6-6 6" />
+  </svg>
+);
+
 const ProcessStepper = ({ steps }: ProcessStepperProps) => {
   const [state, setState] = useState<StepperState>({
     activeIndex: -1,
@@ -102,11 +109,15 @@ const ProcessStepper = ({ steps }: ProcessStepperProps) => {
         {steps.map((step, index) => {
           const isActive = state.activeIndex === index;
           const isDone = state.completedCount > index || state.shipped;
+          const hasConnector = index < steps.length - 1;
+          const connectorComplete = state.shipped || state.activeIndex > index || state.completedCount > index + 1;
 
           return (
             <article
               key={step.title}
-              className={`process-stepper-card rounded-lg border p-5 transition-[background,border-color,box-shadow,transform] duration-300 ${
+              className={`process-stepper-card ${hasConnector ? "has-connector" : ""} ${
+                connectorComplete ? "connector-complete" : ""
+              } rounded-md border p-4 transition-[background,border-color,box-shadow,transform] duration-300 ${
                 isActive
                   ? "border-accent bg-accent-soft shadow-glow"
                   : isDone
@@ -115,7 +126,7 @@ const ProcessStepper = ({ steps }: ProcessStepperProps) => {
               }`}
             >
               <div
-                className={`grid h-[44px] w-[44px] place-items-center rounded-pill border font-mono text-sm font-medium transition-colors ${
+                className={`grid h-9 w-9 place-items-center rounded-pill border font-mono text-xs font-medium transition-colors ${
                   isActive || isDone
                     ? "border-accent bg-accent-soft text-accent"
                     : "border-strong bg-raised text-low"
@@ -123,20 +134,20 @@ const ProcessStepper = ({ steps }: ProcessStepperProps) => {
               >
                 {isDone ? <CheckIcon /> : String(index + 1).padStart(2, "0")}
               </div>
-              <h3 className="mt-5 font-display text-[1.1rem] font-semibold leading-tight text-white">{step.title}</h3>
-              <p className="mt-3 text-[0.95rem] leading-7 text-secondary">{step.description}</p>
+              <h3 className="mt-4 font-display text-[1rem] font-semibold leading-tight text-white">{step.title}</h3>
+              <p className="mt-2 text-[0.88rem] leading-6 text-secondary">{step.description}</p>
             </article>
           );
         })}
       </div>
       <div
-        className={`mt-5 inline-flex items-center gap-3 rounded-pill border px-4 py-2 font-mono text-xs uppercase tracking-[0.14em] transition-colors ${
+        className={`process-status-pill mt-5 inline-flex items-center gap-3 rounded-pill border px-4 py-2 font-mono text-xs uppercase tracking-[0.14em] transition-colors ${
           state.shipped
             ? "border-accent bg-accent-soft text-accent"
             : "border-border bg-tertiary text-low"
         }`}
       >
-        <span aria-hidden="true">-&gt;</span>
+        {state.shipped ? <CheckIcon /> : <ArrowRightIcon />}
         <span>{state.shipped ? "complete / shipped" : "in progress"}</span>
       </div>
     </div>

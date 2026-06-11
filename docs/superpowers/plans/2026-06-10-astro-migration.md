@@ -1393,7 +1393,7 @@ const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
           <p class="text-[0.95rem] leading-7 text-secondary">{service.hero.subtitle}</p>
           <div class="mt-auto flex flex-wrap items-center gap-3 border-t border-border pt-4">
             <Button href={`/services/${service.slug}`} variant="primary" size="sm">Learn more</Button>
-            <Button href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" variant="ghost" size="sm">Book a call</Button>
+            <Button href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" variant="secondary" size="sm">Book a call</Button>
           </div>
         </Card>
       ))}
@@ -1693,7 +1693,7 @@ const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
           <div class="mt-auto flex flex-wrap items-center gap-3 border-t border-border pt-4">
             <Button href={`/projects/${project.slug}`} variant="primary" size="sm">View case study</Button>
             {project.live_link && (
-              <Button href={project.live_link} target="_blank" rel="noopener noreferrer" variant="ghost" size="sm">Live site</Button>
+              <Button href={project.live_link} target="_blank" rel="noopener noreferrer" variant="secondary" size="sm">Live site</Button>
             )}
           </div>
         </Card>
@@ -1788,7 +1788,7 @@ const jsonLd = {
           </Button>
         )}
         <Button href={project.source_code_link} target="_blank" rel="noopener noreferrer" variant="secondary" size="lg">Source code</Button>
-        <Button href="/projects" variant="ghost" size="lg">← All projects</Button>
+        <Button href="/projects" variant="secondary" size="lg">← All projects</Button>
       </div>
     </div>
   </section>
@@ -2021,7 +2021,7 @@ const articles = await getCollection('blog');
           <h3 class="font-display text-[1.15rem] font-semibold leading-tight text-white">{article.data.title}</h3>
           <p class="text-[0.95rem] leading-7 text-secondary">{article.data.description}</p>
           <div class="mt-auto border-t border-border pt-4">
-            <Button href={`/blog/${article.slug}`} variant="ghost" size="sm">Read article</Button>
+            <Button href={`/blog/${article.slug}`} variant="secondary" size="sm">Read article</Button>
           </div>
         </Card>
       ))}
@@ -2111,7 +2111,7 @@ const jsonLd = {
         {post.data.title}
       </h1>
       <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary">{post.data.description}</p>
-      <Button href="/blog" variant="ghost" size="sm" className="mt-8" aria-label="Back to all articles">
+      <Button href="/blog" variant="secondary" size="sm" className="mt-8" aria-label="Back to all articles">
         <span aria-hidden="true">←</span> All articles
       </Button>
     </div>

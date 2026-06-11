@@ -4,7 +4,7 @@ import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { SectionHeader } from '../components/ui/SectionHeader';
-import { experiences, technologies, CALENDLY_URL } from '../config/constants';
+import { experiences, technologies, CALENDLY_URL, BOOK_CALL_URL } from '../config/constants';
 
 const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
 ---
@@ -24,7 +24,7 @@ const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
         I build React and Node.js products and have spent over 7,000 hours teaching web development. Both inform how I work: clean delivery, clear explanations, realistic scoping.
       </p>
       <div class="mt-8 flex flex-wrap gap-4">
-        <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
+        <Button href={BOOK_CALL_URL} variant="primary" size="lg">
           Book a call
         </Button>
         <Button href="/services" variant="secondary" size="lg">
@@ -86,7 +86,7 @@ const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
           </p>
         </div>
         <div class="flex flex-wrap gap-4">
-          <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
+          <Button href={BOOK_CALL_URL} variant="primary" size="lg">
             Book a free call
           </Button>
         </div>

@@ -6,7 +6,8 @@ import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { SectionHeader } from '../../components/ui/SectionHeader';
-import { projects, CALENDLY_URL } from '../../config/constants';
+import { projects, CALENDLY_URL, BOOK_CALL_URL } from '../../config/constants';
+import { getTechBadgeStyle } from '../../config/techBadges';
 
 const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
 ---
@@ -42,12 +43,12 @@ const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
               )}
             </div>
           )}
-          <div class="flex flex-wrap gap-2">
+          <div class="mt-4 flex flex-wrap gap-2">
             {project.tags.map((tag) => (
-              <Badge variant="default">{tag.name}</Badge>
+              <Badge variant="default" className="tech-badge" style={getTechBadgeStyle(tag.name)}>{tag.name}</Badge>
             ))}
           </div>
-          <h2 class="font-display text-xl font-semibold text-white">{project.name}</h2>
+          <h2 class="mt-2 font-display text-xl font-semibold text-white">{project.name}</h2>
           <p class="text-[0.95rem] leading-7 text-secondary">{project.description}</p>
           <div class="mt-auto border-t border-border pt-4">
             <Button href={`/projects/${project.slug}`} variant="secondary" size="sm">
@@ -71,7 +72,7 @@ const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
               description="Book a free call to discuss your idea, current project or blocker."
             />
           </div>
-          <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
+          <Button href={BOOK_CALL_URL} variant="primary" size="lg">
             Book a free call
           </Button>
         </div>

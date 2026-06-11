@@ -3,7 +3,7 @@ import PageLayout from '../components/layout/PageLayout.astro';
 import HeroV2 from '../components/hero/HeroV2.astro';
 import {
   heroStats, workModes, buildStats, serviceOffers, processSteps,
-  pricingPlans, newsletterIssue, feedbackCards, faqs, CALENDLY_URL,
+  pricingPlans, newsletterIssue, feedbackCards, faqs, BOOK_CALL_URL,
 } from '../config/constants';
 import { technologies } from '../config/constants';
 import { Badge } from '../components/ui/Badge';
@@ -102,17 +102,22 @@ const jsonLd = [
           featured={offer.featured}
           ctaHref={serviceCtaMap[offer.title] ?? '/services'}
           ctaLabel={offer.badge === 'Newsletter' ? 'Subscribe →' : 'Learn more →'}
-          ctaVariant={offer.featured ? 'primary' : 'ghost'}
+          ctaVariant={offer.featured ? 'primary' : 'outline'}
         />
       ))}
-      <Card hover class="breathing-violet-glow flex h-full flex-col gap-4 border-accent/25 bg-gradient-to-b from-accent/8 to-transparent">
+      <Card hover class="breathing-violet-glow flex h-full flex-col gap-6 border-accent/25 bg-gradient-to-b from-accent/8 to-transparent p-7">
         <div class="grid h-10 w-10 place-items-center rounded-lg border border-accent bg-accent-soft text-accent">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M2 12h20"/></svg>
         </div>
-        <h3 class="font-display text-xl font-semibold text-white">Not sure where to start?</h3>
-        <p class="text-[0.95rem] leading-7 text-secondary">Book a free 15-minute call. We'll figure out the right next step for your project.</p>
-        <div class="mt-auto flex items-center justify-end gap-4 border-t border-border pt-4">
-          <Button href={CALENDLY_URL} variant="primary" size="sm" target="_blank" rel="noopener noreferrer">
+        <div class="space-y-3">
+          <h3 class="font-display text-xl font-semibold text-white">Not sure where to start?</h3>
+          <p class="text-[0.95rem] leading-7 text-secondary">Book a free 30-minute call. We'll figure out the right next step for your project.</p>
+        </div>
+        <div class="mt-auto flex flex-wrap items-center justify-end gap-3 border-t border-border pt-4">
+          <Button href="/contact" variant="secondary" size="sm">
+            Ask a question
+          </Button>
+          <Button href={BOOK_CALL_URL} variant="primary" size="sm">
             Book a call →
           </Button>
         </div>
@@ -129,7 +134,7 @@ const jsonLd = [
   </section>
 
   <!-- How we work -->
-  <section class={sectionClass}>
+  <section class={sectionClass} id="process">
     <SectionHeader eyebrow="Process" title="How a session works." />
     <ProcessStepper steps={processSteps} client:visible />
   </section>
@@ -158,7 +163,7 @@ const jsonLd = [
           period={plan.period}
           features={plan.features}
           ctaLabel="Book a call"
-          ctaHref={CALENDLY_URL}
+          ctaHref={BOOK_CALL_URL}
           featured={plan.featured}
         />
       ))}
@@ -166,41 +171,43 @@ const jsonLd = [
   </section>
 
   <!-- Newsletter CTA -->
-  <section class="border-y border-border bg-surface/40">
+  <section class="border-y border-border bg-surface/40" id="newsletter">
     <div class={sectionClass}>
-      <Card class="breathing-violet-glow border-accent/45 bg-gradient-to-br from-raised via-tertiary to-surface-deep p-8 sm:p-10 lg:p-14">
-        <div class="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
-          <div class="max-w-2xl">
-            <p class="mb-5 inline-flex items-center gap-3 font-mono text-xs font-semibold uppercase tracking-[0.22em] text-accent">
-              <span class="h-px w-5 bg-accent" aria-hidden="true"></span>
-              Free + Paid
-            </p>
-            <h2 class="max-w-xl font-display text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.05] text-white">
-              Stay ahead of AI web dev without the noise.
-            </h2>
-            <p class="mt-5 max-w-xl text-[1.05rem] leading-8 text-secondary">
-              A practical monthly briefing for builders. What's worth testing, what to ignore, and the prompts and workflows I actually use.
-            </p>
-            <div class="mt-8">
-              <NewsletterForm client:visible />
+      <div class="newsletter-outer-glow">
+        <Card class="border-accent/45 bg-gradient-to-br from-raised via-tertiary to-surface-deep p-8 sm:p-10 lg:p-14">
+          <div class="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
+            <div class="max-w-2xl">
+              <p class="mb-5 inline-flex items-center gap-3 font-mono text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+                <span class="h-px w-5 bg-accent" aria-hidden="true"></span>
+                Free + Paid
+              </p>
+              <h2 class="max-w-xl font-display text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.05] text-white">
+                Stay ahead of AI web dev without the noise.
+              </h2>
+              <p class="mt-5 max-w-xl text-[1.05rem] leading-8 text-secondary">
+                A practical monthly briefing for builders. What's worth testing, what to ignore, and the prompts and workflows I actually use.
+              </p>
+              <div class="mt-8">
+                <NewsletterForm client:visible />
+              </div>
+              <p class="mt-4 text-sm leading-6 text-low">
+                Free sample available · Solo €9/mo · Pro €19/mo · cancel anytime
+              </p>
             </div>
-            <p class="mt-4 text-sm leading-6 text-low">
-              Free sample available · Solo €9/mo · Pro €19/mo · cancel anytime
-            </p>
-          </div>
-          <div class="overflow-hidden rounded-xl border border-border bg-primary/80 font-mono text-sm text-secondary shadow-lg shadow-black/30">
-            <div class="flex items-center gap-3 border-b border-border bg-raised/60 px-5 py-4">
-              <span class="flex gap-2" aria-hidden="true">
-                <span class="h-3 w-3 rounded-full bg-white/10"></span>
-                <span class="h-3 w-3 rounded-full bg-white/10"></span>
-                <span class="h-3 w-3 rounded-full bg-white/10"></span>
-              </span>
-              <span class="text-low">june-issue.md</span>
+            <div class="overflow-hidden rounded-xl border border-border bg-primary/80 font-mono text-sm text-secondary shadow-lg shadow-black/30">
+              <div class="flex items-center gap-3 border-b border-border bg-raised/60 px-5 py-4">
+                <span class="flex gap-2" aria-hidden="true">
+                  <span class="h-3 w-3 rounded-full bg-white/10"></span>
+                  <span class="h-3 w-3 rounded-full bg-white/10"></span>
+                  <span class="h-3 w-3 rounded-full bg-white/10"></span>
+                </span>
+                <span class="text-low">june-issue.md</span>
+              </div>
+              <NewsletterPreview items={newsletterIssue} client:visible />
             </div>
-            <NewsletterPreview items={newsletterIssue} client:visible />
           </div>
-        </div>
-      </Card>
+        </Card>
+      </div>
     </div>
   </section>
 
@@ -242,7 +249,7 @@ const jsonLd = [
           I'll help you clarify it, understand it, build it and launch it. Start with a call — we'll find the right next step.
         </p>
         <div class="flex flex-wrap justify-center gap-4">
-          <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
+          <Button href={BOOK_CALL_URL} variant="primary" size="lg">
             Book a project call <span class="ml-1">→</span>
           </Button>
           <Button href="/services" variant="secondary" size="lg">

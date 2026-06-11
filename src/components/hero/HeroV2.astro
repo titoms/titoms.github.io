@@ -1,6 +1,6 @@
 ---
 import Variant2Board from './Variant2Board';
-import { CALENDLY_URL } from '../../config/constants';
+import { BOOK_CALL_URL } from '../../config/constants';
 ---
 
 <section id="hero-scene" class="hero-v2-root">
@@ -30,7 +30,7 @@ import { CALENDLY_URL } from '../../config/constants';
       </p>
 
       <div class="v-cta reveal r4">
-        <a class="v-btn primary" href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">
+        <a class="v-btn primary" href={BOOK_CALL_URL}>
           Start your project <span class="ar">→</span>
         </a>
         <a class="v-btn secondary" href="/services">
@@ -66,7 +66,7 @@ import { CALENDLY_URL } from '../../config/constants';
   .hero-v2-root {
     position: relative;
     overflow: hidden;
-    background: var(--bg-0);
+    background: transparent;
     color: var(--text-hi);
     font-family: var(--font-body);
     isolation: isolate;
@@ -80,13 +80,11 @@ import { CALENDLY_URL } from '../../config/constants';
     inset: 0;
     pointer-events: none;
     opacity: 0.4;
-    z-index: 2;
+    z-index: 1;
     background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
     background-size: 64px 64px;
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
   }
 
   /* ---- background blobs ---- */

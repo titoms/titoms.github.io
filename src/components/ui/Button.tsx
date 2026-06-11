@@ -1,7 +1,7 @@
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "./utils";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost";
+export type ButtonVariant = "primary" | "secondary" | "outline";
 export type ButtonSize = "sm" | "md" | "lg";
 
 type SharedButtonProps = {
@@ -27,8 +27,8 @@ const variants: Record<ButtonVariant, string> = {
   primary: "btn-primary-animated",
   secondary:
     "btn-grad-hover btn-secondary border-strong bg-tertiary text-white hover:text-white",
-  ghost:
-    "btn-grad-hover btn-ghost border-border bg-transparent text-secondary hover:text-white",
+  outline:
+    "btn-outline border-border bg-transparent text-secondary hover:border-accent hover:text-white",
 };
 
 const sizes: Record<ButtonSize, string> = {

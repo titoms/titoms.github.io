@@ -1090,7 +1090,7 @@ const ServicesIndexPage = () => (
               <Button href={`/services/${service.slug}`} variant="primary" size="sm">
                 Learn more
               </Button>
-              <Button href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" variant="ghost" size="sm">
+              <Button href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" variant="secondary" size="sm">
                 Book a call
               </Button>
             </div>

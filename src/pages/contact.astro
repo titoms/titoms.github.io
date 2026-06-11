@@ -58,7 +58,7 @@ const serviceLinks = [
   </section>
 
   <!-- Calendly inline embed — uses widget.js to apply dark-theme colour params -->
-  <section class="border-y border-border bg-surface/40">
+  <section id="schedule" class="border-y border-border bg-surface/40">
     <div class={sectionClass}>
       <SectionHeader eyebrow="Schedule" title="Pick a time that works for you." />
       <div class="mt-8 overflow-hidden rounded-xl border border-border bg-[#131318]">
@@ -86,7 +86,7 @@ const serviceLinks = [
           <Card hover class="flex flex-col gap-2">
             <h3 class="font-display text-lg font-semibold text-white">{link.title}</h3>
             <p class="text-sm leading-6 text-secondary">{link.description}</p>
-            <Button href={link.href} variant="ghost" size="sm" class="mt-2 w-fit">
+            <Button href={link.href} variant="outline" size="sm" class="mt-2 w-fit">
               Learn more
             </Button>
           </Card>
@@ -95,3 +95,13 @@ const serviceLinks = [
     </div>
   </section>
 </PageLayout>
+
+<style is:global>
+  /* Calendly Dark Theme Workaround */
+  .calendly-inline-widget iframe {
+    background: transparent !important;
+    border-radius: 16px !important;
+    filter: invert(1) hue-rotate(180deg) brightness(1.08) contrast(0.82) saturate(0.90) !important;
+  }
+</style>
+

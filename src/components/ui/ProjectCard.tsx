@@ -1,4 +1,6 @@
+import type { CSSProperties } from "react";
 import type { ImageAsset, Project } from "../../types";
+import { getTechBadgeStyle } from "../../config/techBadges";
 import { Badge } from "./Badge";
 import { Button } from "./Button";
 import { Card } from "./Card";
@@ -41,7 +43,13 @@ export const ProjectCard = ({ project, onOpen }: ProjectCardProps) => (
     <div className="flex flex-1 flex-col gap-4 p-6">
       <div className="flex flex-wrap gap-2">
         {project.tags.map((tag) => (
-          <Badge key={`${project.slug}-${tag.name}`} variant={tag.name.toLowerCase() === "ai" ? "accent" : "default"} dot={tag.name.toLowerCase() === "ai"}>
+          <Badge
+            key={`${project.slug}-${tag.name}`}
+            variant="default"
+            className="tech-badge"
+            style={getTechBadgeStyle(tag.name) as CSSProperties}
+            dot={tag.name.toLowerCase() === "ai"}
+          >
             {tag.name}
           </Badge>
         ))}
@@ -57,7 +65,7 @@ export const ProjectCard = ({ project, onOpen }: ProjectCardProps) => (
           </Button>
         )}
         {project.live_link && (
-          <Button href={project.live_link} variant="ghost" size="sm" target="_blank" rel="noopener noreferrer">
+          <Button href={project.live_link} variant="secondary" size="sm" target="_blank" rel="noopener noreferrer">
             Live project
           </Button>
         )}

@@ -1,6 +1,7 @@
 ---
 import PageLayout from '../../components/layout/PageLayout.astro';
-import { projects, CALENDLY_URL } from '../../config/constants';
+import { projects, CALENDLY_URL, BOOK_CALL_URL } from '../../config/constants';
+import { getTechBadgeStyleAttribute } from '../../config/techBadges';
 
 export async function getStaticPaths() {
   return projects.map((project) => ({
@@ -86,7 +87,7 @@ const jsonLd = [
 
       <div class="hero-badges">
         {project.tags.map(tag => (
-          <span class="badge-cs">{tag.name}</span>
+          <span class="badge-cs tech-badge" style={getTechBadgeStyleAttribute(tag.name)}>{tag.name}</span>
         ))}
       </div>
 
@@ -339,7 +340,7 @@ const jsonLd = [
           </h5>
           <div class="chips">
             {cat.chips.map(chip => (
-              <span class="badge-cs">{chip}</span>
+              <span class="badge-cs tech-badge" style={getTechBadgeStyleAttribute(chip)}>{chip}</span>
             ))}
           </div>
         </div>
@@ -379,7 +380,7 @@ const jsonLd = [
       <p>Bring me your idea or half-built project. We'll scope it, design it and ship it — using the same workflow behind {project.name}.</p>
       <div class="hero-actions" style="justify-content:center;">
         <a class="cs-btn primary" href="/services/mvp-development">Request development help <span class="arrow">→</span></a>
-        <a class="cs-btn secondary" href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">Book a call</a>
+        <a class="cs-btn secondary" href={BOOK_CALL_URL}>Book a call</a>
       </div>
     </div>
   </div>
@@ -422,6 +423,7 @@ const jsonLd = [
   .cs-lead { color: var(--text-mid); font-size: 1.05rem; line-height: 1.65; max-width: 56ch; margin-bottom: 1.5rem; }
   .hero-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.25rem; }
   .badge-cs { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-mid); background: var(--bg-2); border: 1px solid var(--border-strong); border-radius: var(--r-pill); padding: 4px 10px; }
+  .badge-cs.tech-badge { color: var(--tech-color, var(--text-mid)); background: var(--tech-bg, var(--bg-2)); border-color: var(--tech-border, var(--border-strong)); }
   .meta-bar { display: flex; flex-wrap: wrap; gap: 2.5rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
   .meta-bar .mk { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-low); margin-bottom: 4px; }
   .meta-bar .mv { font-family: var(--font-display); font-weight: 600; color: var(--text-hi); font-size: 1.02rem; }

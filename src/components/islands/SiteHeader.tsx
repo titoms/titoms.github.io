@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import logo2026 from "../../assets/logo-2026.png";
-import { CALENDLY_URL } from "../../config/constants";
+import { BOOK_CALL_URL } from "../../config/constants";
 import { Button } from "../ui";
 
 const NAV_LINKS = [
@@ -58,10 +58,8 @@ const SiteHeader = () => {
               </a>
             ))}
             <Button
-              href={CALENDLY_URL}
+              href={BOOK_CALL_URL}
               size="sm"
-              target="_blank"
-              rel="noopener noreferrer"
               className="text-sm"
             >
               Book a call
@@ -106,10 +104,8 @@ const SiteHeader = () => {
             </a>
           ))}
           <Button
-            href={CALENDLY_URL}
+            href={BOOK_CALL_URL}
             size="lg"
-            target="_blank"
-            rel="noopener noreferrer"
             onClick={() => setOpen(false)}
             className="text-xl"
           >

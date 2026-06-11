@@ -6,7 +6,7 @@ import { Card } from '../../components/ui/Card';
 import { SectionHeader } from '../../components/ui/SectionHeader';
 import FAQAccordion from '../../components/islands/FAQAccordion';
 import { servicePages } from '../../config/services-data';
-import { CALENDLY_URL } from '../../config/constants';
+import { CALENDLY_URL, BOOK_CALL_URL } from '../../config/constants';
 import type { FAQ } from '../../types';
 
 export async function getStaticPaths() {
@@ -62,11 +62,9 @@ const jsonLd = {
           </p>
           <div class="mt-8 flex flex-wrap gap-4">
             <Button
-              href={service.hero.primaryCtaHref ?? CALENDLY_URL}
+              href={service.hero.primaryCtaHref ?? BOOK_CALL_URL}
               variant="primary"
               size="lg"
-              target="_blank"
-              rel="noopener noreferrer"
             >
               {service.hero.primaryCta} →
             </Button>
@@ -253,11 +251,9 @@ const jsonLd = {
             </div>
             <p class="font-display text-[1.5rem] font-bold text-white">{row.price}</p>
             <Button
-              href={service.stripeLink && !service.stripeLink.includes('REPLACE') ? service.stripeLink : CALENDLY_URL}
+              href={service.stripeLink && !service.stripeLink.includes('REPLACE') ? service.stripeLink : BOOK_CALL_URL}
               variant={row.featured ? 'primary' : 'secondary'}
               size="sm"
-              target="_blank"
-              rel="noopener noreferrer"
               data-track="stripe_click"
               data-service={service.slug}
             >
@@ -271,18 +267,13 @@ const jsonLd = {
       )}
       <div class="mt-8 flex flex-wrap gap-4">
         <Button
-          href={CALENDLY_URL}
+          href={BOOK_CALL_URL}
           variant="primary"
           size="lg"
-          target="_blank"
-          rel="noopener noreferrer"
           data-track="cta_click"
           data-service={service.slug}
         >
           Book a session
-        </Button>
-        <Button href="/contact" variant="ghost" size="lg">
-          Ask a question
         </Button>
       </div>
     </div>
@@ -318,11 +309,9 @@ const jsonLd = {
             </Button>
           )}
           <Button
-            href={CALENDLY_URL}
+            href={BOOK_CALL_URL}
             variant={service.stripeLink && !service.stripeLink.includes('REPLACE') ? "secondary" : "primary"}
             size="lg"
-            target="_blank"
-            rel="noopener noreferrer"
             data-track="cta_click"
             data-service={service.slug}
           >

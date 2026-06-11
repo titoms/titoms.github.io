@@ -5,7 +5,7 @@ import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { SectionHeader } from '../../components/ui/SectionHeader';
 import { servicePages } from '../../config/services-data';
-import { CALENDLY_URL } from '../../config/constants';
+import { CALENDLY_URL, BOOK_CALL_URL } from '../../config/constants';
 
 const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
 
@@ -110,12 +110,12 @@ const serviceCtaLabels: Record<string, string> = {
       <div class="flex flex-col items-center gap-6 py-10 text-center">
         <span class="font-mono text-xs uppercase tracking-widest text-accent">NOT SURE WHICH?</span>
         <h2 class="font-display text-[clamp(1.8rem,3.5vw,2.8rem)] font-semibold leading-tight text-white">
-          Start with a 15-minute call.
+          Start with a 30-minute call.
         </h2>
         <p class="max-w-prose text-lg leading-8 text-secondary">
           Tell me where you are and we'll pick the right entry point together.
         </p>
-        <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
+        <Button href={BOOK_CALL_URL} variant="primary" size="lg">
           Book a project call →
         </Button>
       </div>

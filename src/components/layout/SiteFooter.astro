@@ -1,5 +1,5 @@
 ---
-import { footerGroups, CALENDLY_URL } from '../../config/constants';
+import { footerGroups, CALENDLY_URL, BOOK_CALL_URL } from '../../config/constants';
 ---
 
 <footer class="border-t border-border bg-surface/30">
@@ -13,7 +13,7 @@ import { footerGroups, CALENDLY_URL } from '../../config/constants';
               const href = link.href
                 ? link.href
                 : link.title === 'Book a call'
-                ? CALENDLY_URL
+                ? BOOK_CALL_URL
                 : link.title === 'LinkedIn'
                 ? 'https://linkedin.com/in/christophe-crognier'
                 : link.title === 'GitHub'
