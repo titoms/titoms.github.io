@@ -135,6 +135,7 @@ body.cursor-active #cursor-glow {
 
 @media (prefers-reduced-motion: reduce) {
   #cursor-glow { display: none; }
+  .btn-grad-hover:hover { animation: none; }
 }
 
 /* ---- gradient border animation ---- */
@@ -150,6 +151,10 @@ body.cursor-active #cursor-glow {
 
 .btn-grad-hover {
   --btn-bg: var(--bg-2);
+}
+
+.btn-grad-hover {
+  transition-property: transform, border-color, box-shadow, color;
 }
 
 .btn-grad-hover.bg-transparent {
