@@ -7,6 +7,7 @@ interface Props {
   description: string;
   canonical?: string;
   ogImage?: string;
+  ogType?: string;
   jsonLd?: object | object[];
   gscVerification?: string;
 }
@@ -16,6 +17,7 @@ const {
   description,
   canonical = Astro.url.href,
   ogImage = 'https://fullstackchris.dev/og-image.png',
+  ogType = 'website',
   jsonLd,
   gscVerification,
 } = Astro.props;
@@ -36,7 +38,7 @@ const cfToken = CF_ANALYTICS_TOKEN.startsWith('REPLACE') ? null : CF_ANALYTICS_T
     <link rel="canonical" href={canonical} />
 
     <!-- OpenGraph -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -50,7 +52,11 @@ const cfToken = CF_ANALYTICS_TOKEN.startsWith('REPLACE') ? null : CF_ANALYTICS_T
     <meta name="twitter:image" content={ogImage} />
 
     <!-- Favicons -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0d0d10" />
 
     <!-- Google Search Console verification (pass gscVerification prop if using meta tag method) -->
     {gscVerification && <meta name="google-site-verification" content={gscVerification} />}
@@ -64,6 +70,7 @@ const cfToken = CF_ANALYTICS_TOKEN.startsWith('REPLACE') ? null : CF_ANALYTICS_T
     <slot name="head" />
   </head>
   <body>
+    <div id="cursor-glow" aria-hidden="true"></div>
     <slot />
 
     <!-- Cloudflare Web Analytics -->
@@ -75,5 +82,38 @@ const cfToken = CF_ANALYTICS_TOKEN.startsWith('REPLACE') ? null : CF_ANALYTICS_T
         data-cf-beacon={JSON.stringify({ token: cfToken })}
       />
     )}
+
+    <script is:inline>
+      (function () {
+        if (window.matchMedia('(hover: none)').matches) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var glow = document.getElementById('cursor-glow');
+        if (!glow) return;
+        var tx = window.innerWidth / 2, ty = window.innerHeight / 2;
+        var cx = tx, cy = ty;
+        var raf = 0, active = false;
+
+        function loop() {
+          cx += (tx - cx) * 0.05;
+          cy += (ty - cy) * 0.05;
+          glow.style.transform = 'translate(calc(' + cx + 'px - 50%), calc(' + cy + 'px - 50%))';
+          if (Math.abs(tx - cx) > 0.5 || Math.abs(ty - cy) > 0.5) {
+            raf = requestAnimationFrame(loop);
+          } else {
+            raf = 0;
+          }
+        }
+
+        window.addEventListener('mousemove', function (e) {
+          tx = e.clientX;
+          ty = e.clientY;
+          if (!active) {
+            active = true;
+            document.body.classList.add('cursor-active');
+          }
+          if (!raf) raf = requestAnimationFrame(loop);
+        }, { passive: true });
+      })();
+    </script>
   </body>
 </html>
