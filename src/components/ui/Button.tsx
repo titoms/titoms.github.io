@@ -27,9 +27,9 @@ const variants: Record<ButtonVariant, string> = {
   primary:
     "border-transparent bg-brand text-[var(--text-on-accent)] shadow-[0_0_0_1px_rgba(167,139,250,0.4),0_8px_24px_rgba(124,92,232,0.25)] hover:bg-brand-hover hover:text-[var(--text-on-accent)] hover:shadow-glow",
   secondary:
-    "border-strong bg-tertiary text-white hover:border-accent hover:bg-raised hover:text-white",
+    "border-strong bg-tertiary text-white hover:border-accent hover:bg-raised hover:text-white btn-grad-hover",
   ghost:
-    "border-transparent bg-transparent text-secondary hover:bg-tertiary hover:text-white",
+    "border-transparent bg-transparent text-secondary hover:bg-tertiary hover:text-white btn-grad-hover",
 };
 
 const sizes: Record<ButtonSize, string> = {

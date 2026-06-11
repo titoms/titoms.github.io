@@ -137,6 +137,39 @@ body.cursor-active #cursor-glow {
   #cursor-glow { display: none; }
 }
 
+/* ---- gradient border animation ---- */
+@property --border-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes border-spin {
+  to { --border-angle: 360deg; }
+}
+
+.btn-grad-hover {
+  --btn-bg: var(--bg-2);
+}
+
+.btn-grad-hover.bg-transparent {
+  --btn-bg: transparent;
+}
+
+.btn-grad-hover:hover {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--btn-bg), var(--btn-bg)) padding-box,
+    conic-gradient(
+      from var(--border-angle),
+      transparent 20%,
+      var(--accent-400) 45%,
+      #60a5fa 60%,
+      transparent 80%
+    ) border-box;
+  animation: border-spin 5s linear infinite;
+}
+
 @keyframes card-glow-drift {
   0%,
   100% {

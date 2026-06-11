@@ -134,7 +134,19 @@ import { CALENDLY_URL } from '../../config/constants';
   .v-btn.primary { background: var(--accent-400); color: var(--text-on-accent); box-shadow: 0 0 0 1px rgba(167,139,250,.4), 0 8px 24px rgba(124,92,232,.25); }
   .v-btn.primary:hover { background: var(--accent-300); box-shadow: var(--glow), 0 8px 28px rgba(124,92,232,.35); }
   .v-btn.secondary { background: var(--bg-2); color: var(--text-hi); border-color: var(--border-strong); }
-  .v-btn.secondary:hover { background: var(--bg-3); border-color: var(--accent-400); }
+  .v-btn.secondary:hover {
+    border-color: transparent;
+    background:
+      linear-gradient(var(--bg-2), var(--bg-2)) padding-box,
+      conic-gradient(
+        from var(--border-angle),
+        transparent 20%,
+        var(--accent-400) 45%,
+        #60a5fa 60%,
+        transparent 80%
+      ) border-box;
+    animation: border-spin 5s linear infinite;
+  }
 
   /* ---- inline tool pills ---- */
   .v2-tools { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 4px; }
