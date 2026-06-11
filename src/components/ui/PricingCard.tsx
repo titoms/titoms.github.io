@@ -33,7 +33,7 @@ export const PricingCard = ({
     glow={featured}
     className={cn(
       "flex h-full flex-col gap-5",
-      featured && "border-accent bg-gradient-to-b from-brand/10 to-tertiary shadow-glow",
+      featured && "breathing-violet-glow border-accent bg-gradient-to-b from-brand/10 to-tertiary shadow-glow",
     )}
   >
     <div className="flex items-start justify-between gap-4">

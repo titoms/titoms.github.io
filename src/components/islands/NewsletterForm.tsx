@@ -41,15 +41,15 @@ const NewsletterForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full max-w-md flex-col gap-3 sm:flex-row">
+    <form onSubmit={handleSubmit} className="flex w-full max-w-xl flex-col gap-3 sm:flex-row">
       <input
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="your@email.com"
+        placeholder="you@example.com"
         required
         disabled={status === "loading"}
-        className="flex-1 rounded-lg border border-border bg-surface px-4 py-3 text-sm text-white placeholder:text-low focus:border-accent focus:outline-none disabled:opacity-60"
+        className="min-h-[48px] flex-1 rounded-lg border border-strong bg-raised/80 px-4 py-3 text-sm text-white placeholder:text-low focus:border-accent focus:outline-none disabled:opacity-60"
       />
       <Button type="submit" variant="primary" size="md" disabled={status === "loading"}>
         {status === "loading" ? "Sending…" : "Subscribe"}

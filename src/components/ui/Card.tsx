@@ -11,8 +11,8 @@ export const Card = ({ children, hover = false, glow = false, className, ...prop
   <div
     className={cn(
       "relative rounded-lg border border-border bg-tertiary p-6 transition-[transform,background,border-color,box-shadow] duration-200",
-      hover && "hover:-translate-y-1 hover:border-strong hover:bg-raised",
-      glow && "shadow-card",
+      hover && "card-hover-glow hover:-translate-y-1 hover:border-strong hover:bg-raised hover:shadow-glow",
+      glow && "card-glow-surface shadow-card",
       className,
     )}
     {...props}

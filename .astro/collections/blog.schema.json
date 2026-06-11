@@ -5,6 +5,9 @@
     "title": {
       "type": "string"
     },
+    "metaTitle": {
+      "type": "string"
+    },
     "description": {
       "type": "string"
     },
@@ -12,10 +15,36 @@
       "type": "string",
       "format": "date-time"
     },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
     "tags": {
       "type": "array",
       "items": {
         "type": "string"
+      }
+    },
+    "imagePrompt": {
+      "type": "string"
+    },
+    "faqs": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "question",
+          "answer"
+        ]
       }
     },
     "comingSoon": {

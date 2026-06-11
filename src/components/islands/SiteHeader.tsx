@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { navLinks, CALENDLY_URL } from "../../config/constants";
+import { useEffect, useState } from "react";
+import logo2026 from "../../assets/logo-2026.png";
+import { CALENDLY_URL } from "../../config/constants";
+import { Button } from "../ui";
 
 const NAV_LINKS = [
   { id: "home", title: "Home", href: "/" },
@@ -13,73 +15,109 @@ const NAV_LINKS = [
 const SiteHeader = () => {
   const [open, setOpen] = useState(false);
 
-  return (
-    <header className="fixed top-0 z-50 w-full border-b border-border bg-primary/80 backdrop-blur-xl">
-      <div className="mx-auto flex w-full max-w-site items-center justify-between px-6 py-4 sm:px-8 lg:px-10">
-        <a href="/" className="font-display text-lg font-bold text-white">
-          fullstackchris<span className="text-accent">.dev</span>
-        </a>
+  useEffect(() => {
+    if (!open) return;
 
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-6 min-[900px]:flex">
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open]);
+
+  return (
+    <>
+      <header className="fixed top-0 z-50 w-full border-b border-border bg-primary/85 backdrop-blur-xl">
+        <div className="mx-auto flex w-full max-w-site items-center justify-between px-6 py-4 sm:px-8 lg:px-10">
+          <a href="/" className="flex items-center gap-3 font-display text-lg font-bold text-white">
+            <img src={logo2026.src} alt="" className="h-9 w-9 shrink-0 object-contain" />
+            <span>
+              fullstackchris<span className="text-accent">.dev</span>
+            </span>
+          </a>
+
+          {/* Desktop nav */}
+          <nav className="hidden items-center gap-6 min-[900px]:flex">
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.id}
+                href={link.href}
+                className="text-sm font-medium text-secondary transition-colors hover:text-white"
+              >
+                {link.title}
+              </a>
+            ))}
+            <Button
+              href={CALENDLY_URL}
+              size="sm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm"
+            >
+              Book a call
+            </Button>
+          </nav>
+
+          {/* Mobile hamburger */}
+          <button
+            type="button"
+            className="relative z-[60] grid h-11 w-11 place-items-center rounded-lg border border-border bg-surface/80 transition-colors hover:bg-raised min-[900px]:hidden"
+            onClick={() => setOpen((current) => !current)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-controls="mobile-navigation"
+            aria-expanded={open}
+          >
+            <span className="flex flex-col gap-[5px]">
+              <span className={`block h-0.5 w-6 bg-white transition-all duration-300 ${open ? "translate-y-[7px] rotate-45" : ""}`} />
+              <span className={`block h-0.5 w-6 bg-white transition-all duration-300 ${open ? "opacity-0" : ""}`} />
+              <span className={`block h-0.5 w-6 bg-white transition-all duration-300 ${open ? "-translate-y-[7px] -rotate-45" : ""}`} />
+            </span>
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile drawer */}
+      <div
+        id="mobile-navigation"
+        aria-hidden={!open}
+        className={`fixed inset-0 z-40 min-[900px]:hidden bg-primary/95 backdrop-blur-xl transition-[opacity,transform] duration-300 ${
+          open ? "pointer-events-auto translate-x-0 opacity-100" : "pointer-events-none translate-x-full opacity-0"
+        }`}
+      >
+        <nav className="flex min-h-[100dvh] flex-col items-center justify-center gap-7 px-6 pb-10 pt-24">
           {NAV_LINKS.map((link) => (
             <a
               key={link.id}
               href={link.href}
-              className="text-sm font-medium text-secondary transition-colors hover:text-white"
+              onClick={() => setOpen(false)}
+              className="text-2xl font-medium text-secondary transition-colors hover:text-white"
             >
               {link.title}
             </a>
           ))}
-          <a
+          <Button
             href={CALENDLY_URL}
+            size="lg"
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-brand/20 transition-colors hover:bg-brand-hover"
+            onClick={() => setOpen(false)}
+            className="text-xl"
           >
             Book a call
-          </a>
+          </Button>
         </nav>
-
-        {/* Mobile hamburger */}
-        <button
-          className="flex min-[900px]:hidden flex-col gap-[5px] p-2"
-          onClick={() => setOpen(!open)}
-          aria-label={open ? "Close menu" : "Open menu"}
-        >
-          <span className={`block h-0.5 w-6 bg-white transition-all duration-300 ${open ? "translate-y-[7px] rotate-45" : ""}`} />
-          <span className={`block h-0.5 w-6 bg-white transition-all duration-300 ${open ? "opacity-0" : ""}`} />
-          <span className={`block h-0.5 w-6 bg-white transition-all duration-300 ${open ? "-translate-y-[7px] -rotate-45" : ""}`} />
-        </button>
       </div>
-
-      {/* Mobile drawer */}
-      <div
-        className={`fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-primary/95 backdrop-blur-xl transition-transform duration-300 min-[900px]:hidden ${
-          open ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        {NAV_LINKS.map((link) => (
-          <a
-            key={link.id}
-            href={link.href}
-            onClick={() => setOpen(false)}
-            className="text-2xl font-medium text-secondary transition-colors hover:text-white"
-          >
-            {link.title}
-          </a>
-        ))}
-        <a
-          href={CALENDLY_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => setOpen(false)}
-          className="rounded-xl bg-brand px-8 py-3 text-xl font-bold text-white shadow-lg shadow-brand/20 transition-colors hover:bg-brand-hover"
-        >
-          Book a call
-        </a>
-      </div>
-    </header>
+    </>
   );
 };
 

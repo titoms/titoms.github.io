@@ -1,5 +1,6 @@
 ---
 import PageLayout from '../components/layout/PageLayout.astro';
+import HeroV2 from '../components/hero/HeroV2.astro';
 import {
   heroStats, workModes, buildStats, serviceOffers, processSteps,
   pricingPlans, newsletterIssue, feedbackCards, faqs, CALENDLY_URL,
@@ -11,10 +12,11 @@ import { Card } from '../components/ui/Card';
 import { SectionHeader } from '../components/ui/SectionHeader';
 import { ServiceCard } from '../components/ui/ServiceCard';
 import { PricingCard } from '../components/ui/PricingCard';
-import { ProcessStep } from '../components/ui/ProcessStep';
 import ProjectsModal from '../components/islands/ProjectsModal';
 import FAQAccordion from '../components/islands/FAQAccordion';
 import NewsletterForm from '../components/islands/NewsletterForm';
+import NewsletterPreview from '../components/islands/NewsletterPreview';
+import ProcessStepper from '../components/islands/ProcessStepper';
 
 const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
 
@@ -53,70 +55,42 @@ const jsonLd = [
   description="Full-stack React and Node.js development, project coaching, MVP workshops and an AI web development newsletter for founders, freelancers and developers."
   jsonLd={jsonLd}
 >
-  <!-- Hero -->
-  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border pt-32 pb-20">
-    <div class={sectionClass}>
-      <Badge variant="accent">React · Node.js · TypeScript · AI workflows</Badge>
-      <h1 class="mt-6 max-w-4xl font-display text-[clamp(2.8rem,6vw,5rem)] font-bold leading-[1.02] tracking-[-0.02em] text-white">
-        Build faster. Ship cleaner.<br />
-        <span class="text-accent">Understand what you build.</span>
-      </h1>
-      <p class="mt-6 max-w-prose text-[clamp(1rem,1.8vw,1.25rem)] leading-8 text-secondary">
-        Full-stack development, coaching, and MVP services for founders, freelancers and developers who want to move faster with React, Node.js, TypeScript and AI-assisted workflows.
-      </p>
-      <div class="mt-10 flex flex-wrap gap-4">
-        <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
-          Book a free call
-        </Button>
-        <Button href="/services" variant="secondary" size="lg">
-          See all services
-        </Button>
-      </div>
-      <div class="mt-16 grid gap-6 sm:grid-cols-3">
-        {heroStats.map((stat) => (
-          <div class="space-y-1">
-            <p class="font-display text-3xl font-bold text-white">{stat.value}</p>
-            <p class="font-mono text-xs uppercase tracking-widest text-accent">{stat.label}</p>
-            <p class="text-sm leading-6 text-secondary">{stat.description}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
+  <!-- Hero V2 — Cursor AI build board -->
+  <HeroV2 />
 
-  <!-- Three ways to work -->
-  <section class={sectionClass}>
-    <SectionHeader eyebrow="How we work" title="Three ways to engage." />
-    <div class="mt-10 grid gap-5 md:grid-cols-3">
-      {workModes.map((mode) => (
-        <Card hover class="flex flex-col gap-3">
-          <h3 class="font-display text-xl font-semibold text-white">{mode.title}</h3>
-          <p class="text-[0.95rem] leading-7 text-secondary">{mode.description}</p>
-          <p class="mt-auto border-t border-border pt-4 text-sm text-accent">{mode.outcome}</p>
-        </Card>
-      ))}
-    </div>
-  </section>
-
-  <!-- What gets built here -->
+  <!-- Why work with me -->
   <section class="border-y border-border bg-surface/40">
     <div class={sectionClass}>
-      <SectionHeader eyebrow="What gets built here" title="Practical delivery across the full stack." />
-      <div class="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-        {buildStats.map((stat) => (
-          <Card class="flex flex-col gap-2">
-            <p class="font-display text-4xl font-bold text-accent">{stat.value}</p>
-            <p class="font-mono text-xs uppercase tracking-widest text-white">{stat.label}</p>
-            <p class="text-sm leading-6 text-secondary">{stat.description}</p>
-          </Card>
-        ))}
+      <SectionHeader eyebrow="WHY WORK WITH ME" title="Developer execution, teaching clarity, AI without the bullshit." />
+      <div class="mt-10 grid gap-0 md:grid-cols-3">
+        <div class="py-8 pr-8">
+          <div class="mb-4 grid h-10 w-10 place-items-center rounded-lg border border-accent bg-accent-soft text-accent">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          </div>
+          <h4 class="mb-2 font-display text-[1.1rem] font-semibold text-white">I can explain it</h4>
+          <p class="text-[0.95rem] leading-7 text-secondary">~7,000 hours teaching web development means I cut through jargon and help non-technical founders make confident decisions.</p>
+        </div>
+        <div class="py-8 pr-8">
+          <div class="mb-4 grid h-10 w-10 place-items-center rounded-lg border border-accent bg-accent-soft text-accent">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
+          </div>
+          <h4 class="mb-2 font-display text-[1.1rem] font-semibold text-white">I can scope it</h4>
+          <p class="text-[0.95rem] leading-7 text-secondary">I turn a vague idea into a prioritized MVP and a realistic budget — so you don't burn weeks building the wrong thing.</p>
+        </div>
+        <div class="py-8 pr-8">
+          <div class="mb-4 grid h-10 w-10 place-items-center rounded-lg border border-accent bg-accent-soft text-accent">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <h4 class="mb-2 font-display text-[1.1rem] font-semibold text-white">I can build it</h4>
+          <p class="text-[0.95rem] leading-7 text-secondary">React, Next.js, Node, TypeScript and Postgres — shipped to production, with AI-assisted workflows where they genuinely help.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Services -->
-  <section class={sectionClass}>
-    <SectionHeader eyebrow="Services" title="Five ways to work together." description="All offers are scoped to specific outcomes. No vague retainers, no endless commitments." />
+  <section class={sectionClass} id="services">
+    <SectionHeader eyebrow="WHAT I OFFER" title="One ladder, from first call to launched product." description="Start wherever you are. Each service hands off cleanly to the next — clarity, then focused build, then a full MVP." />
     <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
       {serviceOffers.map((offer) => (
         <ServiceCard
@@ -127,13 +101,22 @@ const jsonLd = [
           badge={offer.badge}
           featured={offer.featured}
           ctaHref={serviceCtaMap[offer.title] ?? '/services'}
-          ctaLabel="See details"
+          ctaLabel={offer.badge === 'Newsletter' ? 'Subscribe →' : 'Learn more →'}
           ctaVariant={offer.featured ? 'primary' : 'ghost'}
         />
       ))}
-    </div>
-    <div class="mt-8 flex justify-center">
-      <Button href="/services" variant="secondary" size="lg">All services</Button>
+      <Card hover class="breathing-violet-glow flex h-full flex-col gap-4 border-accent/25 bg-gradient-to-b from-accent/8 to-transparent">
+        <div class="grid h-10 w-10 place-items-center rounded-lg border border-accent bg-accent-soft text-accent">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M2 12h20"/></svg>
+        </div>
+        <h3 class="font-display text-xl font-semibold text-white">Not sure where to start?</h3>
+        <p class="text-[0.95rem] leading-7 text-secondary">Book a free 15-minute call. We'll figure out the right next step for your project.</p>
+        <div class="mt-auto flex items-center justify-end gap-4 border-t border-border pt-4">
+          <Button href={CALENDLY_URL} variant="primary" size="sm" target="_blank" rel="noopener noreferrer">
+            Book a call →
+          </Button>
+        </div>
+      </Card>
     </div>
   </section>
 
@@ -148,13 +131,7 @@ const jsonLd = [
   <!-- How we work -->
   <section class={sectionClass}>
     <SectionHeader eyebrow="Process" title="How a session works." />
-    <div class="mt-10 max-w-xl">
-      {processSteps.map((step, i) => (
-        <ProcessStep number={i + 1} title={step.title} isLast={i === processSteps.length - 1}>
-          {step.description}
-        </ProcessStep>
-      ))}
-    </div>
+    <ProcessStepper steps={processSteps} client:visible />
   </section>
 
   <!-- Tech stack -->
@@ -191,28 +168,36 @@ const jsonLd = [
   <!-- Newsletter CTA -->
   <section class="border-y border-border bg-surface/40">
     <div class={sectionClass}>
-      <Card glow class="overflow-hidden p-8 sm:p-10 lg:p-14">
-        <div class="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-start">
-          <div>
-            <SectionHeader
-              eyebrow="AI Web Dev Newsletter"
-              title="What to build with AI this month."
-              description="A practical monthly briefing for developers, founders and freelancers on AI tools, workflows and product opportunities."
-            />
+      <Card class="breathing-violet-glow border-accent/45 bg-gradient-to-br from-raised via-tertiary to-surface-deep p-8 sm:p-10 lg:p-14">
+        <div class="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
+          <div class="max-w-2xl">
+            <p class="mb-5 inline-flex items-center gap-3 font-mono text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+              <span class="h-px w-5 bg-accent" aria-hidden="true"></span>
+              Free + Paid
+            </p>
+            <h2 class="max-w-xl font-display text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.05] text-white">
+              Stay ahead of AI web dev without the noise.
+            </h2>
+            <p class="mt-5 max-w-xl text-[1.05rem] leading-8 text-secondary">
+              A practical monthly briefing for builders. What's worth testing, what to ignore, and the prompts and workflows I actually use.
+            </p>
             <div class="mt-8">
               <NewsletterForm client:visible />
             </div>
+            <p class="mt-4 text-sm leading-6 text-low">
+              Free sample available · Solo €9/mo · Pro €19/mo · cancel anytime
+            </p>
           </div>
-          <div class="hidden rounded-xl border border-border bg-surface p-5 font-mono text-sm text-secondary lg:block min-w-[260px]">
-            <p class="mb-3 text-xs uppercase tracking-widest text-accent">Issue preview</p>
-            <ul class="space-y-2">
-              {newsletterIssue.map((item) => (
-                <li class="flex items-start gap-2">
-                  <span class="mt-0.5 text-positive">›</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+          <div class="overflow-hidden rounded-xl border border-border bg-primary/80 font-mono text-sm text-secondary shadow-lg shadow-black/30">
+            <div class="flex items-center gap-3 border-b border-border bg-raised/60 px-5 py-4">
+              <span class="flex gap-2" aria-hidden="true">
+                <span class="h-3 w-3 rounded-full bg-white/10"></span>
+                <span class="h-3 w-3 rounded-full bg-white/10"></span>
+                <span class="h-3 w-3 rounded-full bg-white/10"></span>
+              </span>
+              <span class="text-low">june-issue.md</span>
+            </div>
+            <NewsletterPreview items={newsletterIssue} client:visible />
           </div>
         </div>
       </Card>
@@ -246,22 +231,22 @@ const jsonLd = [
   </section>
 
   <!-- Book a call CTA -->
-  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border">
+  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border" id="contact">
     <div class={sectionClass}>
       <div class="flex flex-col items-center gap-6 py-10 text-center">
-        <Badge variant="accent">Book a call</Badge>
-        <h2 class="max-w-2xl font-display text-[clamp(2rem,4vw,3.4rem)] font-semibold leading-tight text-white">
-          Ready to build something?
+        <span class="font-mono text-xs uppercase tracking-widest text-accent">START HERE</span>
+        <h2 class="max-w-2xl font-display text-[clamp(2rem,4.5vw,3.5rem)] font-semibold leading-tight text-white">
+          Bring me your idea, blocker or product goal.
         </h2>
         <p class="max-w-prose text-lg leading-8 text-secondary">
-          Book a free 30-minute call to discuss your project, blocker or product idea. No commitment required.
+          I'll help you clarify it, understand it, build it and launch it. Start with a call — we'll find the right next step.
         </p>
         <div class="flex flex-wrap justify-center gap-4">
           <Button href={CALENDLY_URL} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
-            Book a free call
+            Book a project call <span class="ml-1">→</span>
           </Button>
-          <Button href="/contact" variant="secondary" size="lg">
-            Send a message
+          <Button href="/services" variant="secondary" size="lg">
+            See all services
           </Button>
         </div>
       </div>

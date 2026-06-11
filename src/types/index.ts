@@ -97,6 +97,46 @@ export type ProjectCaseStudy = {
   lessonsLearned: string[];
 };
 
+export type ProjectMeta = {
+  role: string;
+  timeline: string;
+  platform: string;
+  type: string;
+};
+
+export type ProjectFlowStep = {
+  step: string;
+  title: string;
+  description: string;
+};
+
+export type ProjectFeature = {
+  title: string;
+  description: string;
+  bullets: string[];
+};
+
+export type ProjectStackCategory = {
+  label: string;
+  chips: string[];
+};
+
+export type ProjectProve = {
+  iconKey: string;
+  title: string;
+  description: string;
+};
+
+export type ProjectPainPoint = {
+  bold: string;
+  rest: string;
+};
+
+export type ProjectAudienceStat = {
+  value: string;
+  label: string;
+};
+
 export type Project = {
   name: string;
   slug: string;
@@ -108,6 +148,16 @@ export type Project = {
   images: ImageAsset[];
   source_code_link: string;
   live_link?: string;
+  meta: ProjectMeta;
+  painPoints: ProjectPainPoint[];
+  audienceWho: string;
+  audienceDesc: string;
+  audienceStats: ProjectAudienceStat[];
+  productFlow: ProjectFlowStep[];
+  features: ProjectFeature[];
+  stack: ProjectStackCategory[];
+  proves: ProjectProve[];
+  nextProjectSlug?: string;
 };
 
 export type MotionDirection = "left" | "right" | "up" | "down" | "";
@@ -123,8 +173,19 @@ export type ServiceIncludedItem = {
   description: string;
 };
 
+export type ServiceHeroCard = {
+  type: 'chips' | 'checklist' | 'investment';
+  title: string;
+  items?: string[];
+  leaveWith?: string;
+  amount?: string;
+  note?: string;
+  footer?: string;
+};
+
 export type ServicePageData = {
   slug: string;
+  title: string;
   meta: {
     title: string;
     description: string;
@@ -138,8 +199,10 @@ export type ServicePageData = {
     secondaryCta?: string;
     secondaryCtaHref?: string;
   };
+  answer?: string;
   painPoints: string[];
   outcomes: string[];
+  useCases?: string[];
   included: ServiceIncludedItem[];
   pricing: ServicePricingRow[];
   pricingNote?: string;
@@ -148,6 +211,7 @@ export type ServicePageData = {
   notAFit?: string[];
   processSteps?: { title: string; description: string }[];
   faqs: { question: string; answer: string }[];
+  heroCard?: ServiceHeroCard;
 };
 
 export type BlogArticle = {

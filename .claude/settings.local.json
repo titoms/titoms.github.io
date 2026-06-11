@@ -22,7 +22,9 @@
       "Bash(Select-Object -First 20)",
       "Bash(git *)",
       "Bash(Remove-Item \"C:/DEV/titoms.github.io/src/vite-env.d.ts\" -Force)",
-      "Bash(Remove-Item \"C:/DEV/titoms.github.io/vite.config.ts\" -Force)"
+      "Bash(Remove-Item \"C:/DEV/titoms.github.io/vite.config.ts\" -Force)",
+      "Bash(dir *)",
+      "Bash(copy *)"
     ]
   }
 }

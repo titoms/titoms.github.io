@@ -24,12 +24,11 @@ type NativeButtonProps = SharedButtonProps &
 export type ButtonProps = AnchorButtonProps | NativeButtonProps;
 
 const variants: Record<ButtonVariant, string> = {
-  primary:
-    "border-transparent bg-brand text-[var(--text-on-accent)] shadow-[0_0_0_1px_rgba(167,139,250,0.4),0_8px_24px_rgba(124,92,232,0.25)] hover:bg-brand-hover hover:text-[var(--text-on-accent)] hover:shadow-glow",
+  primary: "btn-primary-animated",
   secondary:
-    "border-strong bg-tertiary text-white hover:border-accent hover:bg-raised hover:text-white btn-grad-hover",
+    "btn-grad-hover btn-secondary border-strong bg-tertiary text-white hover:text-white",
   ghost:
-    "border-transparent bg-transparent text-secondary hover:bg-tertiary hover:text-white btn-grad-hover",
+    "btn-grad-hover btn-ghost border-border bg-transparent text-secondary hover:text-white",
 };
 
 const sizes: Record<ButtonSize, string> = {

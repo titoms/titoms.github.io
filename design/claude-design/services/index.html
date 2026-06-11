@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services — Christophe Crognier · fullstackchris.dev</title>
+<meta name="description" content="Coaching, full-stack development days, MVP workshops, custom MVP development and a practical AI web-dev newsletter — for founders, freelancers and small teams.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../service.css">
+<style>
+  .svc-row { display: grid; grid-template-columns: 56px 1fr auto; gap: var(--sp-5); align-items: center; padding: var(--sp-6); }
+  .svc-row .ic { width: 50px; height: 50px; border-radius: var(--r-md); background: var(--accent-soft); border: 1px solid var(--border-accent); color: var(--accent-300); display: grid; place-items: center; }
+  .svc-row .meta h3 { font-size: 1.3rem; margin-bottom: 4px; }
+  .svc-row .meta p { color: var(--text-mid); max-width: 56ch; font-size: 0.96rem; }
+  .svc-row .end { text-align: right; display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+  .svc-row .end .price-tag { font-size: 1rem; }
+  .tunnel { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-3); }
+  .tunnel .t-step { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--sp-5); position: relative; }
+  .tunnel .t-step .k { font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-400); letter-spacing: 0.1em; }
+  .tunnel .t-step h4 { font-size: 1rem; margin: 8px 0 6px; }
+  .tunnel .t-step p { font-size: 0.85rem; color: var(--text-mid); }
+  @media (max-width: 900px) { .svc-row { grid-template-columns: 1fr; text-align: left; } .svc-row .end { align-items: flex-start; text-align: left; } .tunnel { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .tunnel { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <nav class="nav">
+      <a class="brand" href="../Homepage.html"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html" style="color:var(--text-hi)">Services</a></li>
+        <li><a href="../Homepage.html#projects">Projects</a></li>
+        <li><a href="ai-web-development-newsletter.html">Newsletter</a></li>
+        <li><a href="../Design System.html">Design system</a></li>
+      </ul>
+      <a class="btn btn-primary btn-sm" href="../Homepage.html#contact">Book a call</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero glow-bg grid-bg" data-screen-label="Services hero">
+  <div class="container">
+    <nav class="breadcrumb"><a href="../Homepage.html">Home</a><span class="sep">/</span><span>Services</span></nav>
+    <h1 style="max-width:20ch; margin-top:var(--sp-4);">Five ways to move your web project forward.</h1>
+    <p class="t-lead">Whether you have a blurry idea, a blocked codebase or a product to launch — there's an entry point sized to where you are right now.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;" data-screen-label="Service list">
+  <div class="container stack gap-4" style="max-width:1000px;">
+
+    <article class="card card-hover svc-row">
+      <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5a2 2 0 0 1 2-2h10l4 4v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M8 9h6M8 13h8M8 17h5"/></svg></div>
+      <div class="meta"><h3>AI Web Development Newsletter</h3><p>A monthly, no-hype briefing on AI coding tools, agents, workflows and MVP ideas worth testing — for developers, founders and freelancers.</p></div>
+      <div class="end"><span class="price-tag">from €9 <span class="unit">/mo</span></span><a class="btn btn-secondary btn-sm" href="ai-web-development-newsletter.html">Subscribe →</a></div>
+    </article>
+
+    <article class="card card-hover svc-row">
+      <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-3.5-7.1L21 4l-1 4h-4"/><path d="M8 12h6"/></svg></div>
+      <div class="meta"><h3>Web Project Coaching</h3><p>One-on-one sessions to unblock, clarify and structure your project. Debugging, architecture, AI-generated code and next steps.</p></div>
+      <div class="end"><span class="price-tag">from €90 <span class="unit">/ 1h</span></span><a class="btn btn-secondary btn-sm" href="web-project-coaching.html">Learn more →</a></div>
+    </article>
+
+    <article class="card card-hover svc-row">
+      <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="7 8 3 12 7 16"/><polyline points="17 8 21 12 17 16"/><line x1="14" y1="5" x2="10" y2="19"/></svg></div>
+      <div class="meta"><h3>Full-Stack Development Day</h3><p>Focused half- or full-day blocks for a clear feature, bug, dashboard, API or refactor on your existing React / Node codebase.</p></div>
+      <div class="end"><span class="price-tag">from €350 <span class="unit">/ day</span></span><a class="btn btn-secondary btn-sm" href="full-stack-development-day.html">Learn more →</a></div>
+    </article>
+
+    <article class="card card-hover svc-row">
+      <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 14l3-4 3 3 4-6"/></svg></div>
+      <div class="meta"><h3>MVP Bootstrapping Workshop</h3><p>Turn an idea into a realistic MVP plan: scope, feature priorities, user flows, tech stack, roadmap and budget estimation.</p></div>
+      <div class="end"><span class="price-tag">from €650 <span class="unit">/ day</span></span><a class="btn btn-secondary btn-sm" href="mvp-bootstrapping-workshop.html">Learn more →</a></div>
+    </article>
+
+    <article class="card card-hover svc-row" style="background:linear-gradient(120deg,var(--accent-soft),var(--bg-2) 55%); border-color:var(--border-accent);">
+      <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/><path d="M3 9h6M15 9h6M9 3v6M9 15v6"/></svg></div>
+      <div class="meta"><h3>Custom MVP Development</h3><p>A working web application from scope to deployment — frontend, backend, database, auth, optional AI features and handover.</p></div>
+      <div class="end"><span class="price-tag">from €4,500</span><a class="btn btn-primary btn-sm" href="mvp-development.html">Request quote →</a></div>
+    </article>
+
+  </div>
+</section>
+
+<section class="section" style="background:var(--bg-1); border-top:1px solid var(--border);" data-screen-label="Tunnel">
+  <div class="container">
+    <div class="s-head"><span class="eyebrow">HOW IT FITS TOGETHER</span><h2>One ladder, not five silos.</h2><p>Most clients start small and move up as the project gets clearer. Each step hands off cleanly to the next.</p></div>
+    <div class="tunnel">
+      <div class="t-step"><span class="k">01 · CLARIFY</span><h4>Coaching call</h4><p>Diagnose the blocker and decide the next move.</p></div>
+      <div class="t-step"><span class="k">02 · PLAN</span><h4>MVP workshop</h4><p>Scope, flows, stack and a realistic roadmap.</p></div>
+      <div class="t-step"><span class="k">03 · BUILD</span><h4>Development days</h4><p>Focused blocks to ship features and progress.</p></div>
+      <div class="t-step"><span class="k">04 · LAUNCH</span><h4>Custom MVP</h4><p>Full build, deployment and handover.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section glow-bg" data-screen-label="CTA">
+  <div class="container cta-band">
+    <span class="eyebrow no-rule" style="justify-content:center;">NOT SURE WHICH?</span>
+    <h2 style="margin-top:18px;">Start with a 15-minute call.</h2>
+    <p class="t-lead" style="max-width:48ch; margin:0 auto var(--sp-6);">Tell me where you are and we'll pick the right entry point together.</p>
+    <a class="btn btn-primary btn-lg" href="../Homepage.html#contact">Book a project call <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand" style="margin-bottom:14px;"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></div>
+        <p class="t-small" style="max-width:34ch;">Full-stack web development, AI-assisted workflows and technical coaching for builders.</p>
+      </div>
+      <div class="footer-col"><h5>Services</h5><ul><li><a href="ai-web-development-newsletter.html">Newsletter</a></li><li><a href="web-project-coaching.html">Coaching</a></li><li><a href="full-stack-development-day.html">Dev day</a></li><li><a href="mvp-bootstrapping-workshop.html">MVP workshop</a></li><li><a href="mvp-development.html">MVP build</a></li></ul></div>
+      <div class="footer-col"><h5>Explore</h5><ul><li><a href="../Homepage.html#projects">Projects</a></li><li><a href="#">Blog</a></li><li><a href="#">About</a></li><li><a href="../Design System.html">Design system</a></li></ul></div>
+      <div class="footer-col"><h5>Connect</h5><ul><li><a href="#">LinkedIn</a></li><li><a href="#">GitHub</a></li><li><a href="#">Email</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Christophe Crognier · fullstackchris.dev</span><span class="row gap-4"><a href="#">Privacy</a><a href="#">Legal</a><a href="#">Sitemap</a></span></div>
+  </div>
+</footer>
+
+</body>
+</html>

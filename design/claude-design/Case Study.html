@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keevo — Case study · fullstackchris.dev</title>
+<meta name="description" content="Case study: Keevo, a local-first desktop app for video creators — transcription, subtitle workflow and AI-assisted productivity. Built with Electron, React and TypeScript.">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ============================================================
+     CASE STUDY — reusable project template
+     Built on the fullstackchris.dev design system (styles.css)
+     ============================================================ */
+
+  body { overflow-x: hidden; }
+
+  /* ---- shared section rhythm ---- */
+  .cs-sec { padding: var(--sp-9) 0; }
+  .cs-sec.tight { padding: var(--sp-8) 0; }
+  .cs-sec.alt { background: var(--bg-1); border-block: 1px solid var(--border); }
+  .cs-head { max-width: 58ch; margin-bottom: var(--sp-7); }
+  .cs-head h2 { font-size: clamp(1.9rem, 3.2vw, 2.7rem); margin: var(--sp-3) 0 var(--sp-4); }
+  .cs-head p { color: var(--text-mid); font-size: 1.05rem; }
+  .module-tag {
+    font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--text-low); border: 1px dashed var(--border-strong); border-radius: var(--r-sm);
+    padding: 3px 8px; margin-left: var(--sp-3); vertical-align: middle;
+  }
+
+  /* ============================================================
+     APP / BROWSER WINDOW MOCKUP
+     ============================================================ */
+  .window {
+    position: relative; border: 1px solid var(--border-strong); border-radius: var(--r-lg);
+    overflow: hidden; background: var(--bg-2); box-shadow: var(--shadow-lg);
+    transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease, border-color .35s ease;
+  }
+  .window-bar {
+    display: flex; align-items: center; gap: var(--sp-3);
+    padding: 11px 14px; background: var(--bg-3); border-bottom: 1px solid var(--border);
+  }
+  .traffic { display: flex; gap: 7px; flex-shrink: 0; }
+  .traffic i { width: 11px; height: 11px; border-radius: 50%; background: var(--bg-4); display: block; }
+  .win-url {
+    flex: 1; max-width: 340px; margin: 0 auto;
+    font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-low);
+    background: var(--bg-1); border: 1px solid var(--border); border-radius: var(--r-pill);
+    padding: 5px 14px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 7px;
+  }
+  .win-url svg { color: var(--accent-400); flex-shrink: 0; }
+  .win-actions { display: flex; gap: 5px; flex-shrink: 0; width: 46px; justify-content: flex-end; }
+  .win-actions i { width: 4px; height: 4px; border-radius: 50%; background: var(--text-low); display: block; }
+  .win-screen {
+    aspect-ratio: 16 / 10;
+    background-color: var(--bg-1);
+    background-image: repeating-linear-gradient(135deg, transparent, transparent 11px, rgba(255,255,255,0.022) 11px, rgba(255,255,255,0.022) 22px);
+    display: grid; place-items: center; position: relative;
+    color: var(--text-low); font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.04em;
+  }
+  .win-screen .ph-note { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+  .win-screen .ph-note .ic { color: var(--text-low); opacity: 0.6; }
+  .window-hover:hover { transform: translateY(-5px); border-color: var(--border-strong); box-shadow: var(--shadow-lg), 0 0 50px rgba(124,92,232,0.18); }
+
+  /* hero window glow stage */
+  .hero-stage { position: relative; }
+  .hero-stage::before {
+    content: ""; position: absolute; left: 50%; top: -8%; transform: translateX(-50%);
+    width: 80%; height: 70%; pointer-events: none; z-index: 0;
+    background: radial-gradient(ellipse at center, rgba(143,110,243,0.30), transparent 68%); filter: blur(50px);
+  }
+  .hero-stage .window { position: relative; z-index: 1; }
+  .hero-stage .reflection {
+    position: absolute; left: 8%; right: 8%; bottom: -34px; height: 70px; z-index: 0;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.5), transparent 72%); filter: blur(14px);
+  }
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  .cs-hero { position: relative; padding: var(--sp-8) 0 var(--sp-9); overflow: hidden; }
+  .crumb { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-low); margin-bottom: var(--sp-6); }
+  .crumb a { color: var(--text-mid); } .crumb a:hover { color: var(--text-hi); }
+  .cs-hero-grid { display: grid; grid-template-columns: 1fr; gap: var(--sp-7); }
+  .cs-hero h1 { font-size: clamp(2.6rem, 5.4vw, 4.2rem); line-height: 0.98; letter-spacing: -0.035em; margin: var(--sp-4) 0 var(--sp-4); }
+  .cs-hero .lead { max-width: 46ch; }
+  .hero-top { max-width: 52rem; }
+  .hero-badges { display: flex; gap: var(--sp-3); flex-wrap: wrap; margin-top: var(--sp-5); }
+
+  .meta-bar {
+    display: flex; flex-wrap: wrap; gap: var(--sp-7); margin-top: var(--sp-6);
+    padding-top: var(--sp-5); border-top: 1px solid var(--border);
+  }
+  .meta-bar .m .k { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-low); margin-bottom: 5px; }
+  .meta-bar .m .v { font-family: var(--font-display); font-weight: 600; color: var(--text-hi); font-size: 1.02rem; }
+  .hero-actions { display: flex; gap: var(--sp-4); flex-wrap: wrap; margin-top: var(--sp-6); }
+
+  /* ============================================================
+     PROBLEM / SOLUTION
+     ============================================================ */
+  .split { display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--sp-8); align-items: start; }
+  .pain-list { list-style: none; padding: 0; margin: var(--sp-5) 0 0; display: flex; flex-direction: column; gap: var(--sp-4); }
+  .pain-list li { display: flex; gap: var(--sp-4); align-items: flex-start; }
+  .pain-list .x { width: 26px; height: 26px; flex-shrink: 0; border-radius: var(--r-sm); display: grid; place-items: center; background: var(--negative-soft); color: var(--negative); margin-top: 2px; }
+  .pain-list .win .x { background: var(--positive-soft); color: var(--positive); }
+  .pain-list .t { color: var(--text-mid); }
+  .pain-list .t b { color: var(--text-hi); font-weight: 600; }
+
+  .audience-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--sp-6); }
+  .audience-card .who { display: flex; align-items: center; gap: var(--sp-4); padding-bottom: var(--sp-5); margin-bottom: var(--sp-5); border-bottom: 1px solid var(--border); }
+  .audience-card .who .av { width: 48px; height: 48px; border-radius: var(--r-md); background: var(--accent-soft); border: 1px solid var(--border-accent); color: var(--accent-300); display: grid; place-items: center; flex-shrink: 0; }
+  .audience-card .who h4 { font-size: 1.1rem; margin-bottom: 2px; }
+  .audience-card .who p { font-size: 0.85rem; color: var(--text-low); font-family: var(--font-mono); }
+  .stat-row { display: flex; gap: var(--sp-6); flex-wrap: wrap; }
+  .stat-row .s .n { font-family: var(--font-display); font-weight: 700; font-size: 1.7rem; color: var(--accent-300); letter-spacing: -0.02em; }
+  .stat-row .s .l { font-size: 0.8rem; color: var(--text-mid); }
+
+  /* product flow */
+  .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-3); margin-top: var(--sp-6); }
+  .flow .node { position: relative; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--sp-5) var(--sp-4); }
+  .flow .node .step { font-family: var(--font-mono); font-size: 0.68rem; color: var(--accent-400); letter-spacing: 0.1em; }
+  .flow .node h5 { font-family: var(--font-display); font-size: 1rem; font-weight: 600; color: var(--text-hi); margin: 6px 0 4px; }
+  .flow .node p { font-size: 0.82rem; color: var(--text-low); }
+  .flow .node:not(:last-child)::after {
+    content: "→"; position: absolute; right: -16px; top: 50%; transform: translateY(-50%);
+    color: var(--text-low); font-family: var(--font-mono); z-index: 2;
+  }
+
+  /* ============================================================
+     KEY FEATURES (zig-zag)
+     ============================================================ */
+  .feature { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-8); align-items: center; margin-top: var(--sp-8); }
+  .feature:first-of-type { margin-top: var(--sp-6); }
+  .feature.reverse .f-media { order: -1; }
+  .f-copy .num { font-family: var(--font-mono); font-size: 0.74rem; color: var(--accent-400); letter-spacing: 0.14em; }
+  .f-copy h3 { font-size: 1.6rem; margin: var(--sp-3) 0 var(--sp-3); }
+  .f-copy p { color: var(--text-mid); }
+  .f-bullets { list-style: none; padding: 0; margin: var(--sp-4) 0 0; display: flex; flex-direction: column; gap: var(--sp-3); }
+  .f-bullets li { display: flex; gap: var(--sp-3); align-items: flex-start; color: var(--text-mid); font-size: 0.95rem; }
+  .f-bullets svg { flex-shrink: 0; margin-top: 3px; color: var(--accent-400); }
+
+  /* ============================================================
+     ANNOTATED / COMMENTED GALLERY
+     ============================================================ */
+  .gallery { display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--sp-7); align-items: center; }
+  .pin {
+    position: absolute; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent-400); color: var(--text-on-accent);
+    font-family: var(--font-mono); font-weight: 700; font-size: 0.8rem;
+    display: grid; place-items: center; z-index: 3;
+    box-shadow: 0 0 0 4px rgba(167,139,250,0.22), var(--shadow-md);
+  }
+  .annot-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--sp-4); }
+  .annot-list li { display: flex; gap: var(--sp-4); align-items: flex-start; }
+  .annot-list .n { width: 28px; height: 28px; flex-shrink: 0; border-radius: 50%; background: var(--accent-soft); border: 1px solid var(--border-accent); color: var(--accent-300); font-family: var(--font-mono); font-weight: 600; font-size: 0.78rem; display: grid; place-items: center; }
+  .annot-list h5 { font-family: var(--font-display); font-size: 1rem; color: var(--text-hi); margin-bottom: 3px; }
+  .annot-list p { font-size: 0.88rem; color: var(--text-mid); }
+
+  /* before / after */
+  .ba { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); margin-top: var(--sp-5); }
+  .ba .tag-lab { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: var(--sp-3); }
+  .ba .before .tag-lab { color: var(--negative); } .ba .after .tag-lab { color: var(--positive); }
+  .ba .tag-lab .d { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+  /* ============================================================
+     TECHNICAL CHALLENGE + ARCHITECTURE
+     ============================================================ */
+  .arch { display: flex; flex-direction: column; gap: var(--sp-4); }
+  .arch-layer {
+    display: flex; align-items: center; gap: var(--sp-5); padding: var(--sp-5);
+    background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-md);
+    position: relative;
+  }
+  .arch-layer .lab { width: 120px; flex-shrink: 0; }
+  .arch-layer .lab .k { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-low); }
+  .arch-layer .lab .n { font-family: var(--font-display); font-weight: 600; color: var(--text-hi); }
+  .arch-layer .nodes { display: flex; gap: var(--sp-3); flex-wrap: wrap; flex: 1; }
+  .arch-node { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-mid); background: var(--bg-3); border: 1px solid var(--border-strong); border-radius: var(--r-sm); padding: 8px 12px; }
+  .arch-node.accent { background: var(--accent-soft); border-color: var(--border-accent); color: var(--accent-200); }
+  .arch-conn { display: grid; place-items: center; height: 14px; color: var(--text-low); }
+  .arch-conn svg { display: block; }
+
+  /* ============================================================
+     STACK
+     ============================================================ */
+  .stack-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-5); }
+  .stack-cat h5 { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-low); margin: 0 0 var(--sp-4); display: flex; align-items: center; gap: 8px; }
+  .stack-cat h5 .ic { color: var(--accent-400); }
+  .stack-cat .chips { display: flex; flex-direction: column; gap: var(--sp-3); align-items: flex-start; }
+
+  /* ============================================================
+     WHAT THIS PROVES
+     ============================================================ */
+  .proves { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); }
+  .prove { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--sp-6); transition: border-color .2s ease, transform .2s ease; }
+  .prove:hover { border-color: var(--border-strong); transform: translateY(-3px); }
+  .prove .ic { width: 44px; height: 44px; border-radius: var(--r-md); background: var(--accent-soft); border: 1px solid var(--border-accent); color: var(--accent-300); display: grid; place-items: center; margin-bottom: var(--sp-4); }
+  .prove h4 { font-size: 1.12rem; margin-bottom: var(--sp-2); }
+  .prove p { font-size: 0.92rem; color: var(--text-mid); }
+
+  /* ============================================================
+     CTA
+     ============================================================ */
+  .cs-cta { text-align: center; }
+  .cs-cta-card {
+    background: linear-gradient(150deg, var(--accent-soft) 0%, var(--bg-2) 55%);
+    border: 1px solid var(--border-accent); border-radius: var(--r-xl);
+    padding: var(--sp-9) var(--sp-7); box-shadow: var(--glow);
+  }
+  .cs-cta-card h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; margin: 0 auto var(--sp-4); }
+  .cs-cta-card p { color: var(--text-mid); max-width: 48ch; margin: 0 auto var(--sp-6); }
+  .cs-cta .hero-actions { justify-content: center; }
+
+  /* next project */
+  .next-proj { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-5); flex-wrap: wrap; }
+  .next-proj .lab { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-low); }
+  .next-proj a { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; color: var(--text-hi); display: inline-flex; align-items: center; gap: var(--sp-3); }
+  .next-proj a:hover { color: var(--accent-300); }
+
+  /* ---- responsive ---- */
+  @media (max-width: 900px) {
+    .split, .feature, .gallery, .ba { grid-template-columns: 1fr; gap: var(--sp-6); }
+    .feature.reverse .f-media { order: 0; }
+    .flow { grid-template-columns: 1fr 1fr; }
+    .flow .node:not(:last-child)::after { display: none; }
+    .stack-grid, .proves { grid-template-columns: repeat(2, 1fr); }
+    .arch-layer { flex-direction: column; align-items: flex-start; gap: var(--sp-3); }
+    .arch-layer .lab { width: auto; }
+  }
+  @media (max-width: 600px) {
+    .flow, .stack-grid, .proves { grid-template-columns: 1fr; }
+    .meta-bar { gap: var(--sp-5); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .window, .prove { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" data-screen-label="Header">
+      <a class="brand" href="Homepage.html"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></a>
+      <ul class="nav-links">
+        <li><a href="services/index.html">Services</a></li>
+        <li><a href="Homepage.html#projects">Projects</a></li>
+        <li><a href="services/ai-web-development-newsletter.html">Newsletter</a></li>
+        <li><a href="Design System.html">Design system</a></li>
+      </ul>
+      <a class="btn btn-primary btn-sm" href="#contact">Book a call</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="cs-hero glow-bg grid-bg" data-screen-label="Hero">
+  <div class="container">
+    <div class="crumb">
+      <a href="Homepage.html#projects">Projects</a><span>/</span><span class="text-mid">Keevo</span>
+    </div>
+
+    <div class="hero-top">
+      <span class="eyebrow">CASE STUDY · DESKTOP PRODUCT</span>
+      <h1>Keevo</h1>
+      <p class="t-lead lead">A local-first desktop app that turns hours of raw footage into clean transcripts and ready-to-use subtitles — without sending a single file to the cloud.</p>
+      <div class="hero-badges">
+        <span class="badge">Electron</span>
+        <span class="badge">React</span>
+        <span class="badge">TypeScript</span>
+        <span class="badge">Node.js</span>
+        <span class="badge badge-accent"><span class="dot"></span>On-device AI</span>
+      </div>
+      <div class="meta-bar">
+        <div class="m"><div class="k">Role</div><div class="v">Solo · full-stack</div></div>
+        <div class="m"><div class="k">Timeline</div><div class="v">2025 · 10 weeks</div></div>
+        <div class="m"><div class="k">Platform</div><div class="v">macOS · Windows</div></div>
+        <div class="m"><div class="k">Type</div><div class="v">Productivity tool</div></div>
+      </div>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="#" target="_blank" rel="noopener">Visit the product <span class="arrow">→</span></a>
+        <a class="btn btn-secondary btn-lg" href="#challenge">Read the technical breakdown</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="margin-top: var(--sp-8);">
+    <div class="hero-stage">
+      <div class="window window-hover" data-screen-label="Hero shot">
+        <div class="window-bar">
+          <span class="traffic"><i></i><i></i><i></i></span>
+          <span class="win-url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>keevo.app — Editor</span>
+          <span class="win-actions"><i></i><i></i><i></i></span>
+        </div>
+        <div class="win-screen" style="aspect-ratio: 16/9;">
+          <span class="ph-note">
+            <span class="ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="m10 9 4 2.5-4 2.5z"/><path d="M2 20h20"/></svg></span>
+            primary screenshot · Keevo editor &amp; timeline
+          </span>
+        </div>
+      </div>
+      <div class="reflection"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROBLEM ============ -->
+<section class="cs-sec alt" data-screen-label="Problem">
+  <div class="container">
+    <div class="split">
+      <div>
+        <span class="eyebrow">THE PROBLEM</span>
+        <h2 class="t-h2" style="margin:var(--sp-3) 0 var(--sp-4);">Subtitling eats a creator's day, and the tools force a bad trade-off.</h2>
+        <p class="t-body">Independent video creators spend hours transcribing and timing captions by hand. The faster web tools fix this — but only by uploading raw, unreleased footage to someone else's servers, which is slow, expensive at scale, and a real privacy problem.</p>
+        <ul class="pain-list">
+          <li><span class="x"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M18 6 6 18M6 6l12 12"/></svg></span><span class="t"><b>Manual timing is brutal.</b> A 20-minute video can take 2–3 hours to caption cleanly.</span></li>
+          <li><span class="x"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M18 6 6 18M6 6l12 12"/></svg></span><span class="t"><b>Cloud tools leak your work.</b> Unreleased footage has to be uploaded before you can even start.</span></li>
+          <li><span class="x"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M18 6 6 18M6 6l12 12"/></svg></span><span class="t"><b>Subscriptions stack up.</b> Per-minute pricing punishes exactly the people who publish the most.</span></li>
+        </ul>
+      </div>
+
+      <div class="audience-card">
+        <div class="who">
+          <div class="av"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div>
+          <div><h4>Who it's for</h4><p>solo creators · editors · studios</p></div>
+        </div>
+        <p class="t-body" style="margin-bottom:var(--sp-5);">YouTubers, course creators and small post-production teams who publish often, care about privacy, and want captions done in minutes — on their own machine.</p>
+        <div class="stat-row">
+          <div class="s"><div class="n">2–3h</div><div class="l">saved per video</div></div>
+          <div class="s"><div class="n">100%</div><div class="l">on-device</div></div>
+          <div class="s"><div class="n">€0</div><div class="l">per-minute fees</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOLUTION ============ -->
+<section class="cs-sec" data-screen-label="Solution">
+  <div class="container">
+    <div class="cs-head">
+      <span class="eyebrow">THE SOLUTION</span>
+      <h2>One desktop app that runs the whole caption workflow locally.</h2>
+      <p>Keevo wraps an on-device speech model in a focused editor. Drop in a video, get an accurate transcript in minutes, refine it in a timeline built for captions, and export broadcast-ready subtitle files — all offline.</p>
+    </div>
+
+    <div class="flow" data-screen-label="Product flow">
+      <div class="node"><div class="step">01</div><h5>Import</h5><p>Drag in any local video or audio file.</p></div>
+      <div class="node"><div class="step">02</div><h5>Transcribe</h5><p>On-device model returns timed text.</p></div>
+      <div class="node"><div class="step">03</div><h5>Refine</h5><p>Edit wording &amp; timing in the timeline.</p></div>
+      <div class="node"><div class="step">04</div><h5>Export</h5><p>SRT, VTT or burned-in captions.</p></div>
+    </div>
+
+    <div class="ba">
+      <div class="before">
+        <span class="tag-lab"><span class="d"></span>Before</span>
+        <div class="window">
+          <div class="window-bar"><span class="traffic"><i></i><i></i><i></i></span><span class="win-url">manual workflow</span><span class="win-actions"><i></i><i></i><i></i></span></div>
+          <div class="win-screen"><span class="ph-note">5 tools · 3 hours · footage uploaded</span></div>
+        </div>
+      </div>
+      <div class="after">
+        <span class="tag-lab"><span class="d"></span>After</span>
+        <div class="window">
+          <div class="window-bar"><span class="traffic"><i></i><i></i><i></i></span><span class="win-url">keevo.app</span><span class="win-actions"><i></i><i></i><i></i></span></div>
+          <div class="win-screen"><span class="ph-note">1 app · 12 minutes · 100% local</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KEY FEATURES ============ -->
+<section class="cs-sec alt" data-screen-label="Features">
+  <div class="container">
+    <div class="cs-head">
+      <span class="eyebrow">KEY FEATURES</span>
+      <h2>Built around how creators actually caption.</h2>
+    </div>
+
+    <!-- Feature 1 -->
+    <div class="feature">
+      <div class="f-copy">
+        <span class="num">FEATURE 01</span>
+        <h3 class="t-h3">On-device transcription</h3>
+        <p class="t-body">A bundled speech model runs locally on the GPU, so transcription starts instantly and never touches the network — fast even on long files.</p>
+        <ul class="f-bullets">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Works fully offline, on a plane or in a studio.</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Speaker-aware paragraphs and timestamps.</li>
+        </ul>
+      </div>
+      <div class="f-media">
+        <div class="window window-hover">
+          <div class="window-bar"><span class="traffic"><i></i><i></i><i></i></span><span class="win-url">transcription</span><span class="win-actions"><i></i><i></i><i></i></span></div>
+          <div class="win-screen"><span class="ph-note">screenshot · live transcript panel</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 2 (reverse) -->
+    <div class="feature reverse">
+      <div class="f-copy">
+        <span class="num">FEATURE 02</span>
+        <h3 class="t-h3">Caption-first timeline</h3>
+        <p class="t-body">A waveform timeline designed only for subtitles — split, merge and nudge timing with the keyboard, and see reading-speed warnings as you go.</p>
+        <ul class="f-bullets">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Keyboard-driven editing for speed.</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Live reading-rate &amp; overlap checks.</li>
+        </ul>
+      </div>
+      <div class="f-media">
+        <div class="window window-hover">
+          <div class="window-bar"><span class="traffic"><i></i><i></i><i></i></span><span class="win-url">timeline</span><span class="win-actions"><i></i><i></i><i></i></span></div>
+          <div class="win-screen"><span class="ph-note">screenshot · waveform &amp; caption track</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 3 -->
+    <div class="feature">
+      <div class="f-copy">
+        <span class="num">FEATURE 03</span>
+        <h3 class="t-h3">Export anywhere</h3>
+        <p class="t-body">One panel exports SRT, VTT and burned-in captions with styling presets that match each platform's safe areas and font rules.</p>
+        <ul class="f-bullets">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Platform presets for YouTube, Reels &amp; TikTok.</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Batch export across a whole project.</li>
+        </ul>
+      </div>
+      <div class="f-media">
+        <div class="window window-hover">
+          <div class="window-bar"><span class="traffic"><i></i><i></i><i></i></span><span class="win-url">export</span><span class="win-actions"><i></i><i></i><i></i></span></div>
+          <div class="win-screen"><span class="ph-note">screenshot · export &amp; presets dialog</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMMENTED GALLERY ============ -->
+<section class="cs-sec" data-screen-label="Gallery">
+  <div class="container">
+    <div class="cs-head">
+      <span class="eyebrow">COMMENTED GALLERY</span>
+      <h2>A closer look at the editor.<span class="module-tag">optional module</span></h2>
+    </div>
+    <div class="gallery">
+      <div class="window window-hover" style="position:relative;">
+        <div class="window-bar"><span class="traffic"><i></i><i></i><i></i></span><span class="win-url">keevo.app — Editor</span><span class="win-actions"><i></i><i></i><i></i></span></div>
+        <div class="win-screen" style="aspect-ratio:16/10;">
+          <span class="ph-note">annotated screenshot · full editor</span>
+          <span class="pin" style="top:22%; left:18%;">1</span>
+          <span class="pin" style="top:38%; left:62%;">2</span>
+          <span class="pin" style="top:70%; left:34%;">3</span>
+        </div>
+      </div>
+      <ul class="annot-list">
+        <li><span class="n">1</span><div><h5>Source &amp; project tray</h5><p>Every clip in the project, with transcription status at a glance.</p></div></li>
+        <li><span class="n">2</span><div><h5>Transcript editor</h5><p>Click any word to jump the playhead; edits sync back to the timeline instantly.</p></div></li>
+        <li><span class="n">3</span><div><h5>Caption timeline</h5><p>Waveform-aligned blocks with live reading-speed warnings.</p></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TECHNICAL CHALLENGE ============ -->
+<section class="cs-sec alt" id="challenge" data-screen-label="Technical challenge">
+  <div class="container">
+    <div class="cs-head">
+      <span class="eyebrow">TECHNICAL CHALLENGE</span>
+      <h2>Running a heavy AI model on a creator's laptop — smoothly.</h2>
+      <p>The hard part wasn't the UI; it was making on-device inference feel instant without freezing the interface or melting the GPU on long files.</p>
+    </div>
+
+    <div class="split" style="align-items:stretch;">
+      <div class="card" style="display:flex; flex-direction:column; gap:var(--sp-4);">
+        <h4 class="t-h4">What made it hard</h4>
+        <ul class="pain-list" style="margin-top:0;">
+          <li><span class="x" style="background:var(--accent-soft); color:var(--accent-300);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/></svg></span><span class="t"><b>Off-main-thread inference.</b> Model runs in a worker process so the editor never blocks.</span></li>
+          <li><span class="x" style="background:var(--accent-soft); color:var(--accent-300);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></span><span class="t"><b>Streaming results.</b> Transcript segments stream into the UI as they finish, not at the end.</span></li>
+          <li><span class="x" style="background:var(--accent-soft); color:var(--accent-300);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg></span><span class="t"><b>Native packaging.</b> Shipping GPU binaries across macOS and Windows from one codebase.</span></li>
+        </ul>
+      </div>
+
+      <div class="code-block" style="align-self:start;">
+        <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-title">transcribe.worker.ts</span></div>
+        <div class="code-body"><span class="ln">1</span><span class="tok-com">// stream segments back to the renderer</span><br><span class="ln">2</span><span class="tok-key">for await</span> (<span class="tok-key">const</span> seg <span class="tok-key">of</span> <span class="tok-fn">model</span>.<span class="tok-fn">stream</span>(audio)) {<br><span class="ln">3</span>&nbsp;&nbsp;port.<span class="tok-fn">postMessage</span>({<br><span class="ln">4</span>&nbsp;&nbsp;&nbsp;&nbsp;type: <span class="tok-str">"segment"</span>,<br><span class="ln">5</span>&nbsp;&nbsp;&nbsp;&nbsp;start: seg.t0, end: seg.t1,<br><span class="ln">6</span>&nbsp;&nbsp;&nbsp;&nbsp;text: seg.text,<br><span class="ln">7</span>&nbsp;&nbsp;});<br><span class="ln">8</span>}</div>
+      </div>
+    </div>
+
+    <!-- ARCHITECTURE SNAPSHOT -->
+    <div style="margin-top: var(--sp-8);">
+      <p class="eyebrow no-rule" style="margin-bottom: var(--sp-5);">ARCHITECTURE SNAPSHOT <span class="module-tag">optional module</span></p>
+      <div class="arch">
+        <div class="arch-layer">
+          <div class="lab"><div class="k">Client</div><div class="n">Renderer</div></div>
+          <div class="nodes"><span class="arch-node">React</span><span class="arch-node">TypeScript</span><span class="arch-node">Zustand</span><span class="arch-node">Web Audio API</span></div>
+        </div>
+        <div class="arch-conn"><svg width="16" height="14" viewBox="0 0 16 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1v12M3 8l5 5 5-5"/></svg></div>
+        <div class="arch-layer">
+          <div class="lab"><div class="k">Process</div><div class="n">Main + Workers</div></div>
+          <div class="nodes"><span class="arch-node">Electron</span><span class="arch-node">Node.js</span><span class="arch-node accent">Inference worker</span><span class="arch-node">FFmpeg</span></div>
+        </div>
+        <div class="arch-conn"><svg width="16" height="14" viewBox="0 0 16 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1v12M3 8l5 5 5-5"/></svg></div>
+        <div class="arch-layer">
+          <div class="lab"><div class="k">Local</div><div class="n">On device</div></div>
+          <div class="nodes"><span class="arch-node accent">Speech model</span><span class="arch-node">SQLite</span><span class="arch-node">File system</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STACK ============ -->
+<section class="cs-sec" data-screen-label="Stack">
+  <div class="container">
+    <div class="cs-head">
+      <span class="eyebrow">THE STACK</span>
+      <h2>Technologies used.</h2>
+    </div>
+    <div class="stack-grid">
+      <div class="stack-cat">
+        <h5><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></span>Frontend</h5>
+        <div class="chips"><span class="badge">React</span><span class="badge">TypeScript</span><span class="badge">Zustand</span><span class="badge">CSS Modules</span></div>
+      </div>
+      <div class="stack-cat">
+        <h5><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span>Runtime</h5>
+        <div class="chips"><span class="badge">Electron</span><span class="badge">Node.js</span><span class="badge">Worker threads</span></div>
+      </div>
+      <div class="stack-cat">
+        <h5><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></span>AI &amp; media</h5>
+        <div class="chips"><span class="badge badge-accent"><span class="dot"></span>On-device ASR</span><span class="badge">FFmpeg</span><span class="badge">Web Audio</span></div>
+      </div>
+      <div class="stack-cat">
+        <h5><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg></span>Data &amp; build</h5>
+        <div class="chips"><span class="badge">SQLite</span><span class="badge">Vite</span><span class="badge">electron-builder</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHAT THIS PROVES ============ -->
+<section class="cs-sec alt" data-screen-label="What this proves">
+  <div class="container">
+    <div class="cs-head">
+      <span class="eyebrow">WHAT THIS PROVES</span>
+      <h2>What Keevo demonstrates.</h2>
+    </div>
+    <div class="proves">
+      <div class="prove">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 0 0 20M2 12h4M18 12h4"/></svg></div>
+        <h4>Product thinking</h4>
+        <p>Found a real, painful workflow and cut it to four clear steps instead of cloning a generic editor.</p>
+      </div>
+      <div class="prove">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <h4>Full-stack capability</h4>
+        <p>UI, native runtime, media processing and an on-device model — owned end to end, in one codebase.</p>
+      </div>
+      <div class="prove">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+        <h4>UI/UX attention</h4>
+        <p>A keyboard-first timeline and live warnings designed around how editors really work.</p>
+      </div>
+      <div class="prove">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6Z"/></svg></div>
+        <h4>Technical autonomy</h4>
+        <p>Solved threading, streaming and cross-platform GPU packaging without a team to lean on.</p>
+      </div>
+      <div class="prove">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m5 12 5 5L20 7"/></svg></div>
+        <h4>Ability to ship</h4>
+        <p>Took it from idea to signed, installable builds on macOS and Windows — a real product, not a demo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cs-sec cs-cta" id="contact" data-screen-label="CTA">
+  <div class="container">
+    <div class="cs-cta-card">
+      <span class="eyebrow no-rule" style="justify-content:center;">WORK WITH ME</span>
+      <h2 style="margin-top:18px;">Want to build something like this?</h2>
+      <p>Bring me your idea or half-built project. We'll scope it, design it and ship it — using the same workflow behind Keevo.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="services/mvp-development.html">Request development help <span class="arrow">→</span></a>
+        <a class="btn btn-secondary btn-lg" href="services/mvp-bootstrapping-workshop.html">Book a workshop</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT PROJECT -->
+<section class="cs-sec tight" data-screen-label="Next project">
+  <div class="container">
+    <div class="next-proj">
+      <span class="lab">Next case study</span>
+      <a href="#">Edumation <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand" style="margin-bottom:14px;"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></div>
+        <p class="t-small" style="max-width:34ch;">Full-stack web development, AI-assisted workflows and technical coaching for builders.</p>
+      </div>
+      <div class="footer-col"><h5>Projects</h5><ul><li><a href="#">Keevo</a></li><li><a href="#">Edumation</a></li><li><a href="#">Singuessr</a></li><li><a href="#">Railguessr</a></li><li><a href="#">FreshWin</a></li></ul></div>
+      <div class="footer-col"><h5>Explore</h5><ul><li><a href="services/index.html">Services</a></li><li><a href="#">Blog</a></li><li><a href="Design System.html">Design system</a></li></ul></div>
+      <div class="footer-col"><h5>Connect</h5><ul><li><a href="#">LinkedIn</a></li><li><a href="#">GitHub</a></li><li><a href="#">Email</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Christophe Crognier · fullstackchris.dev</span>
+      <span class="row gap-4"><a href="#">Privacy</a><a href="#">Legal</a><a href="#">Sitemap</a></span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

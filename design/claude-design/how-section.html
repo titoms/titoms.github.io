@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christophe Crognier — From idea to buildable web app</title>
+<meta name="description" content="A full-stack developer and trainer helping founders, freelancers and small teams clarify, scope and build web products with AI-assisted workflows.">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ============================================================
+     HERO — workflow-in-action composition
+     Built on the fullstackchris.dev design system (styles.css)
+     ============================================================ */
+
+  body { overflow-x: hidden; }
+
+  .hero {
+    position: relative;
+    min-height: calc(100vh - 68px);
+    display: flex;
+    align-items: center;
+    padding: var(--sp-8) 0 var(--sp-9);
+    overflow: hidden;
+  }
+
+  /* ---- Animated gradient field (behind everything) ---- */
+  .hero-bg { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .hero-bg .blob {
+    position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.55;
+    will-change: transform;
+  }
+  .hero-bg .blob-1 {
+    width: 720px; height: 720px; top: -280px; left: -140px;
+    background: radial-gradient(circle at 50% 50%, rgba(143,110,243,0.40), transparent 62%);
+    animation: drift1 26s ease-in-out infinite;
+  }
+  .hero-bg .blob-2 {
+    width: 620px; height: 620px; top: -180px; right: -120px;
+    background: radial-gradient(circle at 50% 50%, rgba(124,92,232,0.30), transparent 64%);
+    animation: drift2 32s ease-in-out infinite;
+  }
+  .hero-bg .blob-3 {
+    width: 540px; height: 540px; bottom: -260px; left: 38%;
+    background: radial-gradient(circle at 50% 50%, rgba(167,139,250,0.22), transparent 66%);
+    animation: drift3 30s ease-in-out infinite;
+  }
+  @keyframes drift1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(60px,40px) scale(1.08); } }
+  @keyframes drift2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-50px,30px) scale(1.1); } }
+  @keyframes drift3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(30px,-40px) scale(1.06); } }
+
+  /* faint dot/line grid masked at top */
+  .hero-grid::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.55;
+    background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    -webkit-mask-image: radial-gradient(ellipse 90% 80% at 30% 20%, #000 25%, transparent 72%);
+            mask-image: radial-gradient(ellipse 90% 80% at 30% 20%, #000 25%, transparent 72%);
+  }
+
+  .hero-layout {
+    position: relative; z-index: 2;
+    display: grid; grid-template-columns: 1.04fr 0.96fr;
+    gap: var(--sp-8); align-items: center;
+  }
+
+  /* ---- Left column ---- */
+  .hero-copy { max-width: 36rem; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: var(--sp-3);
+    font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-mid);
+    padding: 7px 14px 7px 11px; border: 1px solid var(--border-strong); border-radius: var(--r-pill);
+    background: rgba(26,26,32,0.6); backdrop-filter: blur(8px);
+  }
+  .hero-eyebrow .pulse {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--accent-400);
+    box-shadow: 0 0 0 0 var(--accent-glow); animation: pulse 2.6s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(167,139,250,0.5); }
+    70% { box-shadow: 0 0 0 8px rgba(167,139,250,0); }
+    100% { box-shadow: 0 0 0 0 rgba(167,139,250,0); }
+  }
+  .hero-copy h1 {
+    font-size: clamp(2.6rem, 5.2vw, 4.5rem); line-height: 0.98; letter-spacing: -0.035em;
+    margin: var(--sp-5) 0 var(--sp-5);
+  }
+  .hero-copy h1 .grad {
+    background: linear-gradient(100deg, var(--accent-300) 0%, var(--accent-500) 55%, #8db4ff 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+  }
+  .hero-copy .t-lead { max-width: 33rem; }
+  .hero-cta { display: flex; gap: var(--sp-4); flex-wrap: wrap; margin-top: var(--sp-6); }
+  .hero-trust {
+    display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap;
+    margin-top: var(--sp-6); font-family: var(--font-mono);
+    font-size: 0.78rem; color: var(--text-low);
+  }
+  .hero-trust .tools { display: flex; gap: var(--sp-3); flex-wrap: wrap; }
+
+  /* ---- Right column: workflow console ---- */
+  .hero-visual { position: relative; min-height: 480px; }
+
+  .wf-stage-wrap { position: relative; z-index: 3; }
+
+  .console {
+    position: relative; z-index: 3;
+    background: linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 100%);
+    border: 1px solid var(--border-strong); border-radius: var(--r-xl);
+    box-shadow: var(--shadow-lg), 0 0 60px rgba(124,92,232,0.16);
+    overflow: hidden;
+  }
+  .console::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+  .console-head {
+    display: flex; align-items: center; gap: var(--sp-3);
+    padding: 13px 18px; border-bottom: 1px solid var(--border); background: rgba(13,13,16,0.5);
+  }
+  .console-dots { display: flex; gap: 7px; }
+  .console-dots i { width: 11px; height: 11px; border-radius: 50%; background: var(--bg-4); display: block; }
+  .console-title { font-family: var(--font-mono); font-size: 0.76rem; color: var(--text-low); margin-left: 4px; }
+  .console-status {
+    margin-left: auto; display: inline-flex; align-items: center; gap: 7px;
+    font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em;
+    color: var(--accent-300); background: var(--accent-soft);
+    border: 1px solid var(--border-accent); border-radius: var(--r-pill); padding: 4px 10px;
+  }
+  .console-status .live { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-400); animation: pulse 2.6s infinite; }
+
+  .console-body { padding: var(--sp-6) var(--sp-6) var(--sp-5); }
+
+  /* input line: the unclear idea */
+  .wf-input {
+    display: flex; align-items: center; gap: var(--sp-3);
+    padding: 12px 14px; margin-bottom: var(--sp-5);
+    background: var(--bg-4); border: 1px solid var(--border); border-radius: var(--r-md);
+    font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-mid);
+  }
+  .wf-input .tag {
+    font-size: 0.64rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-low);
+    border: 1px solid var(--border-strong); border-radius: var(--r-sm); padding: 3px 7px; flex-shrink: 0;
+  }
+  .wf-input .cursor { color: var(--accent-400); animation: blink 1.1s step-end infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* pipeline */
+  .wf-stages { display: flex; flex-direction: column; }
+  .wf-stage { position: relative; display: flex; gap: var(--sp-4); padding-bottom: var(--sp-5); }
+  .wf-stage:last-child { padding-bottom: 0; }
+
+  /* connector line between nodes */
+  .wf-stage:not(:last-child) .wf-node::after {
+    content: ""; position: absolute; left: 50%; top: 38px; transform: translateX(-50%);
+    width: 2px; height: calc(100% - 38px + var(--sp-5)); background: var(--border-strong);
+    border-radius: 2px; overflow: hidden;
+  }
+  .wf-stage:not(:last-child) .wf-node::before {
+    content: ""; position: absolute; left: 50%; top: 38px; transform: translateX(-50%);
+    width: 2px; height: 0; background: linear-gradient(var(--accent-400), var(--accent-600));
+    border-radius: 2px; z-index: 1; transition: height .55s ease; box-shadow: 0 0 8px var(--accent-glow);
+  }
+  .wf-stage.done:not(:last-child) .wf-node::before { height: calc(100% - 38px + var(--sp-5)); }
+
+  .wf-node {
+    position: relative; width: 38px; height: 38px; flex-shrink: 0; border-radius: var(--r-pill);
+    background: var(--bg-3); border: 1px solid var(--border-strong);
+    display: grid; place-items: center;
+    font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-low);
+    transition: border-color .35s ease, background .35s ease, box-shadow .35s ease, color .35s ease;
+  }
+  .wf-node .num { transition: opacity .25s ease; }
+  .wf-node .check { position: absolute; opacity: 0; transition: opacity .25s ease; color: var(--accent-300); }
+  .wf-node .check svg { display: block; }
+
+  .wf-stage.active .wf-node {
+    border-color: var(--accent-400); color: var(--accent-200); background: var(--accent-soft);
+    box-shadow: 0 0 0 4px rgba(167,139,250,0.12), 0 0 22px rgba(167,139,250,0.35);
+  }
+  .wf-stage.done .wf-node {
+    border-color: var(--border-accent); color: var(--accent-300); background: var(--accent-soft);
+  }
+  .wf-stage.done .wf-node .num { opacity: 0; }
+  .wf-stage.done .wf-node .check { opacity: 1; }
+
+  .wf-meta { padding-top: 7px; min-width: 0; }
+  .wf-meta .name {
+    font-family: var(--font-display); font-weight: 600; font-size: 1.02rem; color: var(--text-mid);
+    letter-spacing: -0.01em; transition: color .35s ease; line-height: 1.1;
+  }
+  .wf-meta .desc { font-size: 0.86rem; color: var(--text-low); margin-top: 3px; transition: color .35s ease; }
+  .wf-stage.active .wf-meta .name, .wf-stage.done .wf-meta .name { color: var(--text-hi); }
+  .wf-stage.active .wf-meta .desc { color: var(--text-mid); }
+
+  /* output row */
+  .wf-output {
+    display: flex; align-items: center; gap: var(--sp-3);
+    margin-top: var(--sp-5); padding: 13px 16px; border-radius: var(--r-md);
+    border: 1px solid var(--border); background: var(--bg-1);
+    font-family: var(--font-mono); font-size: 0.84rem; color: var(--text-low);
+    opacity: 0.45; transition: opacity .5s ease, border-color .5s ease, background .5s ease, box-shadow .5s ease;
+  }
+  .wf-output .arrow { color: var(--text-low); transition: color .5s ease; }
+  .wf-output .label { color: var(--text-mid); transition: color .5s ease; }
+  .wf-output .tick { margin-left: auto; color: var(--accent-300); opacity: 0; transform: scale(0.7); transition: opacity .4s ease, transform .4s ease; }
+  .console.shipped .wf-output {
+    opacity: 1; border-color: var(--border-accent);
+    background: linear-gradient(180deg, var(--accent-soft), var(--bg-1) 80%);
+    box-shadow: 0 0 28px rgba(167,139,250,0.18);
+  }
+  .console.shipped .wf-output .arrow { color: var(--accent-400); }
+  .console.shipped .wf-output .label { color: var(--text-hi); }
+  .console.shipped .wf-output .tick { opacity: 1; transform: scale(1); }
+
+  /* ---- Floating brand pills ---- */
+  .float-pill {
+    position: absolute; z-index: 4;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500; color: var(--text-hi);
+    padding: 9px 14px; border-radius: var(--r-pill);
+    background: rgba(34,34,42,0.82); border: 1px solid var(--border-strong);
+    box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px); white-space: nowrap;
+    will-change: transform;
+  }
+  .float-pill .mk {
+    width: 16px; height: 16px; border-radius: 5px; flex-shrink: 0;
+    display: grid; place-items: center; font-size: 0.6rem; font-weight: 700; color: #0d0d10;
+  }
+  .float-pill .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* positions (relative to .hero-visual) */
+  .fp-react   { top: -26px;  left: -64px; }
+  .fp-node    { top: 56px;   right: -78px; }
+  .fp-ts      { top: 186px;  left: -92px; }
+  .fp-claude  { bottom: 92px; right: -86px; }
+  .fp-codex   { bottom: -22px; left: 8px; }
+  .fp-ds      { bottom: -30px; right: 40px; }
+  .fp-stripe  { top: -34px;  right: 84px; }
+
+  .float-pill[data-depth] { animation: floaty var(--dur,7s) ease-in-out infinite; animation-delay: var(--del,0s); }
+  @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-13px); } }
+
+  /* ---- entrance ---- */
+  .reveal { opacity: 0; transform: translateY(16px); animation: rise .8s cubic-bezier(.2,.7,.2,1) forwards; }
+  .r1 { animation-delay: .05s; } .r2 { animation-delay: .15s; } .r3 { animation-delay: .25s; }
+  .r4 { animation-delay: .35s; } .r5 { animation-delay: .45s; }
+  .reveal-v { opacity: 0; transform: translateY(24px) scale(.98); animation: rise .9s cubic-bezier(.2,.7,.2,1) .3s forwards; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+
+  @media (max-width: 1080px) {
+    .hero-layout { grid-template-columns: 1fr; gap: var(--sp-9); }
+    .hero-copy { max-width: 40rem; }
+    .hero-visual { margin: 0 auto; max-width: 30rem; width: 100%; }
+    .fp-react { top: -28px; left: -64px; } .fp-ts { top: 150px; left: -78px; } .fp-node { right: -70px; }
+    .fp-claude { right: -74px; } .fp-stripe { right: 20px; } .fp-codex { left: -40px; } .fp-ds { right: 24px; }
+  }
+  @media (max-width: 760px) {
+    .fp-react, .fp-stripe, .fp-codex, .fp-ds { display: none; }
+    .fp-ts { top: auto; bottom: 150px; left: -10px; }
+    .fp-node { top: 26px; right: -10px; }
+    .fp-claude { bottom: 70px; right: -10px; }
+  }
+  @media (max-width: 640px) {
+    .hero { min-height: 0; padding: var(--sp-7) 0 var(--sp-8); }
+    .float-pill { font-size: 0.72rem; padding: 7px 11px; }
+    .fp-react, .fp-stripe, .fp-codex, .fp-ds { display: none; }
+    .fp-node { top: 30px; right: -6px; }
+    .fp-ts { top: auto; bottom: 120px; left: -6px; }
+    .fp-claude { bottom: 60px; right: -6px; }
+    .console-body { padding: var(--sp-5) var(--sp-5) var(--sp-4); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-bg .blob, .float-pill[data-depth], .hero-eyebrow .pulse,
+    .console-status .live, .wf-input .cursor { animation: none !important; }
+    .reveal, .reveal-v { animation: none !important; opacity: 1 !important; transform: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER (from the live site) -->
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" data-screen-label="Header">
+      <a class="brand" href="Homepage.html"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></a>
+      <ul class="nav-links">
+        <li><a href="services/index.html">Services</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="services/ai-web-development-newsletter.html">Newsletter</a></li>
+        <li><a href="Design System.html">Design system</a></li>
+      </ul>
+      <a class="btn btn-primary btn-sm" href="#contact">Book a call</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero hero-grid" id="parallax" data-screen-label="Hero">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="container">
+    <div class="hero-layout">
+
+      <!-- LEFT -->
+      <div class="hero-copy">
+        <span class="hero-eyebrow reveal r1"><span class="pulse"></span>Full-stack development · AI workflows · Technical coaching</span>
+        <h1 class="reveal r2">From idea to <span class="grad">buildable web&nbsp;app.</span></h1>
+        <p class="t-lead reveal r3">I help founders, freelancers and small teams clarify, scope and build web projects using React, Node.js, TypeScript and practical AI-assisted development workflows.</p>
+        <div class="hero-cta reveal r4">
+          <a class="btn btn-primary btn-lg" href="#contact">Start your project <span class="arrow">→</span></a>
+          <a class="btn btn-secondary btn-lg" href="#framework">Explore the AI Clarity Framework</a>
+        </div>
+        <div class="hero-trust reveal r5">
+          <span>Trusted stack&nbsp;·</span>
+          <span class="tools">
+            <span class="badge">React</span>
+            <span class="badge">Node.js</span>
+            <span class="badge">TypeScript</span>
+            <span class="badge badge-accent"><span class="dot"></span>AI-assisted</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- RIGHT: workflow-in-action -->
+      <div class="hero-visual reveal-v" data-depth="0.012">
+
+        <!-- floating brand pills -->
+        <span class="float-pill fp-react"  data-depth="0.05" style="--dur:6.5s;--del:0s;"><span class="dot" style="background:#61dafb;"></span>React</span>
+        <span class="float-pill fp-node"   data-depth="0.07" style="--dur:7.8s;--del:.6s;"><span class="dot" style="background:#6cc24a;"></span>Node.js</span>
+        <span class="float-pill fp-ts"     data-depth="0.04" style="--dur:8.6s;--del:1.1s;"><span class="mk" style="background:#3178c6;color:#fff;">TS</span>TypeScript</span>
+        <span class="float-pill fp-claude" data-depth="0.08" style="--dur:7.2s;--del:.3s;"><span class="dot" style="background:#d97757;"></span>Claude Code</span>
+        <span class="float-pill fp-codex"  data-depth="0.055" style="--dur:8.1s;--del:.9s;"><span class="dot" style="background:#10a37f;"></span>Codex</span>
+        <span class="float-pill fp-ds"     data-depth="0.045" style="--dur:7.5s;--del:1.4s;"><span class="dot" style="background:var(--accent-400);"></span>Design System</span>
+        <span class="float-pill fp-stripe" data-depth="0.065" style="--dur:6.9s;--del:.45s;"><span class="dot" style="background:#635bff;"></span>Stripe</span>
+
+        <!-- console -->
+        <div class="console" id="console">
+          <div class="console-head">
+            <span class="console-dots"><i></i><i></i><i></i></span>
+            <span class="console-title">clarity-framework.ts</span>
+            <span class="console-status"><span class="live"></span>building</span>
+          </div>
+          <div class="console-body">
+            <div class="wf-input">
+              <span class="tag">Idea</span>
+              <span>“an app that helps my customers…”</span>
+              <span class="cursor">▍</span>
+            </div>
+
+            <div class="wf-stages" id="stages">
+              <div class="wf-stage" data-i="0">
+                <div class="wf-node"><span class="num">01</span><span class="check"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+                <div class="wf-meta"><div class="name">Idea</div><div class="desc">Capture the raw, unclear concept</div></div>
+              </div>
+              <div class="wf-stage" data-i="1">
+                <div class="wf-node"><span class="num">02</span><span class="check"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+                <div class="wf-meta"><div class="name">Scope</div><div class="desc">Features, user flows &amp; priorities</div></div>
+              </div>
+              <div class="wf-stage" data-i="2">
+                <div class="wf-node"><span class="num">03</span><span class="check"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+                <div class="wf-meta"><div class="name">Design</div><div class="desc">Interface &amp; reusable design system</div></div>
+              </div>
+              <div class="wf-stage" data-i="3">
+                <div class="wf-node"><span class="num">04</span><span class="check"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+                <div class="wf-meta"><div class="name">Stack</div><div class="desc">React · Node · TypeScript · DB</div></div>
+              </div>
+              <div class="wf-stage" data-i="4">
+                <div class="wf-node"><span class="num">05</span><span class="check"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+                <div class="wf-meta"><div class="name">Build</div><div class="desc">Shipped, deployed &amp; handed over</div></div>
+              </div>
+            </div>
+
+            <div class="wf-output">
+              <span class="arrow">→</span>
+              <span class="label">buildable web app</span>
+              <span class="tick"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  /* ---------- Workflow sequence ---------- */
+  (function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var stages = Array.prototype.slice.call(document.querySelectorAll('#stages .wf-stage'));
+    var console_ = document.getElementById('console');
+    if (!stages.length) return;
+
+    if (reduce) {
+      stages.forEach(function (s) { s.classList.add('done'); });
+      console_.classList.add('shipped');
+      return;
+    }
+
+    var i = -1;
+    function reset() { stages.forEach(function (s) { s.classList.remove('done', 'active'); }); console_.classList.remove('shipped'); }
+
+    function tick() {
+      i++;
+      if (i >= stages.length) {
+        console_.classList.add('shipped');
+        setTimeout(function () { reset(); i = -1; tick(); }, 3200);
+        return;
+      }
+      // promote previous active -> done
+      stages.forEach(function (s, idx) {
+        s.classList.toggle('active', idx === i);
+        s.classList.toggle('done', idx < i);
+      });
+      // when the last one finishes its active beat, mark it done too
+      setTimeout(function () {
+        if (i >= 0 && i < stages.length) { stages[i].classList.remove('active'); stages[i].classList.add('done'); }
+      }, 1150);
+      setTimeout(tick, 1350);
+    }
+    setTimeout(tick, 700);
+  })();
+
+  /* ---------- Pointer parallax (subtle, layered depth) ---------- */
+  (function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var scene = document.getElementById('parallax');
+    var layers = Array.prototype.slice.call(scene.querySelectorAll('[data-depth]'));
+    var tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
+
+    function loop() {
+      cx += (tx - cx) * 0.06; cy += (ty - cy) * 0.06;
+      layers.forEach(function (el) {
+        var d = parseFloat(el.getAttribute('data-depth')) || 0;
+        el.style.setProperty('--px', (cx * d) + 'px');
+        // compose with existing float animation by using translate on a wrapper-free element:
+        el.style.transform = (el.classList.contains('float-pill')
+          ? '' : '') + 'translate3d(' + (cx * d) + 'px,' + (cy * d) + 'px,0)';
+      });
+      raf = null;
+    }
+    // float-pills already animate transform via keyframes; parallax them via margin instead to avoid conflict
+    window.addEventListener('mousemove', function (e) {
+      var w = window.innerWidth, h = window.innerHeight;
+      tx = (e.clientX - w / 2); ty = (e.clientY - h / 2);
+      layers.forEach(function (el) {
+        var d = parseFloat(el.getAttribute('data-depth')) || 0;
+        if (el.classList.contains('float-pill')) {
+          el.style.marginLeft = (tx * d) + 'px';
+          el.style.marginTop = (ty * d) + 'px';
+        }
+      });
+      if (!raf) raf = requestAnimationFrame(loop);
+    }, { passive: true });
+  })();
+</script>
+</body>
+</html>

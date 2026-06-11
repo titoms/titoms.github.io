@@ -1,8 +1,10 @@
 import type { ServicePageData } from "../types";
+
 import { STRIPE_PAYMENT_LINKS } from "./constants";
 
 const newsletter: ServicePageData = {
   slug: "ai-web-development-newsletter",
+  title: "AI Web Development Newsletter",
   meta: {
     title: "AI Web Development Newsletter for Developers and Founders",
     description:
@@ -14,6 +16,20 @@ const newsletter: ServicePageData = {
     subtitle:
       "A practical monthly newsletter for developers, founders and freelancers who want to understand what matters in generative AI, coding tools and AI-assisted web development.",
     primaryCta: "Join the waitlist",
+  },
+  answer:
+    "A practical monthly briefing on what actually matters in generative AI, coding tools and web development. Curated for developers, founders and freelancers who want to make smart decisions without reading everything.",
+  useCases: [],
+  heroCard: {
+    type: "checklist",
+    title: "EVERY ISSUE INCLUDES",
+    items: [
+      "AI tools worth testing this month",
+      "Coding workflow ideas",
+      "Practical prompts",
+      "What to ignore",
+      "Opinionated recommendations",
+    ],
   },
   painPoints: [
     "Too many AI tools release every week. Signal is hard to find.",
@@ -95,6 +111,7 @@ const newsletter: ServicePageData = {
 
 const coaching: ServicePageData = {
   slug: "web-project-coaching",
+  title: "Web Project Coaching",
   meta: {
     title: "Web Project Coaching for Founders and Developers",
     description:
@@ -106,6 +123,25 @@ const coaching: ServicePageData = {
     subtitle:
       "I help founders, freelancers and developers clarify, debug and structure web projects using React, Node.js, TypeScript and AI-assisted development workflows.",
     primaryCta: "Book a coaching session",
+  },
+  answer:
+    "Practical, one-on-one technical coaching for your web project. Bring a blocker, a bug, a messy codebase or a vague plan — and leave with a diagnosis, an action plan and a clear understanding of what to do next. Adapted to your level, technical or not.",
+  useCases: [
+    "Code review",
+    "Debugging",
+    "React help",
+    "Node API help",
+    "Database modeling",
+    "Deployment",
+    "MVP scope",
+    "AI coding workflow",
+    "Understanding generated code",
+  ],
+  heroCard: {
+    type: "chips",
+    title: "COME WITH",
+    items: ["A bug", "A messy codebase", "AI-generated code", "A project idea", "A school project", "A freelance job", "A feature to plan"],
+    leaveWith: "A diagnosis, a clear action plan, and a real understanding of your own code.",
   },
   painPoints: [
     "You are blocked on your project and losing time.",
@@ -190,6 +226,7 @@ const coaching: ServicePageData = {
 
 const devDay: ServicePageData = {
   slug: "full-stack-development-day",
+  title: "Full-Stack Development Day",
   meta: {
     title: "Hire a Full Stack React Node Developer for a Day",
     description:
@@ -201,6 +238,29 @@ const devDay: ServicePageData = {
     subtitle:
       "Need a feature, bug fix, dashboard, API or technical cleanup? I work on your React, Node.js or TypeScript project in focused half-day or full-day blocks.",
     primaryCta: "Request a development slot",
+  },
+  answer:
+    "Focused, professional development time on your existing codebase — booked by the half-day or day. Not a full product build: a dedicated block for a specific feature, bug, dashboard, API or refactor, delivered with notes on what changed and what's next.",
+  useCases: [
+    "React pages",
+    "Next.js components",
+    "Node APIs",
+    "PostgreSQL work",
+    "Auth flows",
+    "Dashboards",
+    "Admin panels",
+    "Refactoring",
+    "AI API integrations",
+    "Deployment fixes",
+    "UI improvements",
+    "Responsive layouts",
+  ],
+  heroCard: {
+    type: "investment",
+    title: "DAY RATES",
+    amount: "from €350",
+    note: "Half-day €350 · Full day €600 · 3-day pack €1,650 · 5-day pack €2,600",
+    footer: "Focused blocks · delivery notes included",
   },
   painPoints: [
     "You have a clear bug or feature but no developer time to tackle it.",
@@ -317,6 +377,7 @@ const devDay: ServicePageData = {
 
 const mvpWorkshop: ServicePageData = {
   slug: "mvp-bootstrapping-workshop",
+  title: "MVP Bootstrapping Workshop",
   meta: {
     title: "MVP Bootstrapping Workshop for Founders",
     description:
@@ -328,6 +389,19 @@ const mvpWorkshop: ServicePageData = {
     subtitle:
       "A practical workshop for founders and builders who need to clarify their product, define the first version and understand what it will take to build it.",
     primaryCta: "Book the workshop",
+  },
+  answer:
+    "A structured working session that turns a fuzzy idea into a buildable plan: MVP scope, feature priorities, user flows, tech stack, roadmap and a realistic budget. No code is written — the deliverable is clarity, so you stop guessing and start building the right thing.",
+  useCases: [],
+  heroCard: {
+    type: "checklist",
+    title: "YOU LEAVE WITH",
+    items: [
+      "A defined MVP scope",
+      "A prioritized feature list",
+      "A tech stack & roadmap",
+      "A realistic budget estimate",
+    ],
   },
   painPoints: [
     "You have an idea but no clear plan for what to build.",
@@ -423,6 +497,7 @@ const mvpWorkshop: ServicePageData = {
 
 const mvpDev: ServicePageData = {
   slug: "mvp-development",
+  title: "Custom MVP Development",
   meta: {
     title: "MVP Development for Web Apps and SaaS Products",
     description:
@@ -434,6 +509,27 @@ const mvpDev: ServicePageData = {
     subtitle:
       "I help founders and small teams turn a clear product idea into a working web application using React, Node.js, TypeScript and practical AI-assisted development workflows.",
     primaryCta: "Request a quote",
+  },
+  answer:
+    "End-to-end development of a first version of your web app — from product clarification and architecture through frontend, backend, database, deployment and handover. Built by one full-stack developer who can also help you make product decisions, so scope stays sane and the first version actually ships.",
+  useCases: [
+    "SaaS MVPs",
+    "Internal tools",
+    "Dashboards",
+    "Simple marketplaces",
+    "AI-assisted tools",
+    "Admin panels",
+    "Automation platforms",
+    "Productivity tools",
+    "Client portals",
+    "Training platforms",
+  ],
+  heroCard: {
+    type: "investment",
+    title: "INVESTMENT",
+    amount: "from €4,500",
+    note: "Most projects range €6,000 – €15,000 depending on scope. Custom quote after discovery.",
+    footer: "Staged MVP approach · fixed quote per phase",
   },
   painPoints: [
     "You have a clear product idea but no technical team to build it.",

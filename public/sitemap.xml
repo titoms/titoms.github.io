@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fullstackchris.dev/</loc>
-    <lastmod>2026-06-09</lastmod>
+    <lastmod>2026-06-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -97,20 +97,20 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fullstackchris.dev/blog/ai-web-development</loc>
-    <lastmod>2026-06-09</lastmod>
+    <loc>https://fullstackchris.dev/blog/ai-assisted-development-without-building-a-mess</loc>
+    <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://fullstackchris.dev/blog/building-mvp-with-ai</loc>
-    <lastmod>2026-06-09</lastmod>
+    <loc>https://fullstackchris.dev/blog/ai-clarity-framework-mvp-roadmap</loc>
+    <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://fullstackchris.dev/blog/react-node-typescript</loc>
-    <lastmod>2026-06-09</lastmod>
+    <loc>https://fullstackchris.dev/blog/react-typescript-node-mvp-stack</loc>
+    <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

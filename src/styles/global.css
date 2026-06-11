@@ -70,6 +70,14 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+body > astro-island,
+body > header,
+body > main,
+body > footer {
+  position: relative;
+  z-index: 1;
+}
+
 h1,
 h2,
 h3,
@@ -113,12 +121,12 @@ h4 {
   position: fixed;
   top: 0;
   left: 0;
-  width: 1000px;
-  height: 700px;
+  width: 620px;
+  height: 440px;
   pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: screen;
-  background: radial-gradient(ellipse 500px 380px at center, rgba(139, 92, 246, 0.22), transparent 70%);
+  z-index: 0;
+  mix-blend-mode: normal;
+  background: radial-gradient(ellipse 310px 220px at center, rgba(91, 47, 180, 0.24), rgba(139, 92, 246, 0.08) 42%, transparent 72%);
   transform: translate(-50%, -50%);
   will-change: transform;
   opacity: 0;
@@ -135,7 +143,12 @@ body.cursor-active #cursor-glow {
 
 @media (prefers-reduced-motion: reduce) {
   #cursor-glow { display: none; }
-  .btn-grad-hover:hover { animation: none; }
+  .btn-grad-hover:hover,
+  .btn-primary-animated { animation: none; }
+  .breathing-violet-glow::after,
+  .card-glow-surface::before {
+    animation: none;
+  }
 }
 
 /* ---- gradient border animation ---- */
@@ -149,16 +162,26 @@ body.cursor-active #cursor-glow {
   to { --border-angle: 360deg; }
 }
 
-.btn-grad-hover {
-  --btn-bg: var(--bg-2);
+@keyframes button-gradient-drift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .btn-grad-hover {
+  --btn-bg: var(--bg-2);
+  background:
+    linear-gradient(var(--btn-bg), var(--btn-bg)) padding-box,
+    linear-gradient(var(--border), var(--border)) border-box;
   transition-property: transform, border-color, box-shadow, color;
 }
 
-.btn-grad-hover.bg-transparent {
+.btn-grad-hover.btn-ghost {
   --btn-bg: transparent;
+}
+
+.btn-grad-hover.btn-secondary {
+  --btn-bg: var(--bg-2);
 }
 
 .btn-grad-hover:hover {
@@ -175,6 +198,27 @@ body.cursor-active #cursor-glow {
   animation: border-spin 5s linear infinite;
 }
 
+.btn-primary-animated {
+  border-color: rgba(196, 181, 253, 0.74);
+  color: var(--text-on-accent);
+  background:
+    linear-gradient(115deg, var(--accent-300), var(--accent-200), var(--accent-400), #efe9ff);
+  background-size: 240% 240%;
+  box-shadow:
+    0 0 0 1px rgba(167, 139, 250, 0.26),
+    0 10px 30px rgba(124, 92, 232, 0.22);
+  animation: button-gradient-drift 9s ease-in-out infinite;
+}
+
+.btn-primary-animated:hover {
+  border-color: rgba(221, 210, 254, 0.9);
+  color: #100c18;
+  box-shadow:
+    0 0 0 1px rgba(221, 210, 254, 0.36),
+    0 14px 38px rgba(167, 139, 250, 0.34);
+  transform: translateY(-1px);
+}
+
 @keyframes card-glow-drift {
   0%,
   100% {
@@ -188,24 +232,37 @@ body.cursor-active #cursor-glow {
   }
 }
 
+@keyframes violet-glow-breathe {
+  0%,
+  100% {
+    opacity: 0.52;
+    transform: translate3d(0, 10%, 0) scale(0.92);
+  }
+
+  50% {
+    opacity: 0.86;
+    transform: translate3d(0, 12%, 0) scale(1.08);
+  }
+}
+
 .card-glow-surface,
 .card-hover-glow {
   isolation: isolate;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .card-glow-surface::before,
 .card-hover-glow::before {
   content: "";
   position: absolute;
-  inset: auto 8% -22%;
-  z-index: -1;
+  inset: auto 8% -18%;
+  z-index: 0;
   height: 58%;
   pointer-events: none;
   background:
     radial-gradient(circle at 50% 55%, rgba(91, 47, 180, 0.42), transparent 62%),
     radial-gradient(circle at 72% 40%, rgba(62, 38, 130, 0.22), transparent 54%);
-  filter: blur(18px);
+  filter: blur(16px);
   opacity: 0;
   transform: translate3d(-6%, 10%, 0) scale(0.9);
   transition:
@@ -219,7 +276,7 @@ body.cursor-active #cursor-glow {
 }
 
 .card-hover-glow:hover::before {
-  opacity: 0.7;
+  opacity: 0.58;
   transform: translate3d(4%, 4%, 0) scale(1.08);
 }
 
@@ -227,6 +284,115 @@ body.cursor-active #cursor-glow {
 .card-hover-glow > * {
   position: relative;
   z-index: 1;
+}
+
+.breathing-violet-glow {
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.breathing-violet-glow::after {
+  content: "";
+  position: absolute;
+  inset: auto 5% -24%;
+  z-index: 0;
+  height: 62%;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(91, 47, 180, 0.58), transparent 64%),
+    radial-gradient(circle at 62% 58%, rgba(48, 28, 112, 0.38), transparent 58%);
+  filter: blur(22px);
+  animation: violet-glow-breathe 6.5s ease-in-out infinite;
+}
+
+.newsletter-typed-line {
+  min-height: 1.5rem;
+}
+
+.newsletter-typed-line::after {
+  content: "";
+  display: inline-block;
+  width: 0.52em;
+  height: 1.08em;
+  margin-left: 0.18em;
+  vertical-align: -0.16em;
+  background: var(--accent-300);
+  opacity: 0;
+}
+
+.newsletter-typed-line.is-active::after {
+  opacity: 1;
+  animation: newsletter-caret 1s steps(1) infinite;
+}
+
+@keyframes newsletter-caret {
+  50% { opacity: 0; }
+}
+
+.process-stepper-shell {
+  overflow-x: auto;
+  padding-bottom: 0.75rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(167, 139, 250, 0.55) rgba(255, 255, 255, 0.06);
+}
+
+.process-stepper-track {
+  --process-progress: 0%;
+  position: relative;
+  display: grid;
+  min-width: 860px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.process-stepper-track::before,
+.process-stepper-track::after {
+  content: "";
+  position: absolute;
+  left: calc((100% / 4) / 2);
+  right: calc((100% / 4) / 2);
+  top: 2.25rem;
+  height: 2px;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.process-stepper-track::before {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.process-stepper-track::after {
+  width: var(--process-progress);
+  right: auto;
+  background: linear-gradient(90deg, var(--accent-400), var(--accent-200));
+  box-shadow: 0 0 18px rgba(167, 139, 250, 0.36);
+  transition: width 520ms ease;
+}
+
+.process-stepper-card {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 767px) {
+  .process-stepper-shell {
+    margin-inline: -1.5rem;
+    padding-inline: 1.5rem;
+  }
+
+  .process-stepper-track {
+    min-width: 680px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .newsletter-typed-line::after {
+    display: none;
+  }
+
+  .process-stepper-track::after {
+    transition: none;
+  }
 }
 
 .project-media-frame {

@@ -6,23 +6,50 @@ import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { SectionHeader } from '../../components/ui/SectionHeader';
 
-const articles = await getCollection('blog');
+const articles = (await getCollection('blog')).sort((a, b) => {
+  if (a.data.comingSoon !== b.data.comingSoon) return a.data.comingSoon ? 1 : -1;
+  return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
+});
 const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
+
+const formatDate = new Intl.DateTimeFormat('en', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+});
+
+const publishedArticles = articles.filter((article) => !article.data.comingSoon);
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: "fullstackchris.dev Blog",
+  description: "Practical articles on AI-assisted web development, MVP building, React, Node.js and TypeScript.",
+  url: "https://fullstackchris.dev/blog",
+  blogPost: publishedArticles.map((article) => ({
+    "@type": "BlogPosting",
+    headline: article.data.title,
+    description: article.data.description,
+    datePublished: article.data.publishedAt.toISOString(),
+    url: `https://fullstackchris.dev/blog/${article.id}`,
+  })),
+};
 ---
 
 <PageLayout
-  title="Blog — fullstackchris.dev"
+  title="Blog - fullstackchris.dev"
   description="Practical articles on AI-assisted web development, MVP building, React and Node.js for founders and developers."
+  canonical="https://fullstackchris.dev/blog"
+  jsonLd={jsonLd}
 >
   <!-- Hero -->
-  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border pt-32 pb-20">
+  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border pt-32 pb-20 mb-4">
     <div class={sectionClass}>
       <Badge variant="accent">Blog</Badge>
       <h1 class="mt-6 max-w-4xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white">
-        AI and web development resources for builders.
+        Practical AI and web development resources for builders.
       </h1>
       <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary">
-        Practical articles on AI-assisted development, MVP building, React, Node.js and TypeScript for founders, freelancers and developers.
+        Articles on AI-assisted development, MVP scope, React, Node.js and TypeScript for founders, freelancers and developers.
       </p>
     </div>
   </section>
@@ -31,13 +58,16 @@ const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
   <section class={sectionClass}>
     <SectionHeader
       eyebrow="Articles"
-      title="Coming soon."
-      description="These articles are in progress. Subscribe to the newsletter to get notified when they publish."
+      title="Latest articles."
+      description="Real notes from building, teaching and consulting on web products."
     />
     <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
       {articles.map((article) => (
         <Card hover class="flex h-full flex-col gap-4">
-          <div class="flex flex-wrap gap-2">
+          <div class="font-mono text-xs uppercase tracking-[0.16em] text-low mb-4">
+            {article.data.comingSoon ? 'Planned article' : formatDate.format(article.data.publishedAt)}
+          </div>
+          <div class="flex flex-wrap gap-2 mb-4">
             {article.data.tags.map((tag: string) => (
               <Badge variant="default">{tag}</Badge>
             ))}
@@ -46,10 +76,10 @@ const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
           <h2 class="font-display text-[1.15rem] font-semibold leading-tight text-white">
             {article.data.title}
           </h2>
-          <p class="text-[0.95rem] leading-7 text-secondary">{article.data.description}</p>
+          <p class="text-[0.95rem] leading-7 text-secondary mb-4">{article.data.description}</p>
           <div class="mt-auto border-t border-border pt-4">
             <Button href={`/blog/${article.id}`} variant="ghost" size="sm">
-              Read article
+              {article.data.comingSoon ? 'Preview article' : 'Read article'}
             </Button>
           </div>
         </Card>

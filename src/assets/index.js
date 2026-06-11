@@ -2,6 +2,7 @@ import logo from "./logo.svg";
 import mainlogo from "./mainlogo.webp";
 import backend from "./backend.webp";
 import creator from "./creator.webp";
+import ai from "./ai.webp";
 import mobile from "./mobile.webp";
 import web from "./web.webp";
 import github from "./github.webp";
@@ -54,6 +55,7 @@ export {
   logo,
   backend,
   creator,
+  ai,
   mobile,
   web,
   github,

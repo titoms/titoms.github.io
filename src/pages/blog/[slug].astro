@@ -17,6 +17,14 @@ export async function getStaticPaths() {
 const { article } = Astro.props;
 const { Content } = await render(article);
 const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
+const articleUrl = `https://fullstackchris.dev/blog/${article.id}`;
+const pageTitle = article.data.metaTitle ?? article.data.title;
+
+const formatDate = new Intl.DateTimeFormat('en', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+});
 
 const relatedServices = [
   {
@@ -36,10 +44,10 @@ const relatedServices = [
   },
 ];
 
-const jsonLd = [
+const jsonLd: object[] = [
   {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     headline: article.data.title,
     description: article.data.description,
     author: {
@@ -48,27 +56,51 @@ const jsonLd = [
       url: "https://fullstackchris.dev",
     },
     datePublished: article.data.publishedAt.toISOString(),
-    url: `https://fullstackchris.dev/blog/${article.slug}`,
+    dateModified: (article.data.updatedAt ?? article.data.publishedAt).toISOString(),
+    url: articleUrl,
+    mainEntityOfPage: articleUrl,
+    keywords: article.data.tags.join(", "),
+    isPartOf: {
+      "@type": "Blog",
+      name: "fullstackchris.dev Blog",
+      url: "https://fullstackchris.dev/blog",
+    },
   },
   {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Blog", item: "https://fullstackchris.dev/blog" },
-      { "@type": "ListItem", position: 2, name: article.data.title, item: `https://fullstackchris.dev/blog/${article.slug}` },
+      { "@type": "ListItem", position: 2, name: article.data.title, item: articleUrl },
     ],
   },
 ];
+
+if (article.data.faqs.length > 0) {
+  jsonLd.push({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: article.data.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  });
+}
 ---
 
 <PageLayout
-  title={`${article.data.title} — fullstackchris.dev`}
+  title={`${pageTitle} - fullstackchris.dev`}
   description={article.data.description}
-  canonical={`https://fullstackchris.dev/blog/${article.slug}`}
+  canonical={articleUrl}
+  ogType="article"
   jsonLd={jsonLd}
 >
   <!-- Hero -->
-  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border pt-32 pb-20">
+  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border pt-32 pb-20 mb-4">
     <div class={sectionClass}>
       <div class="flex flex-wrap gap-2">
         {article.data.tags.map((tag: string) => (
@@ -76,6 +108,9 @@ const jsonLd = [
         ))}
         {article.data.comingSoon && <Badge variant="accent">Coming soon</Badge>}
       </div>
+      <p class="mt-5 font-mono text-xs uppercase tracking-[0.16em] text-low">
+        {formatDate.format(article.data.publishedAt)}
+      </p>
       <h1 class="mt-6 max-w-4xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white">
         {article.data.title}
       </h1>
@@ -83,7 +118,7 @@ const jsonLd = [
         {article.data.description}
       </p>
       <Button href="/blog" variant="ghost" size="sm" class="mt-8" aria-label="Back to all articles">
-        <span aria-hidden="true">←</span> All articles
+        <span aria-hidden="true">&larr;</span> All articles
       </Button>
     </div>
   </section>
@@ -113,10 +148,16 @@ const jsonLd = [
     </section>
   )}
 
-  <!-- Article content (for non-coming-soon articles) -->
+  <!-- Article content -->
   {!article.data.comingSoon && (
     <section class={sectionClass}>
-      <div class="prose prose-invert mx-auto max-w-3xl">
+      {article.data.imagePrompt && (
+        <div class="mx-auto mb-10 max-w-3xl rounded-lg border border-dashed border-accent/50 bg-accent-soft p-5">
+          <p class="font-mono text-xs uppercase tracking-[0.16em] text-accent">Image placeholder</p>
+          <p class="mt-3 text-sm leading-7 text-secondary">{article.data.imagePrompt}</p>
+        </div>
+      )}
+      <div class="article-content mx-auto max-w-3xl">
         <Content />
       </div>
     </section>
@@ -125,7 +166,7 @@ const jsonLd = [
   <!-- Related services -->
   <section class="border-t border-border bg-surface/55">
     <div class={sectionClass}>
-      <SectionHeader eyebrow="While you wait" title="Work with me directly." />
+      <SectionHeader eyebrow="Next step" title="Work with me directly." />
       <div class="mt-10 grid gap-4 sm:grid-cols-3">
         {relatedServices.map((service) => (
           <Card hover class="flex flex-col gap-3">
