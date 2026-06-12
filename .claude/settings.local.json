@@ -24,7 +24,10 @@
       "Bash(Remove-Item \"C:/DEV/titoms.github.io/src/vite-env.d.ts\" -Force)",
       "Bash(Remove-Item \"C:/DEV/titoms.github.io/vite.config.ts\" -Force)",
       "Bash(dir *)",
-      "Bash(copy *)"
+      "Bash(copy *)",
+      "Bash(Select-String -Path \"dist\\\\projects\\\\index.html\" -Pattern \"pcard feature|filterbar|data-filter-bar|ladder|float-pill|count\")",
+      "Bash(Select-Object -First 15)",
+      "Bash(Format-Table -AutoSize)"
     ]
   }
 }

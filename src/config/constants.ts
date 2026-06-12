@@ -528,6 +528,87 @@ const testimonials: Testimonial[] = [
 
 const projects: Project[] = [
   {
+    name: "Keevo",
+    slug: "keevo",
+    description:
+      "A local-first desktop app that turns hours of raw footage into clean transcripts and ready-to-use subtitles — running an on-device speech model so no file ever touches the cloud.",
+    longDescription:
+      "Keevo is a desktop transcription and subtitle tool built for content creators and video producers. It processes video locally using an on-device speech recognition model, generates timestamped transcripts, and exports subtitle files in multiple formats — no cloud uploads, no API costs, no privacy concerns.",
+    caseStudy: {
+      tagline: "Local-first transcription — your footage never leaves your machine.",
+      problem:
+        "Content creators spend hours manually transcribing footage or pay recurring API costs to cloud speech services. Both options introduce friction: time cost or privacy concerns around uploading client footage to third-party servers.",
+      context:
+        "Built for freelance video editors, podcasters and content teams who process sensitive recordings and want full ownership of their workflow without subscription costs.",
+      technicalChallenges: [
+        "Running a quantized on-device speech model within Electron without blocking the UI thread.",
+        "Handling long-form audio segmentation to produce accurate timestamps across variable speaking rates.",
+        "Designing a timeline editor that lets users correct transcripts without re-running the model.",
+        "Packaging native binaries for macOS and Windows within a cross-platform Electron build pipeline.",
+      ],
+      architecture:
+        "Electron shell with a React renderer. The speech model runs in a Node.js worker process using a WASM-compiled inference runtime. Results are streamed back to the renderer via IPC as segments complete. SQLite stores project state locally.",
+      implementation:
+        "The pipeline extracts audio via ffmpeg, chunks it into overlapping segments, runs inference in a worker pool, merges results with a timestamp reconciliation pass, then surfaces them in the editor. Subtitle export supports SRT, VTT and plain text.",
+      results: [
+        "Processes 60 minutes of footage in under 4 minutes on Apple Silicon.",
+        "Zero cloud dependency — all data stays on device.",
+        "Subtitle accuracy comparable to leading cloud APIs on clean recordings.",
+      ],
+      lessonsLearned: [
+        "Worker-process isolation is non-negotiable when running inference — blocking the main process tanks UX.",
+        "Overlapping audio chunks with reconciliation produces far cleaner word boundaries than hard splits.",
+        "SQLite is the right local state store for Electron — zero setup, reliable, fast enough for this data shape.",
+      ],
+    },
+    tags: [
+      { name: "Electron", color: "blue-text-gradient" },
+      { name: "React", color: "pink-text-gradient" },
+      { name: "TypeScript", color: "blue-text-gradient" },
+      { name: "On-device AI", color: "green-text-gradient" },
+    ],
+    image: null,
+    images: [],
+    source_code_link: "https://github.com/",
+    meta: { role: "Solo · full-stack", timeline: "2025 · in progress", platform: "Desktop · macOS · Windows", type: "Developer Tool" },
+    painPoints: [
+      { bold: "Cloud transcription is expensive.", rest: "API costs accumulate fast on long recordings and eat into freelance margins." },
+      { bold: "Privacy is a real concern.", rest: "Uploading client footage to third-party servers is a non-starter for many video professionals." },
+      { bold: "Manual transcription is brutal.", rest: "Hours of listen-and-type work that adds nothing creative to the production." },
+    ],
+    audienceWho: "Video creators & podcasters",
+    audienceDesc: "Freelance editors, content teams and podcasters who need fast, private transcription without recurring API costs",
+    audienceStats: [
+      { value: "0 cloud", label: "dependency" },
+      { value: "<4 min", label: "per hour of footage" },
+      { value: "100%", label: "local & private" },
+    ],
+    productFlow: [
+      { step: "01", title: "Import", description: "Drop in any video or audio file." },
+      { step: "02", title: "Transcribe", description: "On-device model runs, segments stream in." },
+      { step: "03", title: "Edit", description: "Correct words and adjust timestamps in the timeline." },
+      { step: "04", title: "Export", description: "SRT, VTT or plain text — ready to drop into any editor." },
+    ],
+    features: [
+      { title: "On-device Inference", description: "A quantized speech model runs entirely on the local machine in a Node.js worker process — no API keys, no uploads, no recurring costs.", bullets: ["WASM-compiled runtime works on both macOS and Windows", "Results stream to the UI as segments complete"] },
+      { title: "Timeline Editor", description: "Correct model output in a synchronized transcript editor — clicking any word seeks the video, so review is fast.", bullets: ["Word-level timestamp display", "Keyboard-first editing flow"] },
+      { title: "Multi-format Export", description: "Export to SRT, WebVTT or plain text with a single click — ready to import into Premiere, Final Cut, DaVinci or any subtitle tool.", bullets: ["Accurate timecodes from the reconciliation pass", "UTF-8 safe for multilingual content"] },
+    ],
+    stack: [
+      { label: "Shell", chips: ["Electron", "Node.js"] },
+      { label: "UI", chips: ["React", "TypeScript"] },
+      { label: "AI", chips: ["WASM inference", "On-device speech model"] },
+      { label: "Storage", chips: ["SQLite", "ffmpeg"] },
+    ],
+    proves: [
+      { iconKey: "cpu", title: "On-device AI", description: "Shipped a production WASM inference pipeline inside Electron without blocking the UI thread." },
+      { iconKey: "zap", title: "Desktop performance", description: "Processes an hour of footage in under 4 minutes via a worker-pool inference architecture." },
+      { iconKey: "shield", title: "Privacy by design", description: "Zero cloud dependency — all processing stays local, making it viable for client and sensitive recordings." },
+      { iconKey: "layers", title: "Cross-platform build", description: "Native binary packaging for both macOS and Windows within a single Electron build pipeline." },
+    ],
+    nextProjectSlug: "edumation",
+  },
+  {
     name: "EduMation",
     slug: "edumation",
     description:

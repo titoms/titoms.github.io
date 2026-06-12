@@ -12,6 +12,27 @@ const NAV_LINKS = [
   { id: "contact", title: "Contact", href: "/contact" },
 ];
 
+const LanguageSelector = ({ className = "" }: { className?: string }) => (
+  <div className={`language-switcher ${className}`} aria-label="Language">
+    {["en", "fr", "es"].map((lang) => (
+      <button
+        key={lang}
+        type="button"
+        className="language-switcher__button"
+        data-lang-choice={lang}
+        aria-pressed="false"
+        onClick={() => {
+          if (typeof window !== "undefined") {
+            (window as unknown as { __setSiteLang?: (language: string) => void }).__setSiteLang?.(lang);
+          }
+        }}
+      >
+        {lang.toUpperCase()}
+      </button>
+    ))}
+  </div>
+);
+
 const SiteHeader = () => {
   const [open, setOpen] = useState(false);
 
@@ -64,6 +85,7 @@ const SiteHeader = () => {
             >
               Book a call
             </Button>
+            <LanguageSelector />
           </nav>
 
           {/* Mobile hamburger */}
@@ -111,6 +133,7 @@ const SiteHeader = () => {
           >
             Book a call
           </Button>
+          <LanguageSelector className="mt-3" />
         </nav>
       </div>
     </>

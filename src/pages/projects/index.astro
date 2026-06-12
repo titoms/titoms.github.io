@@ -1,82 +1,299 @@
 ---
-import type { ImageMetadata } from 'astro';
-import { Image } from 'astro:assets';
 import PageLayout from '../../components/layout/PageLayout.astro';
-import { Badge } from '../../components/ui/Badge';
-import { Button } from '../../components/ui/Button';
-import { Card } from '../../components/ui/Card';
-import { SectionHeader } from '../../components/ui/SectionHeader';
-import { projects, CALENDLY_URL, BOOK_CALL_URL } from '../../config/constants';
-import { getTechBadgeStyle } from '../../config/techBadges';
+import { projects as allProjects, BOOK_CALL_URL } from '../../config/constants';
 
-const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
+const sectionMax = "mx-auto w-full max-w-site px-6 sm:px-8 lg:px-10";
+
+// Category mapping — drives the filter chips
+const projectCats: Record<string, string> = {
+  'keevo':        'tools',
+  'edumation':    'apps',
+  'railguessr':   'games',
+  'singuessr':    'games',
+  'fuchibol-hub': 'apps',
+  'fresh-win':    'apps',
+};
+
+// Window URL labels for the mockup chrome
+const projectUrls: Record<string, string> = {
+  'keevo':        'keevo.app — Editor',
+  'edumation':    'edumation.app',
+  'railguessr':   'railguessr.com',
+  'singuessr':    'singuessr.com',
+  'fuchibol-hub': 'fuchibo.app',
+  'fresh-win':    'fresh.win',
+};
+
+// Kind label (shown above the title)
+const projectKinds: Record<string, string> = {
+  'keevo':        'Desktop product · 2025',
+  'edumation':    'Web app · SaaS',
+  'railguessr':   'Browser game · Maps',
+  'singuessr':    'Browser game · Audio',
+  'fuchibol-hub': 'Web app · Sports',
+  'fresh-win':    'Web app · Prediction',
+};
+
+// The featured card slug
+const featuredSlug = 'keevo';
+const featured = allProjects.find(p => p.slug === featuredSlug)!;
+const rest = allProjects.filter(p => p.slug !== featuredSlug);
+
+// Filter counts
+const counts = {
+  all:   allProjects.length,
+  apps:  allProjects.filter(p => projectCats[p.slug] === 'apps').length,
+  tools: allProjects.filter(p => projectCats[p.slug] === 'tools').length,
+  games: allProjects.filter(p => projectCats[p.slug] === 'games').length,
+};
+
+// Tech stack strip
+const stackBadges = ['React', 'Next.js', 'TypeScript', 'Node.js', 'Electron', 'PostgreSQL', 'Supabase', 'Web Audio', 'On-device AI'];
+const accentBadge = 'On-device AI';
 ---
 
 <PageLayout
   title="Projects — fullstackchris.dev"
-  description="Full-stack case studies: scheduling systems, geography games, music platforms and football prediction apps built with React, Node.js and TypeScript."
+  description="Selected web and desktop products — scoped, built and shipped with React, Node.js, TypeScript and practical AI-assisted workflows."
 >
-  <!-- Hero -->
-  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border pt-32 pb-20 mb-4">
-    <div class={sectionClass}>
-      <Badge variant="accent">Projects</Badge>
-      <h1 class="mt-6 max-w-3xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white">
-        Projects shipped end-to-end.
+
+  <!-- ── HERO ──────────────────────────────────────────────────────────── -->
+  <section
+    class="proj-hero relative overflow-hidden isolation-isolate border-b border-border"
+    data-parallax-scene
+    style="padding: 0 0 64px;"
+  >
+    <!-- Animated blob field -->
+    <div class="bg-field" aria-hidden="true">
+      <span class="blob blob-1"></span>
+      <span class="blob blob-2"></span>
+      <span class="blob blob-3"></span>
+    </div>
+
+    <!-- Grid overlay -->
+    <div class="absolute inset-0 pointer-events-none z-[1] opacity-40"
+         style="background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:64px 64px;"
+         aria-hidden="true"></div>
+
+    <!-- Floating tech pills (desktop only) -->
+    <span class="float-pill" style="top:38px;right:8%;--dur:6.6s;--del:0s;" data-depth="0.06">
+      <span class="dot" style="background:#61dafb;"></span>React
+    </span>
+    <span class="float-pill" style="top:150px;right:22%;--dur:8.3s;--del:.7s;" data-depth="0.045">
+      <span class="mk" style="background:#3178c6;">TS</span>TypeScript
+    </span>
+    <span class="float-pill" style="bottom:80px;right:12%;--dur:7.4s;--del:1.1s;" data-depth="0.07">
+      <span class="dot" style="background:#6cc24a;"></span>Node.js
+    </span>
+
+    <div class={`${sectionMax} relative z-[3]`} style="padding-top:clamp(7rem,12vh,10rem);">
+      <!-- Breadcrumb -->
+      <nav class="reveal r1 flex items-center gap-2 font-mono text-xs text-low mb-6">
+        <a href="/" class="text-secondary transition-colors hover:text-white">Home</a>
+        <span class="opacity-50">/</span>
+        <span class="text-secondary">Projects</span>
+      </nav>
+
+      <!-- Eyebrow -->
+      <span class="reveal r2 inline-flex items-center gap-[10px] font-mono text-[0.7rem] font-medium tracking-[0.16em] uppercase text-secondary px-[14px] py-[7px] border border-strong rounded-full" style="background:rgba(26,26,32,0.55);backdrop-filter:blur(8px);">
+        <span class="pulse-dot"></span>Selected work · 2023 — 2026
+      </span>
+
+      <!-- Headline -->
+      <h1 class="reveal r3 font-display font-bold leading-[0.98] tracking-[-0.035em] mt-5 mb-4" style="font-size:clamp(2.6rem,5.6vw,4.4rem);max-width:18ch;">
+        Things I've scoped, built and <span style="color:var(--accent-400)">actually shipped.</span>
       </h1>
-      <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary">
-        Full-stack case studies covering architecture decisions, technical challenges, implementation details and results.
+
+      <!-- Lead -->
+      <p class="reveal r4 text-secondary leading-7" style="max-width:52ch;font-size:clamp(1rem,1.4vw,1.1rem);">
+        Real products, not portfolio filler — desktop apps, web tools and games. Each one is a small case study in clarifying a fuzzy idea and getting it to production.
       </p>
-    </div>
-  </section>
 
-  <!-- Project grid -->
-  <section class={sectionClass}>
-    <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-      {projects.map((project) => (
-        <Card hover class="flex h-full flex-col gap-4">
-          {project.image && (
-            <div class="aspect-video overflow-hidden rounded-md border border-border">
-              {typeof project.image === 'string' ? (
-                <img src={project.image} alt={project.name} class="h-full w-full object-cover" loading="lazy" />
-              ) : (
-                <Image src={project.image as ImageMetadata} alt={project.name} class="h-full w-full object-cover" loading="lazy" />
-              )}
-            </div>
-          )}
-          <div class="mt-4 flex flex-wrap gap-2">
-            {project.tags.map((tag) => (
-              <Badge variant="default" className="tech-badge" style={getTechBadgeStyle(tag.name)}>{tag.name}</Badge>
-            ))}
+      <!-- Stats -->
+      <div class="reveal r5 flex gap-12 flex-wrap mt-7 pt-5 border-t border-border">
+        <div class="stat">
+          <div class="font-display text-[1.8rem] font-bold text-white leading-none" style="font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">
+            <span class="count" data-count="5">0</span>
           </div>
-          <h2 class="mt-2 font-display text-xl font-semibold text-white">{project.name}</h2>
-          <p class="text-[0.95rem] leading-7 text-secondary">{project.description}</p>
-          <div class="mt-auto border-t border-border pt-4">
-            <Button href={`/projects/${project.slug}`} variant="secondary" size="sm">
-              Read case study
-            </Button>
-          </div>
-        </Card>
-      ))}
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="border-t border-border bg-surface/40">
-    <div class={sectionClass}>
-      <Card glow class="p-8 sm:p-12">
-        <div class="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
-          <div>
-            <SectionHeader
-              eyebrow="Have a project?"
-              title="Let's build yours."
-              description="Book a free call to discuss your idea, current project or blocker."
-            />
-          </div>
-          <Button href={BOOK_CALL_URL} variant="primary" size="lg">
-            Book a free call
-          </Button>
+          <div class="font-mono text-[0.7rem] tracking-[0.1em] uppercase text-low mt-[2px]">Shipped products</div>
         </div>
-      </Card>
+        <div class="stat">
+          <div class="font-display text-[1.8rem] font-bold text-white leading-none" style="font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">
+            <span class="count" data-count="3">0</span>
+          </div>
+          <div class="font-mono text-[0.7rem] tracking-[0.1em] uppercase text-low mt-[2px]">Product domains</div>
+        </div>
+        <div class="stat">
+          <div class="font-display text-[1.8rem] font-bold text-white leading-none" style="font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">
+            <span class="count" data-count="7000" data-suffix="h+">0</span>
+          </div>
+          <div class="font-mono text-[0.7rem] tracking-[0.1em] uppercase text-low mt-[2px]">Teaching web dev</div>
+        </div>
+      </div>
     </div>
   </section>
+
+  <!-- ── FILTER + GRID ─────────────────────────────────────────────────── -->
+  <section class="section" style="padding-top:0;">
+    <div class={sectionMax}>
+
+      <!-- Sticky filter bar -->
+      <div class="flex items-center gap-3 flex-wrap py-5 sticky top-0 z-20 border-b border-border"
+           style="background:rgba(13,13,16,0.82);backdrop-filter:blur(14px);"
+           data-filter-bar>
+        <span class="font-mono text-[0.7rem] tracking-[0.12em] uppercase text-low mr-2">Filter</span>
+        <button class="chip active" data-filter="all">All <span class="c">{counts.all}</span></button>
+        <button class="chip" data-filter="apps">Web apps <span class="c">{counts.apps}</span></button>
+        <button class="chip" data-filter="tools">Tools <span class="c">{counts.tools}</span></button>
+        <button class="chip" data-filter="games">Games <span class="c">{counts.games}</span></button>
+      </div>
+
+      <!-- Project grid -->
+      <div class="pgrid" data-stagger="90">
+
+        <!-- Featured card -->
+        <a
+          class="pcard feature filterable"
+          href={`/projects/${featured.slug}`}
+          data-cats={projectCats[featured.slug] ?? 'apps'}
+          data-reveal="scale"
+        >
+          <span class="feature-flag">
+            <span class="pulse-dot"></span>Featured · case study
+          </span>
+
+          <!-- Body -->
+          <div class="pc-body">
+            <span class="pc-kind">{projectKinds[featured.slug]}</span>
+            <div class="pc-title">{featured.name} <span class="ar">→</span></div>
+            <p class="pc-desc">{featured.description}</p>
+            <div class="pc-foot">
+              <div class="pc-tags">
+                {featured.tags.map((tag, i) => (
+                  <span class={`badge${i === featured.tags.length - 1 ? ' badge-accent' : ''}`}>
+                    {i === featured.tags.length - 1 && <span class="dot"></span>}
+                    {tag.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <span class="pc-cta">Read the case study →</span>
+          </div>
+
+          <!-- Mockup window -->
+          <div class="pc-media">
+            <div class="win">
+              <div class="win-bar">
+                <span class="traffic"><i></i><i></i><i></i></span>
+                <span class="url">{projectUrls[featured.slug]}</span>
+              </div>
+              <div class="win-shot">
+                {featured.name} — editor &amp; timeline
+                <span class="sheen"></span>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Regular cards -->
+        {rest.map((project) => (
+          <a
+            class="pcard filterable"
+            href={`/projects/${project.slug}`}
+            data-cats={projectCats[project.slug] ?? 'apps'}
+            data-reveal="scale"
+          >
+            <!-- Mockup window -->
+            <div class="pc-media">
+              <div class="win">
+                <div class="win-bar">
+                  <span class="traffic"><i></i><i></i><i></i></span>
+                  <span class="url">{projectUrls[project.slug] ?? project.slug + '.app'}</span>
+                </div>
+                <div class="win-shot">
+                  {project.name}
+                  <span class="sheen"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="pc-body">
+              <span class="pc-kind">{projectKinds[project.slug]}</span>
+              <div class="pc-title">{project.name} <span class="ar">→</span></div>
+              <p class="pc-desc">{project.description.slice(0, 140)}{project.description.length > 140 ? '…' : ''}</p>
+              <div class="pc-foot">
+                <div class="pc-tags">
+                  {project.tags.slice(0, 3).map((tag) => (
+                    <span class="badge">{tag.name}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </a>
+        ))}
+
+        <p class="empty-note font-mono text-[0.9rem] text-low text-center col-span-full py-20" hidden>
+          No projects in this category yet.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STACK STRIP ────────────────────────────────────────────────────── -->
+  <section class="section" style="padding-top:0;">
+    <div class={sectionMax}>
+      <div class="flex items-center justify-between gap-6 flex-wrap p-6 border border-border rounded-[var(--r-xl)]"
+           style="background:var(--bg-1);"
+           data-reveal="fade">
+        <div style="min-width:200px;">
+          <span class="font-mono text-[0.62rem] tracking-[0.18em] uppercase text-low">THE TOOLBOX</span>
+          <p class="text-secondary text-sm mt-2 leading-6" style="max-width:30ch;">Modern, boring-in-a-good-way tools that ship and scale.</p>
+        </div>
+        <div class="flex flex-wrap gap-3 flex-1 justify-end">
+          {stackBadges.map(name => (
+            <span class={`badge${name === accentBadge ? ' badge-accent' : ''}`}>
+              {name === accentBadge && <span class="dot"></span>}
+              {name}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ───────────────────────────────────────────────────────────── -->
+  <section class="section" id="contact">
+    <div class={sectionMax}>
+      <div class="text-center border border-accent rounded-[var(--r-xl)] px-8 py-20"
+           style="background:linear-gradient(150deg,var(--accent-soft) 0%,var(--bg-2) 55%);box-shadow:var(--glow);"
+           data-reveal="scale">
+        <span class="font-mono text-[0.62rem] tracking-[0.18em] uppercase text-accent">WORK WITH ME</span>
+        <h2 class="font-display font-semibold leading-tight mt-4 mb-4 mx-auto"
+            style="font-size:clamp(2rem,4vw,3rem);max-width:18ch;">
+          Have an idea that belongs on this page?
+        </h2>
+        <p class="text-secondary leading-7 mb-8 mx-auto" style="max-width:46ch;">
+          Bring me your concept or half-built project. We'll scope it, design it and ship it — using the same workflow behind these.
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <a class="btn btn-primary-animated inline-flex items-center gap-2 rounded-pill border px-6 py-3 font-display font-semibold text-[0.95rem] no-underline transition-all duration-200"
+             href="/services/mvp-development">
+            Start your project <span>→</span>
+          </a>
+          <a class="btn-grad-hover btn-secondary inline-flex items-center gap-2 rounded-pill border border-strong px-6 py-3 font-display font-semibold text-[0.95rem] text-secondary no-underline transition-all duration-200"
+             href="/services">
+            See all services
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </PageLayout>
+
+<style>
+  .proj-hero { isolation: isolate; }
+  .section { padding: 80px 0; }
+  @media (max-width: 700px) { .section { padding: 56px 0; } }
+</style>

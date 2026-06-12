@@ -27,7 +27,7 @@ const cfToken = CF_ANALYTICS_TOKEN.startsWith('REPLACE') ? null : CF_ANALYTICS_T
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-js">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -71,7 +71,13 @@ const cfToken = CF_ANALYTICS_TOKEN.startsWith('REPLACE') ? null : CF_ANALYTICS_T
   </head>
   <body>
     <div id="cursor-glow" aria-hidden="true"></div>
+    <div id="google_translate_element" class="site-translate-host" aria-hidden="true"></div>
     <slot />
+
+    <script src="/i18n.js" defer></script>
+    <script>
+      import '../../scripts/motion.ts';
+    </script>
 
     <!-- Cloudflare Web Analytics -->
     {cfToken && (

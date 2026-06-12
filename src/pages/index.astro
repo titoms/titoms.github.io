@@ -6,6 +6,7 @@ import {
   pricingPlans, newsletterIssue, feedbackCards, faqs, BOOK_CALL_URL,
 } from '../config/constants';
 import { technologies } from '../config/constants';
+import { getTechBadgeStyle } from '../config/techBadges';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
@@ -140,12 +141,12 @@ const jsonLd = [
   </section>
 
   <!-- Tech stack -->
-  <section class="border-y border-border bg-surface/40">
+  <section id="tech-stack" class="border-y border-border bg-surface/40">
     <div class={sectionClass}>
       <SectionHeader eyebrow="Tech stack" title="Tools used daily." />
       <div class="mt-8 flex flex-wrap gap-2">
         {technologies.map((tech) => (
-          <Badge variant="default">{tech.name}</Badge>
+          <Badge variant="default" className="tech-badge" style={getTechBadgeStyle(tech.name)}>{tech.name}</Badge>
         ))}
       </div>
     </div>

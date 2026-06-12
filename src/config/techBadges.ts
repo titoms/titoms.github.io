@@ -2,6 +2,9 @@ type TechBadgeColors = {
   color: string;
   border: string;
   background: string;
+  fill: string;
+  hoverText: string;
+  glow: string;
 };
 
 const TECH_COLORS: Record<string, string> = {
@@ -74,6 +77,19 @@ const rgba = (hex: string, alpha: number) => {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
+const getReadableTextColor = (hex: string) => {
+  const { r, g, b } = hexToRgb(hex);
+  const [rs, gs, bs] = [r, g, b].map((channel) => {
+    const value = channel / 255;
+    return value <= 0.03928
+      ? value / 12.92
+      : Math.pow((value + 0.055) / 1.055, 2.4);
+  });
+  const luminance = 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+
+  return luminance > 0.46 ? "#101014" : "#ffffff";
+};
+
 export const getTechBadgeColors = (name: string): TechBadgeColors => {
   const key = normalizeTechName(name);
   const color = TECH_COLORS[key] ?? TECH_COLORS[key.replace(/-/g, "")];
@@ -83,6 +99,9 @@ export const getTechBadgeColors = (name: string): TechBadgeColors => {
       color: "var(--text-mid)",
       border: "var(--border-strong)",
       background: "var(--bg-2)",
+      fill: "var(--accent-400)",
+      hoverText: "var(--text-on-accent)",
+      glow: "var(--accent-glow)",
     };
   }
 
@@ -90,6 +109,9 @@ export const getTechBadgeColors = (name: string): TechBadgeColors => {
     color,
     border: rgba(color, color === "#f4f4f6" ? 0.28 : 0.48),
     background: rgba(color, color === "#f4f4f6" ? 0.08 : 0.12),
+    fill: color,
+    hoverText: getReadableTextColor(color),
+    glow: rgba(color, color === "#f4f4f6" ? 0.22 : 0.34),
   };
 };
 
@@ -100,11 +122,14 @@ export const getTechBadgeStyle = (name: string) => {
     "--tech-color": colors.color,
     "--tech-border": colors.border,
     "--tech-bg": colors.background,
+    "--tech-fill": colors.fill,
+    "--tech-hover-text": colors.hoverText,
+    "--tech-glow": colors.glow,
   } as Record<string, string>;
 };
 
 export const getTechBadgeStyleAttribute = (name: string) => {
   const colors = getTechBadgeColors(name);
 
-  return `--tech-color:${colors.color};--tech-border:${colors.border};--tech-bg:${colors.background};`;
+  return `--tech-color:${colors.color};--tech-border:${colors.border};--tech-bg:${colors.background};--tech-fill:${colors.fill};--tech-hover-text:${colors.hoverText};--tech-glow:${colors.glow};`;
 };
