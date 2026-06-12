@@ -11,7 +11,6 @@ import close from "./close.svg";
 
 import css from "./tech/css.webp";
 import docker from "./tech/docker.webp";
-import figma from "./tech/figma.webp";
 import git from "./tech/git.webp";
 import html from "./tech/html.webp";
 import javascript from "./tech/javascript.webp";
@@ -21,12 +20,15 @@ import reactjs from "./tech/reactjs.webp";
 import redux from "./tech/redux.webp";
 import tailwind from "./tech/tailwind.webp";
 import typescript from "./tech/typescript.webp";
-import threejs from "./tech/threejs.svg";
 
 import enovee from "./company/enovee.webp";
 import dsp from "./company/dsp.webp";
 import pano from "./company/pano.webp";
 import eventmaker from "./company/eventmaker.webp";
+
+// Keevo
+import keevo_home from "./projects/Keevo/Home.webp";
+import keevo_studio from "./projects/Keevo/STUDIO.webp";
 
 // Edumation
 import edumation from "./projects/Edumation/Dashboard Page.webp";
@@ -63,7 +65,6 @@ export {
   close,
   css,
   docker,
-  figma,
   git,
   html,
   javascript,
@@ -73,11 +74,12 @@ export {
   redux,
   tailwind,
   typescript,
-  threejs,
   dsp,
   pano,
   eventmaker,
   enovee,
+  keevo_home,
+  keevo_studio,
   edumation,
   edumation_login,
   edumation_schedule,

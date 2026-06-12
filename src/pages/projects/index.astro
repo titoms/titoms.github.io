@@ -1,4 +1,6 @@
 ---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
 import PageLayout from '../../components/layout/PageLayout.astro';
 import { projects as allProjects, BOOK_CALL_URL } from '../../config/constants';
 
@@ -50,11 +52,29 @@ const counts = {
 // Tech stack strip
 const stackBadges = ['React', 'Next.js', 'TypeScript', 'Node.js', 'Electron', 'PostgreSQL', 'Supabase', 'Web Audio', 'On-device AI'];
 const accentBadge = 'On-device AI';
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Projects — fullstackchris.dev",
+  url: "https://fullstackchris.dev/projects",
+  description: "Selected web and desktop products built with React, Node.js, TypeScript and AI-assisted workflows.",
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: allProjects.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `https://fullstackchris.dev/projects/${p.slug}`,
+      name: p.name,
+    })),
+  },
+};
 ---
 
 <PageLayout
   title="Projects — fullstackchris.dev"
   description="Selected web and desktop products — scoped, built and shipped with React, Node.js, TypeScript and practical AI-assisted workflows."
+  jsonLd={jsonLd}
 >
 
   <!-- ── HERO ──────────────────────────────────────────────────────────── -->
@@ -158,12 +178,11 @@ const accentBadge = 'On-device AI';
           data-cats={projectCats[featured.slug] ?? 'apps'}
           data-reveal="scale"
         >
-          <span class="feature-flag">
-            <span class="pulse-dot"></span>Featured · case study
-          </span>
-
           <!-- Body -->
           <div class="pc-body">
+            <span class="feature-flag">
+              <span class="pulse-dot"></span>Featured · case study
+            </span>
             <span class="pc-kind">{projectKinds[featured.slug]}</span>
             <div class="pc-title">{featured.name} <span class="ar">→</span></div>
             <p class="pc-desc">{featured.description}</p>
@@ -188,7 +207,13 @@ const accentBadge = 'On-device AI';
                 <span class="url">{projectUrls[featured.slug]}</span>
               </div>
               <div class="win-shot">
-                {featured.name} — editor &amp; timeline
+                {featured.image ? (
+                  typeof featured.image === 'string'
+                    ? <img src={featured.image} alt={featured.name} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" loading="eager" decoding="async" />
+                    : <Image src={featured.image as ImageMetadata} alt={featured.name} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" loading="eager" decoding="async" />
+                ) : (
+                  <span style="position:relative;z-index:1;">{featured.name} — editor &amp; timeline</span>
+                )}
                 <span class="sheen"></span>
               </div>
             </div>
@@ -211,7 +236,13 @@ const accentBadge = 'On-device AI';
                   <span class="url">{projectUrls[project.slug] ?? project.slug + '.app'}</span>
                 </div>
                 <div class="win-shot">
-                  {project.name}
+                  {project.image ? (
+                    typeof project.image === 'string'
+                      ? <img src={project.image} alt={project.name} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async" />
+                      : <Image src={project.image as ImageMetadata} alt={project.name} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async" />
+                  ) : (
+                    <span style="position:relative;z-index:1;">{project.name}</span>
+                  )}
                   <span class="sheen"></span>
                 </div>
               </div>

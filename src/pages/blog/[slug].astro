@@ -5,6 +5,7 @@ import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { SectionHeader } from '../../components/ui/SectionHeader';
+import { SITE_ALIASES, SOCIAL_LINKS } from '../../config/constants';
 
 export async function getStaticPaths() {
   const articles = await getCollection('blog');
@@ -53,7 +54,9 @@ const jsonLd: object[] = [
     author: {
       "@type": "Person",
       name: "Christophe Crognier",
+      alternateName: SITE_ALIASES,
       url: "https://fullstackchris.dev",
+      sameAs: [SOCIAL_LINKS.linkedin, SOCIAL_LINKS.github, SOCIAL_LINKS.twitter],
     },
     datePublished: article.data.publishedAt.toISOString(),
     dateModified: (article.data.updatedAt ?? article.data.publishedAt).toISOString(),
@@ -100,7 +103,12 @@ if (article.data.faqs.length > 0) {
   jsonLd={jsonLd}
 >
   <!-- Hero -->
-  <section class="site-hero hero-glow-field glow-bg grid-bg relative overflow-hidden border-b border-border mb-4">
+  <section class="site-hero hero-glow-field glow-bg grid-bg relative overflow-hidden border-b border-border mb-12 sm:mb-16">
+    <div class="bg-field bv-b" aria-hidden="true">
+      <span class="blob blob-1"></span>
+      <span class="blob blob-2"></span>
+      <span class="blob blob-3"></span>
+    </div>
     <div class={`${sectionClass} site-hero-inner`}>
       <div class="flex flex-wrap gap-2">
         {article.data.tags.map((tag: string) => (

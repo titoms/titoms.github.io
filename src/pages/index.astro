@@ -4,6 +4,7 @@ import HeroV2 from '../components/hero/HeroV2.astro';
 import {
   heroStats, workModes, buildStats, serviceOffers, processSteps,
   pricingPlans, newsletterIssue, feedbackCards, faqs, BOOK_CALL_URL,
+  SITE_ALIASES, SOCIAL_LINKS,
 } from '../config/constants';
 import { technologies } from '../config/constants';
 import { getTechBadgeStyle } from '../config/techBadges';
@@ -34,17 +35,20 @@ const jsonLd = [
     "@context": "https://schema.org",
     "@type": "Person",
     name: "Christophe Crognier",
+    alternateName: SITE_ALIASES,
     url: "https://fullstackchris.dev",
     jobTitle: "Full-Stack Developer",
     sameAs: [
-      "https://linkedin.com/in/christophe-crognier",
-      "https://github.com/titoms",
+      SOCIAL_LINKS.linkedin,
+      SOCIAL_LINKS.github,
+      SOCIAL_LINKS.twitter,
     ],
   },
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "fullstackchris.dev",
+    name: "Full Stack Chris",
+    alternateName: ["fullstackchris.dev", ...SITE_ALIASES],
     url: "https://fullstackchris.dev",
     description: "Full-stack development, coaching, and MVP services for founders and developers.",
   },
@@ -52,8 +56,8 @@ const jsonLd = [
 ---
 
 <PageLayout
-  title="fullstackchris.dev — Full-Stack Development, Coaching & MVP Services"
-  description="Full-stack React and Node.js development, project coaching, MVP workshops and an AI web development newsletter for founders, freelancers and developers."
+  title="fullstackchris.dev — Full Stack Chris | Full-Stack Development, Coaching & MVP Services"
+  description="Full Stack Chris, also known as fullstackchris, offers React and Node.js development, project coaching, MVP workshops and an AI web development newsletter."
   jsonLd={jsonLd}
 >
   <!-- Hero V2 — Cursor AI build board -->
@@ -62,23 +66,23 @@ const jsonLd = [
   <!-- Why work with me -->
   <section class="border-y border-border bg-surface/40">
     <div class={sectionClass}>
-      <SectionHeader eyebrow="WHY WORK WITH ME" title="Developer execution, teaching clarity, AI without the bullshit." />
-      <div class="mt-10 grid gap-0 md:grid-cols-3">
-        <div class="py-8 pr-8">
+      <SectionHeader eyebrow="WHY WORK WITH ME" title="Developer execution, teaching clarity, AI without the bullshit." data-reveal="fade" />
+      <div class="mt-10 grid gap-0 md:grid-cols-3" data-stagger="90" data-stagger-base="80">
+        <div class="py-8 pr-8" data-reveal="soft-left">
           <div class="mb-4 grid h-10 w-10 place-items-center rounded-lg border border-accent bg-accent-soft text-accent">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
           </div>
           <h4 class="mb-2 font-display text-[1.1rem] font-semibold text-white">I can explain it</h4>
           <p class="text-[0.95rem] leading-7 text-secondary">~7,000 hours teaching web development means I cut through jargon and help non-technical founders make confident decisions.</p>
         </div>
-        <div class="py-8 pr-8">
+        <div class="py-8 pr-8" data-reveal="zoom">
           <div class="mb-4 grid h-10 w-10 place-items-center rounded-lg border border-accent bg-accent-soft text-accent">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
           </div>
           <h4 class="mb-2 font-display text-[1.1rem] font-semibold text-white">I can scope it</h4>
           <p class="text-[0.95rem] leading-7 text-secondary">I turn a vague idea into a prioritized MVP and a realistic budget — so you don't burn weeks building the wrong thing.</p>
         </div>
-        <div class="py-8 pr-8">
+        <div class="py-8 pr-8" data-reveal="soft-right">
           <div class="mb-4 grid h-10 w-10 place-items-center rounded-lg border border-accent bg-accent-soft text-accent">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
           </div>
@@ -91,30 +95,32 @@ const jsonLd = [
 
   <!-- Services -->
   <section class={sectionClass} id="services">
-    <SectionHeader eyebrow="WHAT I OFFER" title="One ladder, from first call to launched product." description="Start wherever you are. Each service hands off cleanly to the next — clarity, then focused build, then a full MVP." />
-    <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+    <SectionHeader eyebrow="WHAT I OFFER" title="One ladder, from first call to launched product." description="Start wherever you are. Each service hands off cleanly to the next — clarity, then focused build, then a full MVP." data-reveal="fade" />
+    <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3" data-stagger="85" data-stagger-base="80">
       {serviceOffers.map((offer) => (
-        <ServiceCard
-          title={offer.title}
-          description={offer.description}
-          price={offer.price}
-          priceUnit={offer.priceUnit}
-          badge={offer.badge}
-          featured={offer.featured}
-          ctaHref={serviceCtaMap[offer.title] ?? '/services'}
-          ctaLabel={offer.badge === 'Newsletter' ? 'Subscribe →' : 'Learn more →'}
-          ctaVariant={offer.featured ? 'primary' : 'outline'}
-        />
+        <div class="h-full" data-reveal={offer.featured ? 'zoom' : 'blur'}>
+          <ServiceCard
+            title={offer.title}
+            description={offer.description}
+            price={offer.price}
+            priceUnit={offer.priceUnit}
+            badge={offer.badge}
+            featured={offer.featured}
+            ctaHref={serviceCtaMap[offer.title] ?? '/services'}
+            ctaLabel={offer.badge === 'Newsletter' ? 'Subscribe →' : 'Learn more →'}
+            ctaVariant={offer.featured ? 'primary' : 'outline'}
+          />
+        </div>
       ))}
-      <Card hover class="breathing-violet-glow flex h-full flex-col gap-6 border-accent/25 bg-gradient-to-b from-accent/8 to-transparent p-7">
+      <Card hover class="breathing-violet-glow flex h-full min-h-[260px] flex-col gap-7 border-accent/25 bg-gradient-to-b from-accent/8 to-transparent p-8" data-reveal="zoom">
         <div class="grid h-10 w-10 place-items-center rounded-lg border border-accent bg-accent-soft text-accent">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M2 12h20"/></svg>
         </div>
-        <div class="space-y-3">
+        <div class="space-y-4">
           <h3 class="font-display text-xl font-semibold text-white">Not sure where to start?</h3>
           <p class="text-[0.95rem] leading-7 text-secondary">Book a free 30-minute call. We'll figure out the right next step for your project.</p>
         </div>
-        <div class="mt-auto flex flex-wrap items-center justify-end gap-3 border-t border-border pt-4">
+        <div class="mt-2 flex flex-wrap items-center justify-end gap-4 border-t border-border pt-5">
           <Button href="/contact" variant="secondary" size="sm">
             Ask a question
           </Button>
@@ -127,26 +133,30 @@ const jsonLd = [
   </section>
 
   <!-- Projects -->
-  <section class="border-y border-border bg-surface/40">
+  <section class="border-y border-border bg-surface/40" id="projects">
     <div class={sectionClass}>
-      <SectionHeader eyebrow="Recent work" title="Projects shipped end-to-end." description="Click any project to read the full case study." />
-      <ProjectsModal client:load />
+      <SectionHeader eyebrow="Recent work" title="Projects shipped end-to-end." description="Click any project to read the full case study." data-reveal="fade" />
+      <div data-reveal="zoom">
+        <ProjectsModal client:load />
+      </div>
     </div>
   </section>
 
   <!-- How we work -->
   <section class={sectionClass} id="process">
-    <SectionHeader eyebrow="Process" title="How a session works." />
-    <ProcessStepper steps={processSteps} client:visible />
+    <SectionHeader eyebrow="Process" title="How a session works." data-reveal="fade" />
+    <div data-reveal="soft-right">
+      <ProcessStepper steps={processSteps} client:visible />
+    </div>
   </section>
 
   <!-- Tech stack -->
   <section id="tech-stack" class="border-y border-border bg-surface/40">
     <div class={sectionClass}>
-      <SectionHeader eyebrow="Tech stack" title="Tools used daily." />
-      <div class="mt-8 flex flex-wrap gap-2">
+      <SectionHeader eyebrow="Tech stack" title="Tools used daily." data-reveal="fade" />
+      <div class="mt-8 flex flex-wrap gap-2" data-stagger="45" data-stagger-base="50">
         {technologies.map((tech) => (
-          <Badge variant="default" className="tech-badge" style={getTechBadgeStyle(tech.name)}>{tech.name}</Badge>
+          <Badge variant="default" className="tech-badge" style={getTechBadgeStyle(tech.name)} data-reveal="zoom">{tech.name}</Badge>
         ))}
       </div>
     </div>
@@ -154,19 +164,21 @@ const jsonLd = [
 
   <!-- Pricing -->
   <section class={sectionClass}>
-    <SectionHeader eyebrow="Pricing" title="Pick your plan." description="All sessions include clear deliverables. Book a call if you need a custom quote." />
-    <div class="mt-10 grid gap-5 md:grid-cols-3">
+    <SectionHeader eyebrow="Pricing" title="Pick your plan." description="All sessions include clear deliverables. Book a call if you need a custom quote." data-reveal="fade" />
+    <div class="mt-10 grid gap-5 md:grid-cols-3" data-stagger="100" data-stagger-base="80">
       {pricingPlans.map((plan) => (
-        <PricingCard
-          title={plan.title}
-          description={plan.description}
-          price={plan.price}
-          period={plan.period}
-          features={plan.features}
-          ctaLabel="Book a call"
-          ctaHref={BOOK_CALL_URL}
-          featured={plan.featured}
-        />
+        <div class="h-full" data-reveal={plan.featured ? 'zoom' : 'soft-left'}>
+          <PricingCard
+            title={plan.title}
+            description={plan.description}
+            price={plan.price}
+            period={plan.period}
+            features={plan.features}
+            ctaLabel="Book a call"
+            ctaHref={BOOK_CALL_URL}
+            featured={plan.featured}
+          />
+        </div>
       ))}
     </div>
   </section>
@@ -174,7 +186,7 @@ const jsonLd = [
   <!-- Newsletter CTA -->
   <section class="border-y border-border bg-surface/40" id="newsletter">
     <div class={sectionClass}>
-      <div class="newsletter-outer-glow">
+      <div class="newsletter-outer-glow" data-reveal="zoom">
         <Card class="border-accent/45 bg-gradient-to-br from-raised via-tertiary to-surface-deep p-8 sm:p-10 lg:p-14">
           <div class="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
             <div class="max-w-2xl">
@@ -214,10 +226,10 @@ const jsonLd = [
 
   <!-- Testimonials -->
   <section class={sectionClass}>
-    <SectionHeader eyebrow="Real feedback" title="What clients say." />
-    <div class="mt-10 grid gap-5 md:grid-cols-3">
+    <SectionHeader eyebrow="Real feedback" title="What clients say." data-reveal="fade" />
+    <div class="mt-10 grid gap-5 md:grid-cols-3" data-stagger="100" data-stagger-base="80">
       {feedbackCards.map((fb) => (
-        <Card class="flex flex-col gap-4">
+        <Card class="flex flex-col gap-4" data-reveal="blur">
           <p class="text-[0.95rem] leading-7 text-secondary italic">"{fb.testimonial}"</p>
           <div class="mt-auto border-t border-border pt-4">
             <p class="font-display text-sm font-semibold text-white">{fb.name}</p>
@@ -232,8 +244,10 @@ const jsonLd = [
   <section class="border-y border-border bg-surface/40">
     <div class={sectionClass}>
       <div class="grid gap-12 lg:grid-cols-[1fr_1.5fr]">
-        <SectionHeader eyebrow="Questions" title="Common questions answered." description="Still not sure? Book a free 30-minute call." />
-        <FAQAccordion client:visible />
+        <SectionHeader eyebrow="Questions" title="Common questions answered." description="Still not sure? Book a free 30-minute call." data-reveal="soft-left" />
+        <div data-reveal="soft-right">
+          <FAQAccordion client:visible />
+        </div>
       </div>
     </div>
   </section>
@@ -241,7 +255,7 @@ const jsonLd = [
   <!-- Book a call CTA -->
   <section class="glow-bg grid-bg relative overflow-hidden border-b border-border" id="contact">
     <div class={sectionClass}>
-      <div class="flex flex-col items-center gap-6 py-10 text-center">
+      <div class="flex flex-col items-center gap-6 py-10 text-center" data-reveal="zoom">
         <span class="font-mono text-xs uppercase tracking-widest text-accent">START HERE</span>
         <h2 class="max-w-2xl font-display text-[clamp(2rem,4.5vw,3.5rem)] font-semibold leading-tight text-white">
           Bring me your idea, blocker or product goal.

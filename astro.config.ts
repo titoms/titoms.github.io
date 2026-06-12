@@ -7,4 +7,7 @@ export default defineConfig({
   output: 'static',
   integrations: [react(), tailwind({ applyBaseStyles: false }), mdx()],
   site: 'https://fullstackchris.dev',
+  prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
+  compressHTML: true,
+  build: { inlineStylesheets: 'auto' },
 });

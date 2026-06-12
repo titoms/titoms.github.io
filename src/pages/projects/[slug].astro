@@ -1,6 +1,9 @@
 ---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
 import PageLayout from '../../components/layout/PageLayout.astro';
-import { projects, CALENDLY_URL, BOOK_CALL_URL } from '../../config/constants';
+import ProcessStepper from '../../components/islands/ProcessStepper';
+import { projects, BOOK_CALL_URL, SITE_ALIASES, SOCIAL_LINKS } from '../../config/constants';
 import { getTechBadgeStyleAttribute } from '../../config/techBadges';
 
 export async function getStaticPaths() {
@@ -40,6 +43,10 @@ const nextProject = project.nextProjectSlug
   ? projects.find(p => p.slug === project.nextProjectSlug)
   : null;
 
+const coverImageUrl = project.image && typeof project.image !== 'string'
+  ? new URL((project.image as ImageMetadata).src, Astro.site).href
+  : undefined;
+
 const jsonLd = [
   {
     "@context": "https://schema.org",
@@ -49,9 +56,22 @@ const jsonLd = [
     author: {
       "@type": "Person",
       name: "Christophe Crognier",
+      alternateName: SITE_ALIASES,
       url: "https://fullstackchris.dev",
+      sameAs: [SOCIAL_LINKS.linkedin, SOCIAL_LINKS.github, SOCIAL_LINKS.twitter],
     },
     url: `https://fullstackchris.dev/projects/${project.slug}`,
+    ...(coverImageUrl ? { image: coverImageUrl } : {}),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: project.name,
+    description: project.description,
+    applicationCategory: project.meta.type,
+    operatingSystem: project.meta.platform,
+    url: `https://fullstackchris.dev/projects/${project.slug}`,
+    ...(coverImageUrl ? { image: coverImageUrl } : {}),
   },
   {
     "@context": "https://schema.org",
@@ -68,38 +88,45 @@ const jsonLd = [
   title={`${project.name} — Case Study · fullstackchris.dev`}
   description={project.description}
   canonical={`https://fullstackchris.dev/projects/${project.slug}`}
+  ogImage={coverImageUrl}
+  ogType="article"
   jsonLd={jsonLd}
 >
 
 <!-- ======================================================== HERO -->
 <section class="cs-hero hero-glow-field glow-bg grid-bg">
+  <div class="bg-field bv-c" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+  </div>
   <div class="container cs-hero-layout">
     <div class="hero-copy">
-      <div class="crumb">
+      <div class="crumb reveal r1">
       <a href="/projects">Projects</a>
       <span>/</span>
       <span style="color:var(--text-mid)">{project.name}</span>
     </div>
 
       <div class="hero-top">
-      <span class="eyebrow-cs">CASE STUDY · {project.meta.type.toUpperCase()}</span>
-      <h1>{project.name}</h1>
-      <p class="cs-lead">{project.longDescription}</p>
+      <span class="eyebrow-cs reveal r1">CASE STUDY · {project.meta.type.toUpperCase()}</span>
+      <h1 class="reveal r2">{project.name}</h1>
+      <p class="cs-lead reveal r3">{project.longDescription}</p>
 
-      <div class="hero-badges">
+      <div class="hero-badges reveal r4">
         {project.tags.map(tag => (
           <span class="badge-cs tech-badge" style={getTechBadgeStyleAttribute(tag.name)}>{tag.name}</span>
         ))}
       </div>
 
-      <div class="meta-bar">
+      <div class="meta-bar reveal r5">
         <div class="m"><div class="mk">Role</div><div class="mv">{project.meta.role}</div></div>
         <div class="m"><div class="mk">Timeline</div><div class="mv">{project.meta.timeline}</div></div>
         <div class="m"><div class="mk">Platform</div><div class="mv">{project.meta.platform}</div></div>
         <div class="m"><div class="mk">Type</div><div class="mv">{project.meta.type}</div></div>
       </div>
 
-      <div class="hero-actions">
+      <div class="hero-actions reveal r6">
         {project.live_link && (
           <a class="cs-btn primary" href={project.live_link} target="_blank" rel="noopener noreferrer">
             Visit the product <span class="arrow">→</span>
@@ -111,7 +138,7 @@ const jsonLd = [
     </div>
 
   <!-- Hero window mockup -->
-    <div class="hero-stage">
+    <div class="hero-stage reveal-v">
       <div class="window window-hover">
         <div class="window-bar">
           <span class="traffic"><i></i><i></i><i></i></span>
@@ -123,15 +150,21 @@ const jsonLd = [
           </span>
           <span class="win-actions"><i></i><i></i><i></i></span>
         </div>
-        <div class="win-screen" style="aspect-ratio:16/9;">
-          <span class="ph-note">
-            <span class="ph-ic">
-              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
-                <rect x="2" y="3" width="20" height="14" rx="2"/><path d="m10 9 4 2.5-4 2.5z"/><path d="M2 19h20"/>
-              </svg>
+        <div class="win-screen" style="aspect-ratio:16/9;overflow:hidden;position:relative;">
+          {project.image ? (
+            typeof project.image === 'string'
+              ? <img src={project.image} alt={`${project.name} screenshot`} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" loading="eager" decoding="async" />
+              : <Image src={project.image as ImageMetadata} alt={`${project.name} screenshot`} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" loading="eager" decoding="async" />
+          ) : (
+            <span class="ph-note">
+              <span class="ph-ic">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+                  <rect x="2" y="3" width="20" height="14" rx="2"/><path d="m10 9 4 2.5-4 2.5z"/><path d="M2 19h20"/>
+                </svg>
+              </span>
+              primary screenshot · {project.name}
             </span>
-            primary screenshot · {project.name}
-          </span>
+          )}
         </div>
       </div>
       <div class="reflection"></div>
@@ -144,7 +177,7 @@ const jsonLd = [
   <div class="container">
     <div class="cs-split">
       <!-- Pain list -->
-      <div>
+      <div data-reveal="soft-left">
         <span class="eyebrow-cs">THE PROBLEM</span>
         <h2 style="margin:0.75rem 0 1rem;">{project.caseStudy.problem.split('.')[0]}.</h2>
         <p style="color:var(--text-mid);font-size:1.02rem;line-height:1.6;margin-bottom:1.5rem;">
@@ -165,7 +198,7 @@ const jsonLd = [
       </div>
 
       <!-- Audience card -->
-      <div class="audience-card">
+      <div class="audience-card" data-reveal="soft-right">
         <div class="who">
           <div class="av">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
@@ -193,33 +226,28 @@ const jsonLd = [
 <!-- ======================================================== SOLUTION -->
 <section class="cs-sec">
   <div class="container">
-    <div class="cs-head">
+    <div class="cs-head" data-reveal="fade">
       <span class="eyebrow-cs">THE SOLUTION</span>
       <h2>{project.caseStudy.tagline.split('—')[1]?.trim() ?? project.caseStudy.tagline}</h2>
       <p>{project.caseStudy.architecture}</p>
     </div>
 
-    <!-- Product flow -->
-    <div class="flow">
-      {project.productFlow.map(step => (
-        <div class="flow-node">
-          <div class="step-num">{step.step}</div>
-          <h5>{step.title}</h5>
-          <p>{step.description}</p>
-        </div>
-      ))}
+    <!-- Product flow (animated like the homepage "How a session works" stepper) -->
+    <div data-reveal="soft-right">
+      <ProcessStepper client:visible steps={project.productFlow.map(s => ({ title: s.title, description: s.description }))} />
     </div>
 
+
     <!-- Before / after windows -->
-    <div class="ba">
-      <div class="before">
+    <div class="ba" data-stagger="100" data-stagger-base="80">
+      <div class="before" data-reveal="soft-left">
         <span class="tag-lab"><span class="d"></span>Before</span>
         <div class="window">
           <div class="window-bar"><span class="traffic"><i></i><i></i><i></i></span><span class="win-url">manual workflow</span><span class="win-actions"><i></i><i></i><i></i></span></div>
           <div class="win-screen"><span class="ph-note">fragmented tools · high manual overhead</span></div>
         </div>
       </div>
-      <div class="after">
+      <div class="after" data-reveal="soft-right">
         <span class="tag-lab"><span class="d"></span>After</span>
         <div class="window">
           <div class="window-bar"><span class="traffic"><i></i><i></i><i></i></span><span class="win-url">{project.slug}.app</span><span class="win-actions"><i></i><i></i><i></i></span></div>
@@ -233,14 +261,14 @@ const jsonLd = [
 <!-- ======================================================== KEY FEATURES -->
 <section class="cs-sec alt">
   <div class="container">
-    <div class="cs-head">
+    <div class="cs-head" data-reveal="fade">
       <span class="eyebrow-cs">KEY FEATURES</span>
       <h2>Built around how {project.audienceWho.toLowerCase()} actually work.</h2>
     </div>
 
     {project.features.map((feature, i) => (
-      <div class={i % 2 === 1 ? 'feature reverse' : 'feature'}>
-        <div class="f-copy">
+      <div class={i % 2 === 1 ? 'feature reverse' : 'feature'} data-stagger="100" data-stagger-base="80">
+        <div class="f-copy" data-reveal={i % 2 === 1 ? 'soft-right' : 'soft-left'}>
           <span class="num">FEATURE {String(i + 1).padStart(2, '0')}</span>
           <h3>{feature.title}</h3>
           <p>{feature.description}</p>
@@ -255,15 +283,21 @@ const jsonLd = [
             ))}
           </ul>
         </div>
-        <div class="f-media">
+        <div class="f-media" data-reveal={i % 2 === 1 ? 'soft-left' : 'soft-right'}>
           <div class="window window-hover">
             <div class="window-bar">
               <span class="traffic"><i></i><i></i><i></i></span>
               <span class="win-url">{feature.title.toLowerCase().split(' ').slice(0,2).join('-')}</span>
               <span class="win-actions"><i></i><i></i><i></i></span>
             </div>
-            <div class="win-screen">
-              <span class="ph-note">screenshot · {feature.title}</span>
+            <div class="win-screen" style="overflow:hidden;position:relative;">
+              {project.images[i + 1] ? (
+                typeof project.images[i + 1] === 'string'
+                  ? <img src={project.images[i + 1] as string} alt={feature.title} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async" />
+                  : <Image src={project.images[i + 1] as ImageMetadata} alt={feature.title} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async" />
+              ) : (
+                <span class="ph-note">screenshot · {feature.title}</span>
+              )}
             </div>
           </div>
         </div>
@@ -275,14 +309,14 @@ const jsonLd = [
 <!-- ======================================================== TECHNICAL CHALLENGE -->
 <section class="cs-sec" id="challenge">
   <div class="container">
-    <div class="cs-head">
+    <div class="cs-head" data-reveal="fade">
       <span class="eyebrow-cs">TECHNICAL CHALLENGE</span>
       <h2>Hard problems solved.</h2>
       <p>{project.caseStudy.implementation}</p>
     </div>
 
     <div class="cs-split" style="align-items:stretch;">
-      <div class="card-plain">
+      <div class="card-plain" data-reveal="soft-left">
         <h4>What made it hard</h4>
         <ul class="pain-list" style="margin-top:1rem;">
           {project.caseStudy.technicalChallenges.map(challenge => (
@@ -298,7 +332,7 @@ const jsonLd = [
         </ul>
       </div>
 
-      <div class="code-block">
+      <div class="code-block" data-reveal="soft-right">
         <div class="code-head">
           <span class="code-dots"><i></i><i></i><i></i></span>
           <span class="code-title">architecture.ts</span>
@@ -323,13 +357,13 @@ const jsonLd = [
 <!-- ======================================================== STACK -->
 <section class="cs-sec alt">
   <div class="container">
-    <div class="cs-head">
+    <div class="cs-head" data-reveal="fade">
       <span class="eyebrow-cs">THE STACK</span>
       <h2>Technologies used.</h2>
     </div>
-    <div class="stack-grid">
+    <div class="stack-grid" data-stagger="80" data-stagger-base="80">
       {project.stack.map(cat => (
-        <div class="stack-cat">
+        <div class="stack-cat" data-reveal="zoom">
           <h5>
             <span class="ic">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -352,13 +386,13 @@ const jsonLd = [
 <!-- ======================================================== WHAT THIS PROVES -->
 <section class="cs-sec">
   <div class="container">
-    <div class="cs-head">
+    <div class="cs-head" data-reveal="fade">
       <span class="eyebrow-cs">WHAT THIS PROVES</span>
       <h2>What {project.name} demonstrates.</h2>
     </div>
-    <div class="proves">
+    <div class="proves" data-stagger="90" data-stagger-base="80">
       {project.proves.map(prove => (
-        <div class="prove">
+        <div class="prove" data-reveal="blur">
           <div class="prove-ic">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
               set:html={proveIcon(prove.iconKey)} />
@@ -374,7 +408,7 @@ const jsonLd = [
 <!-- ======================================================== CTA -->
 <section class="cs-sec cs-cta alt">
   <div class="container">
-    <div class="cs-cta-card">
+    <div class="cs-cta-card" data-reveal="zoom">
       <span class="eyebrow-cs" style="justify-content:center;">WORK WITH ME</span>
       <h2>Want to build something like this?</h2>
       <p>Bring me your idea or half-built project. We'll scope it, design it and ship it — using the same workflow behind {project.name}.</p>
@@ -390,7 +424,7 @@ const jsonLd = [
 {nextProject && (
   <section class="cs-sec tight" style="border-top:1px solid var(--border);">
     <div class="container">
-      <div class="next-proj">
+      <div class="next-proj" data-reveal="fade">
         <span class="next-lab">Next case study</span>
         <a href={`/projects/${nextProject.slug}`}>
           {nextProject.name} <span class="arrow">→</span>
@@ -572,7 +606,7 @@ const jsonLd = [
   @media (max-width: 600px) {
     .flow, .stack-grid, .proves { grid-template-columns: 1fr; }
     .meta-bar { gap: 1.25rem; }
-    .cs-hero { min-height: auto; padding: 6rem 0 3rem; }
+    .cs-hero { min-height: 0; padding: 6rem 0 3rem; }
   }
   @media (prefers-reduced-motion: reduce) {
     .window, .prove { transition: none; }

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Christophe Crognier · AI Fullstack Engineer</title>
+<meta name="description" content="AI Fullstack Engineer building production-ready products end to end — fullstack engineering, automation and applied AI. 7,000+ hours teaching web development.">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="service.css">
+<link rel="stylesheet" href="motion.css">
+<style>
+  /* ===== About page composition (extends styles.css / service.css / motion.css) ===== */
+  .about-hero { padding: var(--sp-8) 0 var(--sp-9); position: relative; }
+  .about-hero .hero-split { grid-template-columns: 1.08fr 0.92fr; align-items: center; gap: var(--sp-9); }
+  .about-hero h1 { font-size: clamp(2.4rem, 4.8vw, 3.9rem); max-width: 15ch; line-height: 1.0; }
+  .about-hero h1 .accent { color: var(--accent-400); }
+  .about-hero .t-lead { max-width: 50ch; }
+
+  /* Hero stat row */
+  .hero-meta { display: flex; gap: var(--sp-7); flex-wrap: wrap; margin-top: var(--sp-7); padding-top: var(--sp-6); border-top: 1px solid var(--border); }
+  .hero-meta .stat .n { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--text-hi); letter-spacing: -0.02em; }
+  .hero-meta .stat .l { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-low); margin-top: 4px; }
+
+  /* Portrait card */
+  .portrait-scene { position: relative; }
+  .portrait-card {
+    position: relative; border-radius: var(--r-xl); overflow: hidden;
+    border: 1px solid var(--border-strong);
+    background: var(--bg-1); aspect-ratio: 4 / 5; width: 100%;
+    box-shadow: var(--shadow-lg);
+  }
+  .portrait-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .portrait-card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04), inset 0 -60px 80px -40px rgba(13,13,16,0.7); pointer-events: none; }
+  .portrait-glow { position: absolute; inset: -14% -8% -8% -8%; z-index: -1; border-radius: 50%; background: radial-gradient(ellipse at 50% 38%, var(--accent-glow), transparent 62%); filter: blur(36px); pointer-events: none; }
+  .portrait-tag {
+    position: absolute; left: var(--sp-5); bottom: var(--sp-5); z-index: 3;
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: var(--font-mono); font-size: 0.76rem; color: var(--text-hi);
+    padding: 8px 13px; border-radius: var(--r-pill);
+    background: rgba(13,13,16,0.6); border: 1px solid var(--border-strong); backdrop-filter: blur(10px);
+  }
+  .portrait-tag .pulse-dot { background: var(--positive); }
+
+  /* Float pills around portrait */
+  .portrait-scene .float-pill .mk { background: var(--accent-600); }
+  .pp-1 { top: 8%; left: -7%; --dur: 6.6s; --del: 0s; }
+  .pp-2 { top: 30%; right: -9%; --dur: 7.7s; --del: .6s; }
+  .pp-3 { bottom: 20%; left: -10%; --dur: 8.3s; --del: 1s; }
+  .pp-4 { bottom: 6%; right: -5%; --dur: 7.1s; --del: .4s; }
+
+  /* Approach cards */
+  .approach-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); }
+  .ap-card { display: flex; flex-direction: column; gap: var(--sp-4); }
+  .ap-card .k { font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.12em; color: var(--accent-400); }
+  .ap-card .ic { width: 46px; height: 46px; border-radius: var(--r-md); background: var(--accent-soft); border: 1px solid var(--border-accent); color: var(--accent-300); display: grid; place-items: center; }
+  .ap-card h3 { font-size: 1.25rem; }
+  .ap-card p { color: var(--text-mid); font-size: 0.96rem; }
+
+  /* Bio + at-a-glance */
+  .bio-split { display: grid; grid-template-columns: 1.5fr 0.9fr; gap: var(--sp-8); align-items: start; }
+  .bio-prose { display: flex; flex-direction: column; gap: var(--sp-5); }
+  .bio-prose p { color: var(--text-mid); font-size: 1.04rem; line-height: 1.65; max-width: 60ch; }
+  .bio-prose p .hl { color: var(--text-hi); }
+  .glance { position: sticky; top: 96px; }
+  .glance dl { margin: 0; display: flex; flex-direction: column; }
+  .glance .g-row { padding: var(--sp-4) 0; border-top: 1px solid var(--border); }
+  .glance .g-row:first-child { border-top: none; padding-top: 0; }
+  .glance dt { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-low); margin-bottom: 6px; }
+  .glance dd { margin: 0; color: var(--text-hi); font-size: 0.98rem; }
+  .glance dd .mono { color: var(--text-mid); }
+
+  /* Timeline */
+  .timeline { position: relative; display: flex; flex-direction: column; gap: var(--sp-6); padding-left: 4px; }
+  .tl-rail { position: absolute; left: 21px; top: 18px; bottom: 28px; width: 2px; z-index: 0; }
+  .tl-rail .rail { position: absolute; inset: 0; background: var(--border-strong); border-radius: 2px; }
+  .tl-rail .rail .rail-fill { position: absolute; inset: 0; transform-origin: top center; transform: scaleY(0); background: linear-gradient(180deg, var(--accent-500), var(--accent-300)); box-shadow: 0 0 10px var(--accent-glow); border-radius: 2px; transition: transform 1.7s cubic-bezier(.4,0,.2,1); }
+  .tl-rail.run .rail .rail-fill { transform: scaleY(1); }
+  .tl-row { position: relative; display: grid; grid-template-columns: 44px 1fr; gap: var(--sp-5); z-index: 1; }
+  .tl-num { width: 44px; height: 44px; border-radius: var(--r-pill); background: var(--bg-2); border: 1px solid var(--border-accent); color: var(--accent-300); display: grid; place-items: center; font-family: var(--font-mono); font-size: 0.92rem; font-weight: 600; }
+  .tl-body { padding-top: 2px; }
+  .tl-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-4); flex-wrap: wrap; }
+  .tl-body h3 { font-size: 1.18rem; }
+  .tl-meta { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-low); white-space: nowrap; }
+  .tl-meta .co { color: var(--accent-300); }
+  .tl-list { list-style: none; padding: 0; margin: var(--sp-3) 0 0; display: flex; flex-direction: column; gap: 7px; }
+  .tl-list li { position: relative; padding-left: 18px; color: var(--text-mid); font-size: 0.94rem; line-height: 1.5; }
+  .tl-list li::before { content: ""; position: absolute; left: 0; top: 9px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent-500); }
+  .tl-row.now .tl-num { background: var(--accent-soft); box-shadow: 0 0 0 4px rgba(167,139,250,0.1); }
+  .tl-badge-now { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--positive); border: 1px solid rgba(95,217,154,0.4); background: var(--positive-soft); padding: 2px 8px; border-radius: var(--r-pill); }
+
+  /* Tech stack */
+  .stack-cloud { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+  .stack-cloud .badge { font-size: 0.86rem; padding: 9px 15px; transition: border-color .18s ease, color .18s ease, background .18s ease, transform .18s ease; }
+  .stack-cloud .badge:hover { border-color: var(--accent-400); color: var(--text-hi); transform: translateY(-2px); }
+
+  @media (max-width: 1000px) {
+    .about-hero .hero-split { grid-template-columns: 1fr; gap: var(--sp-8); }
+    .portrait-scene { max-width: 440px; }
+    .approach-grid { grid-template-columns: 1fr; }
+    .bio-split { grid-template-columns: 1fr; gap: var(--sp-6); }
+    .glance { position: static; }
+    .portrait-scene .float-pill { display: none; }
+  }
+  @media (max-width: 600px) {
+    .hero-meta { gap: var(--sp-5); }
+    .tl-head { gap: var(--sp-1); }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" data-screen-label="Header">
+      <a class="brand" href="Homepage.html"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></a>
+      <ul class="nav-links">
+        <li><a href="services/index.html">Services</a></li>
+        <li><a href="Homepage.html#projects">Projects</a></li>
+        <li><a href="About Me.html" style="color:var(--text-hi)">About</a></li>
+        <li><a href="Design System.html">Design system</a></li>
+      </ul>
+      <a class="btn btn-primary btn-sm" href="Homepage.html#contact">Book a call</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="about-hero glow-bg grid-bg" data-screen-label="About hero" data-parallax-scene>
+  <div class="container">
+    <nav class="breadcrumb reveal r1"><a href="Homepage.html">Home</a><span class="sep">/</span><span>About</span></nav>
+    <div class="hero-split" style="margin-top:var(--sp-5);">
+      <div>
+        <span class="eyebrow reveal r1" style="margin-bottom:var(--sp-4);"><span class="pulse-dot"></span>AI FULLSTACK ENGINEER</span>
+        <h1 class="reveal r2" style="margin:var(--sp-4) 0 var(--sp-5);">Production-ready products, <span class="accent">end to end.</span></h1>
+        <p class="t-lead reveal r3">I design and ship scalable web applications and modern AI-enhanced systems — from system architecture and backend engineering to frontend interfaces, deployment pipelines and automation workflows.</p>
+        <div class="hero-cta reveal r4">
+          <a class="btn btn-primary btn-lg" href="Homepage.html#contact">Book a call <span class="arrow">→</span></a>
+          <a class="btn btn-secondary btn-lg" href="services/index.html">See services</a>
+        </div>
+        <div class="hero-meta reveal r5">
+          <div class="stat"><div class="n"><span class="count" data-count="7000" data-suffix="+">0</span></div><div class="l">Hours teaching dev</div></div>
+          <div class="stat"><div class="n"><span class="count" data-count="10" data-suffix="+ yrs">0</span></div><div class="l">Shipping in production</div></div>
+          <div class="stat"><div class="n"><span class="count" data-count="3">0</span></div><div class="l">Disciplines combined</div></div>
+        </div>
+      </div>
+
+      <div class="portrait-scene reveal-v">
+        <div class="portrait-card" data-depth="0.014">
+          <span class="portrait-glow"></span>
+          <img src="media/chris-portrait.png" alt="Christophe Crognier, AI Fullstack Engineer" width="1200" height="1500">
+          <span class="portrait-tag"><span class="pulse-dot"></span>Available for projects</span>
+        </div>
+        <span class="float-pill pp-1" data-depth="0.05"><span class="dot" style="background:#61dafb"></span>React</span>
+        <span class="float-pill pp-2" data-depth="0.07"><span class="dot" style="background:#5fd99a"></span>Node.js</span>
+        <span class="float-pill pp-3" data-depth="0.04"><span class="dot" style="background:#dea584"></span>Rust · Tauri</span>
+        <span class="float-pill pp-4" data-depth="0.065"><span class="mk">C</span>Claude Code</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPROACH -->
+<section class="section" style="padding-top:var(--sp-7);" data-screen-label="Approach">
+  <div class="container">
+    <div class="s-head" data-reveal="fade">
+      <span class="eyebrow">APPROACH</span>
+      <h2 style="margin-top:var(--sp-3);">Pragmatic engineering, production-ready by default.</h2>
+      <p>I position myself at the intersection of fullstack engineering, automation and applied AI — helping companies ship robust products faster while maintaining high engineering standards.</p>
+    </div>
+    <div class="approach-grid" data-stagger="120" data-stagger-base="80">
+      <article class="card card-hover ap-card" data-reveal>
+        <span class="k">01 · FULLSTACK ENGINEERING</span>
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+        <h3 class="t-h3">Production-ready end to end</h3>
+        <p>Architecture, backend, frontend interfaces and deployment pipelines — built with maintainability and pragmatic decision-making so products can evolve safely as usage grows.</p>
+      </article>
+      <article class="card card-hover ap-card" data-reveal>
+        <span class="k">02 · AUTOMATION</span>
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 12a9 9 0 1 1-3.5-7.1"/><polyline points="21 3 21 9 15 9"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h3 class="t-h3">Systems that run themselves</h3>
+        <p>Real-time data processing, transactional logic, scheduled jobs and analytics pipelines — designed to solve real operational problems rather than experimental prototypes.</p>
+      </article>
+      <article class="card card-hover ap-card" data-reveal>
+        <span class="k">03 · APPLIED AI</span>
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.2"/></svg></div>
+        <h3 class="t-h3">AI tooling that ships</h3>
+        <p>Combining traditional software engineering practices with modern AI tooling to create reliable systems — including on-device inference, AI-assisted workflows and intelligent automation.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- BIO + AT A GLANCE -->
+<section class="section" style="background:var(--bg-1); border-block:1px solid var(--border);" data-screen-label="Bio">
+  <div class="container">
+    <div class="bio-split">
+      <div>
+        <div class="s-head" style="margin-bottom:var(--sp-5);" data-reveal="fade">
+          <span class="eyebrow">WHO I AM</span>
+          <h2 style="margin-top:var(--sp-3);">A fullstack engineer who can also explain the system.</h2>
+        </div>
+        <div class="bio-prose">
+          <p data-reveal="fade">I'm a fullstack engineer specialised in designing and delivering scalable web applications and modern AI-enhanced systems. <span class="hl">My work focuses on building production-ready products end to end</span> — combining traditional software engineering practices with emerging AI tooling to create reliable systems that solve real operational problems rather than experimental prototypes.</p>
+          <p data-reveal="fade">Over the past years I have built multiple complex applications involving real-time data processing, transactional logic, scheduled automation, analytics pipelines and user-centric interfaces. My approach emphasises <span class="hl">maintainability, performance and pragmatic decision-making</span>, ensuring that products can evolve safely as usage grows.</p>
+          <p data-reveal="fade">Beyond development, my experience as a programming instructor — <span class="hl">7,000+ hours of teaching</span> — strengthened my ability to structure complex systems clearly, communicate technical decisions effectively, and design architectures that remain understandable for teams over time.</p>
+        </div>
+      </div>
+
+      <aside class="card glance" data-reveal="right">
+        <span class="eyebrow no-rule" style="margin-bottom:var(--sp-4);">AT A GLANCE</span>
+        <dl>
+          <div class="g-row"><dt>Role</dt><dd>AI Fullstack Engineer</dd></div>
+          <div class="g-row"><dt>Focus</dt><dd>Scalable web apps · Automation · Applied AI</dd></div>
+          <div class="g-row"><dt>Stack signature</dt><dd class="mono">React · Node.js · TypeScript · Rust · Tauri · Cloudflare</dd></div>
+          <div class="g-row"><dt>Teaching</dt><dd>7,000+ hours instructing web development</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE / TIMELINE -->
+<section class="section" data-screen-label="Experience">
+  <div class="container" style="max-width:920px;">
+    <div class="s-head" data-reveal="fade">
+      <span class="eyebrow">EXPERIENCE</span>
+      <h2 style="margin-top:var(--sp-3);">Career timeline.</h2>
+      <p>From front-end roles at European event platforms to freelance fullstack work and 7,000+ hours of teaching — a decade of shipping and explaining software.</p>
+    </div>
+
+    <div class="timeline" data-stagger="120" data-stagger-base="120">
+      <div class="tl-rail ladder"><span class="rail"><span class="rail-fill"></span></span></div>
+
+      <div class="tl-row" data-reveal="left">
+        <div class="tl-num">1</div>
+        <div class="tl-body">
+          <div class="tl-head"><h3 class="t-h3">Front End Developer</h3><span class="tl-meta"><span class="co">EventMaker</span> · Jan 2016 – Dec 2016</span></div>
+          <ul class="tl-list">
+            <li>Developed and maintained web pages for major European events.</li>
+            <li>Built landing pages for subscriptions with responsive, cross-browser layouts.</li>
+            <li>Worked in an agile environment alongside design and product.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-row" data-reveal="left">
+        <div class="tl-num">2</div>
+        <div class="tl-body">
+          <div class="tl-head"><h3 class="t-h3">Back End Developer</h3><span class="tl-meta"><span class="co">Enovee</span> · Jan 2017 – Dec 2017</span></div>
+          <ul class="tl-list">
+            <li>Developed and maintained web applications using AngularJS, CakePHP and related tech.</li>
+            <li>Collaborated with designers, product managers and developers to ship quality products.</li>
+            <li>Participated in code reviews and provided constructive feedback.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-row" data-reveal="left">
+        <div class="tl-num">3</div>
+        <div class="tl-body">
+          <div class="tl-head"><h3 class="t-h3">Back End Developer</h3><span class="tl-meta"><span class="co">Panorabanques</span> · Jan 2018 – Dec 2018</span></div>
+          <ul class="tl-list">
+            <li>Created and maintained automation bots.</li>
+            <li>Worked closely with the client to customise the product.</li>
+            <li>Implemented automation tasks in JavaScript, PHP and Java.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-row" data-reveal="left">
+        <div class="tl-num">4</div>
+        <div class="tl-body">
+          <div class="tl-head"><h3 class="t-h3">Full Stack Developer</h3><span class="tl-meta"><span class="co">Digital School of Paris</span> · Jan 2018 – Dec 2018</span></div>
+          <ul class="tl-list">
+            <li>Built an activity-reservation Progressive Web App in ReactJS.</li>
+            <li>Designed and deployed an API with Node.js and Express.</li>
+            <li>Set up CI/CD with Jenkins, Git and Docker; wrote unit, functional and E2E tests.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-row now" data-reveal="left">
+        <div class="tl-num">5</div>
+        <div class="tl-body">
+          <div class="tl-head"><h3 class="t-h3">Freelance Web Developer <span class="tl-badge-now">Now</span></h3><span class="tl-meta"><span class="co">Independent</span> · Jan 2019 – today</span></div>
+          <ul class="tl-list">
+            <li>Design and build custom web applications from concept to production.</li>
+            <li>Work across architecture, front-end, back-end, database modeling, deployment and maintenance.</li>
+            <li>Focus on scalable React/Node apps, API development and automation workflows shipped with modern DevOps.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-row now" data-reveal="left">
+        <div class="tl-num">6</div>
+        <div class="tl-body">
+          <div class="tl-head"><h3 class="t-h3">Freelance Programming Teacher <span class="tl-badge-now">Now</span></h3><span class="tl-meta"><span class="co">Independent</span> · Jan 2019 – today</span></div>
+          <ul class="tl-list">
+            <li>Delivered 7,000+ hours of technical training in higher-education institutions, Bachelor to Master level.</li>
+            <li>Taught both theoretical foundations and real-world software engineering practices.</li>
+            <li>Strengthened the ability to break down complex concepts and document architectures clearly.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="section" style="background:var(--bg-1); border-top:1px solid var(--border);" data-screen-label="Tech stack">
+  <div class="container">
+    <div class="s-head" data-reveal="fade">
+      <span class="eyebrow">TECH STACK</span>
+      <h2 style="margin-top:var(--sp-3);">Tools used daily.</h2>
+      <p>The modern, boring-in-a-good-way toolchain behind everything I ship — plus the AI tools that have become part of the workflow.</p>
+    </div>
+    <div class="stack-cloud" data-stagger="55" data-stagger-base="40">
+      <span class="badge" data-reveal="scale">HTML 5</span>
+      <span class="badge" data-reveal="scale">CSS 3</span>
+      <span class="badge" data-reveal="scale">JavaScript</span>
+      <span class="badge" data-reveal="scale">TypeScript</span>
+      <span class="badge" data-reveal="scale">React JS</span>
+      <span class="badge" data-reveal="scale">Redux Toolkit</span>
+      <span class="badge" data-reveal="scale">Tailwind CSS</span>
+      <span class="badge" data-reveal="scale">Node JS</span>
+      <span class="badge" data-reveal="scale">MongoDB</span>
+      <span class="badge" data-reveal="scale">git</span>
+      <span class="badge" data-reveal="scale">docker</span>
+      <span class="badge badge-accent" data-reveal="scale"><span class="dot"></span>Claude Code</span>
+      <span class="badge badge-accent" data-reveal="scale"><span class="dot"></span>Codex</span>
+      <span class="badge badge-accent" data-reveal="scale"><span class="dot"></span>Stitch</span>
+      <span class="badge badge-accent" data-reveal="scale"><span class="dot"></span>Antigravity</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="section glow-bg" id="contact" data-screen-label="CTA">
+  <div class="container cta-band">
+    <span class="eyebrow no-rule reveal" style="justify-content:center;">WORK WITH ME</span>
+    <h2 style="margin-top:18px;" data-reveal="fade">Bring me your product goal — I'll help you ship it.</h2>
+    <p class="t-lead" style="max-width:52ch; margin:0 auto var(--sp-6);" data-reveal="fade">Fullstack engineering, automation and applied AI, built to production standards. Let's find the right next step on a call.</p>
+    <div class="hero-cta" style="justify-content:center;" data-reveal>
+      <a class="btn btn-primary btn-lg" href="Homepage.html#contact">Book a call <span class="arrow">→</span></a>
+      <a class="btn btn-secondary btn-lg" href="services/index.html">See services</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand" style="margin-bottom:14px;"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></div>
+        <p class="t-small" style="max-width:34ch;">Full-stack web development, AI-assisted workflows and technical coaching for builders.</p>
+      </div>
+      <div class="footer-col"><h5>Services</h5><ul><li><a href="services/index.html">Newsletter</a></li><li><a href="services/web-project-coaching.html">Coaching</a></li><li><a href="services/full-stack-development-day.html">Dev day</a></li><li><a href="services/mvp-development.html">MVP build</a></li></ul></div>
+      <div class="footer-col"><h5>Explore</h5><ul><li><a href="Homepage.html#projects">Projects</a></li><li><a href="About Me.html">About</a></li><li><a href="Design System.html">Design system</a></li></ul></div>
+      <div class="footer-col"><h5>Connect</h5><ul><li><a href="#">LinkedIn</a></li><li><a href="#">GitHub</a></li><li><a href="#">Email</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Christophe Crognier · fullstackchris.dev</span>
+      <span class="row gap-4"><a href="#">Privacy</a><a href="#">Legal</a><a href="#">Sitemap</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="motion.js"></script>
+</body>
+</html>

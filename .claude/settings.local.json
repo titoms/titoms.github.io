@@ -27,7 +27,12 @@
       "Bash(copy *)",
       "Bash(Select-String -Path \"dist\\\\projects\\\\index.html\" -Pattern \"pcard feature|filterbar|data-filter-bar|ladder|float-pill|count\")",
       "Bash(Select-Object -First 15)",
-      "Bash(Format-Table -AutoSize)"
+      "Bash(Format-Table -AutoSize)",
+      "Bash(data\")",
+      "Bash(Get-ChildItem -Path \"C:\\\\DEV\\\\titoms.github.io\" -Force)",
+      "Bash(Select-Object Name)",
+      "Bash(Get-ChildItem \"C:\\\\DEV\\\\titoms.github.io\\\\public\" -Force)",
+      "Bash(Select-Object Name, Length)"
     ]
   }
 }

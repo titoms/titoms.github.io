@@ -6,7 +6,7 @@ import { Card } from '../../components/ui/Card';
 import { SectionHeader } from '../../components/ui/SectionHeader';
 import FAQAccordion from '../../components/islands/FAQAccordion';
 import { servicePages } from '../../config/services-data';
-import { CALENDLY_URL, BOOK_CALL_URL } from '../../config/constants';
+import { BOOK_CALL_URL, SITE_ALIASES, SOCIAL_LINKS } from '../../config/constants';
 import type { FAQ } from '../../types';
 
 export async function getStaticPaths() {
@@ -29,7 +29,9 @@ const jsonLd = {
   provider: {
     "@type": "Person",
     name: "Christophe Crognier",
+    alternateName: SITE_ALIASES,
     url: "https://fullstackchris.dev",
+    sameAs: [SOCIAL_LINKS.linkedin, SOCIAL_LINKS.github, SOCIAL_LINKS.twitter],
   },
   url: `https://fullstackchris.dev/services/${service.slug}`,
 };
@@ -42,9 +44,14 @@ const jsonLd = {
   jsonLd={jsonLd}
 >
   <!-- Hero -->
-  <section class="site-hero hero-glow-field glow-bg grid-bg relative overflow-hidden border-b border-border mb-4">
+  <section class="site-hero hero-glow-field glow-bg grid-bg relative overflow-hidden border-b border-border mb-12 sm:mb-16">
+    <div class="bg-field bv-c" aria-hidden="true">
+      <span class="blob blob-1"></span>
+      <span class="blob blob-2"></span>
+      <span class="blob blob-3"></span>
+    </div>
     <div class={`${sectionClass} site-hero-inner`}>
-      <nav class="mb-6 flex items-center gap-2 font-mono text-xs text-low">
+      <nav class="mb-6 flex items-center gap-2 font-mono text-xs text-low reveal r1">
         <a href="/" class="transition-colors hover:text-white">Home</a>
         <span>/</span>
         <a href="/services" class="transition-colors hover:text-white">Services</a>
@@ -54,13 +61,13 @@ const jsonLd = {
       <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
         <div>
           <span class="font-mono text-xs uppercase tracking-widest text-accent">{service.badge.toUpperCase()}</span>
-          <h1 class="mt-4 max-w-4xl font-display text-[clamp(2.2rem,4.5vw,3.8rem)] font-bold leading-[1.05] tracking-normal text-white">
+          <h1 class="reveal r2 mt-4 max-w-4xl font-display text-[clamp(2.2rem,4.5vw,3.8rem)] font-bold leading-[1.05] tracking-normal text-white">
             {service.hero.h1}
           </h1>
-          <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary">
+          <p class="reveal r3 mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary">
             {service.hero.subtitle}
           </p>
-          <div class="mt-8 flex flex-wrap gap-4">
+          <div class="reveal r4 mt-8 flex flex-wrap gap-4">
             <Button
               href={service.hero.primaryCtaHref ?? BOOK_CALL_URL}
               variant="primary"
@@ -77,7 +84,7 @@ const jsonLd = {
         </div>
 
         {service.heroCard && (
-          <Card class="bg-surface/60">
+          <Card class="reveal r5 bg-surface/60">
             {service.heroCard.type === 'chips' && (
               <>
                 <span class="font-mono text-xs uppercase tracking-widest text-accent">{service.heroCard.title}</span>
@@ -134,7 +141,7 @@ const jsonLd = {
   {service.answer && (
     <section style="padding-top: 0;">
       <div class="mx-auto max-w-[780px] px-6 py-12 sm:px-8 lg:px-10">
-        <blockquote class="border-l-2 border-accent pl-6 font-display text-[1.1rem] leading-8 text-secondary italic">
+        <blockquote class="border-l-2 border-accent pl-6 font-display text-[1.1rem] leading-8 text-secondary italic" data-reveal="soft-left">
           {service.answer}
         </blockquote>
       </div>
@@ -145,10 +152,10 @@ const jsonLd = {
   <section class={sectionClass} style="padding-top: 0;">
     <div class="grid gap-12 lg:grid-cols-2">
       <div>
-        <SectionHeader eyebrow="SOUND FAMILIAR?" title="You don't need a full-time hire. You need clarity." />
-        <div class="mt-8 grid gap-3 sm:grid-cols-2">
+        <SectionHeader eyebrow="SOUND FAMILIAR?" title="You don't need a full-time hire. You need clarity." data-reveal="fade" />
+        <div class="mt-8 grid gap-3 sm:grid-cols-2" data-stagger="70" data-stagger-base="80">
           {service.painPoints.map((point) => (
-            <div class="flex items-start gap-3 text-secondary">
+            <div class="flex items-start gap-3 text-secondary" data-reveal="soft-left">
               <svg class="mt-0.5 shrink-0 text-accent" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
               <p class="text-[0.93rem] leading-6">{point}</p>
             </div>
@@ -156,10 +163,10 @@ const jsonLd = {
         </div>
       </div>
       <div>
-        <SectionHeader eyebrow="WHAT YOU LEAVE WITH" title="Every session ends with a plan." />
-        <div class="mt-8 grid gap-3 sm:grid-cols-2">
+        <SectionHeader eyebrow="WHAT YOU LEAVE WITH" title="Every session ends with a plan." data-reveal="fade" />
+        <div class="mt-8 grid gap-3 sm:grid-cols-2" data-stagger="70" data-stagger-base="110">
           {service.outcomes.map((outcome) => (
-            <div class="flex items-center gap-3 text-secondary">
+            <div class="flex items-center gap-3 text-secondary" data-reveal="soft-right">
               <svg class="shrink-0 text-positive" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
               <span class="text-[0.93rem]">{outcome}</span>
             </div>
@@ -172,10 +179,10 @@ const jsonLd = {
   {service.useCases && service.useCases.length > 0 && (
     <section class="border-t border-border" style="padding-top: 0;">
       <div class={sectionClass}>
-        <SectionHeader eyebrow="WHAT WE CAN WORK ON" title="Use cases." />
-        <div class="mt-6 flex flex-wrap gap-2">
+        <SectionHeader eyebrow="WHAT WE CAN WORK ON" title="Use cases." data-reveal="fade" />
+        <div class="mt-6 flex flex-wrap gap-2" data-stagger="45" data-stagger-base="60">
           {service.useCases.map((uc) => (
-            <Badge variant="default">{uc}</Badge>
+            <Badge variant="default" data-reveal="zoom">{uc}</Badge>
           ))}
         </div>
       </div>
@@ -185,10 +192,10 @@ const jsonLd = {
   <!-- Included -->
   <section class="border-y border-border bg-surface/40">
     <div class={sectionClass}>
-      <SectionHeader eyebrow="WHAT'S INCLUDED" title="Every session includes." />
-      <div class="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      <SectionHeader eyebrow="WHAT'S INCLUDED" title="Every session includes." data-reveal="fade" />
+      <div class="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-3" data-stagger="85" data-stagger-base="80">
         {service.included.map((item) => (
-          <Card class="flex flex-col gap-2">
+          <Card class="flex flex-col gap-2" data-reveal="zoom">
             <h3 class="font-display text-[1.05rem] font-semibold text-white">{item.title}</h3>
             <p class="text-[0.9rem] leading-6 text-secondary">{item.description}</p>
           </Card>
@@ -200,10 +207,10 @@ const jsonLd = {
   <!-- Good fit / Not a fit -->
   {(service.goodFit || service.notAFit) && (
     <section class={sectionClass}>
-      <SectionHeader eyebrow="IS IT A FIT?" title="Best results come from clear scope." />
+      <SectionHeader eyebrow="IS IT A FIT?" title="Best results come from clear scope." data-reveal="fade" />
       <div class="mt-10 grid gap-6 lg:grid-cols-2">
         {service.goodFit && (
-          <div class="rounded-lg border border-positive/20 bg-positive/5 p-6">
+          <div class="rounded-lg border border-positive/20 bg-positive/5 p-6" data-reveal="soft-left">
             <h4 class="mb-4 flex items-center gap-2 font-display font-semibold text-white">
               <svg class="text-positive" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg>
               Good fit
@@ -219,7 +226,7 @@ const jsonLd = {
           </div>
         )}
         {service.notAFit && (
-          <div class="rounded-lg border border-accent/20 bg-accent/5 p-6">
+          <div class="rounded-lg border border-accent/20 bg-accent/5 p-6" data-reveal="soft-right">
             <h4 class="mb-4 flex items-center gap-2 font-display font-semibold text-white">
               <svg class="text-accent" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6 6 18M6 6l12 12"/></svg>
               Not a fit
@@ -241,10 +248,10 @@ const jsonLd = {
   <!-- Pricing -->
   <section class="border-y border-border bg-surface/40" id="pricing">
     <div class={sectionClass}>
-      <SectionHeader eyebrow="PRICING" title={service.pricing.length === 1 ? 'Investment.' : 'Three formats.'} />
-      <div class="mt-10 mx-auto max-w-[880px]">
+      <SectionHeader eyebrow="PRICING" title={service.pricing.length === 1 ? 'Investment.' : 'Three formats.'} data-reveal="fade" />
+      <div class="mt-10 mx-auto max-w-[880px]" data-stagger="75" data-stagger-base="80">
         {service.pricing.map((row) => (
-          <div class={`flex flex-col gap-3 border-b border-border py-5 last:border-0 sm:flex-row sm:items-center sm:gap-6 ${row.featured ? 'rounded-lg border border-accent/30 bg-accent/5 px-4 py-5 -mx-4' : ''}`}>
+          <div class={`flex flex-col gap-3 border-b border-border py-5 last:border-0 sm:flex-row sm:items-center sm:gap-6 ${row.featured ? 'rounded-lg border border-accent/30 bg-accent/5 px-4 py-5 -mx-4' : ''}`} data-reveal="blur">
             {row.featured && <Badge variant="accent">Recommended</Badge>}
             <div class="flex-1">
               <p class="font-display font-medium text-white">{row.label}</p>
@@ -263,9 +270,9 @@ const jsonLd = {
         ))}
       </div>
       {service.pricingNote && (
-        <p class="mt-6 text-sm text-low">{service.pricingNote}</p>
+        <p class="mt-6 text-sm text-low" data-reveal="fade">{service.pricingNote}</p>
       )}
-      <div class="mt-8 flex flex-wrap gap-4">
+      <div class="mt-8 flex flex-wrap gap-4" data-reveal="zoom">
         <Button
           href={BOOK_CALL_URL}
           variant="primary"
@@ -282,15 +289,17 @@ const jsonLd = {
   <!-- FAQ -->
   <section class={sectionClass}>
     <div class="grid gap-12 lg:grid-cols-[1fr_1.5fr]">
-      <SectionHeader eyebrow="QUESTIONS" title="Common questions." />
-      <FAQAccordion faqs={serviceFaqs} client:visible />
+      <SectionHeader eyebrow="QUESTIONS" title="Common questions." data-reveal="soft-left" />
+      <div data-reveal="soft-right">
+        <FAQAccordion faqs={serviceFaqs} client:visible />
+      </div>
     </div>
   </section>
 
   <!-- CTA -->
   <section class="glow-bg grid-bg relative overflow-hidden border-t border-border">
     <div class={sectionClass}>
-      <div class="flex flex-col items-center gap-6 py-10 text-center">
+      <div class="flex flex-col items-center gap-6 py-10 text-center" data-reveal="zoom">
         <h2 class="max-w-xl font-display text-[clamp(1.8rem,3.5vw,2.8rem)] font-semibold leading-tight text-white">
           Ready to get started?
         </h2>

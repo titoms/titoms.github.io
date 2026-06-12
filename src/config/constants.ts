@@ -20,6 +20,8 @@ import {
   enovee,
   dsp,
   mainlogo,
+  keevo_home,
+  keevo_studio,
   edumation,
   edumation_login,
   edumation_schedule,
@@ -85,6 +87,15 @@ export const navLinks: NavLink[] = [
   },
 ];
 
+export const SITE_ALIASES = ["Full Stack Chris", "fullstackchris", "full stack chris"] as const;
+
+export const SOCIAL_LINKS = {
+  linkedin: "https://linkedin.com/in/christophe-crognier",
+  github: "https://github.com/titoms",
+  twitter: "https://x.com/fullstackchris_",
+} as const;
+
+export const TWITTER_HANDLE = "@fullstackchris_" as const;
 
 export const heroStats: BuildStat[] = [
   {
@@ -333,6 +344,7 @@ export const footerGroups: FooterGroup[] = [
       { id: "contact", title: "Book a call" },
       { id: "contact", title: "LinkedIn" },
       { id: "contact", title: "GitHub" },
+      { id: "contact", title: "X / Twitter" },
       { id: "contact", title: "Legal" },
     ],
   },
@@ -541,13 +553,13 @@ const projects: Project[] = [
       context:
         "Built for freelance video editors, podcasters and content teams who process sensitive recordings and want full ownership of their workflow without subscription costs.",
       technicalChallenges: [
-        "Running a quantized on-device speech model within Electron without blocking the UI thread.",
+        "Running a quantized on-device speech model within Tauri without blocking the UI thread.",
         "Handling long-form audio segmentation to produce accurate timestamps across variable speaking rates.",
         "Designing a timeline editor that lets users correct transcripts without re-running the model.",
-        "Packaging native binaries for macOS and Windows within a cross-platform Electron build pipeline.",
+        "Packaging native binaries for macOS and Windows within Tauri's cross-platform build pipeline.",
       ],
       architecture:
-        "Electron shell with a React renderer. The speech model runs in a Node.js worker process using a WASM-compiled inference runtime. Results are streamed back to the renderer via IPC as segments complete. SQLite stores project state locally.",
+        "Tauri shell (Rust core) with a React renderer in the system webview. The speech model runs in a Rust worker spawned from the Tauri backend, with results streamed to the renderer via IPC as segments complete. SQLite stores project state locally.",
       implementation:
         "The pipeline extracts audio via ffmpeg, chunks it into overlapping segments, runs inference in a worker pool, merges results with a timestamp reconciliation pass, then surfaces them in the editor. Subtitle export supports SRT, VTT and plain text.",
       results: [
@@ -556,19 +568,21 @@ const projects: Project[] = [
         "Subtitle accuracy comparable to leading cloud APIs on clean recordings.",
       ],
       lessonsLearned: [
-        "Worker-process isolation is non-negotiable when running inference — blocking the main process tanks UX.",
+        "Off-main-thread isolation is non-negotiable when running inference — blocking the UI thread tanks UX.",
         "Overlapping audio chunks with reconciliation produces far cleaner word boundaries than hard splits.",
-        "SQLite is the right local state store for Electron — zero setup, reliable, fast enough for this data shape.",
+        "SQLite is the right local state store for Tauri — zero setup, reliable, fast enough for this data shape.",
+        "Tauri's Rust backend keeps the install footprint a fraction of Electron's while giving direct access to native inference runtimes.",
       ],
     },
     tags: [
-      { name: "Electron", color: "blue-text-gradient" },
+      { name: "Tauri", color: "blue-text-gradient" },
+      { name: "Rust", color: "orange-text-gradient" },
       { name: "React", color: "pink-text-gradient" },
       { name: "TypeScript", color: "blue-text-gradient" },
       { name: "On-device AI", color: "green-text-gradient" },
     ],
-    image: null,
-    images: [],
+    image: keevo_home,
+    images: [keevo_home, keevo_home, keevo_studio],
     source_code_link: "https://github.com/",
     meta: { role: "Solo · full-stack", timeline: "2025 · in progress", platform: "Desktop · macOS · Windows", type: "Developer Tool" },
     painPoints: [
@@ -590,21 +604,21 @@ const projects: Project[] = [
       { step: "04", title: "Export", description: "SRT, VTT or plain text — ready to drop into any editor." },
     ],
     features: [
-      { title: "On-device Inference", description: "A quantized speech model runs entirely on the local machine in a Node.js worker process — no API keys, no uploads, no recurring costs.", bullets: ["WASM-compiled runtime works on both macOS and Windows", "Results stream to the UI as segments complete"] },
+      { title: "On-device Inference", description: "A quantized speech model runs entirely on the local machine in a Rust worker spawned by the Tauri backend — no API keys, no uploads, no recurring costs.", bullets: ["Native Rust inference runtime works on both macOS and Windows", "Results stream to the UI as segments complete"] },
       { title: "Timeline Editor", description: "Correct model output in a synchronized transcript editor — clicking any word seeks the video, so review is fast.", bullets: ["Word-level timestamp display", "Keyboard-first editing flow"] },
       { title: "Multi-format Export", description: "Export to SRT, WebVTT or plain text with a single click — ready to import into Premiere, Final Cut, DaVinci or any subtitle tool.", bullets: ["Accurate timecodes from the reconciliation pass", "UTF-8 safe for multilingual content"] },
     ],
     stack: [
-      { label: "Shell", chips: ["Electron", "Node.js"] },
+      { label: "Shell", chips: ["Tauri", "Rust"] },
       { label: "UI", chips: ["React", "TypeScript"] },
-      { label: "AI", chips: ["WASM inference", "On-device speech model"] },
+      { label: "AI", chips: ["Native Rust inference", "On-device speech model"] },
       { label: "Storage", chips: ["SQLite", "ffmpeg"] },
     ],
     proves: [
-      { iconKey: "cpu", title: "On-device AI", description: "Shipped a production WASM inference pipeline inside Electron without blocking the UI thread." },
+      { iconKey: "cpu", title: "On-device AI", description: "Shipped a production Rust-side inference pipeline inside Tauri without blocking the UI thread." },
       { iconKey: "zap", title: "Desktop performance", description: "Processes an hour of footage in under 4 minutes via a worker-pool inference architecture." },
       { iconKey: "shield", title: "Privacy by design", description: "Zero cloud dependency — all processing stays local, making it viable for client and sensitive recordings." },
-      { iconKey: "layers", title: "Cross-platform build", description: "Native binary packaging for both macOS and Windows within a single Electron build pipeline." },
+      { iconKey: "layers", title: "Cross-platform build", description: "Native binary packaging for both macOS and Windows via Tauri's single build pipeline." },
     ],
     nextProjectSlug: "edumation",
   },
@@ -776,34 +790,37 @@ const projects: Project[] = [
     name: "Singuessr",
     slug: "singuessr",
     description:
-      "Singuessr is an interactive music blind test platform that turns any Spotify playlist into a real-time guessing game.",
+      "Singuessr is an interactive music blind test platform that turns any Spotify playlist into a real-time guessing game — playlists and cover art come from Spotify, audio previews stream from Apple Music.",
     longDescription:
-      "Singuessr is a dynamic music blind test platform built for fans of all genres. By leveraging the Spotify Web API through a custom high-performance proxy, it allows users to import any public playlist and play instantly. The project features a serverless architecture designed to handle regional API restrictions and high-concurrency recursive fetching.",
+      "Singuessr is a dynamic music blind test platform built for fans of all genres. It combines two music APIs: the Spotify Web API (via a custom high-performance Cloudflare Worker proxy) provides playlist metadata and album cover art, while the Apple Music / iTunes Search API delivers the 30-second audio previews that drive each round. The hybrid serverless architecture handles regional API restrictions, high-concurrency recursive fetching, and cross-catalog track matching.",
     caseStudy: {
       tagline: "Your playlists, your game — the ultimate dynamic blind test.",
       problem:
-        "Traditional music blind tests are often static, pre-defined, or suffer from regional licensing '403 Forbidden' errors that prevent reliable audio streaming from third-party APIs like Spotify when accessed from cloud server regions.",
+        "Traditional music blind tests are static, pre-defined, and limited in scope. On top of that, Spotify previews suffer from regional licensing '403 Forbidden' errors when fetched from cloud server regions — so an app built solely on Spotify audio breaks for most users.",
       context:
-        "Built to solve the limitations of static music trivia. Singuessr provides a platform where content is infinite, sourced directly from the Spotify ecosystem. It targets music lovers who want personalized challenges based on their own curated playlists.",
+        "Built to solve the limitations of static music trivia. Singuessr uses Spotify as the source-of-truth for playlists and cover art (because that's where users curate their music), but routes audio playback through the public Apple Music / iTunes preview catalogue — which is globally reachable, unauthenticated, and free of OAuth complexity.",
       technicalChallenges: [
-        "Architecting a Cloudflare Worker proxy to bypass CORS restrictions and regional licensing locks by injecting location-specific headers (market=FR).",
+        "Architecting a Cloudflare Worker proxy to bypass CORS restrictions and regional licensing locks when fetching Spotify playlist data (injecting market=FR headers and handling OAuth2 token refresh at the edge).",
+        "Matching every Spotify track to its Apple Music / iTunes preview equivalent across two independent catalogues, with fuzzy normalization to cope with naming inconsistencies between providers.",
         "Implementing recursive API fetching to flatten large Spotify playlists (100+ tracks) into a single, high-speed JSON payload for the frontend.",
         "Developing a 'fuzzy' scoring algorithm that normalizes song titles, stripping metadata like '- Remastered' or '(Bonus Track)' to ensure fair guessing.",
-        "Optimizing the media lifecycle in React to pre-fetch upcoming audio buffers, ensuring a zero-latency transition between game rounds.",
+        "Optimizing the media lifecycle in React to pre-fetch upcoming Apple Music audio buffers, ensuring a zero-latency transition between game rounds.",
       ],
       architecture:
-        "A hybrid serverless architecture: React SPA for the UI and a Cloudflare Worker for the API Proxy layer. The Worker handles Spotify OAuth2 flows and data orchestration, while the frontend manages the complex state of the interactive audio loop. Deployment is fully automated via Cloudflare's Edge network.",
+        "A hybrid serverless architecture: React SPA for the UI and a Cloudflare Worker for the API proxy layer. The Worker handles Spotify OAuth2, recursive playlist flattening, and cross-catalog matching against the public iTunes Search API to resolve each track's Apple Music preview URL. The frontend manages the interactive audio loop and feeds the round queue directly from those preview URLs. Deployment is fully automated via Cloudflare's edge network.",
       implementation:
-        "The proxy uses a 'flatten-and-cache' strategy for playlist metadata, drastically reducing the number of round-trips from the client. Audio previews are managed via the HTML5 Audio API with a custom state machine to handle loading, playbacks, and race conditions during fast-paced guessing rounds.",
+        "The proxy uses a 'flatten-and-cache' strategy for Spotify playlist metadata (covers + titles + artists) and pipes each track into a parallel iTunes Search lookup that returns a 30-second Apple Music preview URL. Audio is then played in the React SPA via the HTML5 Audio API with a custom state machine that handles loading, playback, and race conditions during fast-paced guessing rounds.",
       results: [
         "Access to millions of playable playlists instantly via a single search/import interface.",
-        "Sub-200ms load times for large playlists achieved by offloading data flattening to the edge.",
+        "Sub-200ms load times for large playlists achieved by offloading Spotify data flattening and iTunes preview matching to the edge.",
+        "Globally reachable audio playback — Apple Music previews bypass the regional licensing issues that block Spotify previews from server regions.",
         "Successful monetization through privacy-first ad networks (A-Ads) while maintaining high platform performance.",
       ],
       lessonsLearned: [
+        "Cross-catalog matching (Spotify → Apple Music) is the simplest way to combine the best of both worlds: Spotify's curated playlists with Apple Music's globally-reachable preview URLs.",
         "Serverless workers are an ideal solution for API orchestration and bypassing regional restrictions in third-party media integrations.",
         "Pre-fetching assets during 'player downtime' is the most effective way to improve perceived performance in interactive media apps.",
-        "Regex-based string normalization is critical when dealing with inconsistent third-party metadata naming conventions.",
+        "Regex-based string normalization is critical when matching tracks across providers with inconsistent metadata naming conventions.",
         "Privacy-first monetization can be effective and performant when integrated early into the application lifecycle.",
       ],
     },
@@ -811,6 +828,7 @@ const projects: Project[] = [
       { name: "react", color: "blue-text-gradient" },
       { name: "serverless", color: "green-text-gradient" },
       { name: "spotify-api", color: "pink-text-gradient" },
+      { name: "apple-music-api", color: "orange-text-gradient" },
     ],
     image: singuessr_home,
     images: [
@@ -824,7 +842,7 @@ const projects: Project[] = [
     live_link: "https://singuessr.com/",
     meta: { role: "Solo · full-stack", timeline: "2023 · 8 weeks", platform: "Web", type: "Music Platform" },
     painPoints: [
-      { bold: "Regional licensing blocks streaming.", rest: "Cloud servers get 403 errors from Spotify for EU-region content — the app breaks for most users." },
+      { bold: "Regional licensing blocks Spotify previews.", rest: "Cloud servers get 403 errors from Spotify preview URLs for EU-region content — audio simply doesn't play for most users." },
       { bold: "Static blind tests get boring fast.", rest: "Pre-defined song lists don't scale and quickly lose replay value after a few sessions." },
       { bold: "Large playlists are slow to load.", rest: "Fetching 100+ tracks from Spotify's paginated API creates painful loading latency." },
     ],
@@ -837,25 +855,25 @@ const projects: Project[] = [
     ],
     productFlow: [
       { step: "01", title: "Import", description: "Paste any public Spotify playlist URL." },
-      { step: "02", title: "Fetch", description: "Edge worker flattens all tracks instantly." },
-      { step: "03", title: "Play", description: "Audio previews stream round by round." },
+      { step: "02", title: "Resolve", description: "Edge worker flattens Spotify tracks and matches each to its Apple Music preview." },
+      { step: "03", title: "Play", description: "Apple Music previews stream round by round, with cover art from Spotify." },
       { step: "04", title: "Score", description: "Fuzzy matching validates song title guesses." },
     ],
     features: [
-      { title: "Cloudflare Worker Proxy", description: "A lightweight Worker sits between the frontend and Spotify's API, injecting location-specific headers to bypass regional licensing restrictions entirely.", bullets: ["Resolves 403 regional blocks transparently to the client", "Handles OAuth2 token flow and request orchestration at the edge"] },
-      { title: "Recursive Playlist Flattening", description: "A single fetch call recursively pages through all of Spotify's paginated endpoints, returning a flat track array in one round-trip.", bullets: ["Handles Spotify's 100-item page limit transparently", "Sub-200ms for large playlists via edge colocation"] },
-      { title: "Audio Lifecycle Management", description: "A custom state machine pre-fetches the next audio buffer during active round play, eliminating perceived latency between game rounds.", bullets: ["Zero-latency round transitions via background pre-fetch", "Race condition handling during fast-paced guessing sequences"] },
+      { title: "Cloudflare Worker Proxy", description: "A lightweight Worker orchestrates two APIs: it hits Spotify for playlist data + album covers (with the right market headers to dodge regional blocks), then resolves every track to its Apple Music preview URL via iTunes Search.", bullets: ["Resolves Spotify 403 regional blocks transparently to the client", "Cross-catalog matching against iTunes Search to find each preview URL", "Handles OAuth2 token flow and request orchestration at the edge"] },
+      { title: "Recursive Playlist Flattening", description: "A single fetch call recursively pages through all of Spotify's paginated endpoints, returning a flat track array — each enriched with its matched Apple Music preview — in one round-trip.", bullets: ["Handles Spotify's 100-item page limit transparently", "Sub-200ms for large playlists via edge colocation"] },
+      { title: "Audio Lifecycle Management", description: "A custom state machine pre-fetches the next Apple Music preview buffer during active round play, eliminating perceived latency between game rounds.", bullets: ["Zero-latency round transitions via background pre-fetch", "Race condition handling during fast-paced guessing sequences"] },
     ],
     stack: [
       { label: "Frontend", chips: ["React", "Tailwind CSS", "HTML5 Audio API"] },
-      { label: "Edge / Backend", chips: ["Cloudflare Workers", "Spotify Web API"] },
-      { label: "Algorithms", chips: ["Regex normalization", "Fuzzy matching", "State machine"] },
+      { label: "Edge / Backend", chips: ["Cloudflare Workers", "Spotify Web API", "Apple Music / iTunes Search API"] },
+      { label: "Algorithms", chips: ["Regex normalization", "Cross-catalog matching", "Fuzzy matching", "State machine"] },
       { label: "Monetization", chips: ["A-Ads (privacy-first)"] },
     ],
     proves: [
-      { iconKey: "server", title: "Serverless architecture", description: "Designed and shipped a Cloudflare Worker that proxies and orchestrates a third-party API at the edge." },
-      { iconKey: "shield", title: "Regional restriction bypass", description: "Solved a non-obvious licensing problem that blocks most server-hosted music apps by injecting the right market headers." },
-      { iconKey: "zap", title: "Performance engineering", description: "Achieved sub-200ms large playlist loading by collocating data flattening at the CDN edge." },
+      { iconKey: "server", title: "Serverless architecture", description: "Designed and shipped a Cloudflare Worker that proxies and orchestrates two music APIs at the edge." },
+      { iconKey: "shield", title: "Regional restriction bypass", description: "Combined Spotify (playlists + cover art) with Apple Music (globally reachable previews) so audio plays for every user, regardless of region." },
+      { iconKey: "zap", title: "Performance engineering", description: "Achieved sub-200ms large playlist loading by collocating data flattening and cross-catalog matching at the CDN edge." },
       { iconKey: "music", title: "Media state machine", description: "Built a robust audio lifecycle manager that handles pre-fetching and race conditions in a fast-paced game context." },
     ],
     nextProjectSlug: "fuchibol-hub",

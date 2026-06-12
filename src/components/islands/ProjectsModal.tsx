@@ -9,7 +9,7 @@ const ProjectsModal = () => {
 
   return (
     <>
-      <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-10 grid gap-7 lg:grid-cols-2">
         {projects.map((project) => (
           <ProjectCard
             key={project.slug}

@@ -1,96 +1,534 @@
 ---
+import { Image } from 'astro:assets';
 import PageLayout from '../components/layout/PageLayout.astro';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
-import { SectionHeader } from '../components/ui/SectionHeader';
-import { experiences, technologies, CALENDLY_URL, BOOK_CALL_URL } from '../config/constants';
+import { experiences, BOOK_CALL_URL, technologies, SITE_ALIASES, SOCIAL_LINKS } from '../config/constants';
+import { getTechBadgeStyle } from '../config/techBadges';
+import chrisPortrait from '../assets/chris-portrait.webp';
 
-const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Christophe Crognier",
+  alternateName: SITE_ALIASES,
+  url: "https://fullstackchris.dev",
+  jobTitle: "AI Fullstack Engineer",
+  description:
+    "AI Fullstack Engineer building scalable applications and automation systems — designing and shipping production-ready products from architecture to deployment.",
+  knowsAbout: [
+    "React", "Node.js", "TypeScript", "Rust", "Tauri",
+    "Cloudflare Workers", "Applied AI", "Automation", "MVP Development",
+  ],
+  sameAs: [SOCIAL_LINKS.linkedin, SOCIAL_LINKS.github, SOCIAL_LINKS.twitter],
+};
+
+const approachCards = [
+  {
+    key: "01 · FULLSTACK ENGINEERING",
+    title: "Production-ready end to end",
+    body:
+      "Architecture, backend, frontend interfaces and deployment pipelines — built with maintainability and pragmatic decision-making so products can evolve safely as usage grows.",
+    icon: '<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>',
+  },
+  {
+    key: "02 · AUTOMATION",
+    title: "Systems that run themselves",
+    body:
+      "Real-time data processing, transactional logic, scheduled jobs and analytics pipelines — designed to solve real operational problems rather than experimental prototypes.",
+    icon: '<path d="M21 12a9 9 0 1 1-3.5-7.1"/><polyline points="21 3 21 9 15 9"/><circle cx="12" cy="12" r="3"/>',
+  },
+  {
+    key: "03 · APPLIED AI",
+    title: "AI tooling that ships",
+    body:
+      "Combining traditional software engineering practices with modern AI tooling to create reliable systems — including on-device inference, AI-assisted workflows and intelligent automation.",
+    icon: '<path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.2"/>',
+  },
+];
+
 ---
 
 <PageLayout
   title="About — Christophe Crognier | fullstackchris.dev"
-  description="Full-stack developer and programming instructor with 7,000+ hours of teaching experience. Building React and Node.js products for founders, freelancers and developers."
+  description="AI Fullstack Engineer building scalable applications and automation systems. Shipping production-ready React, Node.js and Rust products from architecture to deployment."
+  jsonLd={jsonLd}
 >
-  <!-- Hero -->
-  <section class="site-hero hero-glow-field glow-bg grid-bg relative overflow-hidden border-b border-border mb-4">
-    <div class={`${sectionClass} site-hero-inner`}>
-      <Badge variant="accent">About</Badge>
-      <h1 class="mt-6 max-w-3xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white">
-        Developer who teaches. Teacher who ships.
-      </h1>
-      <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary">
-        I build React and Node.js products and have spent over 7,000 hours teaching web development. Both inform how I work: clean delivery, clear explanations, realistic scoping.
-      </p>
-      <div class="mt-8 flex flex-wrap gap-4">
-        <Button href={BOOK_CALL_URL} variant="primary" size="lg">
-          Book a call
-        </Button>
-        <Button href="/services" variant="secondary" size="lg">
-          See services
-        </Button>
+  <!-- HERO -->
+  <section class="about-hero glow-bg grid-bg" data-parallax-scene>
+    <div class="bg-field bv-a" aria-hidden="true">
+      <span class="blob blob-1"></span>
+      <span class="blob blob-2"></span>
+      <span class="blob blob-3"></span>
+    </div>
+    <div class="about-container">
+      <nav class="breadcrumb reveal r1">
+        <a href="/">Home</a><span class="sep">/</span><span>About</span>
+      </nav>
+      <div class="hero-split">
+        <div>
+          <span class="ab-eyebrow reveal r1"><span class="pulse-dot"></span>AI FULLSTACK ENGINEER</span>
+          <h1 class="ab-h1 reveal r2">
+            Production-ready products, <span class="ab-accent">end to end.</span>
+          </h1>
+          <p class="ab-lead reveal r3">
+            I design and ship scalable web applications and modern AI-enhanced systems — from system architecture and backend engineering to frontend interfaces, deployment pipelines and automation workflows.
+          </p>
+          <div class="hero-cta reveal r4">
+            <Button href={BOOK_CALL_URL} variant="primary" size="lg">
+              Book a call →
+            </Button>
+            <Button href="/services" variant="secondary" size="lg">
+              See services
+            </Button>
+          </div>
+          <div class="hero-meta reveal r5">
+            <div class="stat">
+              <div class="n"><span class="count" data-count="7000" data-suffix="+">0</span></div>
+              <div class="l">Teaching hours</div>
+            </div>
+            <div class="stat">
+              <div class="n"><span class="count" data-count="10" data-suffix="+ yrs">0</span></div>
+              <div class="l">Production shipping</div>
+            </div>
+            <div class="stat">
+              <div class="n"><span class="count" data-count="3">0</span></div>
+              <div class="l">Dev + AI + teaching</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="portrait-scene reveal-v">
+          <div class="portrait-card" data-depth="0.014">
+            <span class="portrait-glow"></span>
+            <Image
+              src={chrisPortrait}
+              alt="Christophe Crognier, AI Fullstack Engineer"
+              widths={[440, 720, 960]}
+              sizes="(max-width: 1000px) 90vw, 480px"
+              loading="eager"
+              decoding="async"
+              quality={82}
+            />
+            <span class="portrait-tag"><span class="pulse-dot avail"></span>Available for projects</span>
+          </div>
+          <span class="float-pill pp-1" data-depth="0.05"><span class="dot" style="background:#61dafb"></span>React</span>
+          <span class="float-pill pp-2" data-depth="0.07"><span class="dot" style="background:#5fd99a"></span>Node.js</span>
+          <span class="float-pill pp-3" data-depth="0.04"><span class="dot" style="background:#dea584"></span>Rust · Tauri</span>
+          <span class="float-pill pp-4" data-depth="0.065"><span class="mk" style="background:var(--accent-600)">C</span>Claude Code</span>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Experience timeline -->
-  <section class={sectionClass}>
-    <SectionHeader eyebrow="Experience" title="Career timeline." />
-    <div class="mt-10 space-y-0">
-      {experiences.map((exp, i) => (
-        <div class="relative flex gap-6 pb-8">
-          {i < experiences.length - 1 && (
-            <span class="absolute bottom-0 left-[17px] top-[38px] w-px bg-white/15" aria-hidden="true" />
-          )}
-          <span class="z-10 grid h-9 w-9 shrink-0 place-items-center rounded-full border border-accent bg-tertiary font-mono text-xs font-medium text-subtle">
-            {i + 1}
-          </span>
-          <div class="space-y-1 pb-2">
-            <p class="font-display text-[1.05rem] font-semibold text-white">{exp.title}</p>
-            <p class="text-sm text-accent">{exp.company_name} · {exp.date}</p>
-            <ul class="mt-2 list-disc space-y-1 pl-4">
-              {exp.points.map((point) => (
-                <li class="text-[0.9rem] leading-6 text-secondary">{point}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      ))}
-    </div>
-  </section>
-
-  <!-- Tech stack -->
-  <section class="border-y border-border bg-surface/40">
-    <div class={sectionClass}>
-      <SectionHeader eyebrow="Tech stack" title="Tools used daily." />
-      <div class="mt-8 flex flex-wrap gap-2">
-        {technologies.map((tech) => (
-          <Badge variant="default">{tech.name}</Badge>
+  <!-- APPROACH -->
+  <section class="ab-section">
+    <div class="about-container">
+      <div class="s-head" data-reveal="fade">
+        <span class="ab-eyebrow">APPROACH</span>
+        <h2 class="ab-h2">Pragmatic engineering, production-ready by default.</h2>
+        <p class="ab-section-lead">I position myself at the intersection of fullstack engineering, automation and applied AI — helping companies ship robust products faster while maintaining high engineering standards.</p>
+      </div>
+      <div class="approach-grid" data-stagger="120" data-stagger-base="80">
+        {approachCards.map((c) => (
+          <article class="ap-card" data-reveal>
+            <span class="k">{c.key}</span>
+            <div class="ic">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" set:html={c.icon} />
+            </div>
+            <h3>{c.title}</h3>
+            <p>{c.body}</p>
+          </article>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class={sectionClass}>
-    <Card glow class="p-8 sm:p-12">
-      <div class="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+  <!-- BIO + AT A GLANCE -->
+  <section class="ab-section ab-section-tint">
+    <div class="about-container">
+      <div class="bio-split">
         <div>
-          <p class="font-mono text-xs uppercase tracking-[0.18em] text-accent">Work with me</p>
-          <h2 class="mt-3 font-display text-[clamp(1.8rem,3.5vw,2.8rem)] font-semibold leading-tight text-white">
-            Have a project in mind?
-          </h2>
-          <p class="mt-3 max-w-prose text-lg leading-7 text-secondary">
-            Book a free 30-minute call to talk through your idea, blocker or project.
-          </p>
+          <div class="s-head" data-reveal="fade">
+            <span class="ab-eyebrow">WHO I AM</span>
+            <h2 class="ab-h2">A fullstack engineer who can also explain the system.</h2>
+          </div>
+          <div class="bio-prose">
+            <p data-reveal="fade">
+              I'm a fullstack engineer specialised in designing and delivering scalable web applications and modern AI-enhanced systems. <span class="hl">My work focuses on building production-ready products end to end</span> — combining traditional software engineering practices with emerging AI tooling to create reliable systems that solve real operational problems rather than experimental prototypes.
+            </p>
+            <p data-reveal="fade">
+              Over the past years I have built multiple complex applications involving real-time data processing, transactional logic, scheduled automation, analytics pipelines and user-centric interfaces. My approach emphasises <span class="hl">maintainability, performance and pragmatic decision-making</span>, ensuring that products can evolve safely as usage grows.
+            </p>
+            <p data-reveal="fade">
+              Beyond development, my experience as a programming instructor — <span class="hl">7,000+ hours of teaching</span> — strengthened my ability to structure complex systems clearly, communicate technical decisions effectively, and design architectures that remain understandable for teams over time.
+            </p>
+          </div>
         </div>
-        <div class="flex flex-wrap gap-4">
-          <Button href={BOOK_CALL_URL} variant="primary" size="lg">
-            Book a free call
-          </Button>
-        </div>
+
+        <aside class="glance" data-reveal="right">
+          <span class="ab-eyebrow">AT A GLANCE</span>
+          <dl>
+            <div class="g-row"><dt>Role</dt><dd>AI Fullstack Engineer</dd></div>
+            <div class="g-row"><dt>Focus</dt><dd>Scalable web apps · Automation · Applied AI</dd></div>
+            <div class="g-row"><dt>Stack signature</dt><dd class="mono">React · Node.js · TypeScript · Rust · Tauri · Cloudflare</dd></div>
+            <div class="g-row"><dt>Teaching</dt><dd>7,000+ hours instructing web development</dd></div>
+          </dl>
+        </aside>
       </div>
-    </Card>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE / TIMELINE -->
+  <section class="ab-section">
+    <div class="about-container ab-narrow">
+      <div class="s-head" data-reveal="fade">
+        <span class="ab-eyebrow">EXPERIENCE</span>
+        <h2 class="ab-h2">Career timeline.</h2>
+        <p class="ab-section-lead">From front-end roles at European event platforms to freelance fullstack work and 7,000+ hours of teaching — a decade of shipping and explaining software.</p>
+      </div>
+
+      <div class="timeline" data-vladder-container data-stagger="120" data-stagger-base="120">
+        <!-- Vertical rail: scaleY draw, sits behind the numbered nodes (z-index:0) -->
+        <div class="tl-rail ladder vertical" aria-hidden="true">
+          <span class="rail"><span class="rail-fill"></span></span>
+        </div>
+
+        {experiences.map((exp, i) => {
+          const isNow = exp.date.toLowerCase().includes('today');
+          return (
+            <div class={`tl-row ${isNow ? 'now' : ''}`} data-reveal="left">
+              <div class="tl-num"><span>{i + 1}</span></div>
+              <div class="tl-body">
+                <div class="tl-head">
+                  <h3>
+                    {exp.title.trim()}
+                    {isNow && <span class="tl-badge-now">Now</span>}
+                  </h3>
+                  <span class="tl-meta"><span class="co">{exp.company_name}</span> · {exp.date}</span>
+                </div>
+                <ul class="tl-list">
+                  {exp.points.map((p) => <li>{p}</li>)}
+                </ul>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH STACK -->
+  <section class="ab-section ab-section-tint">
+    <div class="about-container">
+      <div class="s-head" data-reveal="fade">
+        <span class="ab-eyebrow">TECH STACK</span>
+        <h2 class="ab-h2">Tools used daily.</h2>
+        <p class="ab-section-lead">The modern, boring-in-a-good-way toolchain behind everything I ship — plus the AI tools that have become part of the workflow.</p>
+      </div>
+      <div class="stack-cloud" data-stagger="55" data-stagger-base="40">
+        {technologies.map((tech) => (
+          <Badge variant="default" className="tech-badge" style={getTechBadgeStyle(tech.name)} data-reveal="zoom">
+            {tech.name}
+          </Badge>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <section class="ab-section ab-cta glow-bg">
+    <div class="about-container ab-cta-inner">
+      <span class="ab-eyebrow center" data-reveal>WORK WITH ME</span>
+      <h2 class="ab-h2 center" data-reveal="fade">Bring me your product goal — I'll help you ship it.</h2>
+      <p class="ab-lead center" data-reveal="fade">
+        Fullstack engineering, automation and applied AI, built to production standards. Let's find the right next step on a call.
+      </p>
+      <div class="hero-cta center" data-reveal>
+        <Button href={BOOK_CALL_URL} variant="primary" size="lg">Book a call →</Button>
+        <Button href="/services" variant="secondary" size="lg">See services</Button>
+      </div>
+    </div>
   </section>
 </PageLayout>
+
+<style>
+  /* === About page — scoped composition over the shared motion system. === */
+  /* No explicit z-index here: inside .glow-bg the global rule `.glow-bg > * { z-index: 2 }`
+     lifts this above the .grid-bg::after grid (z-index: 1) and the .bg-field blobs (z-index: 0). */
+  .about-container { max-width: 1180px; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 2.5rem); position: relative; }
+  .about-container.ab-narrow { max-width: 920px; }
+  /* Explicitly hoist the hero container above the grid + glow (same layering as the other pages) */
+  .about-hero > .about-container { z-index: 2; }
+  .ab-cta > .about-container { z-index: 2; }
+
+  /* ── hero ── */
+  .about-hero {
+    position: relative;
+    padding: clamp(5rem, 10vh, 8rem) 0 clamp(3.5rem, 7vh, 5.5rem);
+    isolation: isolate;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .breadcrumb { display: inline-flex; gap: 10px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-low); letter-spacing: 0.04em; }
+  .breadcrumb a { color: var(--text-mid); text-decoration: none; transition: color .15s ease; }
+  .breadcrumb a:hover { color: var(--text-hi); }
+  .breadcrumb .sep { color: var(--text-low); }
+
+  .hero-split {
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    align-items: center;
+    gap: clamp(2.5rem, 5vw, 5rem);
+    margin-top: 1.5rem;
+  }
+
+  .ab-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono); font-size: 0.74rem; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent-400);
+  }
+  .ab-eyebrow.center { display: inline-flex; justify-content: center; }
+
+  .ab-h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 4.8vw, 3.9rem);
+    line-height: 1.0;
+    letter-spacing: -0.025em;
+    color: var(--text-hi);
+    max-width: 15ch;
+    margin: 1.2rem 0 1.5rem;
+  }
+  .ab-h1 .ab-accent { color: var(--accent-400); }
+  .ab-h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text-hi);
+    margin: 0.75rem 0 1rem;
+  }
+  .ab-h2.center { text-align: center; max-width: 22ch; margin-inline: auto; }
+  .ab-lead {
+    font-family: var(--font-body);
+    color: var(--text-mid);
+    font-size: clamp(1rem, 1.35vw, 1.12rem);
+    line-height: 1.65;
+    max-width: 50ch;
+  }
+  .ab-lead.center { text-align: center; max-width: 52ch; margin: 0 auto 1.6rem; }
+
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 1.6rem; }
+  .hero-cta.center { justify-content: center; }
+
+  .hero-meta {
+    display: flex; flex-wrap: nowrap; gap: clamp(1.1rem, 2.4vw, 2.25rem);
+    margin-top: 2rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .hero-meta .stat { min-width: 0; }
+  .hero-meta .stat .n {
+    font-family: var(--font-display);
+    font-size: 1.8rem; font-weight: 700;
+    color: var(--text-hi); letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .hero-meta .stat .l {
+    font-family: var(--font-mono); font-size: 0.7rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-low); margin-top: 4px;
+  }
+
+  /* ── portrait scene ── */
+  .portrait-scene { position: relative; }
+  .portrait-card {
+    position: relative; border-radius: var(--r-xl); overflow: hidden;
+    border: 1px solid var(--border-strong); background: var(--bg-1);
+    aspect-ratio: 4 / 5; width: 100%;
+    box-shadow: var(--shadow-lg);
+  }
+  .portrait-card :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .portrait-card::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04), inset 0 -60px 80px -40px rgba(13,13,16,0.7);
+    pointer-events: none;
+  }
+  .portrait-glow {
+    position: absolute; inset: -14% -8% -8% -8%; z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at 50% 38%, var(--accent-glow), transparent 62%);
+    filter: blur(36px); pointer-events: none;
+  }
+  .portrait-tag {
+    position: absolute; left: 1.25rem; bottom: 1.25rem; z-index: 3;
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: var(--font-mono); font-size: 0.76rem; color: var(--text-hi);
+    padding: 8px 13px; border-radius: var(--r-pill);
+    background: rgba(13,13,16,0.6);
+    border: 1px solid var(--border-strong);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .pulse-dot.avail { background: var(--positive); }
+  .pulse-dot.avail { animation-name: pulse-ring-green; }
+  @keyframes pulse-ring-green {
+    0%   { box-shadow: 0 0 0 0 rgba(95,217,154,0.55); }
+    70%  { box-shadow: 0 0 0 8px rgba(95,217,154,0); }
+    100% { box-shadow: 0 0 0 0 rgba(95,217,154,0); }
+  }
+
+  /* Float pill positions around the portrait */
+  .portrait-scene .pp-1 { top: 8%;    left: -7%;  --dur: 6.6s; --del: 0s; }
+  .portrait-scene .pp-2 { top: 30%;   right: -9%; --dur: 7.7s; --del: .6s; }
+  .portrait-scene .pp-3 { bottom: 20%; left: -10%; --dur: 8.3s; --del: 1s; }
+  .portrait-scene .pp-4 { bottom: 6%;  right: -5%; --dur: 7.1s; --del: .4s; }
+
+  /* ── approach ── */
+  .ab-section { padding: clamp(4rem, 8vh, 6.5rem) 0; position: relative; }
+  .ab-section-tint { background: var(--bg-1); border-block: 1px solid var(--border); }
+
+  .s-head { max-width: 56rem; margin-bottom: 2.5rem; }
+  .ab-section-lead { font-family: var(--font-body); color: var(--text-mid); font-size: 1.02rem; line-height: 1.65; max-width: 60ch; }
+
+  .approach-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .ap-card {
+    display: flex; flex-direction: column; gap: 1rem;
+    padding: 1.5rem; border-radius: var(--r-md);
+    background: var(--bg-2); border: 1px solid var(--border);
+    transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+  }
+  .ap-card:hover { border-color: var(--border-strong); transform: translateY(-3px); box-shadow: var(--shadow-md, 0 12px 32px rgba(0,0,0,0.4)); }
+  .ap-card .k { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.14em; color: var(--accent-400); }
+  .ap-card .ic {
+    width: 46px; height: 46px; border-radius: var(--r-md);
+    background: var(--accent-soft); border: 1px solid var(--border-accent);
+    color: var(--accent-300);
+    display: grid; place-items: center;
+  }
+  .ap-card h3 { font-family: var(--font-display); font-size: 1.18rem; font-weight: 600; color: var(--text-hi); margin: 0; line-height: 1.2; }
+  .ap-card p { color: var(--text-mid); font-size: 0.94rem; line-height: 1.6; margin: 0; }
+
+  /* ── bio + at a glance ── */
+  .bio-split { display: grid; grid-template-columns: 1.5fr 0.9fr; gap: clamp(2rem, 4vw, 3.5rem); align-items: start; }
+  .bio-prose { display: flex; flex-direction: column; gap: 1.25rem; }
+  .bio-prose p { color: var(--text-mid); font-size: 1.02rem; line-height: 1.7; max-width: 60ch; }
+  .bio-prose .hl { color: var(--text-hi); font-weight: 500; }
+
+  .glance {
+    position: sticky; top: 96px;
+    padding: 1.5rem; border-radius: var(--r-md);
+    border: 1px solid var(--border); background: var(--bg-2);
+  }
+  .glance dl { margin: 1rem 0 0; display: flex; flex-direction: column; }
+  .glance .g-row { padding: 1rem 0; border-top: 1px solid var(--border); }
+  .glance .g-row:first-child { border-top: none; padding-top: 0; }
+  .glance dt { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-low); margin-bottom: 6px; }
+  .glance dd { margin: 0; color: var(--text-hi); font-size: 0.98rem; }
+  .glance dd.mono { color: var(--text-mid); font-family: var(--font-mono); font-size: 0.86rem; }
+
+  /* ── career timeline ── */
+  .timeline {
+    position: relative;
+    display: flex; flex-direction: column; gap: 2rem;
+    padding-left: 0;
+    isolation: isolate;
+  }
+  /* Rail container — placed behind the row column (z-index:0 < row z-index:1) */
+  .tl-rail {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+  }
+  .tl-row {
+    position: relative;
+    display: grid; grid-template-columns: 44px 1fr; gap: 1.5rem;
+    z-index: 1;
+  }
+  .tl-num {
+    --tl-num-fill: var(--bg-2);
+    width: 44px; height: 44px;
+    border-radius: var(--r-pill);
+    background: transparent;
+    border: 1px solid var(--border-accent);
+    color: var(--accent-300);
+    display: grid; place-items: center;
+    font-family: var(--font-mono); font-size: 0.92rem; font-weight: 600;
+    position: relative;
+    z-index: 2; /* ensure number sits above rail fill */
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .tl-num::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--tl-num-fill);
+    z-index: 0;
+  }
+  .tl-num > span {
+    position: relative;
+    z-index: 1;
+  }
+  .tl-row.now .tl-num {
+    --tl-num-fill: linear-gradient(var(--accent-soft), var(--accent-soft)), var(--bg-2);
+    box-shadow: 0 0 0 4px rgba(167,139,250,0.10);
+  }
+  .tl-body { padding-top: 2px; }
+  .tl-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap;
+  }
+  .tl-body h3 {
+    font-family: var(--font-display); font-size: 1.15rem; font-weight: 600;
+    color: var(--text-hi); margin: 0;
+    display: inline-flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
+  }
+  .tl-meta {
+    font-family: var(--font-mono); font-size: 0.78rem;
+    color: var(--text-low); white-space: nowrap;
+  }
+  .tl-meta .co { color: var(--accent-300); }
+  .tl-list { list-style: none; padding: 0; margin: 0.75rem 0 0; display: flex; flex-direction: column; gap: 7px; }
+  .tl-list li {
+    position: relative; padding-left: 18px;
+    color: var(--text-mid); font-size: 0.93rem; line-height: 1.55;
+  }
+  .tl-list li::before {
+    content: ""; position: absolute; left: 0; top: 9px;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--accent-500);
+  }
+  .tl-badge-now {
+    font-family: var(--font-mono); font-size: 0.62rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--positive);
+    border: 1px solid rgba(95,217,154,0.4);
+    background: var(--positive-soft);
+    padding: 2px 8px; border-radius: var(--r-pill);
+  }
+
+  /* ── tech stack cloud ── */
+  .stack-cloud { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+  /* ── CTA band ── */
+  .ab-cta { border-top: 1px solid var(--border); }
+  .ab-cta-inner { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+
+  /* ── responsive ── */
+  @media (max-width: 1000px) {
+    .hero-split { grid-template-columns: 1fr; gap: 3rem; }
+    .portrait-scene { max-width: 440px; margin: 0 auto; }
+    .approach-grid { grid-template-columns: 1fr; }
+    .bio-split { grid-template-columns: 1fr; gap: 2rem; }
+    .glance { position: static; }
+    .portrait-scene .float-pill { display: none; }
+  }
+  @media (max-width: 600px) {
+    .hero-meta { flex-wrap: wrap; gap: 1.25rem; }
+    .tl-head { gap: 0.4rem; }
+    .tl-meta { white-space: normal; }
+  }
+</style>

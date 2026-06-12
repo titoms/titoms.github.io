@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import logo2026 from "../../assets/logo-2026.png";
+import logo2026 from "../../assets/logo-2026.webp";
 import { BOOK_CALL_URL } from "../../config/constants";
 import { Button } from "../ui";
 
@@ -33,8 +33,18 @@ const LanguageSelector = ({ className = "" }: { className?: string }) => (
   </div>
 );
 
+const isActiveLink = (href: string, pathname: string) => {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(href + "/");
+};
+
 const SiteHeader = () => {
   const [open, setOpen] = useState(false);
+  const [pathname, setPathname] = useState("");
+
+  useEffect(() => {
+    setPathname(window.location.pathname);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -69,15 +79,19 @@ const SiteHeader = () => {
 
           {/* Desktop nav */}
           <nav className="hidden items-center gap-6 min-[900px]:flex">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.id}
-                href={link.href}
-                className="text-sm font-medium text-secondary transition-colors hover:text-white"
-              >
-                {link.title}
-              </a>
-            ))}
+            {NAV_LINKS.map((link) => {
+              const active = isActiveLink(link.href, pathname);
+              return (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`nav-link text-sm font-medium transition-colors ${active ? "nav-link--active text-white" : "text-secondary hover:text-white"}`}
+                >
+                  {link.title}
+                </a>
+              );
+            })}
             <Button
               href={BOOK_CALL_URL}
               size="sm"
@@ -115,16 +129,20 @@ const SiteHeader = () => {
         }`}
       >
         <nav className="flex min-h-[100dvh] flex-col items-center justify-center gap-7 px-6 pb-10 pt-24">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.id}
-              href={link.href}
-              onClick={() => setOpen(false)}
-              className="text-2xl font-medium text-secondary transition-colors hover:text-white"
-            >
-              {link.title}
-            </a>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const active = isActiveLink(link.href, pathname);
+            return (
+              <a
+                key={link.id}
+                href={link.href}
+                aria-current={active ? "page" : undefined}
+                onClick={() => setOpen(false)}
+                className={`nav-link text-2xl font-medium transition-colors ${active ? "nav-link--active text-white" : "text-secondary hover:text-white"}`}
+              >
+                {link.title}
+              </a>
+            );
+          })}
           <Button
             href={BOOK_CALL_URL}
             size="lg"

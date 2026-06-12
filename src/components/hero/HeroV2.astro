@@ -4,11 +4,11 @@ import { BOOK_CALL_URL } from '../../config/constants';
 ---
 
 <section id="hero-scene" class="hero-v2-root">
-  <!-- Background blobs: CSS keyframe animated, zero JS -->
-  <div class="vbg" aria-hidden="true">
-    <span class="vblob b1"></span>
-    <span class="vblob b2"></span>
-    <span class="vblob b3"></span>
+  <!-- Background blobs: global .blob system, variant D positions -->
+  <div class="bg-field bv-d" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
   </div>
 
   <!-- Two-column layout -->
@@ -54,13 +54,10 @@ import { BOOK_CALL_URL } from '../../config/constants';
 </section>
 
 <style is:global>
-  /* ---- keyframes (not via Tailwind utilities so must be declared here) ---- */
-  @keyframes drift1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(50px,36px) scale(1.08); } }
-  @keyframes drift2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-44px,26px) scale(1.1); } }
-  @keyframes drift3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(28px,-34px) scale(1.06); } }
+  /* ---- keyframes local to this component ---- */
   @keyframes vpulse { 0% { box-shadow: 0 0 0 0 rgba(167,139,250,.5); } 70% { box-shadow: 0 0 0 8px rgba(167,139,250,0); } 100% { box-shadow: 0 0 0 0 rgba(167,139,250,0); } }
   @keyframes vblink { 50% { opacity: 0; } }
-  @keyframes rise { to { opacity: 1; transform: none; } }
+  /* drift1/2/3 and rise are in global.css */
 
   /* ---- hero root ---- */
   .hero-v2-root {
@@ -87,12 +84,7 @@ import { BOOK_CALL_URL } from '../../config/constants';
     background-size: 64px 64px;
   }
 
-  /* ---- background blobs ---- */
-  .vbg { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
-  .vblob { position: absolute; border-radius: 50%; filter: blur(80px); will-change: transform; }
-  .vblob.b1 { width: 620px; height: 620px; top: -240px; left: -120px; background: radial-gradient(circle, rgba(143,110,243,.38), transparent 64%); animation: drift1 28s ease-in-out infinite; }
-  .vblob.b2 { width: 560px; height: 560px; top: -160px; right: -100px; background: radial-gradient(circle, rgba(124,92,232,.28), transparent 66%); animation: drift2 34s ease-in-out infinite; }
-  .vblob.b3 { width: 520px; height: 520px; bottom: -260px; left: 40%; background: radial-gradient(circle, rgba(167,139,250,.20), transparent 68%); animation: drift3 31s ease-in-out infinite; }
+  /* ---- background blobs via global .bg-field.bv-d ---- */
 
   /* ---- entrance reveal ---- */
   .reveal { opacity: 0; transform: translateY(16px); animation: rise .8s cubic-bezier(.2,.7,.2,1) forwards; }

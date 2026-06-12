@@ -65,10 +65,23 @@ const ladderNodes = [
 <PageLayout
   title="Services — fullstackchris.dev"
   description="Coaching, full-stack development days, MVP workshops, custom MVP development and a practical AI web-dev newsletter — for founders, freelancers and small teams."
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Services — fullstackchris.dev",
+    url: "https://fullstackchris.dev/services",
+    description: "Coaching, development days, MVP workshops and custom MVP development.",
+    itemListElement: servicePages.map((s, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `https://fullstackchris.dev/services/${s.slug}`,
+      name: s.title,
+    })),
+  }}
 >
 
   <!-- ── HERO ──────────────────────────────────────────────────────────── -->
-  <section class="svc-hero relative overflow-hidden border-b border-border" style="padding-bottom:64px;isolation:isolate;">
+  <section class="svc-hero relative overflow-hidden" style="isolation:isolate;">
     <!-- Blob field -->
     <div class="bg-field" aria-hidden="true">
       <span class="blob blob-1"></span>
@@ -81,9 +94,9 @@ const ladderNodes = [
          style="background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:64px 64px;"
          aria-hidden="true"></div>
 
-    <div class={`${sectionMax} relative z-[3]`} style="padding-top:clamp(7rem,12vh,10rem);">
+    <div class={`${sectionMax} relative z-[3]`} style="padding-top:clamp(5rem,8vh,6.5rem);">
       <!-- Breadcrumb -->
-      <nav class="reveal r1 flex items-center gap-2 font-mono text-xs text-low mb-6">
+      <nav class="reveal r1 flex items-center gap-2 font-mono text-xs text-low mb-4">
         <a href="/" class="text-secondary transition-colors hover:text-white">Home</a>
         <span class="opacity-50">/</span>
         <span class="text-secondary">Services</span>
@@ -95,22 +108,22 @@ const ladderNodes = [
       </span>
 
       <!-- Headline -->
-      <h1 class="reveal r3 font-display font-bold leading-[0.99] tracking-[-0.035em] mt-5 mb-4" style="font-size:clamp(2.5rem,5.4vw,4.2rem);max-width:19ch;">
+      <h1 class="reveal r3 font-display font-bold leading-[0.99] tracking-[-0.035em] mt-4 mb-3" style="font-size:clamp(2.2rem,4.6vw,3.6rem);max-width:19ch;">
         Five ways to move your web project <span style="color:var(--accent-400)">forward.</span>
       </h1>
 
       <!-- Lead -->
-      <p class="reveal r4 text-secondary leading-7 mb-6" style="max-width:54ch;font-size:clamp(1rem,1.4vw,1.1rem);">
+      <p class="reveal r4 text-secondary leading-7 mb-4" style="max-width:54ch;font-size:clamp(0.95rem,1.3vw,1.05rem);">
         Whether you have a blurry idea, a blocked codebase or a product to launch — there's an entry point sized to exactly where you are right now.
       </p>
 
       <!-- CTAs -->
       <div class="reveal r5 flex flex-wrap gap-3">
-        <a class="btn btn-primary-animated inline-flex items-center gap-2 rounded-pill border px-6 py-3 font-display font-semibold text-[0.95rem] no-underline transition-all duration-200"
+        <a class="btn btn-primary-animated inline-flex items-center gap-2 rounded-pill border px-5 py-2 font-display font-semibold text-[0.875rem] no-underline transition-all duration-200"
            href={BOOK_CALL_URL}>
           Book a 15-min call <span>→</span>
         </a>
-        <a class="btn-grad-hover btn-secondary inline-flex items-center gap-2 rounded-pill border border-strong px-6 py-3 font-display font-semibold text-[0.95rem] text-secondary no-underline transition-all duration-200"
+        <a class="btn-grad-hover btn-secondary inline-flex items-center gap-2 rounded-pill border border-strong px-5 py-2 font-display font-semibold text-[0.875rem] text-secondary no-underline transition-all duration-200"
            href="#ladder">
           See how it fits together
         </a>
@@ -211,7 +224,7 @@ const ladderNodes = [
         <span class="font-mono text-[0.62rem] tracking-[0.18em] uppercase text-accent">NOT SURE WHICH?</span>
         <h2 class="font-display font-semibold leading-tight mt-4 mb-4 mx-auto"
             style="font-size:clamp(2rem,4vw,3rem);max-width:18ch;">
-          Start with a 15-minute call.
+          Start with a 30-minute call.
         </h2>
         <p class="text-secondary leading-7 mb-8 mx-auto" style="max-width:46ch;">
           Tell me where you are and we'll pick the right entry point together — no pressure, no jargon.
@@ -227,6 +240,8 @@ const ladderNodes = [
 </PageLayout>
 
 <style>
+  .svc-hero { min-height: 50svh; }
+  @media (max-width: 700px) { .svc-hero { min-height: 0; } }
   .section { padding: 80px 0; }
   @media (max-width: 700px) { .section { padding: 56px 0; } }
 </style>

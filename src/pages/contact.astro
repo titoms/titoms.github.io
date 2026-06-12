@@ -4,7 +4,7 @@ import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { SectionHeader } from '../components/ui/SectionHeader';
-import { CALENDLY_URL } from '../config/constants';
+import { CALENDLY_URL, SITE_ALIASES, SOCIAL_LINKS } from '../config/constants';
 
 const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
 
@@ -20,24 +20,45 @@ const serviceLinks = [
   { title: "MVP bootstrapping workshop", href: "/services/mvp-bootstrapping-workshop", description: "Turn your idea into a build plan." },
   { title: "AI web development newsletter", href: "/services/ai-web-development-newsletter", description: "Monthly briefing on AI tools and workflows." },
 ];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: "Contact — fullstackchris.dev",
+  url: "https://fullstackchris.dev/contact",
+  description: "Book a free 30-minute call to discuss your project, blocker, or product idea.",
+  mainEntity: {
+    "@type": "Person",
+    name: "Christophe Crognier",
+    alternateName: SITE_ALIASES,
+    url: "https://fullstackchris.dev",
+    sameAs: [SOCIAL_LINKS.linkedin, SOCIAL_LINKS.github, SOCIAL_LINKS.twitter],
+  },
+};
 ---
 
 <PageLayout
   title="Contact — fullstackchris.dev"
   description="Book a free 30-minute call to discuss your project, blocker, or product idea. No commitment required."
+  jsonLd={jsonLd}
 >
   <Fragment slot="head">
     <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
     <script is:inline async src="https://assets.calendly.com/assets/external/widget.js"></script>
   </Fragment>
   <!-- Hero -->
-  <section class="site-hero hero-glow-field glow-bg grid-bg relative overflow-hidden border-b border-border mb-4">
-    <div class={`${sectionClass} site-hero-inner`}>
-      <Badge variant="accent">Contact</Badge>
-      <h1 class="mt-6 max-w-3xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white">
+  <section class="site-hero hero-glow-field glow-bg grid-bg relative overflow-hidden border-b border-border mb-12 sm:mb-16">
+    <div class="bg-field bv-a" aria-hidden="true">
+      <span class="blob blob-1"></span>
+      <span class="blob blob-2"></span>
+      <span class="blob blob-3"></span>
+    </div>
+    <div class={`${sectionClass} site-hero-inner`} data-stagger="100" data-stagger-base="80">
+      <Badge variant="accent" data-reveal="fade">Contact</Badge>
+      <h1 class="mt-6 max-w-3xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white" data-reveal="soft-left">
         Let's talk about your project.
       </h1>
-      <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary">
+      <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary" data-reveal="blur">
         Book a free 30-minute call. Bring your project, blocker, or idea — we'll figure out if and how I can help.
       </p>
     </div>
@@ -45,10 +66,10 @@ const serviceLinks = [
 
   <!-- Call steps -->
   <section class={sectionClass}>
-    <SectionHeader eyebrow="How it works" title="Book a call in 3 steps." />
-    <div class="mt-10 grid gap-5 sm:grid-cols-3">
+    <SectionHeader eyebrow="How it works" title="Book a call in 3 steps." data-reveal="fade" />
+    <div class="mt-10 grid gap-5 sm:grid-cols-3" data-stagger="100" data-stagger-base="80">
       {callSteps.map((s) => (
-        <Card class="flex flex-col gap-3">
+        <Card class="flex flex-col gap-3" data-reveal="zoom">
           <span class="font-mono text-3xl font-bold text-accent">{s.step}</span>
           <h3 class="font-display text-lg font-semibold text-white">{s.label}</h3>
           <p class="text-sm leading-6 text-secondary">{s.description}</p>
@@ -60,15 +81,15 @@ const serviceLinks = [
   <!-- Calendly inline embed — uses widget.js to apply dark-theme colour params -->
   <section id="schedule" class="border-y border-border bg-surface/40">
     <div class={sectionClass}>
-      <SectionHeader eyebrow="Schedule" title="Pick a time that works for you." />
-      <div class="mt-8 overflow-hidden rounded-xl border border-border bg-[#131318]">
+      <SectionHeader eyebrow="Schedule" title="Pick a time that works for you." data-reveal="fade" />
+      <div class="mt-8 overflow-hidden rounded-xl border border-border bg-[#131318]" data-reveal="soft-right">
         <div
           class="calendly-inline-widget"
           data-url="https://calendly.com/fullstackchris/30min?background_color=131318&text_color=f4f4f6&primary_color=a78bfa&hide_gdpr_banner=1"
           style="min-width:320px;height:700px;"
         ></div>
       </div>
-      <p class="mt-4 text-center text-sm text-secondary">
+      <p class="mt-4 text-center text-sm text-secondary" data-reveal="fade">
         Can't see the calendar?
         <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" class="text-brand underline underline-offset-2 hover:text-brand-hover">
           Open in Calendly
@@ -80,10 +101,10 @@ const serviceLinks = [
   <!-- Services links -->
   <section class="border-y border-border bg-surface/40">
     <div class={sectionClass}>
-      <SectionHeader eyebrow="Or browse services" title="Know what you need?" description="Skip the call and go straight to the right offer." />
-      <div class="mt-10 grid gap-4 sm:grid-cols-2">
+      <SectionHeader eyebrow="Or browse services" title="Know what you need?" description="Skip the call and go straight to the right offer." data-reveal="fade" />
+      <div class="mt-10 grid gap-4 sm:grid-cols-2" data-stagger="85" data-stagger-base="80">
         {serviceLinks.map((link) => (
-          <Card hover class="flex flex-col gap-2">
+          <Card hover class="flex flex-col gap-2" data-reveal="blur">
             <h3 class="font-display text-lg font-semibold text-white">{link.title}</h3>
             <p class="text-sm leading-6 text-secondary">{link.description}</p>
             <Button href={link.href} variant="outline" size="sm" class="mt-2 w-fit">

@@ -1,5 +1,5 @@
 ---
-import { footerGroups, CALENDLY_URL, BOOK_CALL_URL } from '../../config/constants';
+import { footerGroups, BOOK_CALL_URL, SOCIAL_LINKS } from '../../config/constants';
 ---
 
 <footer class="border-t border-border bg-surface/30">
@@ -15,9 +15,11 @@ import { footerGroups, CALENDLY_URL, BOOK_CALL_URL } from '../../config/constant
                 : link.title === 'Book a call'
                 ? BOOK_CALL_URL
                 : link.title === 'LinkedIn'
-                ? 'https://linkedin.com/in/christophe-crognier'
+                ? SOCIAL_LINKS.linkedin
                 : link.title === 'GitHub'
-                ? 'https://github.com/titoms'
+                ? SOCIAL_LINKS.github
+                : link.title === 'X / Twitter'
+                ? SOCIAL_LINKS.twitter
                 : '/contact';
               const isExternal = href.startsWith('http');
               return (

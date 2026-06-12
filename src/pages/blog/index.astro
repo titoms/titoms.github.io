@@ -42,13 +42,18 @@ const jsonLd = {
   jsonLd={jsonLd}
 >
   <!-- Hero -->
-  <section class="site-hero hero-glow-field glow-bg grid-bg relative overflow-hidden border-b border-border mb-4">
-    <div class={`${sectionClass} site-hero-inner`}>
-      <Badge variant="accent">Blog</Badge>
-      <h1 class="mt-6 max-w-4xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white">
+  <section class="site-hero hero-glow-field glow-bg grid-bg relative overflow-hidden border-b border-border mb-12 sm:mb-16">
+    <div class="bg-field bv-b" aria-hidden="true">
+      <span class="blob blob-1"></span>
+      <span class="blob blob-2"></span>
+      <span class="blob blob-3"></span>
+    </div>
+    <div class={`${sectionClass} site-hero-inner`} data-stagger="100" data-stagger-base="80">
+      <Badge variant="accent" data-reveal="fade">Blog</Badge>
+      <h1 class="mt-6 max-w-4xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white" data-reveal="soft-left">
         Practical AI and web development resources for builders.
       </h1>
-      <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary">
+      <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary" data-reveal="blur">
         Articles on AI-assisted development, MVP scope, React, Node.js and TypeScript for founders, freelancers and developers.
       </p>
     </div>
@@ -60,10 +65,11 @@ const jsonLd = {
       eyebrow="Articles"
       title="Latest articles."
       description="Real notes from building, teaching and consulting on web products."
+      data-reveal="fade"
     />
-    <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+    <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3" data-stagger="90" data-stagger-base="80">
       {articles.map((article) => (
-        <Card hover class="flex h-full flex-col gap-4">
+        <Card hover class="flex h-full flex-col gap-4" data-reveal={article.data.comingSoon ? 'zoom' : 'blur'}>
           <div class="font-mono text-xs uppercase tracking-[0.16em] text-low mb-4">
             {article.data.comingSoon ? 'Planned article' : formatDate.format(article.data.publishedAt)}
           </div>
@@ -90,7 +96,7 @@ const jsonLd = {
   <!-- Newsletter CTA -->
   <section class="border-t border-border bg-surface/55">
     <div class={sectionClass}>
-      <Card glow class="overflow-hidden p-8 sm:p-10 lg:p-12">
+      <Card glow class="overflow-hidden p-8 sm:p-10 lg:p-12" data-reveal="zoom">
         <div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
             <p class="font-mono text-xs uppercase tracking-[0.18em] text-accent">Get notified</p>
