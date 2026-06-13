@@ -1,0 +1,91 @@
+---
+import { getTechBadgeStyleAttribute } from '../../config/techBadges';
+import { featuredTechnologies } from '../../config/constants';
+
+interface Category {
+  label: string;
+  items: string[];
+}
+
+interface Props {
+  categories: Category[];
+  /** Optional class name for the outer grid */
+  class?: string;
+}
+
+const { categories, class: className = '' } = Astro.props;
+const featuredSet = new Set(featuredTechnologies.map((t) => t.toLowerCase()));
+---
+
+<div class:list={['tech-stack-grouped', className]} data-stagger="80" data-stagger-base="80">
+  {categories.map((cat) => (
+    <div class="tsg-cat" data-reveal="zoom">
+      <h5 class="tsg-cat-label">
+        <span class="tsg-ic" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="4"/>
+          </svg>
+        </span>
+        {cat.label}
+      </h5>
+      <div class="tsg-chips">
+        {cat.items.map((item) => {
+          const isFeatured = featuredSet.has(item.toLowerCase());
+          return (
+            <span
+              class:list={['tech-badge', isFeatured && 'featured']}
+              style={getTechBadgeStyleAttribute(item)}
+            >{item}</span>
+          );
+        })}
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .tech-stack-grouped {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+  }
+  .tsg-cat-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-low);
+    margin: 0 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tsg-ic { color: var(--accent-400); display: inline-flex; }
+  .tsg-chips {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+  /* Tablet — keep 5 columns, shrink type/spacing */
+  @media (max-width: 1080px) {
+    .tech-stack-grouped { gap: 0.9rem; }
+    .tsg-cat-label { font-size: 0.62rem; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
+    .tsg-chips { gap: 0.35rem; }
+    .tech-stack-grouped :global(.tech-badge) {
+      font-size: 0.62rem;
+      padding: 5px 8px 6px;
+    }
+  }
+  /* Mobile — 2 columns */
+  @media (max-width: 720px) {
+    .tech-stack-grouped { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+    .tsg-cat-label { font-size: 0.7rem; letter-spacing: 0.12em; margin-bottom: 0.85rem; }
+    .tsg-chips { gap: 0.5rem; }
+    .tech-stack-grouped :global(.tech-badge) {
+      font-size: 0.72rem;
+      padding: 6px 11px 7px;
+    }
+  }
+</style>

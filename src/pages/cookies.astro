@@ -1,0 +1,118 @@
+---
+import LegalPageLayout from '../components/layout/LegalPageLayout.astro';
+
+{/*
+  TODO: A cookie consent banner (CMP) is required ONLY if non-essential
+  trackers are added later. Examples that would require one:
+    - Google Analytics (gtag, GA4)
+    - Meta Pixel (Facebook)
+    - LinkedIn Insight Tag
+    - Advertising / remarketing pixels (Google Ads, TikTok, Reddit, etc.)
+    - Auto-loaded YouTube embeds (set cookies before user interaction)
+    - Hotjar / FullStory / Smartlook session replay
+  Today the Website uses only Cloudflare Web Analytics (cookieless) and
+  third-party form embeds (beehiiv, Stripe) that set cookies only on their
+  own domains — no CMP needed yet.
+*/}
+---
+
+<LegalPageLayout
+  title="Cookie policy"
+  description="How fullstackchris.dev uses cookies and trackers — short answer: minimal, with privacy-friendly analytics and no advertising pixels."
+  lastUpdated="2026-06-13"
+>
+  <p>
+    This page explains how
+    <a href="https://fullstackchris.dev">fullstackchris.dev</a>
+    uses cookies and similar technologies. The short version: the Website is
+    designed to be as cookie-light as possible. There is no advertising
+    pixel, no cross-site tracking, and analytics are cookieless.
+  </p>
+
+  <h2>What is a cookie</h2>
+  <p>
+    A cookie is a small text file that a website can store in your browser to
+    remember information between visits — for example, a session, a language
+    preference, or a tracking identifier. Similar technologies include local
+    storage, session storage, and pixels.
+  </p>
+
+  <h2>What this Website uses</h2>
+  <ul>
+    <li>
+      <strong>Strictly necessary technical storage</strong> — used only if
+      needed for the page to work (for example, remembering a chosen language
+      via local storage). No personal identifiers are stored.
+    </li>
+    <li>
+      <strong>Cloudflare Web Analytics</strong> — a privacy-friendly analytics
+      service that <em>does not set cookies</em> and does not use personal
+      identifiers. It collects aggregated, anonymous data such as page views
+      and referrers.
+    </li>
+  </ul>
+
+  <h2>Third-party embeds and services</h2>
+  <p>
+    When you interact with embedded forms or services on the Website, the
+    corresponding third party may set cookies on its own domain. These are
+    governed by the third party's own privacy and cookie policies:
+  </p>
+  <ul>
+    <li><strong>beehiiv</strong> — newsletter subscription form.</li>
+    <li><strong>Stripe</strong> — payment links and checkout for paid services.</li>
+    <li><strong>Calendly</strong> — scheduling embed when used for booking calls.</li>
+    <li>
+      YouTube, Tally, or Formspree — only if explicitly embedded on a page.
+      They are not used by default.
+    </li>
+  </ul>
+  <p>
+    These cookies are set by the third party, not by this Website, and they
+    only apply within those services. Submitting a form or starting a checkout
+    is treated as a deliberate interaction.
+  </p>
+
+  <h2>Consent</h2>
+  <p>
+    Because the Website does not currently use non-essential tracking cookies
+    or advertising pixels, no cookie banner is displayed. If non-essential
+    trackers are added in the future (for example, a marketing pixel or
+    auto-loaded video player), a consent mechanism will be implemented at
+    that time, in line with EU ePrivacy and GDPR requirements.
+  </p>
+
+  <h2>Managing cookies in your browser</h2>
+  <p>
+    You can manage or delete cookies in your browser settings. Most browsers
+    let you block all cookies, allow only first-party cookies, or clear stored
+    data per site:
+  </p>
+  <ul>
+    <li>
+      <a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener noreferrer">Google Chrome</a>
+    </li>
+    <li>
+      <a href="https://support.mozilla.org/en-US/kb/cookies-information-websites-store-on-your-computer" target="_blank" rel="noopener noreferrer">Mozilla Firefox</a>
+    </li>
+    <li>
+      <a href="https://support.apple.com/guide/safari/manage-cookies-sfri11471/mac" target="_blank" rel="noopener noreferrer">Safari</a>
+    </li>
+    <li>
+      <a href="https://support.microsoft.com/en-us/microsoft-edge" target="_blank" rel="noopener noreferrer">Microsoft Edge</a>
+    </li>
+  </ul>
+
+  <h2>Updates to this policy</h2>
+  <p>
+    This policy may change when new services or trackers are added. The
+    "Last updated" date at the top of the page reflects the most recent
+    revision.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions about cookies on this Website:
+    <a href="mailto:christophe.crognier@gmail.com">christophe.crognier@gmail.com</a>.
+  </p>
+</LegalPageLayout>

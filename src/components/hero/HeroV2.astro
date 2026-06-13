@@ -25,7 +25,7 @@ import { BOOK_CALL_URL } from '../../config/constants';
       </h1>
 
       <p class="v-sub reveal r3">
-        I help founders, freelancers and small teams clarify, scope and build web projects
+        I help founders, freelancers and small teams clarify, build and launch web projects
         using React, Node.js, TypeScript and practical AI-assisted development workflows.
       </p>
 
@@ -190,6 +190,21 @@ import { BOOK_CALL_URL } from '../../config/constants';
     .v-h1 { font-size: clamp(2.2rem, 7vw, 3.2rem); }
   }
   @media (max-width: 900px) {
+    /* Keep the 2-column board layout on tablet/mobile; shrink content instead */
+    .v2-board { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .bcard { padding: 11px 12px; }
+    .bcard .btitle { font-size: 0.66rem; }
+    .bcard .bstatus { font-size: 0.55rem; padding: 2px 6px; }
+    .bcard .bdot { width: 22px; height: 22px; }
+    .editor { font-size: 0.66rem; line-height: 1.55; }
+    .task { font-size: 0.7rem; }
+    .ds-chip { font-size: 0.55rem; padding: 2px 5px; }
+    .deploy { padding: 10px 12px; gap: 8px; }
+    .deploy .dlabel { font-size: 0.7rem; }
+    .deploy .durl { font-size: 0.62rem; }
+  }
+  @media (max-width: 420px) {
+    /* Very small phones — allow stacking */
     .v2-board { grid-template-columns: 1fr; }
     .bcard.span2 { grid-column: 1; }
     .deploy { grid-column: 1; }

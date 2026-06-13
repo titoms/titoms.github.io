@@ -1,0 +1,39 @@
+---
+import PageLayout from './PageLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  lastUpdated: string;
+  noindex?: boolean;
+}
+
+const { title, description, lastUpdated, noindex = false } = Astro.props;
+---
+
+<PageLayout title={title} description={description}>
+  {noindex && (
+    <Fragment slot="head">
+      <meta name="robots" content="noindex,follow" />
+    </Fragment>
+  )}
+
+  <section class="mx-auto w-full max-w-prose px-6 py-20 sm:px-8">
+    <header class="mb-10">
+      <h1 class="font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+        {title}
+      </h1>
+      <p class="mt-3 text-sm text-mid">
+        <em>Last updated: {lastUpdated}</em>
+      </p>
+    </header>
+
+    <article class="legal-prose">
+      <slot />
+    </article>
+
+    <aside class="legal-checklist mt-16">
+      <slot name="checklist" />
+    </aside>
+  </section>
+</PageLayout>

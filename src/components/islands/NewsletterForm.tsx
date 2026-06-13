@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui";
 import { BEEHIIV_PUBLICATION_ID } from "../../config/constants";
 import { trackEvent } from "../../utils/analytics";
@@ -12,6 +12,10 @@ const NewsletterForm = () => {
     if (!email || status === "loading") return;
     setStatus("loading");
     try {
+      // no-cors makes the response opaque — we cannot tell if beehiiv accepted,
+      // rejected, deduped, or rate-limited the email. The success state means
+      // "request submitted", not "subscription active". For real confirmation,
+      // proxy this through a server (Worker / API route) and inspect the response.
       await fetch(`https://embeds.beehiiv.com/${BEEHIIV_PUBLICATION_ID}/subscribe`, {
         method: "POST",
         mode: "no-cors",
@@ -26,17 +30,28 @@ const NewsletterForm = () => {
       });
       setStatus("success");
       setEmail("");
-      trackEvent("newsletter_signup", { source: "footer" });
+      trackEvent("newsletter_signup_submit", { source: "footer" });
     } catch {
       setStatus("error");
     }
   };
 
+  useEffect(() => {
+    if (status === "success") {
+      trackEvent("newsletter_signup_success_view", { source: "footer" });
+    }
+  }, [status]);
+
   if (status === "success") {
     return (
-      <p className="text-sm text-positive">
-        You're in! Check your inbox for a confirmation email.
-      </p>
+      <div data-analytics="newsletter_signup_success">
+        <p className="text-sm text-positive">
+          Check your inbox to confirm your subscription.
+        </p>
+        <p className="mt-1 text-xs text-mid">
+          If confirmation is required, you'll receive an email from AI Clarity Newsletter shortly.
+        </p>
+      </div>
     );
   }
 
@@ -51,7 +66,13 @@ const NewsletterForm = () => {
         disabled={status === "loading"}
         className="min-h-[48px] flex-1 rounded-lg border border-strong bg-raised/80 px-4 py-3 text-sm text-white placeholder:text-low focus:border-accent focus:outline-none disabled:opacity-60"
       />
-      <Button type="submit" variant="primary" size="md" disabled={status === "loading"}>
+      <Button
+        type="submit"
+        variant="primary"
+        size="md"
+        disabled={status === "loading"}
+        data-analytics="newsletter_signup_submit"
+      >
         {status === "loading" ? "Sending…" : "Subscribe"}
       </Button>
       {status === "error" && (

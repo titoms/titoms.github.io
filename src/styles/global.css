@@ -283,6 +283,33 @@ body.cursor-active #cursor-glow {
   transform: translateY(-1px);
 }
 
+/* ---- gradient outlined button (animated conic border + accent text by default) ---- */
+.btn-gradient {
+  --btn-bg: var(--bg-2);
+  background:
+    linear-gradient(var(--btn-bg), var(--btn-bg)) padding-box,
+    conic-gradient(
+      from var(--border-angle),
+      transparent 20%,
+      var(--accent-400) 45%,
+      #60a5fa 60%,
+      transparent 80%
+    ) border-box;
+  animation: border-spin 5s linear infinite;
+  color: var(--accent-300);
+  transition-property: transform, box-shadow, color;
+}
+
+.btn-gradient:hover {
+  color: var(--text-hi);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(124, 92, 232, 0.22);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-gradient { animation: none; }
+}
+
 .btn-primary-animated {
   border-color: rgba(196, 181, 253, 0.74);
   color: var(--text-on-accent);
@@ -507,44 +534,46 @@ body.cursor-active #cursor-glow {
 .tech-badge {
   position: relative;
   isolation: isolate;
-  color: var(--tech-color, var(--text-mid));
-  border-color: var(--tech-border, var(--border-strong));
-  background: var(--tech-bg, var(--bg-2));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-mid);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-2);
+  border-radius: var(--r-pill);
+  /* Slightly larger bottom padding compensates the mono font baseline so the
+     glyph sits visually centered between the rounded edges. */
+  padding: 6px 12px 7px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1;
   transition:
-    background-color 180ms ease,
     border-color 180ms ease,
+    background-color 180ms ease,
     box-shadow 180ms ease,
     color 180ms ease,
     transform 180ms ease;
 }
 
-.tech-badge::before {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  z-index: -1;
-  border-radius: inherit;
-  pointer-events: none;
-  background: radial-gradient(circle at center, var(--tech-glow, var(--accent-glow)), transparent 68%);
-  filter: blur(12px);
-  opacity: 0;
-  transition: opacity 180ms ease, transform 180ms ease;
-  transform: scale(0.86);
-}
-
 .tech-badge:hover {
-  color: var(--tech-hover-text, var(--text-on-accent));
-  border-color: var(--tech-fill, var(--accent-400));
-  background: var(--tech-fill, var(--accent-400));
-  box-shadow:
-    0 0 0 1px var(--tech-border, var(--border-accent)),
-    0 0 24px var(--tech-glow, var(--accent-glow));
+  color: var(--tech-color, var(--accent-300));
+  border-color: var(--tech-color, var(--accent-400));
+  background: color-mix(in srgb, var(--tech-color, var(--accent-400)) 8%, var(--bg-2));
+  box-shadow: 0 0 0 1px var(--tech-color, var(--accent-400)), 0 6px 16px color-mix(in srgb, var(--tech-color, var(--accent-400)) 22%, transparent);
   transform: translateY(-1px);
 }
 
-.tech-badge:hover::before {
-  opacity: 1;
-  transform: scale(1);
+.tech-badge.featured {
+  color: var(--text-hi);
+  border-color: var(--border-accent);
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 1px var(--border-accent);
+}
+.tech-badge.featured:hover {
+  color: var(--tech-color, var(--text-hi));
+  border-color: var(--tech-color, var(--accent-400));
 }
 
 @media (max-width: 700px) {
@@ -880,6 +909,20 @@ html.no-js .reveal {
   flex-shrink: 0;
 }
 
+/* ── shared hero eyebrow (Home, About, Contact, Blog) ── */
+.site-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-mid);
+  padding: 7px 14px 7px 11px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-pill);
+  background: rgba(26,26,32,0.55);
+  backdrop-filter: blur(8px);
+  width: fit-content;
+}
+.site-eyebrow.accent { color: var(--accent-400); }
+
 /* ── project filter: show / hide states ── */
 .is-hidden {
   opacity: 0 !important;
@@ -1045,10 +1088,34 @@ html.no-js .reveal {
   line-height: 1.45;
 }
 @media (max-width: 720px) {
-  .ladder .rail { display: none; }
-  .lnodes { grid-template-columns: 1fr; gap: 20px; }
-  .lnode { flex-direction: row; align-items: flex-start; text-align: left; gap: 16px; }
-  .lnode .ld { max-width: none; }
+  /* Convert horizontal rail to vertical rail running through the markers */
+  .ladder .rail {
+    top: 27px;
+    bottom: 27px;
+    left: 27px;
+    right: auto;
+    width: 2px;
+    height: auto;
+  }
+  .ladder .rail-fill {
+    transform-origin: top;
+    transform: scaleY(0);
+    background: linear-gradient(180deg, var(--accent-500), var(--accent-300));
+  }
+  .lnodes { grid-template-columns: 1fr; gap: 24px; }
+  .lnode {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    align-items: center;
+    column-gap: 16px;
+    row-gap: 4px;
+    text-align: left;
+    width: 100%;
+  }
+  .lnode .marker { grid-row: span 3; }
+  .lnode .lk { grid-column: 2; }
+  .lnode .ln { grid-column: 2; }
+  .lnode .ld { grid-column: 2; max-width: none; }
 }
 
 /* ── project card: mockup window ── */
@@ -1470,3 +1537,125 @@ html.no-js .reveal {
 .article-content strong {
   color: var(--text-hi);
 }
+
+.legal-prose {
+  color: var(--text-mid);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.legal-prose > * + * {
+  margin-top: 1rem;
+}
+
+.legal-prose h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-hi);
+}
+
+.legal-prose h3 {
+  margin-top: 1.75rem;
+  margin-bottom: 0.25rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-hi);
+}
+
+.legal-prose p,
+.legal-prose li {
+  color: var(--text-mid);
+}
+
+.legal-prose a {
+  color: var(--color-brand);
+  text-decoration: underline;
+  text-decoration-color: rgba(167, 139, 250, 0.45);
+  text-underline-offset: 3px;
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+}
+
+.legal-prose a:hover {
+  color: var(--color-brand-hover);
+  text-decoration-color: var(--color-brand-hover);
+}
+
+.legal-prose ul,
+.legal-prose ol {
+  padding-left: 1.35rem;
+}
+
+.legal-prose ul {
+  list-style: disc;
+}
+
+.legal-prose ol {
+  list-style: decimal;
+}
+
+.legal-prose li + li {
+  margin-top: 0.35rem;
+}
+
+.legal-prose strong {
+  color: var(--text-hi);
+  font-weight: 600;
+}
+
+.legal-prose code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  padding: 0.1em 0.35em;
+  border-radius: var(--r-sm);
+  background: var(--bg-2);
+  color: var(--text-hi);
+}
+
+.legal-prose dl {
+  display: grid;
+  grid-template-columns: minmax(10rem, max-content) 1fr;
+  gap: 0.35rem 1rem;
+}
+
+.legal-prose dt {
+  color: var(--text-hi);
+  font-weight: 600;
+}
+
+.legal-prose dd {
+  color: var(--text-mid);
+  margin: 0;
+}
+
+.legal-checklist:empty {
+  display: none;
+}
+
+.legal-checklist {
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--text-low);
+}
+
+.legal-checklist h2 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--text-mid);
+  margin-bottom: 0.5rem;
+}
+
+.legal-checklist ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+.legal-checklist li + li {
+  margin-top: 0.25rem;
+}
+

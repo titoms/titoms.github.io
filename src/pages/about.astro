@@ -1,10 +1,9 @@
 ---
 import { Image } from 'astro:assets';
 import PageLayout from '../components/layout/PageLayout.astro';
-import { Badge } from '../components/ui/Badge';
+import TechStackGrouped from '../components/ui/TechStackGrouped.astro';
 import { Button } from '../components/ui/Button';
-import { experiences, BOOK_CALL_URL, technologies, SITE_ALIASES, SOCIAL_LINKS } from '../config/constants';
-import { getTechBadgeStyle } from '../config/techBadges';
+import { experiences, BOOK_CALL_URL, technologyCategories, SITE_ALIASES, SOCIAL_LINKS } from '../config/constants';
 import chrisPortrait from '../assets/chris-portrait.webp';
 
 const jsonLd = {
@@ -50,8 +49,8 @@ const approachCards = [
 ---
 
 <PageLayout
-  title="About — Christophe Crognier | fullstackchris.dev"
-  description="AI Fullstack Engineer building scalable applications and automation systems. Shipping production-ready React, Node.js and Rust products from architecture to deployment."
+  title="About — Christophe Crognier, AI-Assisted Full-Stack Web Developer | fullstackchris.dev"
+  description="AI-assisted full-stack web developer and technical coach. I build React, Node.js and TypeScript web apps end to end — from MVP scope and architecture to deployment, automation and AI workflows."
   jsonLd={jsonLd}
 >
   <!-- HERO -->
@@ -67,7 +66,7 @@ const approachCards = [
       </nav>
       <div class="hero-split">
         <div>
-          <span class="ab-eyebrow reveal r1"><span class="pulse-dot"></span>AI FULLSTACK ENGINEER</span>
+          <span class="site-eyebrow accent reveal r1"><span class="pulse-dot"></span>AI FULLSTACK ENGINEER</span>
           <h1 class="ab-h1 reveal r2">
             Production-ready products, <span class="ab-accent">end to end.</span>
           </h1>
@@ -226,12 +225,8 @@ const approachCards = [
         <h2 class="ab-h2">Tools used daily.</h2>
         <p class="ab-section-lead">The modern, boring-in-a-good-way toolchain behind everything I ship — plus the AI tools that have become part of the workflow.</p>
       </div>
-      <div class="stack-cloud" data-stagger="55" data-stagger-base="40">
-        {technologies.map((tech) => (
-          <Badge variant="default" className="tech-badge" style={getTechBadgeStyle(tech.name)} data-reveal="zoom">
-            {tech.name}
-          </Badge>
-        ))}
+      <div class="stack-cloud">
+        <TechStackGrouped categories={technologyCategories} />
       </div>
     </div>
   </section>
@@ -511,7 +506,7 @@ const approachCards = [
   }
 
   /* ── tech stack cloud ── */
-  .stack-cloud { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .stack-cloud { width: 100%; }
 
   /* ── CTA band ── */
   .ab-cta { border-top: 1px solid var(--border); }
@@ -527,7 +522,9 @@ const approachCards = [
     .portrait-scene .float-pill { display: none; }
   }
   @media (max-width: 600px) {
-    .hero-meta { flex-wrap: wrap; gap: 1.25rem; }
+    .hero-meta { flex-wrap: nowrap; gap: 0.8rem; }
+    .hero-meta .stat .n { font-size: 1.25rem; }
+    .hero-meta .stat .l { font-size: 0.58rem; letter-spacing: 0.08em; }
     .tl-head { gap: 0.4rem; }
     .tl-meta { white-space: normal; }
   }

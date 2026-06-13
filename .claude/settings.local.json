@@ -32,7 +32,12 @@
       "Bash(Get-ChildItem -Path \"C:\\\\DEV\\\\titoms.github.io\" -Force)",
       "Bash(Select-Object Name)",
       "Bash(Get-ChildItem \"C:\\\\DEV\\\\titoms.github.io\\\\public\" -Force)",
-      "Bash(Select-Object Name, Length)"
+      "Bash(Select-Object Name, Length)",
+      "Bash(Select-String -Pattern \"\\(privacy|legal|cookies|terms|mentions\\)\" -ErrorAction SilentlyContinue)",
+      "Bash(legal)",
+      "Bash(cookies)",
+      "Bash(terms)",
+      "Bash(mentions\")"
     ]
   }
 }

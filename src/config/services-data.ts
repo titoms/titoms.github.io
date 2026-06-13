@@ -138,10 +138,15 @@ const coaching: ServicePageData = {
     "Understanding generated code",
   ],
   heroCard: {
-    type: "chips",
-    title: "COME WITH",
-    items: ["A bug", "A messy codebase", "AI-generated code", "A project idea", "A school project", "A freelance job", "A feature to plan"],
-    leaveWith: "A diagnosis, a clear action plan, and a real understanding of your own code.",
+    type: "checklist",
+    title: "YOU LEAVE WITH",
+    items: [
+      "A clear project diagnosis",
+      "A written action plan",
+      "Architecture and stack advice",
+      "Real understanding of your code",
+      "Next steps you can execute",
+    ],
   },
   painPoints: [
     "You are blocked on your project and losing time.",
@@ -219,7 +224,7 @@ const coaching: ServicePageData = {
     {
       question: "Can this lead to development work?",
       answer:
-        "Yes. If the scope is clear, we can move from coaching to development days or a custom MVP project.",
+        "Yes. If the scope is clear, you can move from coaching to development days or a custom MVP project.",
     },
   ],
 };
@@ -256,11 +261,23 @@ const devDay: ServicePageData = {
     "Responsive layouts",
   ],
   heroCard: {
-    type: "investment",
-    title: "DAY RATES",
-    amount: "from €350",
-    note: "Half-day €350 · Full day €600 · 3-day pack €1,650 · 5-day pack €2,600",
-    footer: "Focused blocks · delivery notes included",
+    type: "info",
+    title: "WHAT THIS IS",
+    description:
+      "Focused, professional development time on your existing codebase — booked by the half-day or day. Not a full product build: a dedicated block to ship a specific feature, fix a bug or deliver a clear technical outcome.",
+    whenTitle: "WHEN TO USE",
+    whenItems: [
+      "You have a scoped feature or bug but no dev bandwidth",
+      "You need a senior pair of hands for a few days",
+      "You want a focused refactor or technical cleanup",
+      "You need a working slice shipped on a tight schedule",
+    ],
+    leaveWithItems: [
+      "A shipped feature, fix or refactor",
+      "Delivery notes with the decisions made",
+      "Clear next steps documented",
+      "Working code you fully own",
+    ],
   },
   painPoints: [
     "You have a clear bug or feature but no developer time to tackle it.",
@@ -377,11 +394,11 @@ const devDay: ServicePageData = {
 
 const mvpWorkshop: ServicePageData = {
   slug: "mvp-bootstrapping-workshop",
-  title: "MVP Bootstrapping Workshop",
+  title: "AI Clarity Bootstrap Workshop",
   meta: {
-    title: "MVP Bootstrapping Workshop for Founders",
+    title: "AI Clarity Framework — MVP Workshop for Solo Founders",
     description:
-      "A practical 1-day or 5-day workshop to clarify your web app idea, define your MVP, choose the right tech stack and create a realistic product roadmap.",
+      "A practical workshop to clarify your web app idea, define your MVP, choose the right stack and create a realistic roadmap using the AI Clarity Framework — for solo founders and small teams.",
   },
   badge: "Workshop",
   hero: {
@@ -525,11 +542,23 @@ const mvpDev: ServicePageData = {
     "Training platforms",
   ],
   heroCard: {
-    type: "investment",
-    title: "INVESTMENT",
-    amount: "from €4,500",
-    note: "Most projects range €6,000 – €15,000 depending on scope. Custom quote after discovery.",
-    footer: "Staged MVP approach · fixed quote per phase",
+    type: "info",
+    title: "WHAT THIS IS",
+    description:
+      "End-to-end development of the first version of your web app — product clarification, architecture, frontend, backend, deployment and handover, delivered by one full-stack developer who can also help you make product decisions.",
+    whenTitle: "WHEN TO USE",
+    whenItems: [
+      "You have a clear product idea and need to ship the first version",
+      "You can't afford or don't need a full team yet",
+      "You want product thinking and execution from the same person",
+      "You want to launch fast without accumulating tech debt",
+    ],
+    leaveWithItems: [
+      "A working web application in production",
+      "Product scope clarified along the way",
+      "Codebase handed over with docs",
+      "Foundations ready for the next phase",
+    ],
   },
   painPoints: [
     "You have a clear product idea but no technical team to build it.",
@@ -590,7 +619,7 @@ const mvpDev: ServicePageData = {
   processSteps: [
     {
       title: "Discovery",
-      description: "We map the product idea, target users, must-have features, constraints and risks.",
+      description: "I'll map the product idea, target users, must-have features, constraints and risks with you.",
     },
     {
       title: "Scope and proposal",
@@ -623,7 +652,7 @@ const mvpDev: ServicePageData = {
     {
       question: "Can you help define the scope first?",
       answer:
-        "Yes. The MVP Bootstrapping Workshop is recommended before development if the idea is still unclear.",
+        "Yes. The AI Clarity Bootstrap Workshop is recommended before development if the idea is still unclear.",
     },
     {
       question: "Can you include AI features?",

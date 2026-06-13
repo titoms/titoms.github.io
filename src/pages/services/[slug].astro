@@ -132,6 +132,43 @@ const jsonLd = {
                 )}
               </>
             )}
+
+            {service.heroCard.type === 'info' && (
+              <>
+                <span class="font-mono text-xs uppercase tracking-widest text-accent">{service.heroCard.title}</span>
+                {service.heroCard.description && (
+                  <p class="mt-3 text-[0.95rem] leading-7 text-secondary">{service.heroCard.description}</p>
+                )}
+                {service.heroCard.whenItems && service.heroCard.whenItems.length > 0 && (
+                  <>
+                    <hr class="my-5 border-border" />
+                    <span class="font-mono text-xs uppercase tracking-widest text-accent">{service.heroCard.whenTitle ?? 'WHEN TO USE'}</span>
+                    <ul class="mt-3 space-y-2">
+                      {service.heroCard.whenItems.map((item) => (
+                        <li class="flex items-start gap-2 text-[0.95rem] leading-6 text-secondary">
+                          <svg class="mt-1 shrink-0 text-accent" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m13 6 6 6-6 6"/><path d="M5 12h14"/></svg>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+                {service.heroCard.leaveWithItems && service.heroCard.leaveWithItems.length > 0 && (
+                  <>
+                    <hr class="my-5 border-border" />
+                    <span class="font-mono text-xs uppercase tracking-widest text-accent">YOU LEAVE WITH</span>
+                    <ul class="mt-3 space-y-2">
+                      {service.heroCard.leaveWithItems.map((item) => (
+                        <li class="flex items-start gap-2 text-[0.95rem] leading-6 text-secondary">
+                          <svg class="mt-1 shrink-0 text-positive" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+              </>
+            )}
           </Card>
         )}
       </div>
@@ -179,7 +216,7 @@ const jsonLd = {
   {service.useCases && service.useCases.length > 0 && (
     <section class="border-t border-border" style="padding-top: 0;">
       <div class={sectionClass}>
-        <SectionHeader eyebrow="WHAT WE CAN WORK ON" title="Use cases." data-reveal="fade" />
+        <SectionHeader eyebrow="WHAT I CAN HELP WITH" title="Use cases." data-reveal="fade" />
         <div class="mt-6 flex flex-wrap gap-2" data-stagger="45" data-stagger-base="60">
           {service.useCases.map((uc) => (
             <Badge variant="default" data-reveal="zoom">{uc}</Badge>
@@ -250,29 +287,46 @@ const jsonLd = {
     <div class={sectionClass}>
       <SectionHeader eyebrow="PRICING" title={service.pricing.length === 1 ? 'Investment.' : 'Three formats.'} data-reveal="fade" />
       <div class="mt-10 mx-auto max-w-[880px]" data-stagger="75" data-stagger-base="80">
-        {service.pricing.map((row) => (
-          <div class={`flex flex-col gap-3 border-b border-border py-5 last:border-0 sm:flex-row sm:items-center sm:gap-6 ${row.featured ? 'rounded-lg border border-accent/30 bg-accent/5 px-4 py-5 -mx-4' : ''}`} data-reveal="blur">
-            {row.featured && <Badge variant="accent">Recommended</Badge>}
-            <div class="flex-1">
-              <p class="font-display font-medium text-white">{row.label}</p>
+        {service.pricing.map((row) => {
+          const hasStripe = !!service.stripeLink && !service.stripeLink.includes('REPLACE');
+          return (
+            <div class={`flex flex-col gap-3 border-b border-border py-5 last:border-0 sm:flex-row sm:items-center sm:gap-6 ${row.featured ? 'rounded-lg border border-accent/30 bg-accent/5 px-4 py-5 -mx-4' : ''}`} data-reveal="blur">
+              {row.featured && <Badge variant="accent">Recommended</Badge>}
+              <div class="flex-1">
+                <p class="font-display font-medium text-white">{row.label}</p>
+              </div>
+              <p class="font-display text-[1.5rem] font-bold text-white">{row.price}</p>
+              {hasStripe ? (
+                <Button
+                  href={service.stripeLink!}
+                  variant={row.featured ? 'primary' : 'secondary'}
+                  size="sm"
+                  data-track="stripe_click"
+                  data-service={service.slug}
+                >
+                  Buy now
+                </Button>
+              ) : (
+                <Button
+                  href={BOOK_CALL_URL}
+                  variant="outline"
+                  size="sm"
+                  class="opacity-60"
+                  title="Direct payment coming soon — book a call to get started"
+                  data-track="cta_click"
+                  data-service={service.slug}
+                >
+                  Book a call
+                </Button>
+              )}
             </div>
-            <p class="font-display text-[1.5rem] font-bold text-white">{row.price}</p>
-            <Button
-              href={service.stripeLink && !service.stripeLink.includes('REPLACE') ? service.stripeLink : BOOK_CALL_URL}
-              variant={row.featured ? 'primary' : 'secondary'}
-              size="sm"
-              data-track="stripe_click"
-              data-service={service.slug}
-            >
-              {service.stripeLink && !service.stripeLink.includes('REPLACE') ? 'Buy now' : 'Book'}
-            </Button>
-          </div>
-        ))}
+          );
+        })}
       </div>
       {service.pricingNote && (
         <p class="mt-6 text-sm text-low" data-reveal="fade">{service.pricingNote}</p>
       )}
-      <div class="mt-8 flex flex-wrap gap-4" data-reveal="zoom">
+      <div class="mt-8 flex flex-wrap justify-center gap-4" data-reveal="zoom">
         <Button
           href={BOOK_CALL_URL}
           variant="primary"

@@ -234,7 +234,7 @@ const jsonLd = [
 
     <!-- Product flow (animated like the homepage "How a session works" stepper) -->
     <div data-reveal="soft-right">
-      <ProcessStepper client:visible steps={project.productFlow.map(s => ({ title: s.title, description: s.description }))} />
+      <ProcessStepper client:visible showStatus={false} steps={project.productFlow.map(s => ({ title: s.title, description: s.description }))} />
     </div>
 
 
@@ -365,9 +365,9 @@ const jsonLd = [
       {project.stack.map(cat => (
         <div class="stack-cat" data-reveal="zoom">
           <h5>
-            <span class="ic">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <span class="ic" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="12" r="4"/>
               </svg>
             </span>
             {cat.label}
@@ -411,7 +411,7 @@ const jsonLd = [
     <div class="cs-cta-card" data-reveal="zoom">
       <span class="eyebrow-cs" style="justify-content:center;">WORK WITH ME</span>
       <h2>Want to build something like this?</h2>
-      <p>Bring me your idea or half-built project. We'll scope it, design it and ship it — using the same workflow behind {project.name}.</p>
+      <p>Bring me your idea or half-built project. I'll scope it, design it and ship it — using the same workflow behind {project.name}.</p>
       <div class="hero-actions" style="justify-content:center;">
         <a class="cs-btn primary" href="/services/mvp-development">Request development help <span class="arrow">→</span></a>
         <a class="cs-btn secondary" href={BOOK_CALL_URL}>Book a call</a>
@@ -458,8 +458,7 @@ const jsonLd = [
   .cs-hero h1 { font-size: clamp(2.6rem, 5.4vw, 4.2rem); line-height: 0.98; letter-spacing: -0.035em; margin: 1rem 0 1rem; }
   .cs-lead { color: var(--text-mid); font-size: 1.05rem; line-height: 1.65; max-width: 56ch; margin-bottom: 1.5rem; }
   .hero-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.25rem; }
-  .badge-cs { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-mid); background: var(--bg-2); border: 1px solid var(--border-strong); border-radius: var(--r-pill); padding: 4px 10px; }
-  .badge-cs.tech-badge { color: var(--tech-color, var(--text-mid)); background: var(--tech-bg, var(--bg-2)); border-color: var(--tech-border, var(--border-strong)); }
+  .badge-cs { font-family: var(--font-mono); font-size: 0.72rem; border-radius: var(--r-pill); padding: 4px 10px; }
   .meta-bar { display: flex; flex-wrap: wrap; gap: 2.5rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
   .meta-bar .mk { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-low); margin-bottom: 4px; }
   .meta-bar .mv { font-family: var(--font-display); font-weight: 600; color: var(--text-hi); font-size: 1.02rem; }
@@ -571,7 +570,7 @@ const jsonLd = [
   .chips { display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-start; }
 
   /* ---- proves ---- */
-  .proves { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  .proves { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
   .prove { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.5rem; transition: border-color .2s ease, transform .2s ease; }
   .prove:hover { border-color: var(--border-strong); transform: translateY(-3px); }
   .prove-ic { width: 44px; height: 44px; border-radius: var(--r-md); background: var(--accent-soft); border: 1px solid var(--border-accent); color: var(--accent-300); display: grid; place-items: center; margin-bottom: 1rem; }

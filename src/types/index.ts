@@ -174,13 +174,17 @@ export type ServiceIncludedItem = {
 };
 
 export type ServiceHeroCard = {
-  type: 'chips' | 'checklist' | 'investment';
+  type: 'chips' | 'checklist' | 'investment' | 'info';
   title: string;
   items?: string[];
   leaveWith?: string;
+  leaveWithItems?: string[];
   amount?: string;
   note?: string;
   footer?: string;
+  description?: string;
+  whenTitle?: string;
+  whenItems?: string[];
 };
 
 export type ServicePageData = {

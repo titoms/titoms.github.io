@@ -1,6 +1,5 @@
 ---
 import PageLayout from '../components/layout/PageLayout.astro';
-import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { SectionHeader } from '../components/ui/SectionHeader';
@@ -11,13 +10,13 @@ const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
 const callSteps = [
   { step: "1", label: "Choose a time", description: "Pick a 30-minute slot that works for you." },
   { step: "2", label: "Describe your project", description: "Brief context on what you are building or what is blocked." },
-  { step: "3", label: "Join the call", description: "We will talk through the situation and define a path forward." },
+  { step: "3", label: "Join the call", description: "I'll talk through the situation with you and define a path forward." },
 ];
 
 const serviceLinks = [
   { title: "Web project coaching", href: "/services/web-project-coaching", description: "Review, unblock, and get written next steps." },
   { title: "Full-stack development day", href: "/services/full-stack-development-day", description: "Focused implementation sessions." },
-  { title: "MVP bootstrapping workshop", href: "/services/mvp-bootstrapping-workshop", description: "Turn your idea into a build plan." },
+  { title: "AI Clarity Bootstrap Workshop", href: "/services/mvp-bootstrapping-workshop", description: "Turn your idea into a build plan." },
   { title: "AI web development newsletter", href: "/services/ai-web-development-newsletter", description: "Monthly briefing on AI tools and workflows." },
 ];
 
@@ -38,8 +37,8 @@ const jsonLd = {
 ---
 
 <PageLayout
-  title="Contact — fullstackchris.dev"
-  description="Book a free 30-minute call to discuss your project, blocker, or product idea. No commitment required."
+  title="Contact — Book a Call with a Full-Stack Web Developer | fullstackchris.dev"
+  description="Book a free 30-minute call to discuss your web project, MVP, blocker or product idea. Full-stack development, web project coaching, AI-assisted workflows — no commitment required."
   jsonLd={jsonLd}
 >
   <Fragment slot="head">
@@ -54,12 +53,12 @@ const jsonLd = {
       <span class="blob blob-3"></span>
     </div>
     <div class={`${sectionClass} site-hero-inner`} data-stagger="100" data-stagger-base="80">
-      <Badge variant="accent" data-reveal="fade">Contact</Badge>
+      <span class="site-eyebrow" data-reveal="fade"><span class="pulse-dot"></span>Contact</span>
       <h1 class="mt-6 max-w-3xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white" data-reveal="soft-left">
         Let's talk about your project.
       </h1>
       <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary" data-reveal="blur">
-        Book a free 30-minute call. Bring your project, blocker, or idea — we'll figure out if and how I can help.
+        Book a free 30-minute call. Bring your project, blocker, or idea — I'll help you figure out if and how I can help.
       </p>
     </div>
   </section>
@@ -104,10 +103,10 @@ const jsonLd = {
       <SectionHeader eyebrow="Or browse services" title="Know what you need?" description="Skip the call and go straight to the right offer." data-reveal="fade" />
       <div class="mt-10 grid gap-4 sm:grid-cols-2" data-stagger="85" data-stagger-base="80">
         {serviceLinks.map((link) => (
-          <Card hover class="flex flex-col gap-2" data-reveal="blur">
+          <Card hover class="flex flex-col gap-4" data-reveal="blur">
             <h3 class="font-display text-lg font-semibold text-white">{link.title}</h3>
             <p class="text-sm leading-6 text-secondary">{link.description}</p>
-            <Button href={link.href} variant="outline" size="sm" class="mt-2 w-fit">
+            <Button href={link.href} variant="outline" size="sm" class="mt-4 w-fit">
               Learn more
             </Button>
           </Card>

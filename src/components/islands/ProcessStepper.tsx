@@ -4,6 +4,7 @@ import type { ProcessItem } from "../../types";
 
 type ProcessStepperProps = {
   steps: ProcessItem[];
+  showStatus?: boolean;
 };
 
 type StepperState = {
@@ -30,7 +31,7 @@ const ArrowRightIcon = () => (
   </svg>
 );
 
-const ProcessStepper = ({ steps }: ProcessStepperProps) => {
+const ProcessStepper = ({ steps, showStatus = true }: ProcessStepperProps) => {
   const [state, setState] = useState<StepperState>({
     activeIndex: -1,
     completedCount: 0,
@@ -140,16 +141,20 @@ const ProcessStepper = ({ steps }: ProcessStepperProps) => {
           );
         })}
       </div>
-      <div
-        className={`process-status-pill mt-5 inline-flex items-center gap-3 rounded-pill border px-4 py-2 font-mono text-xs uppercase tracking-[0.14em] transition-colors ${
-          state.shipped
-            ? "border-accent bg-accent-soft text-accent"
-            : "border-border bg-tertiary text-low"
-        }`}
-      >
-        {state.shipped ? <CheckIcon /> : <ArrowRightIcon />}
-        <span>{state.shipped ? "complete / shipped" : "in progress"}</span>
-      </div>
+      {showStatus && (
+        <div className="mt-5 flex justify-center">
+          <div
+            className={`process-status-pill inline-flex items-center gap-3 rounded-pill border px-4 py-2 font-mono text-xs uppercase tracking-[0.14em] transition-colors ${
+              state.shipped
+                ? "border-accent bg-accent-soft text-accent"
+                : "border-border bg-tertiary text-low"
+            }`}
+          >
+            {state.shipped ? <CheckIcon /> : <ArrowRightIcon />}
+            <span>{state.shipped ? "complete / shipped" : "in progress"}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

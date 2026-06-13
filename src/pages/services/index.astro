@@ -53,7 +53,7 @@ const ladderNodes = [
     icon: `<path d="M4 19V5a2 2 0 0 1 2-2h10l4 4v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M8 9h6M8 13h8M8 17h5"/>` },
   { step: "1", key: "clarify", label: "Clarify",  name: "Coaching",    desc: "Diagnose the blocker, pick the next move.",
     icon: `<path d="M21 12a9 9 0 1 1-3.5-7.1L21 4l-1 4h-4"/><path d="M8 12h6"/>` },
-  { step: "2", key: "plan",    label: "Plan",     name: "MVP workshop", desc: "Scope, flows, stack and a real roadmap.",
+  { step: "2", key: "plan",    label: "Plan",     name: "Clarity bootstrap", desc: "Scope, flows, stack and a real roadmap.",
     icon: `<path d="M3 3v18h18"/><path d="M7 14l3-4 3 3 4-6"/>` },
   { step: "3", key: "build",   label: "Build",    name: "Dev days",    desc: "Focused blocks that ship features.",
     icon: `<polyline points="7 8 3 12 7 16"/><polyline points="17 8 21 12 17 16"/><line x1="14" y1="5" x2="10" y2="19"/>` },
@@ -63,8 +63,8 @@ const ladderNodes = [
 ---
 
 <PageLayout
-  title="Services — fullstackchris.dev"
-  description="Coaching, full-stack development days, MVP workshops, custom MVP development and a practical AI web-dev newsletter — for founders, freelancers and small teams."
+  title="Services — Web Project Coaching, Full-Stack Development, MVP Workshop and Custom MVP | fullstackchris.dev"
+  description="Web project coaching, full-stack development days, the AI Clarity Bootstrap Workshop, custom MVP development and a practical AI web development newsletter — React, Node.js, TypeScript and AI-assisted workflows for founders, freelancers and small teams."
   jsonLd={{
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -94,7 +94,7 @@ const ladderNodes = [
          style="background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:64px 64px;"
          aria-hidden="true"></div>
 
-    <div class={`${sectionMax} relative z-[3]`} style="padding-top:clamp(5rem,8vh,6.5rem);">
+    <div class={`${sectionMax} relative z-[3]`} style="padding-top:clamp(5rem,8vh,6.5rem);padding-bottom:clamp(2.5rem,4vh,1rem);">
       <!-- Breadcrumb -->
       <nav class="reveal r1 flex items-center gap-2 font-mono text-xs text-low mb-4">
         <a href="/" class="text-secondary transition-colors hover:text-white">Home</a>
@@ -103,7 +103,7 @@ const ladderNodes = [
       </nav>
 
       <!-- Eyebrow -->
-      <span class="reveal r2 inline-flex items-center gap-[10px] font-mono text-[0.7rem] font-medium tracking-[0.16em] uppercase text-secondary px-[14px] py-[7px] border border-strong rounded-full" style="background:rgba(26,26,32,0.55);backdrop-filter:blur(8px);">
+      <span class="reveal r2 inline-flex items-center gap-[10px] font-mono text-[0.7rem] font-medium tracking-[0.16em] uppercase text-secondary px-[14px] py-[7px] border border-strong rounded-md" style="background:rgba(26,26,32,0.55);backdrop-filter:blur(8px);">
         <span class="pulse-dot"></span>Clarify · Plan · Build · Launch
       </span>
 
@@ -119,11 +119,11 @@ const ladderNodes = [
 
       <!-- CTAs -->
       <div class="reveal r5 flex flex-wrap gap-3">
-        <a class="btn btn-primary-animated inline-flex items-center gap-2 rounded-pill border px-5 py-2 font-display font-semibold text-[0.875rem] no-underline transition-all duration-200"
+        <a class="btn btn-primary-animated inline-flex items-center gap-2 rounded-md border px-5 py-2 font-display font-semibold text-[0.875rem] no-underline transition-all duration-200"
            href={BOOK_CALL_URL}>
           Book a 15-min call <span>→</span>
         </a>
-        <a class="btn-grad-hover btn-secondary inline-flex items-center gap-2 rounded-pill border border-strong px-5 py-2 font-display font-semibold text-[0.875rem] text-secondary no-underline transition-all duration-200"
+        <a class="btn-grad-hover btn-secondary inline-flex items-center gap-2 rounded-md border border-strong px-5 py-2 font-display font-semibold text-[0.875rem] text-secondary no-underline transition-all duration-200"
            href="#ladder">
           See how it fits together
         </a>
@@ -227,9 +227,9 @@ const ladderNodes = [
           Start with a 30-minute call.
         </h2>
         <p class="text-secondary leading-7 mb-8 mx-auto" style="max-width:46ch;">
-          Tell me where you are and we'll pick the right entry point together — no pressure, no jargon.
+          Tell me where you are and I'll help you pick the right entry point — no pressure, no jargon.
         </p>
-        <a class="btn btn-primary-animated inline-flex items-center gap-2 rounded-pill border px-6 py-3 font-display font-semibold text-[0.95rem] no-underline transition-all duration-200"
+        <a class="btn btn-primary-animated inline-flex items-center gap-2 rounded-md border px-6 py-3 font-display font-semibold text-[0.95rem] no-underline transition-all duration-200"
            href={BOOK_CALL_URL}>
           Book a project call <span>→</span>
         </a>

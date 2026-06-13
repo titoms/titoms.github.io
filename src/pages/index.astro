@@ -6,9 +6,8 @@ import {
   pricingPlans, newsletterIssue, feedbackCards, faqs, BOOK_CALL_URL,
   SITE_ALIASES, SOCIAL_LINKS,
 } from '../config/constants';
-import { technologies } from '../config/constants';
-import { getTechBadgeStyle } from '../config/techBadges';
-import { Badge } from '../components/ui/Badge';
+import { technologyCategories } from '../config/constants';
+import TechStackGrouped from '../components/ui/TechStackGrouped.astro';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { SectionHeader } from '../components/ui/SectionHeader';
@@ -26,8 +25,17 @@ const serviceCtaMap: Record<string, string> = {
   "AI Web Dev Newsletter": "/services/ai-web-development-newsletter",
   "Web Project Coaching": "/services/web-project-coaching",
   "Full-stack Development Day": "/services/full-stack-development-day",
-  "MVP Bootstrapping Workshop": "/services/mvp-bootstrapping-workshop",
+  "AI Clarity Bootstrap Workshop": "/services/mvp-bootstrapping-workshop",
   "Custom MVP Development": "/services/mvp-development",
+};
+
+// Maps the Home pricing plan titles to their dedicated service page so
+// the CTA opens the full landing page (with details + stripe link) instead
+// of jumping straight to the booking page.
+const pricingPlanServiceMap: Record<string, string> = {
+  "Coaching Session": "/services/web-project-coaching",
+  "Development Day": "/services/full-stack-development-day",
+  "MVP Workshop": "/services/mvp-bootstrapping-workshop",
 };
 
 const jsonLd = [
@@ -56,8 +64,8 @@ const jsonLd = [
 ---
 
 <PageLayout
-  title="fullstackchris.dev — Full Stack Chris | Full-Stack Development, Coaching & MVP Services"
-  description="Full Stack Chris, also known as fullstackchris, offers React and Node.js development, project coaching, MVP workshops and an AI web development newsletter."
+  title="Full-Stack Web Development, AI Workflows and Technical Coaching — fullstackchris.dev"
+  description="I help founders, freelancers and small teams clarify, build and launch web projects using React, Node.js, TypeScript and practical AI-assisted development workflows — full-stack development, web project coaching, MVP roadmap and custom MVP development."
   jsonLd={jsonLd}
 >
   <!-- Hero V2 — Cursor AI build board -->
@@ -118,7 +126,7 @@ const jsonLd = [
         </div>
         <div class="space-y-4">
           <h3 class="font-display text-xl font-semibold text-white">Not sure where to start?</h3>
-          <p class="text-[0.95rem] leading-7 text-secondary">Book a free 30-minute call. We'll figure out the right next step for your project.</p>
+          <p class="text-[0.95rem] leading-7 text-secondary">Book a free 30-minute call. I'll help you figure out the right next step for your project.</p>
         </div>
         <div class="mt-2 flex flex-wrap items-center justify-end gap-4 border-t border-border pt-5">
           <Button href="/contact" variant="secondary" size="sm">
@@ -132,54 +140,73 @@ const jsonLd = [
     </div>
   </section>
 
-  <!-- Projects -->
-  <section class="border-y border-border bg-surface/40" id="projects">
+  <!-- How we work — process explained right after the offer -->
+  <section class="border-y border-border bg-surface/40" id="process">
     <div class={sectionClass}>
-      <SectionHeader eyebrow="Recent work" title="Projects shipped end-to-end." description="Click any project to read the full case study." data-reveal="fade" />
-      <div data-reveal="zoom">
-        <ProjectsModal client:load />
+      <SectionHeader eyebrow="Process" title="How a session works." description="From first call to shipped code — the same delivery flow on every engagement." data-reveal="fade" />
+      <div data-reveal="soft-right">
+        <ProcessStepper steps={processSteps} client:visible />
       </div>
     </div>
   </section>
 
-  <!-- How we work -->
-  <section class={sectionClass} id="process">
-    <SectionHeader eyebrow="Process" title="How a session works." data-reveal="fade" />
-    <div data-reveal="soft-right">
-      <ProcessStepper steps={processSteps} client:visible />
+  <!-- Projects — proof of execution -->
+  <section class={sectionClass} id="projects">
+    <SectionHeader eyebrow="Recent work" title="AI-assisted web projects shipped end-to-end." description="Real React, Node.js and TypeScript products — desktop apps, web tools and games. Click any project to read the full case study." data-reveal="fade" />
+    <div data-reveal="zoom">
+      <ProjectsModal client:load />
     </div>
   </section>
 
-  <!-- Tech stack -->
-  <section id="tech-stack" class="border-y border-border bg-surface/40">
+  <!-- Testimonials — social proof right after projects -->
+  <section class="border-y border-border bg-surface/40">
     <div class={sectionClass}>
-      <SectionHeader eyebrow="Tech stack" title="Tools used daily." data-reveal="fade" />
-      <div class="mt-8 flex flex-wrap gap-2" data-stagger="45" data-stagger-base="50">
-        {technologies.map((tech) => (
-          <Badge variant="default" className="tech-badge" style={getTechBadgeStyle(tech.name)} data-reveal="zoom">{tech.name}</Badge>
+      <SectionHeader eyebrow="Real feedback" title="What founders and developers say." data-reveal="fade" />
+      <div class="mt-10 grid gap-5 md:grid-cols-3" data-stagger="100" data-stagger-base="80">
+        {feedbackCards.map((fb) => (
+          <Card class="flex flex-col gap-4" data-reveal="blur">
+            <p class="text-[0.95rem] leading-7 text-secondary italic">"{fb.testimonial}"</p>
+            <div class="mt-auto border-t border-border pt-4">
+              <p class="font-display text-sm font-semibold text-white">{fb.name}</p>
+              <p class="text-xs text-low">{fb.designation} · {fb.company}</p>
+            </div>
+          </Card>
         ))}
       </div>
     </div>
   </section>
 
+  <!-- Tech stack — credibility builder before pricing -->
+  <section id="tech-stack" class={sectionClass}>
+    <SectionHeader eyebrow="Tech stack" title="React, Node.js, TypeScript and AI tools used daily." data-reveal="fade" />
+    <div class="mt-8">
+      <TechStackGrouped categories={technologyCategories} />
+    </div>
+  </section>
+
   <!-- Pricing -->
-  <section class={sectionClass}>
-    <SectionHeader eyebrow="Pricing" title="Pick your plan." description="All sessions include clear deliverables. Book a call if you need a custom quote." data-reveal="fade" />
-    <div class="mt-10 grid gap-5 md:grid-cols-3" data-stagger="100" data-stagger-base="80">
-      {pricingPlans.map((plan) => (
-        <div class="h-full" data-reveal={plan.featured ? 'zoom' : 'soft-left'}>
-          <PricingCard
-            title={plan.title}
-            description={plan.description}
-            price={plan.price}
-            period={plan.period}
-            features={plan.features}
-            ctaLabel="Book a call"
-            ctaHref={BOOK_CALL_URL}
-            featured={plan.featured}
-          />
-        </div>
-      ))}
+  <section class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <SectionHeader eyebrow="Pricing" title="Pick your plan." description="All sessions include clear deliverables. Book a call if you need a custom quote." data-reveal="fade" />
+      <div class="mt-10 grid gap-5 md:grid-cols-3" data-stagger="100" data-stagger-base="80">
+        {pricingPlans.map((plan) => {
+          const servicePage = pricingPlanServiceMap[plan.title];
+          return (
+            <div class="h-full" data-reveal={plan.featured ? 'zoom' : 'soft-left'}>
+              <PricingCard
+                title={plan.title}
+                description={plan.description}
+                price={plan.price}
+                period={plan.period}
+                features={plan.features}
+                ctaLabel={servicePage ? 'See plans →' : 'Book a call'}
+                ctaHref={servicePage ?? BOOK_CALL_URL}
+                featured={plan.featured}
+              />
+            </div>
+          );
+        })}
+      </div>
     </div>
   </section>
 
@@ -224,30 +251,12 @@ const jsonLd = [
     </div>
   </section>
 
-  <!-- Testimonials -->
-  <section class={sectionClass}>
-    <SectionHeader eyebrow="Real feedback" title="What clients say." data-reveal="fade" />
-    <div class="mt-10 grid gap-5 md:grid-cols-3" data-stagger="100" data-stagger-base="80">
-      {feedbackCards.map((fb) => (
-        <Card class="flex flex-col gap-4" data-reveal="blur">
-          <p class="text-[0.95rem] leading-7 text-secondary italic">"{fb.testimonial}"</p>
-          <div class="mt-auto border-t border-border pt-4">
-            <p class="font-display text-sm font-semibold text-white">{fb.name}</p>
-            <p class="text-xs text-low">{fb.designation} · {fb.company}</p>
-          </div>
-        </Card>
-      ))}
-    </div>
-  </section>
-
   <!-- FAQ -->
-  <section class="border-y border-border bg-surface/40">
-    <div class={sectionClass}>
-      <div class="grid gap-12 lg:grid-cols-[1fr_1.5fr]">
-        <SectionHeader eyebrow="Questions" title="Common questions answered." description="Still not sure? Book a free 30-minute call." data-reveal="soft-left" />
-        <div data-reveal="soft-right">
-          <FAQAccordion client:visible />
-        </div>
+  <section class={sectionClass}>
+    <div class="grid gap-12 lg:grid-cols-[1fr_1.5fr]">
+      <SectionHeader eyebrow="Questions" title="Common questions answered." description="Still not sure? Book a free 30-minute call." data-reveal="soft-left" />
+      <div data-reveal="soft-right">
+        <FAQAccordion client:visible />
       </div>
     </div>
   </section>
@@ -261,7 +270,7 @@ const jsonLd = [
           Bring me your idea, blocker or product goal.
         </h2>
         <p class="max-w-prose text-lg leading-8 text-secondary">
-          I'll help you clarify it, understand it, build it and launch it. Start with a call — we'll find the right next step.
+          I'll help you clarify it, understand it, build it and launch it. Start with a call — I'll find the right next step with you.
         </p>
         <div class="flex flex-wrap justify-center gap-4">
           <Button href={BOOK_CALL_URL} variant="primary" size="lg">

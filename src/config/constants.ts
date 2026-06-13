@@ -185,7 +185,7 @@ export const serviceOffers: ServiceOffer[] = [
     badge: "Delivery",
   },
   {
-    title: "MVP Bootstrapping Workshop",
+    title: "AI Clarity Bootstrap Workshop",
     description:
       "Turn an idea into a realistic MVP plan: scope, user flows, stack, roadmap and budget.",
     price: "from €650",
@@ -206,7 +206,7 @@ export const processSteps: ProcessItem[] = [
   {
     title: "Clarify the real goal",
     description:
-      "We map the user, business goal, current state, constraints and the smallest useful outcome.",
+      "I'll map the user, business goal, current state, constraints and the smallest useful outcome with you.",
   },
   {
     title: "Reduce the scope",
@@ -296,7 +296,7 @@ export const faqs: FAQ[] = [
   {
     question: "How much does an MVP cost?",
     answer:
-      "MVP development starts at €4,500, with most projects landing between €6,000 and €15,000 depending on scope. We confirm a fixed quote after a short discovery.",
+      "MVP development starts at €4,500, with most projects landing between €6,000 and €15,000 depending on scope. I confirm a fixed quote after a short discovery.",
   },
   {
     question: "Can you help with AI-generated code?",
@@ -345,7 +345,15 @@ export const footerGroups: FooterGroup[] = [
       { id: "contact", title: "LinkedIn" },
       { id: "contact", title: "GitHub" },
       { id: "contact", title: "X / Twitter" },
-      { id: "contact", title: "Legal" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { id: "legal-notice",     title: "Legal notice",     href: "/legal-notice" },
+      { id: "privacy-policy",   title: "Privacy policy",   href: "/privacy-policy" },
+      { id: "terms-of-service", title: "Terms of service", href: "/terms-of-service" },
+      { id: "cookies",          title: "Cookies",          href: "/cookies" },
     ],
   },
 ];
@@ -431,6 +439,31 @@ const technologies: Technology[] = [
     icon: docker,
   },
 ];
+
+const technologyCategories: { label: string; items: string[] }[] = [
+  {
+    label: "Frontend",
+    items: ["React", "TypeScript", "React Native", "JavaScript", "HTML 5", "CSS 3", "Tailwind CSS"],
+  },
+  {
+    label: "Backend",
+    items: ["Node JS", "Express", "Python", "FastAPI", "PostgreSQL", "MongoDB", "Tauri"],
+  },
+  {
+    label: "AI / LLM",
+    items: ["Claude Code", "Codex", "Antigravity", "OpenAI API", "Anthropic API", "Whisper"],
+  },
+  {
+    label: "DevOps & Tools",
+    items: ["Cloudflare", "Docker", "Traefik", "Jenkins", "Prometheus", "Grafana", "git"],
+  },
+  {
+    label: "Design",
+    items: ["Stitch", "Claude Design", "Relume", "Adobe"],
+  },
+];
+
+const featuredTechnologies: string[] = ["React", "TypeScript", "React Native"];
 
 const experiences: Experience[] = [
   {
@@ -584,6 +617,7 @@ const projects: Project[] = [
     image: keevo_home,
     images: [keevo_home, keevo_home, keevo_studio],
     source_code_link: "https://github.com/",
+    live_link: "https://keevo.dev/",
     meta: { role: "Solo · full-stack", timeline: "2025 · in progress", platform: "Desktop · macOS · Windows", type: "Developer Tool" },
     painPoints: [
       { bold: "Cloud transcription is expensive.", rest: "API costs accumulate fast on long recordings and eat into freelance margins." },
@@ -1066,4 +1100,4 @@ export const STRIPE_PAYMENT_LINKS = {
 // Sourced from .env (PUBLIC_CF_ANALYTICS_TOKEN) — set in Cloudflare Pages for production
 export const CF_ANALYTICS_TOKEN = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN as string ?? "";
 
-export { services, technologies, experiences, testimonials, projects };
+export { services, technologies, technologyCategories, featuredTechnologies, experiences, testimonials, projects };
