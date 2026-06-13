@@ -11,6 +11,8 @@ export interface Env {
   BEEHIIV_API_KEY?: string;
   BEEHIIV_PUBLICATION_ID?: string;
   BEEHIIV_API_BASE_URL?: string;
+  DEBUG_BEEHIIV?: string;
+  BEEHIIV_CUSTOM_FIELDS_ENABLED?: string;
 }
 
 const JSON_HEADERS = {
@@ -21,6 +23,7 @@ const JSON_HEADERS = {
 const MAX_BODY_BYTES = 4096;
 const DEFAULT_BEEHIIV_API_BASE_URL = "https://api.beehiiv.com";
 const GENERIC_NEWSLETTER_ERROR = "We could not subscribe you right now. Please try again later.";
+const MAX_BEEHIIV_DEBUG_BODY_CHARS = 1000;
 
 const ALLOWED_CORS_ORIGINS = new Set([
   "https://fullstackchris.dev",
@@ -76,6 +79,166 @@ const handleNewsletterOptions = (request: Request) =>
     headers: getCorsHeaders(request),
   });
 
+const isDebugBeehiivEnabled = (env: Env) => env.DEBUG_BEEHIIV === "true";
+
+const isBeehiivCustomFieldsEnabled = (env: Env) => env.BEEHIIV_CUSTOM_FIELDS_ENABLED === "true";
+
+const publicationIdLooksValid = (publicationId?: string) => Boolean(publicationId?.startsWith("pub_"));
+
+const getBeehiivApiBaseUrl = (env: Env) => {
+  const rawBaseUrl = (env.BEEHIIV_API_BASE_URL || DEFAULT_BEEHIIV_API_BASE_URL).trim();
+  const withoutTrailingSlashes = rawBaseUrl.replace(/\/+$/, "");
+
+  return withoutTrailingSlashes.replace(/\/v2$/i, "") || DEFAULT_BEEHIIV_API_BASE_URL;
+};
+
+const buildBeehiivUrl = (env: Env, publicationId: string, path: string) =>
+  `${getBeehiivApiBaseUrl(env)}/v2/publications/${encodeURIComponent(publicationId)}${path}`;
+
+const sanitizeDebugText = (value: string) =>
+  value
+    .replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, "[email]")
+    .slice(0, MAX_BEEHIIV_DEBUG_BODY_CHARS);
+
+const readBeehiivFailureBody = async (response: Response) => {
+  try {
+    return sanitizeDebugText(await response.text());
+  } catch {
+    return "";
+  }
+};
+
+const extractCustomFieldName = (field: unknown) => {
+  if (!field || typeof field !== "object") return "";
+
+  const record = field as Record<string, unknown>;
+  const candidate = record.name || record.display || record.display_name || record.key;
+
+  return typeof candidate === "string" ? candidate : "";
+};
+
+const extractCustomFieldType = (field: unknown) => {
+  if (!field || typeof field !== "object") return "";
+
+  const record = field as Record<string, unknown>;
+  const candidate = record.type || record.kind || record.field_type;
+
+  return typeof candidate === "string" ? candidate : "";
+};
+
+const getCustomFieldsFromResponseBody = (body: unknown) => {
+  if (Array.isArray(body)) return body;
+  if (!body || typeof body !== "object") return [];
+
+  const record = body as Record<string, unknown>;
+  if (Array.isArray(record.data)) return record.data;
+  if (Array.isArray(record.custom_fields)) return record.custom_fields;
+
+  return [];
+};
+
+const fetchBeehiivCustomFields = async (env: Env, beehiivApiKey: string, publicationId: string) => {
+  const response = await fetch(buildBeehiivUrl(env, publicationId, "/custom_fields"), {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${beehiivApiKey}`,
+    },
+  });
+
+  if (!response.ok) {
+    return {
+      ok: false as const,
+      status: response.status,
+      body: await readBeehiivFailureBody(response),
+      fields: [],
+    };
+  }
+
+  try {
+    const responseBody = await response.json();
+    return {
+      ok: true as const,
+      status: response.status,
+      body: "",
+      fields: getCustomFieldsFromResponseBody(responseBody),
+    };
+  } catch {
+    return {
+      ok: false as const,
+      status: response.status,
+      body: "beehiiv custom fields response was not valid JSON",
+      fields: [],
+    };
+  }
+};
+
+const getExistingBeehiivCustomFieldNames = async (
+  env: Env,
+  beehiivApiKey: string,
+  publicationId: string,
+) => {
+  if (!isBeehiivCustomFieldsEnabled(env)) return new Set<string>();
+
+  const result = await fetchBeehiivCustomFields(env, beehiivApiKey, publicationId);
+  if (!result.ok) {
+    console.warn("[beehiiv-newsletter] custom fields lookup failed", {
+      status: result.status,
+      body: result.body,
+    });
+
+    return new Set<string>();
+  }
+
+  return new Set(result.fields.map(extractCustomFieldName).filter(Boolean));
+};
+
+const handleNewsletterDebugConfig = (env: Env) =>
+  jsonResponse({
+    ok: true,
+    hasBeehiivApiKey: Boolean(env.BEEHIIV_API_KEY),
+    hasBeehiivPublicationId: Boolean(env.BEEHIIV_PUBLICATION_ID),
+    beehiivApiBaseUrl: getBeehiivApiBaseUrl(env),
+    publicationIdLooksValid: publicationIdLooksValid(env.BEEHIIV_PUBLICATION_ID),
+  });
+
+const handleNewsletterCustomFields = async (env: Env) => {
+  if (!isDebugBeehiivEnabled(env)) {
+    return jsonResponse({ ok: false, message: "Not found." }, 404);
+  }
+
+  const beehiivApiKey = env.BEEHIIV_API_KEY;
+  const publicationId = env.BEEHIIV_PUBLICATION_ID;
+
+  if (!beehiivApiKey || !publicationId) {
+    return jsonResponse({ ok: false, message: GENERIC_NEWSLETTER_ERROR }, 500);
+  }
+
+  const result = await fetchBeehiivCustomFields(env, beehiivApiKey, publicationId);
+  if (!result.ok) {
+    return jsonResponse({
+      ok: false,
+      message: GENERIC_NEWSLETTER_ERROR,
+      debug: {
+        beehiivStatus: result.status,
+        beehiivBody: result.body,
+      },
+    }, 502);
+  }
+
+  return jsonResponse({
+    ok: true,
+    customFields: result.fields.map((field) => {
+      const record = field && typeof field === "object" ? field as Record<string, unknown> : {};
+
+      return {
+        id: typeof record.id === "string" ? record.id : "",
+        name: extractCustomFieldName(field),
+        type: extractCustomFieldType(field),
+      };
+    }),
+  });
+};
+
 const handleNewsletterSubscribe = async (request: Request, env: Env) => {
   const corsHeaders = getCorsHeaders(request);
 
@@ -99,6 +262,18 @@ const handleNewsletterSubscribe = async (request: Request, env: Env) => {
 
   const beehiivApiKey = env.BEEHIIV_API_KEY;
   const publicationId = env.BEEHIIV_PUBLICATION_ID;
+  const beehiivDebugEnabled = isDebugBeehiivEnabled(env);
+
+  console.log("[beehiiv-newsletter] subscribe request received", {
+    hasSource: Boolean(input.source),
+    hasInterest: Boolean(input.interest),
+  });
+
+  console.log("[beehiiv-newsletter] config", {
+    hasBeehiivApiKey: Boolean(beehiivApiKey),
+    hasBeehiivPublicationId: Boolean(publicationId),
+    publicationIdLooksValid: publicationIdLooksValid(publicationId),
+  });
 
   // Runtime-only Cloudflare secrets. Missing values are intentionally hidden
   // from the browser response so deployment details are not exposed.
@@ -106,21 +281,51 @@ const handleNewsletterSubscribe = async (request: Request, env: Env) => {
     return jsonResponse({ success: false, message: GENERIC_NEWSLETTER_ERROR }, 500, corsHeaders);
   }
 
-  const apiBaseUrl = (env.BEEHIIV_API_BASE_URL || DEFAULT_BEEHIIV_API_BASE_URL).replace(/\/+$/, "");
+  const existingCustomFieldNames = input.interest
+    ? await getExistingBeehiivCustomFieldNames(env, beehiivApiKey, publicationId)
+    : new Set<string>();
+
   const beehiivResponse = await fetch(
-    `${apiBaseUrl}/v2/publications/${publicationId}/subscriptions`,
+    buildBeehiivUrl(env, publicationId, "/subscriptions"),
     {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${beehiivApiKey}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(buildBeehiivPayload(input)),
+      body: JSON.stringify(buildBeehiivPayload(input, {
+        customFieldsEnabled: isBeehiivCustomFieldsEnabled(env),
+        existingCustomFieldNames,
+      })),
     },
   );
 
+  console.log("[beehiiv-newsletter] beehiiv response", {
+    status: beehiivResponse.status,
+    ok: beehiivResponse.ok,
+  });
+
   if (!beehiivResponse.ok) {
-    return jsonResponse({ success: false, message: GENERIC_NEWSLETTER_ERROR }, 502, corsHeaders);
+    const beehiivBody = await readBeehiivFailureBody(beehiivResponse);
+
+    console.warn("[beehiiv-newsletter] beehiiv failure body", {
+      status: beehiivResponse.status,
+      body: beehiivBody,
+    });
+
+    const responseBody: JsonBody = {
+      success: false,
+      message: GENERIC_NEWSLETTER_ERROR,
+    };
+
+    if (beehiivDebugEnabled) {
+      responseBody.debug = {
+        beehiivStatus: beehiivResponse.status,
+        beehiivBody,
+      };
+    }
+
+    return jsonResponse(responseBody, 502, corsHeaders);
   }
 
   return jsonResponse({
@@ -142,6 +347,14 @@ export default {
 
     if (url.pathname === "/api/newsletter/subscribe" && request.method === "OPTIONS") {
       return handleNewsletterOptions(request);
+    }
+
+    if (url.pathname === "/api/newsletter/debug-config" && request.method === "GET") {
+      return handleNewsletterDebugConfig(env);
+    }
+
+    if (url.pathname === "/api/newsletter/custom-fields" && request.method === "GET") {
+      return handleNewsletterCustomFields(env);
     }
 
     if (url.pathname === "/api/newsletter/subscribe") {

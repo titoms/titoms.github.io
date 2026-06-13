@@ -35,17 +35,26 @@ export const validateSignupInput = (input) => {
   return { ok: true };
 };
 
-export const buildBeehiivPayload = (input) => {
+export const buildBeehiivPayload = (input, options = {}) => {
   const payload = {
     email: input.email,
     reactivate_existing: false,
-    send_welcome_email: true,
+    send_welcome_email: false,
     utm_source: input.source || "website",
     utm_medium: "organic",
+    utm_campaign: "ai_clarity_newsletter",
+    double_opt_override: "not_set",
   };
 
-  if (input.interest) {
-    payload.custom_fields = [{ name: "interest", value: input.interest }];
+  const existingCustomFieldNames = options.existingCustomFieldNames || new Set();
+  if (options.customFieldsEnabled && input.interest && existingCustomFieldNames.has("Interest")) {
+    const customFields = [{ name: "Interest", value: input.interest }];
+
+    if (existingCustomFieldNames.has("Source")) {
+      customFields.push({ name: "Source", value: input.source || "website" });
+    }
+
+    payload.custom_fields = customFields;
   }
 
   return payload;

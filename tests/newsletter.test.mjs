@@ -40,7 +40,7 @@ test("rejects invalid, empty, suspicious, and honeypot signups", () => {
   }
 });
 
-test("builds the expected beehiiv payload", () => {
+test("builds the minimal beehiiv payload by default", () => {
   const payload = buildBeehiivPayload({
     email: "reader@example.com",
     source: "newsletter-footer",
@@ -51,9 +51,83 @@ test("builds the expected beehiiv payload", () => {
   assert.deepEqual(payload, {
     email: "reader@example.com",
     reactivate_existing: false,
-    send_welcome_email: true,
+    send_welcome_email: false,
     utm_source: "newsletter-footer",
     utm_medium: "organic",
-    custom_fields: [{ name: "interest", value: "AI Clarity" }],
+    utm_campaign: "ai_clarity_newsletter",
+    double_opt_override: "not_set",
+  });
+});
+
+test("adds beehiiv custom fields only when enabled and existing", () => {
+  const payload = buildBeehiivPayload(
+    {
+      email: "reader@example.com",
+      source: "cloudflare-test",
+      interest: "AI workflows",
+      honeypot: "",
+    },
+    {
+      customFieldsEnabled: true,
+      existingCustomFieldNames: new Set(["Interest", "Source"]),
+    },
+  );
+
+  assert.deepEqual(payload.custom_fields, [
+    { name: "Interest", value: "AI workflows" },
+    { name: "Source", value: "cloudflare-test" },
+  ]);
+});
+
+test("does not add beehiiv custom fields when Interest is missing", () => {
+  const payload = buildBeehiivPayload(
+    {
+      email: "reader@example.com",
+      source: "cloudflare-test",
+      interest: "AI workflows",
+      honeypot: "",
+    },
+    {
+      customFieldsEnabled: true,
+      existingCustomFieldNames: new Set(["Source"]),
+    },
+  );
+
+  assert.equal("custom_fields" in payload, false);
+});
+
+test("does not add beehiiv custom fields when support is disabled", () => {
+  const payload = buildBeehiivPayload(
+    {
+      email: "reader@example.com",
+      source: "cloudflare-test",
+      interest: "AI workflows",
+      honeypot: "",
+    },
+    {
+      customFieldsEnabled: false,
+      existingCustomFieldNames: new Set(["Interest", "Source"]),
+    },
+  );
+
+  assert.equal("custom_fields" in payload, false);
+});
+
+test("uses a safe default source in beehiiv payloads", () => {
+  const payload = buildBeehiivPayload({
+    email: "reader@example.com",
+    source: "",
+    interest: "",
+    honeypot: "",
+  });
+
+  assert.deepEqual(payload, {
+    email: "reader@example.com",
+    reactivate_existing: false,
+    send_welcome_email: false,
+    utm_source: "website",
+    utm_medium: "organic",
+    utm_campaign: "ai_clarity_newsletter",
+    double_opt_override: "not_set",
   });
 });

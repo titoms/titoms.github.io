@@ -85,10 +85,12 @@ BEEHIIV_API_KEY
 BEEHIIV_PUBLICATION_ID
 ```
 
-Optional variable:
+Optional variables:
 
 ```text
 BEEHIIV_API_BASE_URL=https://api.beehiiv.com
+DEBUG_BEEHIIV=true
+BEEHIIV_CUSTOM_FIELDS_ENABLED=true
 ```
 
 For Cloudflare, add these as Worker secrets/environment variables:
@@ -97,9 +99,33 @@ For Cloudflare, add these as Worker secrets/environment variables:
 BEEHIIV_API_KEY
 BEEHIIV_PUBLICATION_ID
 BEEHIIV_API_BASE_URL
+DEBUG_BEEHIIV
+BEEHIIV_CUSTOM_FIELDS_ENABLED
 ```
 
 Do not use `PUBLIC_` prefixes for beehiiv values. `PUBLIC_` Astro variables are bundled into frontend code.
+
+`BEEHIIV_API_BASE_URL` can be omitted unless beehiiv changes its host. If it is set, use the host only:
+
+```text
+https://api.beehiiv.com
+```
+
+Do not set it to a subscriptions endpoint. The Worker appends:
+
+```text
+/v2/publications/{publicationId}/subscriptions
+```
+
+To temporarily debug beehiiv configuration in Cloudflare:
+
+1. Set `DEBUG_BEEHIIV=true` on the Worker.
+2. Redeploy if the Cloudflare UI requires it for variable changes.
+3. Run the PowerShell smoke tests below.
+4. Remove `DEBUG_BEEHIIV` or set it to `false` before production use.
+5. Redeploy again if needed.
+
+Debug mode never returns the API key, but it can return a sanitized beehiiv error body. Keep it disabled outside short troubleshooting windows.
 
 ## Newsletter endpoint
 
@@ -118,6 +144,63 @@ Check your inbox to confirm your subscription.
 ```
 
 This remains correct if beehiiv double opt-in is enabled and the subscriber is pending confirmation.
+
+The Worker first sends the minimal beehiiv subscription payload:
+
+```json
+{
+  "email": "user@example.com",
+  "reactivate_existing": false,
+  "send_welcome_email": false,
+  "utm_source": "cloudflare-test",
+  "utm_medium": "organic",
+  "utm_campaign": "ai_clarity_newsletter",
+  "double_opt_override": "not_set"
+}
+```
+
+Do not enable custom fields until the minimal subscription works.
+
+To use optional custom fields:
+
+1. In beehiiv, open `Audience  Custom Fields  Create field`.
+2. Create `Interest` as Text/String.
+3. Create `Source` as Text/String.
+4. Make sure the API key can read custom fields if you plan to call `/api/newsletter/custom-fields`.
+5. Set `BEEHIIV_CUSTOM_FIELDS_ENABLED=true` in Cloudflare only after the fields exist.
+
+beehiiv discards custom fields that do not already exist in the publication. The Worker checks for `Interest` before sending custom fields, and only sends `Source` when that field exists too.
+
+## PowerShell smoke tests
+
+Use the deployed temporary Worker URL first. These commands are safe to run from PowerShell and do not expose secrets.
+
+```powershell
+Invoke-RestMethod -Uri "https://fullstackchris.christophe-crognier.workers.dev/api/health" -Method GET
+```
+
+```powershell
+Invoke-RestMethod -Uri "https://fullstackchris.christophe-crognier.workers.dev/api/newsletter/debug-config" -Method GET
+```
+
+```powershell
+Invoke-RestMethod -Uri "https://fullstackchris.christophe-crognier.workers.dev/api/newsletter/subscribe" -Method POST -ContentType "application/json" -Body '{"email":"test@example.com","source":"cloudflare-test","interest":"AI workflows","honeypot":""}'
+```
+
+When `DEBUG_BEEHIIV=true`, a failing subscription response may include:
+
+```json
+{
+  "success": false,
+  "message": "We could not subscribe you right now. Please try again later.",
+  "debug": {
+    "beehiivStatus": 401,
+    "beehiivBody": "..."
+  }
+}
+```
+
+If debug mode is disabled, the public frontend response remains generic.
 
 ## Domain migration
 

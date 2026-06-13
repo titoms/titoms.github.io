@@ -16,6 +16,9 @@ Set these Worker environment variables in Cloudflare:
 
 - `BEEHIIV_API_KEY`: beehiiv API key with subscription write access.
 - `BEEHIIV_PUBLICATION_ID`: publication ID for AI Clarity Newsletter.
+- `BEEHIIV_API_BASE_URL`: optional, defaults to `https://api.beehiiv.com`.
+- `DEBUG_BEEHIIV`: optional, set to `true` only while troubleshooting.
+- `BEEHIIV_CUSTOM_FIELDS_ENABLED`: optional, set to `true` only after beehiiv fields exist.
 
 Cloudflare setup path:
 
@@ -28,4 +31,4 @@ Cloudflare setup path:
 
 Do not prefix these values with `PUBLIC_`. `PUBLIC_` variables are exposed to frontend code by Astro.
 
-The endpoint sends `send_welcome_email: true`, and the UI says "Check your inbox to confirm your subscription." If beehiiv custom fields are used, create a custom field named `interest` before sending that value from a form.
+The endpoint sends the minimal beehiiv payload first with `send_welcome_email: false`. If beehiiv custom fields are used, create `Interest` and `Source` manually in beehiiv before setting `BEEHIIV_CUSTOM_FIELDS_ENABLED=true`.
