@@ -4,9 +4,9 @@ import { footerGroups, BOOK_CALL_URL, SOCIAL_LINKS } from '../../config/constant
 
 <footer class="border-t border-border bg-surface/30">
   <div class="mx-auto w-full max-w-site px-6 py-16 sm:px-8 lg:px-10">
-    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
+    <div class="grid gap-10 sm:grid-cols-2 lg:flex lg:items-start lg:justify-between lg:gap-12">
       {footerGroups.map((group) => (
-        <div>
+        <div class="lg:w-40">
           <p class="mb-4 font-mono text-xs uppercase tracking-[0.18em] text-accent">{group.title}</p>
           <ul class="space-y-2">
             {group.links.map((link) => {

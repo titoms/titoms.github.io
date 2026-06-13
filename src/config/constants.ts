@@ -1083,9 +1083,6 @@ export const CALENDLY_URL = "https://calendly.com/fullstackchris/30min";
 /** Internal URL — navigates to the embedded Calendly on the contact page */
 export const BOOK_CALL_URL = "/contact#schedule";
 
-// Sourced from .env (PUBLIC_BEEHIIV_PUBLICATION_ID) — set in Cloudflare Pages for production
-export const BEEHIIV_PUBLICATION_ID = import.meta.env.PUBLIC_BEEHIIV_PUBLICATION_ID as string ?? "";
-
 // Stripe TEST MODE links — safe to commit. Swap for live links before going to production.
 export const STRIPE_PAYMENT_LINKS = {
   newsletter:          "",                                                        // handled via Beehiiv, no Stripe

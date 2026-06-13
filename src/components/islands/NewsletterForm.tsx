@@ -1,37 +1,56 @@
 import { useEffect, useState } from "react";
 import { Button } from "../ui";
-import { BEEHIIV_PUBLICATION_ID } from "../../config/constants";
 import { trackEvent } from "../../utils/analytics";
+
+type NewsletterResponse = {
+  success: boolean;
+  message?: string;
+};
+
+const DEFAULT_SUCCESS_MESSAGE = "Check your inbox to confirm your subscription.";
+const DEFAULT_ERROR_MESSAGE = "Something went wrong. Please try again.";
 
 const NewsletterForm = () => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [message, setMessage] = useState(DEFAULT_SUCCESS_MESSAGE);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email || status === "loading") return;
+
     setStatus("loading");
+    setMessage("");
+
+    const formData = new FormData(e.currentTarget);
+    const honeypot = String(formData.get("honeypot") ?? "");
+
     try {
-      // no-cors makes the response opaque — we cannot tell if beehiiv accepted,
-      // rejected, deduped, or rate-limited the email. The success state means
-      // "request submitted", not "subscription active". For real confirmation,
-      // proxy this through a server (Worker / API route) and inspect the response.
-      await fetch(`https://embeds.beehiiv.com/${BEEHIIV_PUBLICATION_ID}/subscribe`, {
+      const response = await fetch("/api/newsletter/subscribe", {
         method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           email,
-          utm_source: "website",
-          utm_medium: "organic",
-          utm_campaign: "newsletter-footer",
-          double_opt_in: "false",
-        }).toString(),
+          source: "homepage",
+          interest: "AI workflows",
+          honeypot,
+        }),
       });
+
+      const result = await response.json() as NewsletterResponse;
+
+      if (!response.ok || !result.success) {
+        setMessage(result.message || DEFAULT_ERROR_MESSAGE);
+        setStatus("error");
+        return;
+      }
+
+      setMessage(result.message || DEFAULT_SUCCESS_MESSAGE);
       setStatus("success");
       setEmail("");
       trackEvent("newsletter_signup_submit", { source: "footer" });
     } catch {
+      setMessage(DEFAULT_ERROR_MESSAGE);
       setStatus("error");
     }
   };
@@ -45,9 +64,7 @@ const NewsletterForm = () => {
   if (status === "success") {
     return (
       <div data-analytics="newsletter_signup_success">
-        <p className="text-sm text-positive">
-          Check your inbox to confirm your subscription.
-        </p>
+        <p className="text-sm text-positive">{message}</p>
         <p className="mt-1 text-xs text-mid">
           If confirmation is required, you'll receive an email from AI Clarity Newsletter shortly.
         </p>
@@ -57,7 +74,21 @@ const NewsletterForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="flex w-full max-w-xl flex-col gap-3 sm:flex-row">
+      <label className="hidden" aria-hidden="true">
+        Website
+        <input
+          type="text"
+          name="honeypot"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </label>
+      <label htmlFor="newsletter-email" className="sr-only">
+        Email address
+      </label>
       <input
+        id="newsletter-email"
+        name="email"
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -73,10 +104,10 @@ const NewsletterForm = () => {
         disabled={status === "loading"}
         data-analytics="newsletter_signup_submit"
       >
-        {status === "loading" ? "Sending…" : "Subscribe"}
+        {status === "loading" ? "Sending..." : "Subscribe"}
       </Button>
       {status === "error" && (
-        <p className="w-full text-sm text-negative">Something went wrong. Please try again.</p>
+        <p className="w-full text-sm text-negative">{message}</p>
       )}
     </form>
   );

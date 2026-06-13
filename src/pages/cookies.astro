@@ -10,9 +10,9 @@ import LegalPageLayout from '../components/layout/LegalPageLayout.astro';
     - Advertising / remarketing pixels (Google Ads, TikTok, Reddit, etc.)
     - Auto-loaded YouTube embeds (set cookies before user interaction)
     - Hotjar / FullStory / Smartlook session replay
-  Today the Website uses only Cloudflare Web Analytics (cookieless) and
-  third-party form embeds (beehiiv, Stripe) that set cookies only on their
-  own domains — no CMP needed yet.
+  Today the Website uses only Cloudflare Web Analytics (cookieless), a
+  same-origin newsletter form, and external services that require deliberate
+  user interaction.
 */}
 ---
 
@@ -54,12 +54,12 @@ import LegalPageLayout from '../components/layout/LegalPageLayout.astro';
 
   <h2>Third-party embeds and services</h2>
   <p>
-    When you interact with embedded forms or services on the Website, the
-    corresponding third party may set cookies on its own domain. These are
+    When you interact with embedded services or leave the Website for an
+    external service, the corresponding third party may set cookies on its own domain. These are
     governed by the third party's own privacy and cookie policies:
   </p>
   <ul>
-    <li><strong>beehiiv</strong> — newsletter subscription form.</li>
+    <li><strong>beehiiv</strong> — newsletter delivery and subscriber management, called server-side by the Website.</li>
     <li><strong>Stripe</strong> — payment links and checkout for paid services.</li>
     <li><strong>Calendly</strong> — scheduling embed when used for booking calls.</li>
     <li>
