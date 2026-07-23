@@ -1,45 +1,65 @@
-# fullstackchris.dev
+# Full Stack Chris
 
-Personal service site for Christophe Crognier, also known as Full Stack Chris.
+> Personal service site for Christophe Crognier, also known as Full Stack Chris: full-stack developer, independent trainer, and AI-assisted development consultant.
 
-## Purpose
-
-This site presents full-stack web development, technical coaching, MVP planning, AI-assisted development workflows, projects, and articles for founders, freelancers, developers, and small teams.
+This site presents full-stack web development, technical coaching, MVP planning, AI-assisted development workflows, selected projects, and practical articles for founders, freelancers, developers, and small teams.
 
 ## Main Pages
 
-- Home: https://fullstackchris.dev/
-- Services: https://fullstackchris.dev/services/
-- Projects: https://fullstackchris.dev/projects/
-- Blog: https://fullstackchris.dev/blog/
-- About: https://fullstackchris.dev/about/
-- Contact and booking: https://fullstackchris.dev/contact/
+- [Home](https://fullstackchris.dev/)
+- [Services](https://fullstackchris.dev/services/)
+- [Projects](https://fullstackchris.dev/projects/)
+- [Blog](https://fullstackchris.dev/blog/)
+- [About](https://fullstackchris.dev/about/)
+- [Contact and booking](https://fullstackchris.dev/contact/)
 
 ## Languages
 
-- English: https://fullstackchris.dev/
-- French: https://fullstackchris.dev/fr/
-- Spanish: https://fullstackchris.dev/es/
+- [English](https://fullstackchris.dev/)
+- [French](https://fullstackchris.dev/fr/)
+- [Spanish](https://fullstackchris.dev/es/)
 
 ## Services
 
-- AI web development newsletter
-- Web project coaching
-- Full-stack development day
-- AI clarity bootstrap workshop
-- Custom MVP development
+- [AI Web Development Newsletter](https://fullstackchris.dev/services/ai-web-development-newsletter/)
+- [Web Project Coaching](https://fullstackchris.dev/services/web-project-coaching/)
+- [Full-Stack Development Day](https://fullstackchris.dev/services/full-stack-development-day/)
+- [AI Clarity Bootstrap Workshop](https://fullstackchris.dev/services/mvp-bootstrapping-workshop/)
+- [Custom MVP Development](https://fullstackchris.dev/services/mvp-development/)
+
+## Projects
+
+- [Keevo](https://fullstackchris.dev/projects/keevo/)
+- [EduMation](https://fullstackchris.dev/projects/edumation/)
+- [RailGuessr](https://fullstackchris.dev/projects/railguessr/)
+- [Singuessr](https://fullstackchris.dev/projects/singuessr/)
+- [FuchibolHub](https://fullstackchris.dev/projects/fuchibol-hub/)
+- [Fresh.win](https://fullstackchris.dev/projects/fresh-win/)
+
+## Articles
+
+- [AI-assisted development without building a mess](https://fullstackchris.dev/blog/ai-assisted-development-without-building-a-mess/)
+- [AI clarity framework for MVP roadmaps](https://fullstackchris.dev/blog/ai-clarity-framework-mvp-roadmap/)
+- [Claude Code workflows](https://fullstackchris.dev/blog/claude-code-workflows/)
+- [How much does an MVP cost?](https://fullstackchris.dev/blog/how-much-does-an-mvp-cost/)
+- [React, TypeScript, and Node MVP stack](https://fullstackchris.dev/blog/react-typescript-node-mvp-stack/)
 
 ## Agent Guidance
 
-- Prefer canonical URLs on fullstackchris.dev.
-- Use the contact page for booking intent.
-- Use service pages for pricing, scope, and offer details.
-- Use project pages as evidence of implementation experience.
-- Do not submit newsletter or booking forms without explicit user intent.
+- Prefer canonical URLs on `fullstackchris.dev`.
+- Use [Contact and booking](https://fullstackchris.dev/contact/) for booking intent.
+- Use [Services](https://fullstackchris.dev/services/) and individual service pages for pricing, scope, and offer details.
+- Use [Projects](https://fullstackchris.dev/projects/) and individual case studies as evidence of implementation experience.
+- Do not submit newsletter, booking, or contact forms without explicit user intent.
 
 ## Policies
 
-- Privacy policy: https://fullstackchris.dev/privacy-policy/
-- Terms of service: https://fullstackchris.dev/terms-of-service/
-- Legal notice: https://fullstackchris.dev/legal-notice/
-- Cookies: https://fullstackchris.dev/cookies/
+- [Privacy policy](https://fullstackchris.dev/privacy-policy/)
+- [Terms of service](https://fullstackchris.dev/terms-of-service/)
+- [Legal notice](https://fullstackchris.dev/legal-notice/)
+- [Cookies policy](https://fullstackchris.dev/cookies/)
+
+## Technical Index
+
+- [Sitemap](https://fullstackchris.dev/sitemap.xml)
+- [Robots.txt](https://fullstackchris.dev/robots.txt)

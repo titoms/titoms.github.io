@@ -19,5 +19,5 @@ export default defineConfig({
   },
   prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
   compressHTML: true,
-  build: { inlineStylesheets: 'auto' },
+  build: { inlineStylesheets: 'always' },
 });

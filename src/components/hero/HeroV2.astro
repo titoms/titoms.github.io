@@ -47,20 +47,20 @@ const heroCopy = {
   <div class="v2-wrap">
     <!-- Left: copy -->
     <div class="v2-copy">
-      <span class="v-eyebrow reveal r1">
+      <span class="v-eyebrow">
         <span class="pulse"></span>
         {heroCopy.eyebrow}
       </span>
 
-      <h1 class="v-h1 reveal r2">
+      <h1 class="v-h1">
         {heroCopy.h1Lead}<span class="grad">{heroCopy.h1Accent}</span>
       </h1>
 
-      <p class="v-sub reveal r3">
+      <p class="v-sub">
         {heroCopy.sub}
       </p>
 
-      <div class="v-cta reveal r4">
+      <div class="v-cta">
         <a class="v-btn primary" href={bookCallUrl}>
           {heroCopy.primaryCta} <span class="ar">→</span>
         </a>
@@ -69,7 +69,7 @@ const heroCopy = {
         </a>
       </div>
 
-      <div class="v2-tools reveal r5">
+      <div class="v2-tools">
         <span class="tool-pill"><span class="dot" style="background:#61dafb"></span>React</span>
         <span class="tool-pill"><span class="dot" style="background:#6cc24a"></span>Node.js</span>
         <span class="tool-pill"><span class="mk" style="background:#3178c6">TS</span>TypeScript</span>
@@ -116,13 +116,7 @@ const heroCopy = {
 
   /* ---- background blobs via global .bg-field.bv-d ---- */
 
-  /* ---- entrance reveal ---- */
-  .reveal { opacity: 0; transform: translateY(16px); animation: rise .8s cubic-bezier(.2,.7,.2,1) forwards; }
-  .r1 { animation-delay: .05s; }
-  .r2 { animation-delay: .15s; }
-  .r3 { animation-delay: .25s; }
-  .r4 { animation-delay: .35s; }
-  .r5 { animation-delay: .45s; }
+  /* ---- non-critical visual entrance ---- */
   .reveal-v { opacity: 0; transform: translateY(24px) scale(.98); animation: rise .9s cubic-bezier(.2,.7,.2,1) .3s forwards; }
 
   /* ---- layout ---- */
