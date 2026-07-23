@@ -21,7 +21,7 @@ export const colors = {
   textPrimary:      '#f4f4f6',
   textSecondary:    '#a4a4af',
   textSubtle:       '#ddd2fe',
-  textLow:          '#6c6c78',
+  textLow:          '#8f8f9d',
   textLight:        '#f4f4f6',
   textOnAccent:     '#15101f',
 

@@ -84,9 +84,8 @@ const heroCopy = {
   </div>
 </section>
 
-<style is:global>
+<style is:inline>
   /* ---- keyframes local to this component ---- */
-  @keyframes vpulse { 0% { box-shadow: 0 0 0 0 rgba(167,139,250,.5); } 70% { box-shadow: 0 0 0 8px rgba(167,139,250,0); } 100% { box-shadow: 0 0 0 0 rgba(167,139,250,0); } }
   @keyframes vblink { 50% { opacity: 0; } }
   /* drift1/2/3 and rise are in global.css */
 
@@ -138,7 +137,7 @@ const heroCopy = {
     padding: 7px 14px 7px 11px; border: 1px solid var(--border-strong); border-radius: var(--r-pill);
     background: rgba(26,26,32,0.55); backdrop-filter: blur(8px); width: fit-content;
   }
-  .v-eyebrow .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-400); box-shadow: 0 0 0 0 var(--accent-glow); animation: vpulse 2.6s ease-out infinite; flex-shrink: 0; }
+  .v-eyebrow .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-400); box-shadow: 0 0 0 4px rgba(167,139,250,.16); flex-shrink: 0; }
 
   /* ---- headline ---- */
   .v-h1 { font-family: var(--font-display); font-weight: 600; line-height: 0.98; letter-spacing: -0.035em; color: var(--text-hi); margin: 0; font-size: clamp(2.8rem, 5.5vw, 4.4rem); }
@@ -166,7 +165,7 @@ const heroCopy = {
         #60a5fa 60%,
         transparent 80%
       ) border-box;
-    animation: border-spin 5s linear infinite;
+    animation: none;
   }
 
   /* ---- inline tool pills ---- */
@@ -244,7 +243,6 @@ const heroCopy = {
   /* ---- reduced motion ---- */
   @media (prefers-reduced-motion: reduce) {
     .vblob { animation: none !important; }
-    .v-eyebrow .pulse { animation: none !important; }
     .editor .caret { animation: none !important; }
     .reveal, .reveal-v { animation: none !important; opacity: 1 !important; transform: none !important; }
     .v-btn.secondary:hover { animation: none; }

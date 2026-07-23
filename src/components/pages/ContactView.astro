@@ -99,7 +99,7 @@ const jsonLd = {
           <Card hover class="flex flex-col gap-4" data-reveal="blur">
             <h3 class="font-display text-lg font-semibold text-white">{link.title}</h3>
             <p class="text-sm leading-6 text-secondary">{link.description}</p>
-            <Button href={`${localePrefix}${link.href}`} variant="outline" size="sm" class="mt-4 w-fit">
+            <Button href={`${localePrefix}${link.href}`} variant="outline" size="sm" class="mt-4 w-fit" aria-label={`${c.services.learnMore} ${link.title}`}> 
               {c.services.learnMore}
             </Button>
           </Card>
@@ -109,7 +109,7 @@ const jsonLd = {
   </section>
 </PageLayout>
 
-<style is:global>
+<style is:inline>
   /* Calendly Dark Theme Workaround */
   .calendly-inline-widget iframe {
     background: transparent !important;

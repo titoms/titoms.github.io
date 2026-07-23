@@ -20,14 +20,14 @@ const featuredSet = new Set(featuredTechnologies.map((t) => t.toLowerCase()));
 <div class:list={['tech-stack-grouped', className]} data-stagger="80" data-stagger-base="80">
   {categories.map((cat) => (
     <div class="tsg-cat" data-reveal="zoom">
-      <h5 class="tsg-cat-label">
+      <h3 class="tsg-cat-label">
         <span class="tsg-ic" aria-hidden="true">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
             <circle cx="12" cy="12" r="4"/>
           </svg>
         </span>
         {cat.label}
-      </h5>
+      </h3>
       <div class="tsg-chips">
         {cat.items.map((item) => {
           const isFeatured = featuredSet.has(item.toLowerCase());
@@ -43,7 +43,7 @@ const featuredSet = new Set(featuredTechnologies.map((t) => t.toLowerCase()));
   ))}
 </div>
 
-<style>
+<style is:inline>
   .tech-stack-grouped {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));

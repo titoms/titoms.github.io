@@ -1,0 +1,45 @@
+# fullstackchris.dev
+
+Personal service site for Christophe Crognier, also known as Full Stack Chris.
+
+## Purpose
+
+This site presents full-stack web development, technical coaching, MVP planning, AI-assisted development workflows, projects, and articles for founders, freelancers, developers, and small teams.
+
+## Main Pages
+
+- Home: https://fullstackchris.dev/
+- Services: https://fullstackchris.dev/services/
+- Projects: https://fullstackchris.dev/projects/
+- Blog: https://fullstackchris.dev/blog/
+- About: https://fullstackchris.dev/about/
+- Contact and booking: https://fullstackchris.dev/contact/
+
+## Languages
+
+- English: https://fullstackchris.dev/
+- French: https://fullstackchris.dev/fr/
+- Spanish: https://fullstackchris.dev/es/
+
+## Services
+
+- AI web development newsletter
+- Web project coaching
+- Full-stack development day
+- AI clarity bootstrap workshop
+- Custom MVP development
+
+## Agent Guidance
+
+- Prefer canonical URLs on fullstackchris.dev.
+- Use the contact page for booking intent.
+- Use service pages for pricing, scope, and offer details.
+- Use project pages as evidence of implementation experience.
+- Do not submit newsletter or booking forms without explicit user intent.
+
+## Policies
+
+- Privacy policy: https://fullstackchris.dev/privacy-policy/
+- Terms of service: https://fullstackchris.dev/terms-of-service/
+- Legal notice: https://fullstackchris.dev/legal-notice/
+- Cookies: https://fullstackchris.dev/cookies/

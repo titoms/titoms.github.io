@@ -53,7 +53,7 @@ export const ServiceCard = ({
           </p>
         )}
         {ctaHref && (
-          <Button href={ctaHref} variant={ctaVariant} size="sm">
+          <Button href={ctaHref} variant={ctaVariant} size="sm" aria-label={`${ctaLabel} ${title}`}>
             {ctaLabel}
           </Button>
         )}
