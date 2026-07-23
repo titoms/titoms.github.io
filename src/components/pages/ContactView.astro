@@ -1,0 +1,119 @@
+---
+import PageLayout from '../layout/PageLayout.astro';
+import { Button } from '../ui/Button';
+import { Card } from '../ui/Card';
+import { SectionHeader } from '../ui/SectionHeader';
+import { CALENDLY_URL, SITE_ALIASES, SOCIAL_LINKS } from '../../config/constants';
+import { defaultLocale } from '../../i18n/ui';
+import { contact } from './content/contact';
+
+const locale = (Astro.currentLocale ?? defaultLocale) as 'en' | 'fr' | 'es';
+const c = contact[locale];
+const localePrefix = locale === 'en' ? '' : `/${locale}`;
+
+const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: c.jsonLd.name,
+  url: "https://fullstackchris.dev/contact/",
+  description: c.jsonLd.description,
+  mainEntity: {
+    "@type": "Person",
+    name: "Christophe Crognier",
+    alternateName: SITE_ALIASES,
+    url: "https://fullstackchris.dev",
+    sameAs: [SOCIAL_LINKS.linkedin, SOCIAL_LINKS.github, SOCIAL_LINKS.twitter],
+  },
+};
+---
+
+<PageLayout
+  title={c.meta.title}
+  description={c.meta.description}
+  jsonLd={jsonLd}
+>
+  <Fragment slot="head">
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
+    <script is:inline async src="https://assets.calendly.com/assets/external/widget.js"></script>
+  </Fragment>
+  <!-- Hero -->
+  <section class="site-hero hero-glow-field glow-bg grid-bg relative overflow-hidden border-b border-border mb-12 sm:mb-16">
+    <div class="bg-field bv-a" aria-hidden="true">
+      <span class="blob blob-1"></span>
+      <span class="blob blob-2"></span>
+      <span class="blob blob-3"></span>
+    </div>
+    <div class={`${sectionClass} site-hero-inner`} data-stagger="100" data-stagger-base="80">
+      <span class="site-eyebrow" data-reveal="fade"><span class="pulse-dot"></span>{c.eyebrow}</span>
+      <h1 class="mt-6 max-w-3xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white" data-reveal="soft-left">
+        {c.h1}
+      </h1>
+      <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary" data-reveal="blur">
+        {c.lead}
+      </p>
+    </div>
+  </section>
+
+  <!-- Call steps -->
+  <section class={sectionClass}>
+    <SectionHeader eyebrow={c.callSteps.eyebrow} title={c.callSteps.title} data-reveal="fade" />
+    <div class="mt-10 grid gap-5 sm:grid-cols-3" data-stagger="100" data-stagger-base="80">
+      {c.callSteps.steps.map((s) => (
+        <Card class="flex flex-col gap-3" data-reveal="zoom">
+          <span class="font-mono text-3xl font-bold text-accent">{s.step}</span>
+          <h3 class="font-display text-lg font-semibold text-white">{s.label}</h3>
+          <p class="text-sm leading-6 text-secondary">{s.description}</p>
+        </Card>
+      ))}
+    </div>
+  </section>
+
+  <!-- Calendly inline embed — uses widget.js to apply dark-theme colour params -->
+  <section id="schedule" class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <SectionHeader eyebrow={c.schedule.eyebrow} title={c.schedule.title} data-reveal="fade" />
+      <div class="mt-8 overflow-hidden rounded-xl border border-border bg-[#131318]" data-reveal="soft-right">
+        <div
+          class="calendly-inline-widget"
+          data-url="https://calendly.com/fullstackchris/30min?background_color=131318&text_color=f4f4f6&primary_color=a78bfa&hide_gdpr_banner=1"
+          style="min-width:320px;height:700px;"
+        ></div>
+      </div>
+      <p class="mt-4 text-center text-sm text-secondary" data-reveal="fade">
+        {c.schedule.cantSee}
+        <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" class="text-brand underline underline-offset-2 hover:text-brand-hover">
+          {c.schedule.openInCalendly}
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Services links -->
+  <section class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <SectionHeader eyebrow={c.services.eyebrow} title={c.services.title} description={c.services.description} data-reveal="fade" />
+      <div class="mt-10 grid gap-4 sm:grid-cols-2" data-stagger="85" data-stagger-base="80">
+        {c.services.links.map((link) => (
+          <Card hover class="flex flex-col gap-4" data-reveal="blur">
+            <h3 class="font-display text-lg font-semibold text-white">{link.title}</h3>
+            <p class="text-sm leading-6 text-secondary">{link.description}</p>
+            <Button href={`${localePrefix}${link.href}`} variant="outline" size="sm" class="mt-4 w-fit">
+              {c.services.learnMore}
+            </Button>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+</PageLayout>
+
+<style is:global>
+  /* Calendly Dark Theme Workaround */
+  .calendly-inline-widget iframe {
+    background: transparent !important;
+    border-radius: 16px !important;
+    filter: invert(1) hue-rotate(180deg) brightness(1.08) contrast(0.82) saturate(0.90) !important;
+  }
+</style>

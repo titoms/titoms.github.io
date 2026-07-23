@@ -4,9 +4,11 @@ import { getTechBadgeStyle } from "../../config/techBadges";
 import { Badge } from "./Badge";
 import { Card } from "./Card";
 import { Button } from "./Button";
+import { useTranslations } from "../../i18n/ui";
 
 type ProjectCardProps = {
   project: Project;
+  locale?: string;
 };
 
 const imgSrc = (img: ImageAsset | null): string | undefined => {
@@ -14,8 +16,10 @@ const imgSrc = (img: ImageAsset | null): string | undefined => {
   return typeof img === "string" ? img : img.src;
 };
 
-export const ProjectCard = ({ project }: ProjectCardProps) => {
-  const caseStudyHref = `/projects/${project.slug}`;
+export const ProjectCard = ({ project, locale = "en" }: ProjectCardProps) => {
+  const t = useTranslations(locale);
+  const localePrefix = locale === "en" ? "" : `/${locale}`;
+  const caseStudyHref = `${localePrefix}/projects/${project.slug}/`;
   const liveHref = project.live_link;
 
   return (
@@ -69,7 +73,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         </div>
         <div className="mt-auto flex flex-wrap gap-3 pt-2">
           <Button href={caseStudyHref} variant="secondary" size="sm">
-            Case study
+            {t("common.caseStudy")}
           </Button>
           {liveHref && (
             <Button
@@ -79,7 +83,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Test live ↗
+              {t("common.testLive")}
             </Button>
           )}
         </div>

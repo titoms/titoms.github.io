@@ -1,0 +1,14 @@
+---
+import ProjectCaseStudyView from '../../../components/pages/ProjectCaseStudyView.astro';
+import { getProjects } from '../../../config/projects';
+
+export async function getStaticPaths() {
+  return getProjects('es').map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+---
+<ProjectCaseStudyView project={project} />

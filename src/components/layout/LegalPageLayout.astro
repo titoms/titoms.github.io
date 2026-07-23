@@ -1,5 +1,6 @@
 ---
 import PageLayout from './PageLayout.astro';
+import { useTranslations, defaultLocale } from '../../i18n/ui';
 
 interface Props {
   title: string;
@@ -9,6 +10,8 @@ interface Props {
 }
 
 const { title, description, lastUpdated, noindex = false } = Astro.props;
+const locale = Astro.currentLocale ?? defaultLocale;
+const t = useTranslations(locale);
 ---
 
 <PageLayout title={title} description={description}>
@@ -24,7 +27,7 @@ const { title, description, lastUpdated, noindex = false } = Astro.props;
         {title}
       </h1>
       <p class="mt-3 text-sm text-mid">
-        <em>Last updated: {lastUpdated}</em>
+        <em>{t('common.lastUpdated')}: {lastUpdated}</em>
       </p>
     </header>
 

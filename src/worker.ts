@@ -32,6 +32,38 @@ const ALLOWED_CORS_ORIGINS = new Set([
   "http://localhost:8787",
 ]);
 
+const CANONICAL_HOST = "fullstackchris.dev";
+const ROUTE_FILE_EXTENSION = /\.[^/]+$/;
+
+const isStaticPagePath = (pathname: string) =>
+  pathname !== "/" &&
+  !pathname.startsWith("/api/") &&
+  !pathname.startsWith("/cdn-cgi/") &&
+  !pathname.startsWith("/.well-known/") &&
+  !ROUTE_FILE_EXTENSION.test(pathname);
+
+const getCanonicalRedirect = (request: Request) => {
+  const url = new URL(request.url);
+  let changed = false;
+
+  if (url.protocol !== "https:") {
+    url.protocol = "https:";
+    changed = true;
+  }
+
+  if (url.hostname === "www.fullstackchris.dev") {
+    url.hostname = CANONICAL_HOST;
+    changed = true;
+  }
+
+  if ((request.method === "GET" || request.method === "HEAD") && isStaticPagePath(url.pathname) && !url.pathname.endsWith("/")) {
+    url.pathname = `${url.pathname}/`;
+    changed = true;
+  }
+
+  return changed ? Response.redirect(url.toString(), 308) : null;
+};
+
 type JsonBody = Record<string, unknown>;
 
 const jsonResponse = (body: JsonBody, status = 200, headers: HeadersInit = {}) =>
@@ -336,6 +368,9 @@ const handleNewsletterSubscribe = async (request: Request, env: Env) => {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
+    const canonicalRedirect = getCanonicalRedirect(request);
+    if (canonicalRedirect) return canonicalRedirect;
+
     const url = new URL(request.url);
 
     if (url.pathname === "/api/health" && request.method === "GET") {

@@ -1,7 +1,9 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import BaseLayout from './BaseLayout.astro';
 import SiteFooter from './SiteFooter.astro';
 import SiteHeader from '../islands/SiteHeader';
+import { locales, defaultLocale, stripLocalePrefix } from '../../i18n/ui';
 
 interface Props {
   title: string;
@@ -14,13 +16,20 @@ interface Props {
 }
 
 const props = Astro.props;
+const currentLocale = Astro.currentLocale ?? defaultLocale;
+const barePath = stripLocalePrefix(Astro.url.pathname).replace(/^\//, '');
+const languageLinks = locales.map((locale) => ({
+  locale,
+  href: getRelativeLocaleUrl(locale, barePath),
+  active: locale === currentLocale,
+}));
 ---
 
 <BaseLayout {...props}>
   <slot name="head" slot="head" />
-  <SiteHeader client:load />
+  <SiteHeader client:load locale={currentLocale} languageLinks={languageLinks} currentPath={Astro.url.pathname} />
   <main>
     <slot />
   </main>
-  <SiteFooter />
+  <SiteFooter locale={currentLocale} languageLinks={languageLinks} />
 </BaseLayout>

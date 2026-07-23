@@ -9,11 +9,13 @@
     "preview": "astro preview",
     "test": "node --test \"tests/*.mjs\"",
     "cf:dev": "pnpm run build && pnpm exec wrangler dev",
-    "cf:deploy": "pnpm run build && pnpm exec wrangler deploy"
+    "cf:deploy": "pnpm run build && pnpm exec wrangler deploy",
+    "web": "astro dev"
   },
   "dependencies": {
     "@astrojs/mdx": "^6.0.2",
     "@astrojs/react": "^5.0.7",
+    "@astrojs/sitemap": "^3.7.3",
     "@astrojs/tailwind": "^6.0.2",
     "@fontsource/hanken-grotesk": "^5.2.8",
     "@fontsource/jetbrains-mono": "^5.2.8",
@@ -41,5 +43,6 @@
     "tailwindcss": "^3.3.1",
     "typescript": "^5.9.3",
     "wrangler": "^4.100.0"
-  }
+  },
+  "packageManager": "pnpm@10.11.1"
 }

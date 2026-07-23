@@ -244,7 +244,7 @@ Current context:
 [x] Domain management: Cloudflare.
 [x] Newsletter provider: Beehiiv.
 [x] English remains the default language.
-[ ] Future language routes prepared for /fr and /es.
+[x] Full /fr and /es translations shipped (replaced the old Google Translate widget hack).
 ```
 
 Recommended architecture:
@@ -286,15 +286,16 @@ Content model recommendation:
 [ ] Keep freebie metadata in a typed data file or content collection.
 ```
 
-Translation preparation:
+Translation — implemented (2026-07-22):
 
 ```txt
-[ ] Keep English routes as canonical default routes for now.
-[ ] Add language fields to content records: language, translationKey, translatedFrom, and availableTranslations.
-[ ] Model future translated slugs without publishing empty /fr or /es pages yet.
-[ ] Plan future routes as /fr/blog/[slug], /es/blog/[slug], /fr/freebies, and /es/freebies.
-[ ] Add hreflang only when translated pages actually exist.
-[ ] Avoid duplicating CTA logic per language by keeping CTA definitions in shared data files.
+[x] English routes stay canonical/unprefixed (Astro i18n `prefixDefaultLocale: false`); /fr and /es are real prefixed routes, not placeholders.
+[x] Blog posts use per-locale subfolders (src/content/blog/{en,fr,es}/slug.mdx) — same filename links translations, no extra frontmatter fields needed.
+[x] Projects and services use a structural/content split (src/config/projects/, src/config/services/) — non-text fields (images, slugs, stack chips) shared, prose translated per locale via getProjects(locale)/getServicePages(locale).
+[x] hreflang alternates (+ x-default) added in BaseLayout, generated from actual existing pages.
+[x] UI chrome strings centralized in src/i18n/ (dictionary + useTranslations helper), shared by .astro files and React islands via a `locale` prop.
+[x] @astrojs/sitemap integration - installed and enabled; sitemap.xml now points to the generated Astro sitemap output.
+[ ] /freebies not yet built — when it lands, follow the same content-split + locale-wrapper pattern as projects/services.
 ```
 
 Components needed:
@@ -454,7 +455,7 @@ Risks and open questions:
 [ ] Lead magnets: confirm whether each freebie already exists, needs to be created, or should launch as a "coming soon" signup.
 [ ] Analytics provider: choose Plausible, Umami, PostHog, or Cloudflare Web Analytics before implementing event dispatch.
 [ ] Newsletter positioning: confirm whether AI Clarity Notes replaces the old AI Web Development Newsletter wording everywhere or coexists during transition.
-[ ] Multilingual scope: decide when /fr and /es content becomes worth translating instead of only preparing the model.
+[x] Multilingual scope: resolved — full /fr and /es translation shipped 2026-07-22 (see Translation section above). Any new content (e.g. /freebies) should follow the same pattern.
 ```
 
 Acceptance criteria:
@@ -469,7 +470,7 @@ Acceptance criteria:
 [ ] Beehiiv forms are used for email capture.
 [ ] Important CTAs include data-analytics attributes.
 [ ] Sitemap includes /blog, the three article URLs, and /freebies.
-[ ] English remains default while the content model can support future /fr and /es translations.
+[x] English remains default; /fr and /es are fully translated for all existing pages (freebies, once built, still need their own translation).
 ```
 
 ## Phase 11 - Lead Qualification And Forms
@@ -529,7 +530,7 @@ Budget ranges to preserve:
 [ ] No Three.js dependencies or canvas imports remain.
 [ ] No legacy Poppins or old purple background/accent tokens remain.
 [x] Sitemap includes all planned URLs.
-[x] Robots file references https://fullstackchris.dev/sitemap.xml.
+[x] Robots file references https://fullstackchris.dev/sitemap.xml, which points to the generated Astro sitemap.
 ```
 
 Assumptions:

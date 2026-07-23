@@ -51,6 +51,15 @@
       "default": false,
       "type": "boolean"
     },
+    "language": {
+      "default": "en",
+      "type": "string",
+      "enum": [
+        "en",
+        "fr",
+        "es"
+      ]
+    },
     "$schema": {
       "type": "string"
     }

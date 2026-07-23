@@ -1,6 +1,38 @@
 ---
 import Variant2Board from './Variant2Board';
 import { BOOK_CALL_URL } from '../../config/constants';
+import { defaultLocale, getLocalizedPath } from '../../i18n/ui';
+
+const locale = (Astro.currentLocale ?? defaultLocale) as 'en' | 'fr' | 'es';
+const localePrefix = locale === 'en' ? '' : `/${locale}`;
+const bookCallUrl = getLocalizedPath(BOOK_CALL_URL, locale);
+
+const heroCopy = {
+  en: {
+    eyebrow: 'Full-stack development · AI workflows · Technical coaching',
+    h1Lead: 'From idea to ',
+    h1Accent: 'buildable web app.',
+    sub: 'I help founders, freelancers and small teams clarify, build and launch web projects using React, Node.js, TypeScript and practical AI-assisted development workflows.',
+    primaryCta: 'Start your project',
+    secondaryCta: 'Explore services',
+  },
+  fr: {
+    eyebrow: 'Développement full-stack · Workflows IA · Coaching technique',
+    h1Lead: "D'une idée à une ",
+    h1Accent: 'application web réalisable.',
+    sub: "J'aide les fondateurs, freelances et petites équipes à clarifier, construire et lancer des projets web avec React, Node.js, TypeScript et des workflows de développement assisté par IA concrets.",
+    primaryCta: 'Démarrer votre projet',
+    secondaryCta: 'Explorer les services',
+  },
+  es: {
+    eyebrow: 'Desarrollo full-stack · Flujos de IA · Coaching técnico',
+    h1Lead: 'De la idea a una ',
+    h1Accent: 'aplicación web construible.',
+    sub: 'Ayudo a fundadores, freelancers y equipos pequeños a clarificar, construir y lanzar proyectos web usando React, Node.js, TypeScript y flujos de desarrollo asistidos por IA prácticos.',
+    primaryCta: 'Inicia tu proyecto',
+    secondaryCta: 'Explorar servicios',
+  },
+}[locale];
 ---
 
 <section id="hero-scene" class="hero-v2-root">
@@ -17,24 +49,23 @@ import { BOOK_CALL_URL } from '../../config/constants';
     <div class="v2-copy">
       <span class="v-eyebrow reveal r1">
         <span class="pulse"></span>
-        Full-stack development · AI workflows · Technical coaching
+        {heroCopy.eyebrow}
       </span>
 
       <h1 class="v-h1 reveal r2">
-        From idea to <span class="grad">buildable web app.</span>
+        {heroCopy.h1Lead}<span class="grad">{heroCopy.h1Accent}</span>
       </h1>
 
       <p class="v-sub reveal r3">
-        I help founders, freelancers and small teams clarify, build and launch web projects
-        using React, Node.js, TypeScript and practical AI-assisted development workflows.
+        {heroCopy.sub}
       </p>
 
       <div class="v-cta reveal r4">
-        <a class="v-btn primary" href={BOOK_CALL_URL}>
-          Start your project <span class="ar">→</span>
+        <a class="v-btn primary" href={bookCallUrl}>
+          {heroCopy.primaryCta} <span class="ar">→</span>
         </a>
-        <a class="v-btn secondary" href="/services">
-          Explore services
+        <a class="v-btn secondary" href={`${localePrefix}/services/`}>
+          {heroCopy.secondaryCta}
         </a>
       </div>
 

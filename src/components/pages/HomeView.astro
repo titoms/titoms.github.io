@@ -1,0 +1,274 @@
+---
+import PageLayout from '../layout/PageLayout.astro';
+import HeroV2 from '../hero/HeroV2.astro';
+import { BOOK_CALL_URL, SITE_ALIASES, SOCIAL_LINKS, technologyCategories } from '../../config/constants';
+import TechStackGrouped from '../ui/TechStackGrouped.astro';
+import { Button } from '../ui/Button';
+import { Card } from '../ui/Card';
+import { SectionHeader } from '../ui/SectionHeader';
+import { ServiceCard } from '../ui/ServiceCard';
+import { PricingCard } from '../ui/PricingCard';
+import ProjectsModal from '../islands/ProjectsModal';
+import FAQAccordion from '../islands/FAQAccordion';
+import NewsletterForm from '../islands/NewsletterForm';
+import NewsletterPreview from '../islands/NewsletterPreview';
+import ProcessStepper from '../islands/ProcessStepper';
+import { useTranslations, defaultLocale, getLocalizedPath } from '../../i18n/ui';
+import { home } from './content/home';
+
+const locale = (Astro.currentLocale ?? defaultLocale) as 'en' | 'fr' | 'es';
+const t = useTranslations(locale);
+const c = home[locale];
+const localePrefix = locale === 'en' ? '' : `/${locale}`;
+const bookCallUrl = getLocalizedPath(BOOK_CALL_URL, locale);
+
+const techCategories = technologyCategories.map((cat, i) => ({
+  ...cat,
+  label: [t('techCategories.frontend'), t('techCategories.backend'), t('techCategories.aiLlm'), t('techCategories.devopsTools'), t('techCategories.design')][i] ?? cat.label,
+}));
+
+const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Christophe Crognier",
+    alternateName: SITE_ALIASES,
+    url: "https://fullstackchris.dev",
+    jobTitle: c.jsonLd.jobTitle,
+    sameAs: [
+      SOCIAL_LINKS.linkedin,
+      SOCIAL_LINKS.github,
+      SOCIAL_LINKS.twitter,
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Full Stack Chris",
+    alternateName: ["fullstackchris.dev", ...SITE_ALIASES],
+    url: "https://fullstackchris.dev",
+    description: c.jsonLd.websiteDescription,
+  },
+];
+---
+
+<PageLayout
+  title={c.meta.title}
+  description={c.meta.description}
+  jsonLd={jsonLd}
+>
+  <!-- Hero V2 — Cursor AI build board -->
+  <HeroV2 />
+
+  <!-- Why work with me -->
+  <section class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <SectionHeader eyebrow={c.why.eyebrow} title={c.why.title} data-reveal="fade" />
+      <div class="mt-10 grid gap-0 md:grid-cols-3" data-stagger="90" data-stagger-base="80">
+        <div class="py-8 pr-8" data-reveal="soft-left">
+          <div class="mb-4 grid h-10 w-10 place-items-center rounded-lg border border-accent bg-accent-soft text-accent">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          </div>
+          <h4 class="mb-2 font-display text-[1.1rem] font-semibold text-white">{c.why.cards[0].title}</h4>
+          <p class="text-[0.95rem] leading-7 text-secondary">{c.why.cards[0].body}</p>
+        </div>
+        <div class="py-8 pr-8" data-reveal="zoom">
+          <div class="mb-4 grid h-10 w-10 place-items-center rounded-lg border border-accent bg-accent-soft text-accent">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
+          </div>
+          <h4 class="mb-2 font-display text-[1.1rem] font-semibold text-white">{c.why.cards[1].title}</h4>
+          <p class="text-[0.95rem] leading-7 text-secondary">{c.why.cards[1].body}</p>
+        </div>
+        <div class="py-8 pr-8" data-reveal="soft-right">
+          <div class="mb-4 grid h-10 w-10 place-items-center rounded-lg border border-accent bg-accent-soft text-accent">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <h4 class="mb-2 font-display text-[1.1rem] font-semibold text-white">{c.why.cards[2].title}</h4>
+          <p class="text-[0.95rem] leading-7 text-secondary">{c.why.cards[2].body}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class={sectionClass} id="services">
+    <SectionHeader eyebrow={c.services.eyebrow} title={c.services.title} description={c.services.description} data-reveal="fade" />
+    <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3" data-stagger="85" data-stagger-base="80">
+      {c.services.offers.map((offer) => (
+        <div class="h-full" data-reveal={offer.featured ? 'zoom' : 'blur'}>
+          <ServiceCard
+            title={offer.title}
+            description={offer.description}
+            price={offer.price}
+            priceUnit={offer.priceUnit}
+            badge={offer.badge}
+            featured={offer.featured}
+            ctaHref={`${localePrefix}${offer.ctaHref}`}
+            ctaLabel={offer.ctaLabel}
+            ctaVariant={offer.featured ? 'primary' : 'outline'}
+          />
+        </div>
+      ))}
+      <Card hover class="breathing-violet-glow flex h-full min-h-[260px] flex-col gap-7 border-accent/25 bg-gradient-to-b from-accent/8 to-transparent p-8" data-reveal="zoom">
+        <div class="grid h-10 w-10 place-items-center rounded-lg border border-accent bg-accent-soft text-accent">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M2 12h20"/></svg>
+        </div>
+        <div class="space-y-4">
+          <h3 class="font-display text-xl font-semibold text-white">{c.services.notSure.title}</h3>
+          <p class="text-[0.95rem] leading-7 text-secondary">{c.services.notSure.body}</p>
+        </div>
+        <div class="mt-2 flex flex-wrap items-center justify-end gap-4 border-t border-border pt-5">
+          <Button href={`${localePrefix}/contact/`} variant="secondary" size="sm">
+            {c.services.notSure.askQuestion}
+          </Button>
+          <Button href={bookCallUrl} variant="primary" size="sm">
+            {t('nav.bookCall')} →
+          </Button>
+        </div>
+      </Card>
+    </div>
+  </section>
+
+  <!-- How we work — process explained right after the offer -->
+  <section class="border-y border-border bg-surface/40" id="process">
+    <div class={sectionClass}>
+      <SectionHeader eyebrow={c.process.eyebrow} title={c.process.title} description={c.process.description} data-reveal="fade" />
+      <div data-reveal="soft-right">
+        <ProcessStepper steps={c.process.steps} client:visible locale={locale} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects — proof of execution -->
+  <section class={sectionClass} id="projects">
+    <SectionHeader eyebrow={c.projects.eyebrow} title={c.projects.title} description={c.projects.description} data-reveal="fade" />
+    <div data-reveal="zoom">
+      <ProjectsModal client:load locale={locale} />
+    </div>
+  </section>
+
+  <!-- Testimonials — social proof right after projects -->
+  <section class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <SectionHeader eyebrow={c.testimonials.eyebrow} title={c.testimonials.title} data-reveal="fade" />
+      <div class="mt-10 grid gap-5 md:grid-cols-3" data-stagger="100" data-stagger-base="80">
+        {c.testimonials.cards.map((fb) => (
+          <Card class="flex flex-col gap-4" data-reveal="blur">
+            <p class="text-[0.95rem] leading-7 text-secondary italic">"{fb.testimonial}"</p>
+            <div class="mt-auto border-t border-border pt-4">
+              <p class="font-display text-sm font-semibold text-white">{fb.name}</p>
+              <p class="text-xs text-low">{fb.designation} · {fb.company}</p>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Tech stack — credibility builder before pricing -->
+  <section id="tech-stack" class={sectionClass}>
+    <SectionHeader eyebrow={c.techStack.eyebrow} title={c.techStack.title} data-reveal="fade" />
+    <div class="mt-8">
+      <TechStackGrouped categories={techCategories} />
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="border-y border-border bg-surface/40">
+    <div class={sectionClass}>
+      <SectionHeader eyebrow={c.pricing.eyebrow} title={c.pricing.title} description={c.pricing.description} data-reveal="fade" />
+      <div class="mt-10 grid gap-5 md:grid-cols-3" data-stagger="100" data-stagger-base="80">
+        {c.pricing.plans.map((plan) => (
+          <div class="h-full" data-reveal={plan.featured ? 'zoom' : 'soft-left'}>
+            <PricingCard
+              title={plan.title}
+              description={plan.description}
+              price={plan.price}
+              period={plan.period}
+              features={plan.features}
+              ctaLabel={plan.ctaLabel}
+              ctaHref={`${localePrefix}${plan.ctaHref}`}
+              featured={plan.featured}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter CTA -->
+  <section class="border-y border-border bg-surface/40" id="newsletter">
+    <div class={sectionClass}>
+      <div class="newsletter-outer-glow" data-reveal="zoom">
+        <Card class="border-accent/45 bg-gradient-to-br from-raised via-tertiary to-surface-deep p-8 sm:p-10 lg:p-14">
+          <div class="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
+            <div class="max-w-2xl">
+              <p class="mb-5 inline-flex items-center gap-3 font-mono text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+                <span class="h-px w-5 bg-accent" aria-hidden="true"></span>
+                {c.newsletter.tag}
+              </p>
+              <h2 class="max-w-xl font-display text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.05] text-white">
+                {c.newsletter.h2}
+              </h2>
+              <p class="mt-5 max-w-xl text-[1.05rem] leading-8 text-secondary">
+                {c.newsletter.lead}
+              </p>
+              <div class="mt-8">
+                <NewsletterForm client:visible locale={locale} />
+              </div>
+              <p class="mt-4 text-sm leading-6 text-low">
+                {c.newsletter.note}
+              </p>
+            </div>
+            <div class="newsletter-terminal overflow-hidden rounded-xl border border-border bg-primary/80 font-mono text-sm text-secondary shadow-lg shadow-black/30">
+              <div class="flex items-center gap-3 border-b border-border bg-raised/60 px-5 py-4">
+                <span class="terminal-window-controls flex gap-2" aria-hidden="true">
+                  <span class="terminal-dot terminal-dot--close"></span>
+                  <span class="terminal-dot terminal-dot--minimize"></span>
+                  <span class="terminal-dot terminal-dot--maximize"></span>
+                </span>
+                <span class="text-low">june-issue.md</span>
+              </div>
+              <NewsletterPreview items={c.newsletter.issue} client:visible />
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class={sectionClass}>
+    <div class="grid gap-12 lg:grid-cols-[1fr_1.5fr]">
+      <SectionHeader eyebrow={c.faq.eyebrow} title={c.faq.title} description={c.faq.description} data-reveal="soft-left" />
+      <div data-reveal="soft-right">
+        <FAQAccordion faqs={c.faq.items} client:visible />
+      </div>
+    </div>
+  </section>
+
+  <!-- Book a call CTA -->
+  <section class="glow-bg grid-bg relative overflow-hidden border-b border-border" id="contact">
+    <div class={sectionClass}>
+      <div class="flex flex-col items-center gap-6 py-10 text-center" data-reveal="zoom">
+        <span class="font-mono text-xs uppercase tracking-widest text-accent">{c.finalCta.eyebrow}</span>
+        <h2 class="max-w-2xl font-display text-[clamp(2rem,4.5vw,3.5rem)] font-semibold leading-tight text-white">
+          {c.finalCta.h2}
+        </h2>
+        <p class="max-w-prose text-lg leading-8 text-secondary">
+          {c.finalCta.lead}
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <Button href={bookCallUrl} variant="primary" size="lg">
+            {c.finalCta.primaryCta} <span class="ml-1">→</span>
+          </Button>
+          <Button href={`${localePrefix}/services/`} variant="secondary" size="lg">
+            {c.finalCta.secondaryCta}
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+</PageLayout>

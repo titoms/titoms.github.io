@@ -1,5 +1,43 @@
 ---
 import { footerGroups, BOOK_CALL_URL, SOCIAL_LINKS } from '../../config/constants';
+import { getLocalizedPath, useTranslations } from '../../i18n/ui';
+
+interface Props {
+  locale?: string;
+  languageLinks?: { locale: string; href: string; active: boolean }[];
+}
+
+const { locale = 'en', languageLinks = [] } = Astro.props as Props;
+const t = useTranslations(locale);
+const localePrefix = locale === 'en' ? '' : `/${locale}`;
+const bookCallUrl = getLocalizedPath(BOOK_CALL_URL, locale);
+
+const footerLinkLabels: Record<string, string> = {
+  'AI newsletter': t('footer.groups.services.links.aiNewsletter'),
+  'Project coaching': t('footer.groups.services.links.projectCoaching'),
+  'Development day': t('footer.groups.services.links.developmentDay'),
+  'MVP workshop': t('footer.groups.services.links.mvpWorkshop'),
+  'AI-assisted development': t('footer.groups.blog.links.aiAssistedDevelopment'),
+  'MVP roadmap with AI': t('footer.groups.blog.links.mvpRoadmapWithAi'),
+  'React TypeScript Node stack': t('footer.groups.blog.links.reactTypescriptNodeStack'),
+  'Claude Code workflows': t('footer.groups.blog.links.claudeCodeWorkflows'),
+  'Book a call': t('footer.groups.contact.bookCall'),
+  'LinkedIn': t('footer.groups.contact.linkedin'),
+  'GitHub': t('footer.groups.contact.github'),
+  'X / Twitter': t('footer.groups.contact.twitter'),
+  'Legal notice': t('footer.groups.legal.legalNotice'),
+  'Privacy policy': t('footer.groups.legal.privacyPolicy'),
+  'Terms of service': t('footer.groups.legal.termsOfService'),
+  'Cookies': t('footer.groups.legal.cookies'),
+};
+
+const footerGroupTitles: Record<string, string> = {
+  'Services': t('footer.groups.services.title'),
+  'Projects': t('footer.groups.projects.title'),
+  'Blog / resources': t('footer.groups.blog.title'),
+  'Contact': t('footer.groups.contact.title'),
+  'Legal': t('footer.groups.legal.title'),
+};
 ---
 
 <footer class="border-t border-border bg-surface/30">
@@ -7,21 +45,24 @@ import { footerGroups, BOOK_CALL_URL, SOCIAL_LINKS } from '../../config/constant
     <div class="grid gap-10 sm:grid-cols-2 lg:flex lg:items-start lg:justify-between lg:gap-12">
       {footerGroups.map((group) => (
         <div class="lg:w-40">
-          <p class="mb-4 font-mono text-xs uppercase tracking-[0.18em] text-accent">{group.title}</p>
+          <p class="mb-4 font-mono text-xs uppercase tracking-[0.18em] text-accent">{footerGroupTitles[group.title] ?? group.title}</p>
           <ul class="space-y-2">
             {group.links.map((link) => {
+              const isExternal = link.href?.startsWith('http')
+                || link.title === 'LinkedIn'
+                || link.title === 'GitHub'
+                || link.title === 'X / Twitter';
               const href = link.href
-                ? link.href
+                ? `${localePrefix}${link.href}`
                 : link.title === 'Book a call'
-                ? BOOK_CALL_URL
+                ? bookCallUrl
                 : link.title === 'LinkedIn'
                 ? SOCIAL_LINKS.linkedin
                 : link.title === 'GitHub'
                 ? SOCIAL_LINKS.github
                 : link.title === 'X / Twitter'
                 ? SOCIAL_LINKS.twitter
-                : '/contact';
-              const isExternal = href.startsWith('http');
+                : `${localePrefix}/contact/`;
               return (
                 <li>
                   <a
@@ -30,7 +71,7 @@ import { footerGroups, BOOK_CALL_URL, SOCIAL_LINKS } from '../../config/constant
                     rel={isExternal ? 'noopener noreferrer' : undefined}
                     class="text-sm text-secondary transition-colors hover:text-white"
                   >
-                    {link.title}
+                    {footerLinkLabels[link.title] ?? link.title}
                   </a>
                 </li>
               );
@@ -42,12 +83,19 @@ import { footerGroups, BOOK_CALL_URL, SOCIAL_LINKS } from '../../config/constant
 
     <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
       <p class="text-sm text-low">
-        &copy; {new Date().getFullYear()} fullstackchris.dev — Christophe Crognier
+        &copy; {new Date().getFullYear()} {t('footer.copyright')}
       </p>
-      <div class="language-switcher" aria-label="Language">
-        <button type="button" class="language-switcher__button" data-lang-choice="en" aria-pressed="false">EN</button>
-        <button type="button" class="language-switcher__button" data-lang-choice="fr" aria-pressed="false">FR</button>
-        <button type="button" class="language-switcher__button" data-lang-choice="es" aria-pressed="false">ES</button>
+      <div class="language-switcher" aria-label={t('languageSwitcher.label')}>
+        {languageLinks.map(({ locale: linkLocale, href, active }) => (
+          <a
+            href={href}
+            class="language-switcher__button"
+            aria-current={active ? 'true' : undefined}
+            data-active={active ? 'true' : undefined}
+          >
+            {linkLocale.toUpperCase()}
+          </a>
+        ))}
       </div>
     </div>
   </div>

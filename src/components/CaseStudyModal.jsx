@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { close, github } from "../assets";
 import { CALENDLY_URL, BOOK_CALL_URL } from "../config/constants";
 import { getTechBadgeStyle } from "../config/techBadges";
+import { getLocalizedPath } from "../i18n/ui";
 
 const imgSrc = (img) => img ? (typeof img === "string" ? img : img.src) : undefined;
 
@@ -15,6 +16,10 @@ const SectionTitle = ({ label }) => (
 
 const CaseStudyModal = ({ project, onClose }) => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const locale = typeof window !== "undefined"
+    ? window.location.pathname.match(/^\/(fr|es)(\/|$)/)?.[1] ?? "en"
+    : "en";
+  const bookCallUrl = getLocalizedPath(BOOK_CALL_URL, locale);
 
   useEffect(() => {
     if (!project) return;
@@ -232,7 +237,7 @@ const CaseStudyModal = ({ project, onClose }) => {
                 Book a free 30-minute discovery call. No commitment — just a conversation about what you're building.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <a href={BOOK_CALL_URL} className="bg-brand py-4 px-8 text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-brand-hover transition-all shadow-lg shadow-brand/20 active:scale-95">
+                <a href={bookCallUrl} className="bg-brand py-4 px-8 text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-brand-hover transition-all shadow-lg shadow-brand/20 active:scale-95">
                   Book a Call
                   <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                     <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM7 11h5v5H7z" />

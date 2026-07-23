@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import type { ProcessItem } from "../../types";
+import { useTranslations } from "../../i18n/ui";
 
 type ProcessStepperProps = {
   steps: ProcessItem[];
   showStatus?: boolean;
+  locale?: string;
 };
 
 type StepperState = {
@@ -31,7 +33,8 @@ const ArrowRightIcon = () => (
   </svg>
 );
 
-const ProcessStepper = ({ steps, showStatus = true }: ProcessStepperProps) => {
+const ProcessStepper = ({ steps, showStatus = true, locale = "en" }: ProcessStepperProps) => {
+  const t = useTranslations(locale);
   const [state, setState] = useState<StepperState>({
     activeIndex: -1,
     completedCount: 0,
@@ -105,7 +108,7 @@ const ProcessStepper = ({ steps, showStatus = true }: ProcessStepperProps) => {
   }, [state.activeIndex, state.completedCount, state.shipped, steps.length]);
 
   return (
-    <div className="process-stepper-shell mt-10" aria-label="How a session works">
+    <div className="process-stepper-shell mt-10" aria-label={t("processStepper.ariaLabel")}>
       <div className="process-stepper-track" style={{ "--process-progress": progress } as CSSProperties}>
         {steps.map((step, index) => {
           const isActive = state.activeIndex === index;
@@ -151,7 +154,7 @@ const ProcessStepper = ({ steps, showStatus = true }: ProcessStepperProps) => {
             }`}
           >
             {state.shipped ? <CheckIcon /> : <ArrowRightIcon />}
-            <span>{state.shipped ? "complete / shipped" : "in progress"}</span>
+            <span>{state.shipped ? t("processStepper.complete") : t("processStepper.inProgress")}</span>
           </div>
         </div>
       )}

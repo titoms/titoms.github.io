@@ -1,0 +1,15 @@
+---
+import { getCollection } from 'astro:content';
+import BlogPostView from '../../../components/pages/BlogPostView.astro';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('blog', (entry) => entry.id.startsWith('es/'));
+  return articles.map((article) => ({
+    params: { slug: article.id.replace(/^es\//, '') },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+---
+<BlogPostView article={article} />

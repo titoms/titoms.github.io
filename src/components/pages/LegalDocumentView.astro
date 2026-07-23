@@ -1,0 +1,18 @@
+---
+import LegalPageLayout from '../layout/LegalPageLayout.astro';
+import type { LegalPageContent } from './content/legal/legalNotice';
+
+interface Props {
+  content: LegalPageContent;
+}
+
+const { content } = Astro.props;
+---
+
+<LegalPageLayout
+  title={content.title}
+  description={content.description}
+  lastUpdated={content.lastUpdated}
+>
+  <Fragment set:html={content.bodyHtml} />
+</LegalPageLayout>

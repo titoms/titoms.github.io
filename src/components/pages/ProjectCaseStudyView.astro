@@ -1,0 +1,618 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import PageLayout from '../../components/layout/PageLayout.astro';
+import ProcessStepper from '../../components/islands/ProcessStepper';
+import { BOOK_CALL_URL, SITE_ALIASES, SOCIAL_LINKS } from '../../config/constants';
+import { getTechBadgeStyleAttribute } from '../../config/techBadges';
+import { getProjects } from '../../config/projects';
+import type { Project } from '../../types';
+import { useTranslations, defaultLocale, getLocalizedPath } from '../../i18n/ui';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props as Props;
+const locale = (Astro.currentLocale ?? defaultLocale) as 'en' | 'fr' | 'es';
+const t = useTranslations(locale);
+const localePrefix = locale === 'en' ? '' : `/${locale}`;
+const bookCallUrl = getLocalizedPath(BOOK_CALL_URL, locale);
+const allProjects = getProjects(locale);
+
+const proveIcons: Record<string, string> = {
+  brain:    `<path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10M22 12c0-5.5-4.5-10-10-10"/><path d="M12 8c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4"/>`,
+  shield:   `<path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6Z"/>`,
+  zap:      `<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/>`,
+  link:     `<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>`,
+  graph:    `<circle cx="5" cy="12" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="m7 12 10-5.5M7 12l10 5.5"/>`,
+  mobile:   `<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>`,
+  search:   `<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>`,
+  server:   `<rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/>`,
+  music:    `<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>`,
+  activity: `<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>`,
+  lock:     `<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>`,
+  layers:   `<path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/>`,
+  users:    `<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>`,
+  star:     `<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>`,
+  database: `<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>`,
+  check:    `<path d="M20 6 9 17l-5-5"/>`,
+  code:     `<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>`,
+};
+
+function proveIcon(key: string): string {
+  return proveIcons[key] ?? proveIcons.check;
+}
+
+const nextProject = project.nextProjectSlug
+  ? allProjects.find(p => p.slug === project.nextProjectSlug)
+  : null;
+
+const coverImageUrl = project.image && typeof project.image !== 'string'
+  ? new URL((project.image as ImageMetadata).src, Astro.site).href
+  : undefined;
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: project.caseStudy.tagline,
+    description: project.description,
+    author: {
+      "@type": "Person",
+      name: "Christophe Crognier",
+      alternateName: SITE_ALIASES,
+      url: "https://fullstackchris.dev",
+      sameAs: [SOCIAL_LINKS.linkedin, SOCIAL_LINKS.github, SOCIAL_LINKS.twitter],
+    },
+    url: `https://fullstackchris.dev${localePrefix}/projects/${project.slug}/`,
+    ...(coverImageUrl ? { image: coverImageUrl } : {}),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: project.name,
+    description: project.description,
+    applicationCategory: project.meta.type,
+    operatingSystem: project.meta.platform,
+    url: `https://fullstackchris.dev${localePrefix}/projects/${project.slug}/`,
+    ...(coverImageUrl ? { image: coverImageUrl } : {}),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Projects", item: `https://fullstackchris.dev${localePrefix}/projects/` },
+      { "@type": "ListItem", position: 2, name: project.name, item: `https://fullstackchris.dev${localePrefix}/projects/${project.slug}/` },
+    ],
+  },
+];
+---
+
+<PageLayout
+  title={`${project.name} — ${t('projectPage.caseStudy')} · fullstackchris.dev`}
+  description={project.description}
+  canonical={`https://fullstackchris.dev${localePrefix}/projects/${project.slug}/`}
+  ogImage={coverImageUrl}
+  ogType="article"
+  jsonLd={jsonLd}
+>
+
+<!-- ======================================================== HERO -->
+<section class="cs-hero hero-glow-field glow-bg grid-bg">
+  <div class="bg-field bv-c" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+  </div>
+  <div class="container cs-hero-layout">
+    <div class="hero-copy">
+      <div class="crumb reveal r1">
+      <a href={`${localePrefix}/projects/`}>{t('nav.projects')}</a>
+      <span>/</span>
+      <span style="color:var(--text-mid)">{project.name}</span>
+    </div>
+
+      <div class="hero-top">
+      <span class="eyebrow-cs reveal r1">{t('projectPage.caseStudy')} · {project.meta.type.toUpperCase()}</span>
+      <h1 class="reveal r2">{project.name}</h1>
+      <p class="cs-lead reveal r3">{project.longDescription}</p>
+
+      <div class="hero-badges reveal r4">
+        {project.tags.map(tag => (
+          <span class="badge-cs tech-badge" style={getTechBadgeStyleAttribute(tag.name)}>{tag.name}</span>
+        ))}
+      </div>
+
+      <div class="meta-bar reveal r5">
+        <div class="m"><div class="mk">{t('projectPage.role')}</div><div class="mv">{project.meta.role}</div></div>
+        <div class="m"><div class="mk">{t('projectPage.timeline')}</div><div class="mv">{project.meta.timeline}</div></div>
+        <div class="m"><div class="mk">{t('projectPage.platform')}</div><div class="mv">{project.meta.platform}</div></div>
+        <div class="m"><div class="mk">{t('projectPage.type')}</div><div class="mv">{project.meta.type}</div></div>
+      </div>
+
+      <div class="hero-actions reveal r6">
+        {project.live_link && (
+          <a class="cs-btn primary" href={project.live_link} target="_blank" rel="noopener noreferrer">
+            {t('projectPage.visitProduct')} <span class="arrow">→</span>
+          </a>
+        )}
+        <a class="cs-btn secondary" href="#challenge">{t('projectPage.readTechnicalBreakdown')}</a>
+      </div>
+      </div>
+    </div>
+
+  <!-- Hero window mockup -->
+    <div class="hero-stage reveal-v">
+      <div class="window window-hover">
+        <div class="window-bar">
+          <span class="traffic"><i></i><i></i><i></i></span>
+          <span class="win-url">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            {project.slug}.app
+          </span>
+          <span class="win-actions"><i></i><i></i><i></i></span>
+        </div>
+        <div class="win-screen" style="aspect-ratio:16/9;overflow:hidden;position:relative;">
+          {project.image ? (
+            typeof project.image === 'string'
+              ? <img src={project.image} alt={`${project.name} screenshot`} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" loading="eager" decoding="async" />
+              : <Image src={project.image as ImageMetadata} alt={`${project.name} screenshot`} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" loading="eager" decoding="async" />
+          ) : (
+            <span class="ph-note">
+              <span class="ph-ic">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+                  <rect x="2" y="3" width="20" height="14" rx="2"/><path d="m10 9 4 2.5-4 2.5z"/><path d="M2 19h20"/>
+                </svg>
+              </span>
+              {t('projectPage.primaryScreenshot')} · {project.name}
+            </span>
+          )}
+        </div>
+      </div>
+      <div class="reflection"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== PROBLEM -->
+<section class="cs-sec alt">
+  <div class="container">
+    <div class="cs-split">
+      <!-- Pain list -->
+      <div data-reveal="soft-left">
+        <span class="eyebrow-cs">{t('projectPage.theProblem')}</span>
+        <h2 style="margin:0.75rem 0 1rem;">{project.caseStudy.problem.split('.')[0]}.</h2>
+        <p style="color:var(--text-mid);font-size:1.02rem;line-height:1.6;margin-bottom:1.5rem;">
+          {project.caseStudy.context}
+        </p>
+        <ul class="pain-list">
+          {project.painPoints.map(point => (
+            <li>
+              <span class="x">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6">
+                  <path d="M18 6 6 18M6 6l12 12"/>
+                </svg>
+              </span>
+              <span class="t"><b>{point.bold}</b> {point.rest}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Audience card -->
+      <div class="audience-card" data-reveal="soft-right">
+        <div class="who">
+          <div class="av">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+              <circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>
+            </svg>
+          </div>
+          <div>
+            <h4>{project.audienceWho}</h4>
+            <p style="font-size:0.85rem;color:var(--text-low);font-family:var(--font-mono);">{project.audienceDesc}</p>
+          </div>
+        </div>
+        <div class="stat-row">
+          {project.audienceStats.map(stat => (
+            <div class="s">
+              <div class="sn">{stat.value}</div>
+              <div class="sl">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== SOLUTION -->
+<section class="cs-sec">
+  <div class="container">
+    <div class="cs-head" data-reveal="fade">
+      <span class="eyebrow-cs">{t('projectPage.theSolution')}</span>
+      <h2>{project.caseStudy.tagline.split('—')[1]?.trim() ?? project.caseStudy.tagline}</h2>
+      <p>{project.caseStudy.architecture}</p>
+    </div>
+
+    <!-- Product flow (animated like the homepage "How a session works" stepper) -->
+    <div data-reveal="soft-right">
+      <ProcessStepper client:visible showStatus={false} locale={Astro.currentLocale} steps={project.productFlow.map(s => ({ title: s.title, description: s.description }))} />
+    </div>
+
+
+    <!-- Before / after windows -->
+    <div class="ba" data-stagger="100" data-stagger-base="80">
+      <div class="before" data-reveal="soft-left">
+        <span class="tag-lab"><span class="d"></span>{t('projectPage.before')}</span>
+        <div class="window">
+          <div class="window-bar"><span class="traffic"><i></i><i></i><i></i></span><span class="win-url">{t('projectPage.manualWorkflow')}</span><span class="win-actions"><i></i><i></i><i></i></span></div>
+          <div class="win-screen"><span class="ph-note">{t('projectPage.fragmentedTools')}</span></div>
+        </div>
+      </div>
+      <div class="after" data-reveal="soft-right">
+        <span class="tag-lab"><span class="d"></span>{t('projectPage.after')}</span>
+        <div class="window">
+          <div class="window-bar"><span class="traffic"><i></i><i></i><i></i></span><span class="win-url">{project.slug}.app</span><span class="win-actions"><i></i><i></i><i></i></span></div>
+          <div class="win-screen"><span class="ph-note">{t('projectPage.unifiedProduct')}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== KEY FEATURES -->
+<section class="cs-sec alt">
+  <div class="container">
+    <div class="cs-head" data-reveal="fade">
+      <span class="eyebrow-cs">{t('projectPage.keyFeatures')}</span>
+      <h2>{t('projectPage.builtAround').replace('{who}', project.audienceWho.toLowerCase())}</h2>
+    </div>
+
+    {project.features.map((feature, i) => (
+      <div class={i % 2 === 1 ? 'feature reverse' : 'feature'} data-stagger="100" data-stagger-base="80">
+        <div class="f-copy" data-reveal={i % 2 === 1 ? 'soft-right' : 'soft-left'}>
+          <span class="num">FEATURE {String(i + 1).padStart(2, '0')}</span>
+          <h3>{feature.title}</h3>
+          <p>{feature.description}</p>
+          <ul class="f-bullets">
+            {feature.bullets.map(bullet => (
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M20 6 9 17l-5-5"/>
+                </svg>
+                {bullet}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="f-media" data-reveal={i % 2 === 1 ? 'soft-left' : 'soft-right'}>
+          <div class="window window-hover">
+            <div class="window-bar">
+              <span class="traffic"><i></i><i></i><i></i></span>
+              <span class="win-url">{feature.title.toLowerCase().split(' ').slice(0,2).join('-')}</span>
+              <span class="win-actions"><i></i><i></i><i></i></span>
+            </div>
+            <div class="win-screen" style="overflow:hidden;position:relative;">
+              {project.images[i + 1] ? (
+                typeof project.images[i + 1] === 'string'
+                  ? <img src={project.images[i + 1] as string} alt={feature.title} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async" />
+                  : <Image src={project.images[i + 1] as ImageMetadata} alt={feature.title} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async" />
+              ) : (
+                <span class="ph-note">{t('projectPage.screenshotOf')} · {feature.title}</span>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<!-- ======================================================== TECHNICAL CHALLENGE -->
+<section class="cs-sec" id="challenge">
+  <div class="container">
+    <div class="cs-head" data-reveal="fade">
+      <span class="eyebrow-cs">{t('projectPage.technicalChallenge')}</span>
+      <h2>{t('projectPage.hardProblemsSolved')}</h2>
+      <p>{project.caseStudy.implementation}</p>
+    </div>
+
+    <div class="cs-split" style="align-items:stretch;">
+      <div class="card-plain" data-reveal="soft-left">
+        <h4>{t('projectPage.whatMadeItHard')}</h4>
+        <ul class="pain-list" style="margin-top:1rem;">
+          {project.caseStudy.technicalChallenges.map(challenge => (
+            <li>
+              <span class="x accent-x">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                  <path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/>
+                </svg>
+              </span>
+              <span class="t" style="color:var(--text-mid);">{challenge}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="code-block" data-reveal="soft-right">
+        <div class="code-head">
+          <span class="code-dots"><i></i><i></i><i></i></span>
+          <span class="code-title">architecture.ts</span>
+        </div>
+        <div class="code-body">
+          {project.stack.map((cat, ci) => (
+            <div class="code-line">
+              <span class="ln">{ci + 1}</span>
+              <span class="tok-key">const </span>
+              <span class="tok-fn">{cat.label.toLowerCase().replace(/\s+/g, '_')}</span>
+              <span> = [</span>
+              <span class="tok-str">"{cat.chips.join('", "')}"</span>
+              <span>];</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== STACK -->
+<section class="cs-sec alt">
+  <div class="container">
+    <div class="cs-head" data-reveal="fade">
+      <span class="eyebrow-cs">{t('projectPage.theStack')}</span>
+      <h2>{t('projectPage.technologiesUsed')}</h2>
+    </div>
+    <div class="stack-grid" data-stagger="80" data-stagger-base="80">
+      {project.stack.map(cat => (
+        <div class="stack-cat" data-reveal="zoom">
+          <h5>
+            <span class="ic" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="12" r="4"/>
+              </svg>
+            </span>
+            {cat.label}
+          </h5>
+          <div class="chips">
+            {cat.chips.map(chip => (
+              <span class="badge-cs tech-badge" style={getTechBadgeStyleAttribute(chip)}>{chip}</span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== WHAT THIS PROVES -->
+<section class="cs-sec">
+  <div class="container">
+    <div class="cs-head" data-reveal="fade">
+      <span class="eyebrow-cs">{t('projectPage.whatThisProves')}</span>
+      <h2>{t('projectPage.whatDemonstrates').replace('{name}', project.name)}</h2>
+    </div>
+    <div class="proves" data-stagger="90" data-stagger-base="80">
+      {project.proves.map(prove => (
+        <div class="prove" data-reveal="blur">
+          <div class="prove-ic">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+              set:html={proveIcon(prove.iconKey)} />
+          </div>
+          <h4>{prove.title}</h4>
+          <p>{prove.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== CTA -->
+<section class="cs-sec cs-cta alt">
+  <div class="container">
+    <div class="cs-cta-card" data-reveal="zoom">
+      <span class="eyebrow-cs" style="justify-content:center;">{t('projectPage.workWithMe')}</span>
+      <h2>{t('projectPage.wantToBuildSomethingLikeThis')}</h2>
+      <p>{t('projectPage.bringMeYourIdea').replace('{name}', project.name)}</p>
+      <div class="hero-actions" style="justify-content:center;">
+        <a class="cs-btn primary" href={`${localePrefix}/services/mvp-development/`}>{t('projectPage.requestDevelopmentHelp')} <span class="arrow">→</span></a>
+        <a class="cs-btn secondary" href={bookCallUrl}>{t('nav.bookCall')}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== NEXT PROJECT -->
+{nextProject && (
+  <section class="cs-sec tight" style="border-top:1px solid var(--border);">
+    <div class="container">
+      <div class="next-proj" data-reveal="fade">
+        <span class="next-lab">{t('projectPage.nextCaseStudy')}</span>
+        <a href={`${localePrefix}/projects/${nextProject.slug}/`}>
+          {nextProject.name} <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+)}
+
+</PageLayout>
+
+<style>
+  /* ---- shared rhythm ---- */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+  .cs-sec { padding: 5rem 0; }
+  .cs-sec.alt { background: var(--bg-1); border-block: 1px solid var(--border); }
+  .cs-sec.tight { padding: 2.5rem 0; }
+  .cs-head { max-width: 58ch; margin-bottom: 2.5rem; }
+  .cs-head h2 { font-size: clamp(1.9rem, 3.2vw, 2.7rem); margin: 0.75rem 0 1rem; }
+  .cs-head p { color: var(--text-mid); font-size: 1.05rem; line-height: 1.6; }
+
+  /* ---- hero ---- */
+  .cs-hero { position: relative; min-height: var(--site-hero-height); display: flex; align-items: center; padding: clamp(6rem, 10vh, 8rem) 0 clamp(3rem, 7vh, 5rem); overflow: hidden; }
+  .cs-hero-layout { display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(360px, 1fr); gap: clamp(2rem, 4vw, 4rem); align-items: center; }
+  .hero-copy { min-width: 0; }
+  .crumb { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-low); margin-bottom: 2rem; }
+  .crumb a { color: var(--text-mid); text-decoration: none; }
+  .crumb a:hover { color: var(--text-hi); }
+  .hero-top { max-width: 52rem; }
+  .eyebrow-cs { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-low); display: flex; align-items: center; gap: 8px; }
+  .cs-hero h1 { font-size: clamp(2.6rem, 5.4vw, 4.2rem); line-height: 0.98; letter-spacing: -0.035em; margin: 1rem 0 1rem; }
+  .cs-lead { color: var(--text-mid); font-size: 1.05rem; line-height: 1.65; max-width: 56ch; margin-bottom: 1.5rem; }
+  .hero-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.25rem; }
+  .badge-cs { font-family: var(--font-mono); font-size: 0.72rem; border-radius: var(--r-pill); padding: 4px 10px; }
+  .meta-bar { display: flex; flex-wrap: wrap; gap: 2.5rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+  .meta-bar .mk { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-low); margin-bottom: 4px; }
+  .meta-bar .mv { font-family: var(--font-display); font-weight: 600; color: var(--text-hi); font-size: 1.02rem; }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
+  .cs-btn { font-family: var(--font-body); font-weight: 600; font-size: 0.92rem; display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: var(--r-md); border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: background .15s, border-color .15s, box-shadow .2s; }
+  .cs-btn .arrow { transition: transform .15s; }
+  .cs-btn:hover .arrow { transform: translateX(3px); }
+  .cs-btn.primary { background: var(--accent-400); color: var(--text-on-accent); box-shadow: 0 0 0 1px rgba(167,139,250,.4); }
+  .cs-btn.primary:hover { background: var(--accent-300); box-shadow: var(--glow); }
+  .cs-btn.secondary { background: var(--bg-2); color: var(--text-hi); border-color: var(--border-strong); }
+  .cs-btn.secondary:hover {
+    border-color: transparent;
+    background:
+      linear-gradient(var(--bg-2), var(--bg-2)) padding-box,
+      conic-gradient(
+        from var(--border-angle),
+        transparent 20%,
+        var(--accent-400) 45%,
+        #60a5fa 60%,
+        transparent 80%
+      ) border-box;
+    animation: border-spin 5s linear infinite;
+  }
+
+  /* ---- window mockup ---- */
+  .window { position: relative; border: 1px solid var(--border-strong); border-radius: var(--r-lg); overflow: hidden; background: var(--bg-2); box-shadow: var(--shadow-lg); transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease, border-color .35s ease; }
+  .window-bar { display: flex; align-items: center; gap: 0.75rem; padding: 11px 14px; background: var(--bg-3); border-bottom: 1px solid var(--border); }
+  .traffic { display: flex; gap: 7px; flex-shrink: 0; }
+  .traffic i { width: 11px; height: 11px; border-radius: 50%; background: var(--bg-4); display: block; }
+  .win-url { flex: 1; max-width: 340px; margin: 0 auto; font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-low); background: var(--bg-1); border: 1px solid var(--border); border-radius: var(--r-pill); padding: 5px 14px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 7px; }
+  .win-url svg { color: var(--accent-400); flex-shrink: 0; }
+  .win-actions { display: flex; gap: 5px; flex-shrink: 0; width: 46px; justify-content: flex-end; }
+  .win-actions i { width: 4px; height: 4px; border-radius: 50%; background: var(--text-low); display: block; }
+  .win-screen { aspect-ratio: 16/10; background-color: var(--bg-1); background-image: repeating-linear-gradient(135deg, transparent, transparent 11px, rgba(255,255,255,0.022) 11px, rgba(255,255,255,0.022) 22px); display: grid; place-items: center; color: var(--text-low); font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.04em; }
+  .win-screen .ph-note { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+  .win-screen .ph-ic { color: var(--text-low); opacity: 0.6; }
+  .window-hover:hover { transform: translateY(-5px); border-color: var(--border-strong); box-shadow: var(--shadow-lg), 0 0 50px rgba(124,92,232,0.18); }
+  .hero-stage { position: relative; width: 100%; max-width: 620px; justify-self: end; }
+  .hero-stage::before { content: ""; position: absolute; left: 50%; top: -8%; transform: translateX(-50%); width: 80%; height: 70%; pointer-events: none; z-index: 0; background: radial-gradient(ellipse at center, rgba(143,110,243,0.30), transparent 68%); filter: blur(50px); }
+  .hero-stage .window { position: relative; z-index: 1; }
+  .reflection { position: absolute; left: 8%; right: 8%; bottom: -34px; height: 70px; z-index: 0; background: radial-gradient(ellipse at center, rgba(0,0,0,0.5), transparent 72%); filter: blur(14px); }
+
+  /* ---- split layout ---- */
+  .cs-split { display: grid; grid-template-columns: 1.1fr 1fr; gap: 3rem; align-items: start; }
+
+  /* ---- pain list ---- */
+  .pain-list { list-style: none; padding: 0; margin: 1.25rem 0 0; display: flex; flex-direction: column; gap: 1rem; }
+  .pain-list li { display: flex; gap: 1rem; align-items: flex-start; }
+  .x { width: 26px; height: 26px; flex-shrink: 0; border-radius: var(--r-sm); display: grid; place-items: center; background: rgba(244,115,115,.12); color: var(--negative); margin-top: 2px; }
+  .accent-x { background: var(--accent-soft) !important; color: var(--accent-300) !important; }
+  .t { color: var(--text-mid); }
+  .t b { color: var(--text-hi); font-weight: 600; }
+
+  /* ---- audience card ---- */
+  .audience-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.5rem; }
+  .who { display: flex; align-items: center; gap: 1rem; padding-bottom: 1.25rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
+  .av { width: 48px; height: 48px; border-radius: var(--r-md); background: var(--accent-soft); border: 1px solid var(--border-accent); color: var(--accent-300); display: grid; place-items: center; flex-shrink: 0; }
+  .who h4 { font-size: 1.1rem; margin-bottom: 2px; color: var(--text-hi); }
+  .stat-row { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .sn { font-family: var(--font-display); font-weight: 700; font-size: 1.7rem; color: var(--accent-300); letter-spacing: -0.02em; }
+  .sl { font-size: 0.8rem; color: var(--text-mid); }
+
+  /* ---- product flow ---- */
+  .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-top: 1.5rem; }
+  .flow-node { position: relative; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-md); padding: 1.25rem 1rem; }
+  .flow-node .step-num { font-family: var(--font-mono); font-size: 0.68rem; color: var(--accent-400); letter-spacing: 0.1em; }
+  .flow-node h5 { font-family: var(--font-display); font-size: 1rem; font-weight: 600; color: var(--text-hi); margin: 6px 0 4px; }
+  .flow-node p { font-size: 0.82rem; color: var(--text-low); line-height: 1.4; }
+  .flow-node:not(:last-child)::after { content: "→"; position: absolute; right: -16px; top: 50%; transform: translateY(-50%); color: var(--text-low); font-family: var(--font-mono); z-index: 2; }
+
+  /* ---- before / after ---- */
+  .ba { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.25rem; }
+  .tag-lab { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.75rem; }
+  .before .tag-lab { color: var(--negative); }
+  .after .tag-lab { color: var(--positive); }
+  .tag-lab .d { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+  /* ---- features zig-zag ---- */
+  .feature { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-top: 3rem; }
+  .feature:first-of-type { margin-top: 1.5rem; }
+  .feature.reverse .f-media { order: -1; }
+  .num { font-family: var(--font-mono); font-size: 0.74rem; color: var(--accent-400); letter-spacing: 0.14em; }
+  .f-copy h3 { font-size: 1.6rem; margin: 0.75rem 0 0.75rem; }
+  .f-copy p { color: var(--text-mid); line-height: 1.6; }
+  .f-bullets { list-style: none; padding: 0; margin: 1rem 0 0; display: flex; flex-direction: column; gap: 0.75rem; }
+  .f-bullets li { display: flex; gap: 0.75rem; align-items: flex-start; color: var(--text-mid); font-size: 0.95rem; }
+  .f-bullets svg { flex-shrink: 0; margin-top: 3px; color: var(--accent-400); }
+
+  /* ---- technical challenge ---- */
+  .card-plain { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+  .card-plain h4 { font-family: var(--font-display); font-size: 1.1rem; color: var(--text-hi); }
+  .code-block { background: var(--bg-1); border: 1px solid var(--border-strong); border-radius: var(--r-lg); overflow: hidden; font-family: var(--font-mono); }
+  .code-head { display: flex; align-items: center; gap: 0.75rem; padding: 10px 14px; background: var(--bg-2); border-bottom: 1px solid var(--border); }
+  .code-dots { display: flex; gap: 6px; }
+  .code-dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--bg-4); display: block; }
+  .code-title { font-size: 0.75rem; color: var(--text-low); }
+  .code-body { padding: 1rem 1.25rem; font-size: 0.78rem; line-height: 1.8; color: var(--text-mid); white-space: pre-wrap; }
+  .tok-key { color: var(--accent-300); }
+  .tok-fn { color: #7fb0ff; }
+  .tok-str { color: var(--positive); }
+  .tok-com { color: var(--text-low); font-style: italic; }
+  .ln { color: var(--text-low); user-select: none; margin-right: 1rem; display: inline-block; width: 1.5rem; }
+  .code-line { display: flex; align-items: baseline; line-height: 2; }
+
+  /* ---- stack grid ---- */
+  .stack-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+  .stack-cat h5 { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-low); margin: 0 0 1rem; display: flex; align-items: center; gap: 8px; }
+  .stack-cat .ic { color: var(--accent-400); }
+  .chips { display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+
+  /* ---- proves ---- */
+  .proves { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+  .prove { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.5rem; transition: border-color .2s ease, transform .2s ease; }
+  .prove:hover { border-color: var(--border-strong); transform: translateY(-3px); }
+  .prove-ic { width: 44px; height: 44px; border-radius: var(--r-md); background: var(--accent-soft); border: 1px solid var(--border-accent); color: var(--accent-300); display: grid; place-items: center; margin-bottom: 1rem; }
+  .prove h4 { font-size: 1.12rem; margin-bottom: 0.5rem; color: var(--text-hi); }
+  .prove p { font-size: 0.92rem; color: var(--text-mid); line-height: 1.5; }
+
+  /* ---- CTA ---- */
+  .cs-cta { text-align: center; }
+  .cs-cta-card { background: linear-gradient(150deg, var(--accent-soft) 0%, var(--bg-2) 55%); border: 1px solid var(--border-accent); border-radius: var(--r-xl); padding: 4rem 3rem; box-shadow: var(--glow); }
+  .cs-cta-card h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; margin: 1rem auto 1rem; }
+  .cs-cta-card p { color: var(--text-mid); max-width: 48ch; margin: 0 auto 1.5rem; }
+
+  /* ---- next project ---- */
+  .next-proj { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap; }
+  .next-lab { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-low); }
+  .next-proj a { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; color: var(--text-hi); display: inline-flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+  .next-proj a:hover { color: var(--accent-300); }
+  .next-proj a .arrow { transition: transform .15s; }
+  .next-proj a:hover .arrow { transform: translateX(4px); }
+
+  /* ---- responsive ---- */
+  @media (max-width: 900px) {
+    .cs-hero { display: block; }
+    .cs-hero-layout { grid-template-columns: 1fr; }
+    .hero-stage { max-width: none; justify-self: stretch; }
+    .cs-split, .feature, .ba { grid-template-columns: 1fr; gap: 1.5rem; }
+    .feature.reverse .f-media { order: 0; }
+    .flow { grid-template-columns: 1fr 1fr; }
+    .flow-node:not(:last-child)::after { display: none; }
+    .stack-grid, .proves { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .flow, .stack-grid, .proves { grid-template-columns: 1fr; }
+    .meta-bar { gap: 1.25rem; }
+    .cs-hero { min-height: 0; padding: 6rem 0 3rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .window, .prove { transition: none; }
+  }
+</style>

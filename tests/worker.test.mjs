@@ -44,9 +44,42 @@ test("health endpoint returns service status JSON", async () => {
   });
 });
 
-test("falls back to static assets for non-api routes", async () => {
+test("falls back to static assets for canonical non-api routes", async () => {
   const response = await worker.fetch(
-    new Request("https://fullstackchris.dev/projects"),
+    new Request("https://fullstackchris.dev/projects/"),
+    makeEnv(),
+    {},
+  );
+
+  assert.equal(response.status, 200);
+  assert.equal(await response.text(), "asset fallback");
+});
+
+test("redirects www host to the canonical apex host", async () => {
+  const response = await worker.fetch(
+    new Request("https://www.fullstackchris.dev/"),
+    makeEnv(),
+    {},
+  );
+
+  assert.equal(response.status, 308);
+  assert.equal(response.headers.get("Location"), "https://fullstackchris.dev/");
+});
+
+test("redirects extensionless static routes to trailing-slash canonicals", async () => {
+  const response = await worker.fetch(
+    new Request("https://fullstackchris.dev/services/mvp-development"),
+    makeEnv(),
+    {},
+  );
+
+  assert.equal(response.status, 308);
+  assert.equal(response.headers.get("Location"), "https://fullstackchris.dev/services/mvp-development/");
+});
+
+test("does not add trailing slashes to asset URLs", async () => {
+  const response = await worker.fetch(
+    new Request("https://fullstackchris.dev/og-image.png"),
     makeEnv(),
     {},
   );

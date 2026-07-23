@@ -1,6 +1,8 @@
 ---
 import '../../styles/global.css';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { CF_ANALYTICS_TOKEN, TWITTER_HANDLE } from '../../config/constants';
+import { locales, defaultLocale, stripLocalePrefix } from '../../i18n/ui';
 
 interface Props {
   title: string;
@@ -22,35 +24,75 @@ const {
   gscVerification,
 } = Astro.props;
 
+const SITE_URL = 'https://fullstackchris.dev';
+
+const normalizeCanonicalUrl = (value: string) => {
+  try {
+    const url = new URL(value, SITE_URL);
+
+    if (url.hostname === 'www.fullstackchris.dev') {
+      url.hostname = 'fullstackchris.dev';
+    }
+
+    if (url.hostname === 'fullstackchris.dev') {
+      url.protocol = 'https:';
+
+      if (url.pathname !== '/' && !url.pathname.endsWith('/') && !/\.[^/]+$/.test(url.pathname)) {
+        url.pathname = `${url.pathname}/`;
+      }
+    }
+
+    return url.href;
+  } catch {
+    return value;
+  }
+};
+
+const canonicalHref = normalizeCanonicalUrl(canonical);
 const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 const cfToken = CF_ANALYTICS_TOKEN.startsWith('REPLACE') ? null : CF_ANALYTICS_TOKEN;
+
+const locale = Astro.currentLocale ?? defaultLocale;
+const ogLocaleMap: Record<string, string> = { en: 'en_US', fr: 'fr_FR', es: 'es_ES' };
+const ogLocale = ogLocaleMap[locale] ?? 'en_US';
+
+const barePath = stripLocalePrefix(Astro.url.pathname).replace(/^\//, '');
+const hreflangLinks = locales.map((loc) => ({
+  hreflang: loc,
+  href: new URL(getRelativeLocaleUrl(loc, barePath), SITE_URL).href,
+}));
+const xDefaultHref = new URL(getRelativeLocaleUrl(defaultLocale, barePath), SITE_URL).href;
 ---
 
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang={locale} class="no-js">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
 
     <!-- Security headers (meta-tag subset; GitHub Pages does not allow custom HTTP response headers) -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com https://assets.calendly.com https://translate.google.com https://translate.googleapis.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://assets.calendly.com https://translate.googleapis.com https://www.gstatic.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://calendly.com https://www.google.com; connect-src 'self' https://cloudflareinsights.com https://translate.googleapis.com; object-src 'none'; base-uri 'self'" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com https://assets.calendly.com; style-src 'self' 'unsafe-inline' https://assets.calendly.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://calendly.com; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="robots" content="index, follow, max-image-preview:large" />
-    <link rel="canonical" href={canonical} />
+    <link rel="canonical" href={canonicalHref} />
+    {hreflangLinks.map(({ hreflang, href }) => (
+      <link rel="alternate" hreflang={hreflang} href={href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={xDefaultHref} />
 
     <!-- OpenGraph -->
     <meta property="og:type" content={ogType} />
-    <meta property="og:url" content={canonical} />
+    <meta property="og:url" content={canonicalHref} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={ogLocale} />
     <meta property="og:site_name" content="fullstackchris.dev" />
 
     <!-- Twitter Card -->
@@ -81,10 +123,8 @@ const cfToken = CF_ANALYTICS_TOKEN.startsWith('REPLACE') ? null : CF_ANALYTICS_T
   </head>
   <body>
     <div id="cursor-glow" aria-hidden="true"></div>
-    <div id="google_translate_element" class="site-translate-host" aria-hidden="true"></div>
     <slot />
 
-    <script src="/i18n.js" defer></script>
     <script>
       import '../../scripts/motion.ts';
     </script>

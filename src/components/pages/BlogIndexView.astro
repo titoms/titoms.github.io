@@ -1,0 +1,126 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '../layout/PageLayout.astro';
+import { Badge } from '../ui/Badge';
+import { Button } from '../ui/Button';
+import { Card } from '../ui/Card';
+import { SectionHeader } from '../ui/SectionHeader';
+import { defaultLocale } from '../../i18n/ui';
+import { blogIndex } from './content/blogIndex';
+
+const locale = (Astro.currentLocale ?? defaultLocale) as 'en' | 'fr' | 'es';
+const c = blogIndex[locale];
+const localePrefix = locale === 'en' ? '' : `/${locale}`;
+
+const articles = (await getCollection('blog', (entry) => entry.id.startsWith(`${locale}/`))).sort((a, b) => {
+  if (a.data.comingSoon !== b.data.comingSoon) return a.data.comingSoon ? 1 : -1;
+  return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
+});
+const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
+
+const formatDate = new Intl.DateTimeFormat(locale, {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+});
+
+const publishedArticles = articles.filter((article) => !article.data.comingSoon);
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: c.jsonLd.name,
+  description: c.jsonLd.description,
+  url: `https://fullstackchris.dev${localePrefix}/blog/`,
+  blogPost: publishedArticles.map((article) => ({
+    "@type": "BlogPosting",
+    headline: article.data.title,
+    description: article.data.description,
+    datePublished: article.data.publishedAt.toISOString(),
+    url: `https://fullstackchris.dev${localePrefix}/blog/${article.id.replace(/^(en|fr|es)\//, '')}/`,
+  })),
+};
+---
+
+<PageLayout
+  title={c.meta.title}
+  description={c.meta.description}
+  canonical={`https://fullstackchris.dev${localePrefix}/blog/`}
+  jsonLd={jsonLd}
+>
+  <!-- Hero -->
+  <section class="site-hero hero-glow-field glow-bg grid-bg relative overflow-hidden border-b border-border mb-12 sm:mb-16">
+    <div class="bg-field bv-b" aria-hidden="true">
+      <span class="blob blob-1"></span>
+      <span class="blob blob-2"></span>
+      <span class="blob blob-3"></span>
+    </div>
+    <div class={`${sectionClass} site-hero-inner`} data-stagger="100" data-stagger-base="80">
+      <span class="site-eyebrow" data-reveal="fade"><span class="pulse-dot"></span>{c.eyebrow}</span>
+      <h1 class="mt-6 max-w-4xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] tracking-normal text-white" data-reveal="soft-left">
+        {c.h1}
+      </h1>
+      <p class="mt-6 max-w-prose text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary" data-reveal="blur">
+        {c.lead}
+      </p>
+    </div>
+  </section>
+
+  <!-- Articles -->
+  <section class={sectionClass}>
+    <SectionHeader
+      eyebrow={c.articles.eyebrow}
+      title={c.articles.title}
+      description={c.articles.description}
+      data-reveal="fade"
+    />
+    <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3" data-stagger="90" data-stagger-base="80">
+      {articles.map((article) => {
+        const slug = article.id.replace(/^(en|fr|es)\//, '');
+        return (
+          <Card hover class="flex h-full flex-col gap-4" data-reveal={article.data.comingSoon ? 'zoom' : 'blur'}>
+            <div class="font-mono text-xs uppercase tracking-[0.16em] text-low mb-4">
+              {article.data.comingSoon ? c.plannedArticle : formatDate.format(article.data.publishedAt)}
+            </div>
+            <div class="flex flex-wrap gap-2 mb-4">
+              {article.data.tags.map((tag: string) => (
+                <Badge variant="default">{tag}</Badge>
+              ))}
+              {article.data.comingSoon && <Badge variant="accent">{c.comingSoon}</Badge>}
+            </div>
+            <h2 class="font-display text-[1.15rem] font-semibold leading-tight text-white">
+              {article.data.title}
+            </h2>
+            <p class="text-[0.95rem] leading-7 text-secondary mb-4">{article.data.description}</p>
+            <div class="mt-auto border-t border-border pt-4">
+              <Button href={`${localePrefix}/blog/${slug}/`} variant="outline" size="sm">
+                {article.data.comingSoon ? c.previewArticle : c.readArticle}
+              </Button>
+            </div>
+          </Card>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Newsletter CTA -->
+  <section class="border-t border-border bg-surface/55">
+    <div class={sectionClass}>
+      <Card glow class="overflow-hidden p-8 sm:p-10 lg:p-12" data-reveal="zoom">
+        <div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
+            <p class="font-mono text-xs uppercase tracking-[0.18em] text-accent">{c.newsletterCta.getNotified}</p>
+            <h2 class="mt-4 max-w-2xl font-display text-[clamp(1.8rem,3.5vw,3rem)] font-semibold leading-tight text-white">
+              {c.newsletterCta.h2}
+            </h2>
+            <p class="mt-4 max-w-prose text-lg leading-8 text-secondary">
+              {c.newsletterCta.lead}
+            </p>
+          </div>
+          <Button href={`${localePrefix}/services/ai-web-development-newsletter/`} variant="primary" size="lg">
+            {c.newsletterCta.joinNewsletter}
+          </Button>
+        </div>
+      </Card>
+    </div>
+  </section>
+</PageLayout>

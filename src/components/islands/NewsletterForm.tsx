@@ -1,26 +1,27 @@
 import { useEffect, useState } from "react";
 import { Button } from "../ui";
 import { trackEvent } from "../../utils/analytics";
+import { useTranslations } from "../../i18n/ui";
 
 type NewsletterResponse = {
   success: boolean;
   message?: string;
 };
 
-const DEFAULT_SUCCESS_MESSAGE = "Check your inbox to confirm your subscription.";
-const DEFAULT_ERROR_MESSAGE = "Something went wrong. Please try again.";
+type NewsletterFormProps = {
+  locale?: string;
+};
 
-const NewsletterForm = () => {
+const NewsletterForm = ({ locale = "en" }: NewsletterFormProps) => {
+  const t = useTranslations(locale);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [message, setMessage] = useState(DEFAULT_SUCCESS_MESSAGE);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email || status === "loading") return;
 
     setStatus("loading");
-    setMessage("");
 
     const formData = new FormData(e.currentTarget);
     const honeypot = String(formData.get("honeypot") ?? "");
@@ -40,17 +41,14 @@ const NewsletterForm = () => {
       const result = await response.json() as NewsletterResponse;
 
       if (!response.ok || !result.success) {
-        setMessage(result.message || DEFAULT_ERROR_MESSAGE);
         setStatus("error");
         return;
       }
 
-      setMessage(result.message || DEFAULT_SUCCESS_MESSAGE);
       setStatus("success");
       setEmail("");
       trackEvent("newsletter_signup_submit", { source: "footer" });
     } catch {
-      setMessage(DEFAULT_ERROR_MESSAGE);
       setStatus("error");
     }
   };
@@ -64,10 +62,8 @@ const NewsletterForm = () => {
   if (status === "success") {
     return (
       <div data-analytics="newsletter_signup_success">
-        <p className="text-sm text-positive">{message}</p>
-        <p className="mt-1 text-xs text-mid">
-          If confirmation is required, you'll receive an email from AI Clarity Newsletter shortly.
-        </p>
+        <p className="text-sm text-positive">{t("newsletter.successFallback")}</p>
+        <p className="mt-1 text-xs text-mid">{t("newsletter.confirmationHint")}</p>
       </div>
     );
   }
@@ -75,7 +71,7 @@ const NewsletterForm = () => {
   return (
     <form onSubmit={handleSubmit} className="flex w-full max-w-xl flex-col gap-3 sm:flex-row">
       <label className="hidden" aria-hidden="true">
-        Website
+        {t("newsletter.honeypotLabel")}
         <input
           type="text"
           name="honeypot"
@@ -84,7 +80,7 @@ const NewsletterForm = () => {
         />
       </label>
       <label htmlFor="newsletter-email" className="sr-only">
-        Email address
+        {t("newsletter.emailLabel")}
       </label>
       <input
         id="newsletter-email"
@@ -92,7 +88,7 @@ const NewsletterForm = () => {
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="you@example.com"
+        placeholder={t("newsletter.placeholder")}
         required
         disabled={status === "loading"}
         className="min-h-[48px] flex-1 rounded-lg border border-strong bg-raised/80 px-4 py-3 text-sm text-white placeholder:text-low focus:border-accent focus:outline-none disabled:opacity-60"
@@ -104,10 +100,10 @@ const NewsletterForm = () => {
         disabled={status === "loading"}
         data-analytics="newsletter_signup_submit"
       >
-        {status === "loading" ? "Sending..." : "Subscribe"}
+        {status === "loading" ? t("newsletter.sending") : t("newsletter.subscribe")}
       </Button>
       {status === "error" && (
-        <p className="w-full text-sm text-negative">{message}</p>
+        <p className="w-full text-sm text-negative">{t("newsletter.errorFallback")}</p>
       )}
     </form>
   );

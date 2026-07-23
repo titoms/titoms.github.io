@@ -16,6 +16,7 @@ const blog = defineCollection({
       answer: z.string(),
     })).default([]),
     comingSoon: z.boolean().default(false),
+    language: z.enum(['en', 'fr', 'es']).default('en'),
   }),
 });
 
