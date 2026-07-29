@@ -1,11 +1,186 @@
 ---
 title: "Claude Code Workflows for Web Developers"
-description: "Practical Claude Code workflows for React and Node.js projects. How to use Claude Code CLI to accelerate development, debug faster and maintain code quality."
-publishedAt: 2025-12-01
-tags: ["Claude Code", "AI", "Developer Tools"]
-comingSoon: true
+metaTitle: "Claude Code Workflows for Web Developers (React and Node.js)"
+description: "Practical Claude Code workflows for React and Node.js projects: how to set up repo context, plan before coding, debug faster and keep code quality high."
+publishedAt: 2026-07-22
+tags: ["Claude Code", "AI-assisted development", "React", "Node.js"]
+imagePrompt: "Flat, modern diagram showing a terminal window at the center labeled Claude Code, with arrows connecting to labeled boxes: CLAUDE.md, Plan Mode, Subagents, Hooks, Slash Commands, Tests. Dark background, blue and teal accent lines, developer-tool aesthetic."
+faqs:
+  - question: "Do I need CLAUDE.md for a small side project?"
+    answer: "Yes. Even a short CLAUDE.md helps the agent understand the stack, commands and project rules instead of rediscovering them every session."
+  - question: "Is Claude Code a replacement for code review?"
+    answer: "No. A Claude Code review pass can catch mechanical issues, but human review is still needed for architecture, product decisions and risk."
+  - question: "Does TDD work well with an AI coding agent?"
+    answer: "Yes, especially beyond trivial changes. A failing test gives the agent a clear target and catches regressions before they reach the user."
+  - question: "What is the difference between a slash command and a hook?"
+    answer: "A slash command is a reusable prompt you run deliberately. A hook runs automatically and can enforce rules around tool usage."
+comingSoon: false
 ---
 
-# Claude Code Workflows for Web Developers
+Claude Code is not just a smarter autocomplete. It is an agentic CLI tool that can read your repo, run commands, edit files across a codebase and hold a plan across several steps.
 
-This article is coming soon. Subscribe to the newsletter to get notified when it publishes.
+That is useful on a React or Node.js project. It is also how you can end up with a working demo and a codebase nobody understands six weeks later if you use it without structure.
+
+The difference is not only the model. It is the workflow around it.
+
+## Make CLAUDE.md the project constitution
+
+Every agent session starts from limited context unless you give it a memory. A `CLAUDE.md` file at the repo root should carry the project rules you would otherwise repeat in every prompt.
+
+For a React and Node.js project, that usually means:
+
+- The stack and architecture.
+- Naming and folder conventions.
+- How errors, loading states and forms are handled.
+- How tests are written.
+- Commands for dev, test, lint and build.
+- Explicit rules such as no direct database calls from UI components or no edits to generated files.
+
+Without this, the agent re-derives your architecture from whatever file it opens first. With it, Claude Code starts from a useful baseline.
+
+My practical rule is simple: if you explain the same thing twice, that is probably a missing line in `CLAUDE.md`.
+
+## Plan before you let it edit files
+
+For anything beyond a one-file fix, ask for a plan before implementation.
+
+The plan should say which files will change, in what order, and what the risky part is. This matters because the common failure mode is not "nothing works." The common failure mode is "it works, but it duplicates an existing pattern three folders away."
+
+Freestyle AI coding is fine for a disposable prototype. It is the wrong default for a codebase that has to survive the next feature.
+
+Planning first turns "it runs" into "it fits."
+
+## Use red-green-refactor with the agent
+
+The highest-leverage workflow for new features and bug fixes is still test first:
+
+1. Ask Claude Code to write or identify a failing test.
+2. Confirm the failure proves the right behavior.
+3. Let it implement the smallest change that passes.
+4. Ask for a refactor pass with the tests still green.
+
+This is especially useful in React and Node.js code because it gives the agent a concrete contract. Components, hooks, API handlers and data mappers become easier to change when a test describes the expected behavior.
+
+For bugs, the same rule applies: reproduce first, fix second. A fix without a reproducing test is a guess that happened to make the symptom disappear.
+
+If your team needs help installing this discipline in an existing project, [web project coaching](/services/web-project-coaching/) is usually enough to set up the first loop.
+
+## Debug systematically instead of re-prompting
+
+When something breaks, do not just restate the symptom and ask for another fix. Give the agent a debugging loop:
+
+1. Reproduce the failure reliably.
+2. Reduce the repro to the smallest trigger.
+3. Inspect logs, failing assertions or network responses.
+4. Form a hypothesis.
+5. Make a narrow fix.
+6. Add a regression test.
+
+This is slower for a typo and much faster for the real bugs: race conditions, stale React state, broken async flows, schema mismatches and Node.js error paths that only fail under one condition.
+
+The goal is to make the agent reason from evidence rather than guess from a description.
+
+## Let Claude Code review before you do
+
+After implementation, run a review pass against the original goal and your project instructions.
+
+Ask it to look for:
+
+- Drift from the requested behavior.
+- Reused patterns that should have been followed.
+- Missing tests.
+- Unused variables and dead code.
+- Weak error handling.
+- Accessibility or loading-state gaps in UI work.
+
+This does not replace human review. It makes human review cleaner because the obvious issues are already gone.
+
+For AI-generated changes, I like doing this before I inspect the final diff. It forces the agent to critique its own work while the full context is still warm.
+
+## Use subagents for exploration
+
+Subagents are useful when the task is broad discovery.
+
+Good uses:
+
+- Find every place a deprecated API is called.
+- Compare several implementation patterns across a large repo.
+- Audit pages for missing metadata.
+- Search a monorepo for ownership boundaries before editing.
+
+Poor uses:
+
+- Implement one component.
+- Rename one function.
+- Fix a small local bug.
+
+Subagents have coordination cost. Use them when they reduce context noise, not just because a task sounds long.
+
+## Turn repeated prompts into slash commands
+
+If you type the same multi-step prompt for the third time, make it a slash command.
+
+Examples:
+
+- Run checks and summarize failures.
+- Review the current diff against project conventions.
+- Generate a release note from commits.
+- Prepare a debugging report from logs and failing tests.
+
+Committed commands help a team use the same workflow instead of relying on everyone to remember the same prompt.
+
+Hooks are stricter. Use them for rules that must be enforced, such as blocking direct commits to `main` or preventing edits to generated files. Read any hook before enabling it because hooks run with your local credentials.
+
+## Connect real context with MCP
+
+For React and Node.js teams, MCP connections are useful when they remove repeated copy-paste.
+
+The highest-value connections are usually:
+
+- GitHub issues, pull requests and CI status.
+- Read-only database schema access.
+- Design tools for exact frontend implementation.
+- Documentation sources used by the team.
+
+Do not connect tools just because they exist. Connect the tools that give Claude Code information you already paste into prompts every week.
+
+## Common mistakes
+
+The mistakes I see most often are predictable:
+
+- Treating Claude Code like a generic search engine instead of an agent inside your repo.
+- Working without a `CLAUDE.md`, so each session re-learns the project.
+- Skipping planning on multi-file changes.
+- Accepting working code without a review pass.
+- Letting AI-generated code expand product scope because every feature feels cheap.
+- Granting hooks or MCP servers access without reading what they do.
+
+Most of these are workflow problems, not model problems.
+
+## The takeaway
+
+Claude Code speeds up web development in proportion to the structure around it.
+
+Use `CLAUDE.md` for shared context, plan before multi-file changes, test before implementation when risk is real, debug from evidence and run a review pass before you look at the final diff.
+
+Skip that structure and you get speed now, cleanup later. Keep it, and the speed starts to compound.
+
+If your team is using Claude Code without shared project instructions, review habits or a testing loop, the [AI Clarity Bootstrap Workshop](/services/mvp-bootstrapping-workshop/) and [web project coaching](/services/web-project-coaching/) are built for exactly that kind of workflow setup.
+
+## FAQ
+
+### Do I need CLAUDE.md for a small side project?
+
+Yes. Even a short file helps: stack, important commands, conventions and things the agent must not do.
+
+### Is Claude Code a replacement for code review?
+
+No. It can catch mechanical problems and missed instructions, but architecture and product judgment still need a human.
+
+### Does TDD work well with an AI coding agent?
+
+Yes. A failing test gives the agent a concrete target and prevents a lot of confident-but-wrong changes.
+
+### What is the difference between a slash command and a hook?
+
+A slash command is a reusable prompt you run deliberately. A hook runs automatically and can enforce rules around tool use.
