@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop — Templates, Design Systems & Dev Resources | fullstackchris.dev</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../motion.css">
+<link rel="stylesheet" href="../service.css">
+<link rel="stylesheet" href="shop.css">
+<style>
+  .shop-hero { padding: var(--sp-8) 0 var(--sp-7); position: relative; }
+  .trust-bar { display: flex; gap: var(--sp-6); flex-wrap: wrap; padding: var(--sp-4) 0; border-block: 1px solid var(--border); margin-bottom: var(--sp-8); }
+  .trust-bar .t-item { display: flex; align-items: center; gap: 8px; color: var(--text-mid); font-size: 0.85rem; }
+  .trust-bar .t-item svg { color: var(--accent-400); }
+  .featured-banner { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-7); align-items: center; background: linear-gradient(135deg, var(--accent-soft) 0%, var(--bg-2) 55%); border: 1px solid var(--border-accent); border-radius: var(--r-xl); padding: var(--sp-7); box-shadow: var(--glow); margin-bottom: var(--sp-8); }
+  @media (max-width: 900px) { .featured-banner { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" data-screen-label="Header">
+      <a class="brand" href="../Homepage.html"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></a>
+      <ul class="nav-links">
+        <li><a href="../services/index.html">Services</a></li>
+        <li><a href="index.html" style="color:var(--text-hi);">Shop</a></li>
+        <li><a href="../Homepage.html#projects">Projects</a></li>
+        <li><a href="account.html">Account</a></li>
+      </ul>
+      <div class="row gap-3">
+        <button class="cart-btn" aria-label="Open cart"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="count cart-count" style="display:none;">0</span></button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<section class="shop-hero glow-bg grid-bg" data-screen-label="Shop hero">
+  <div class="container">
+    <span class="eyebrow">SHOP</span>
+    <h1 class="t-h1" style="margin:var(--sp-4) 0 var(--sp-4); max-width:20ch;">Templates, design systems and free resources — built to ship, not just look nice.</h1>
+    <p class="t-lead" style="max-width:56ch;">Everything I use myself: Astro/React/Tailwind templates, the exact design system behind this site, and free starter kits. Instant download, no subscriptions.</p>
+  </div>
+</section>
+
+<div class="container">
+  <div class="trust-bar" data-screen-label="Trust bar">
+    <div class="t-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Secure checkout via Stripe</div>
+    <div class="t-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Instant digital download</div>
+    <div class="t-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M2 12h20"/></svg>1,200+ downloads across all products</div>
+    <div class="t-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11Z"/></svg>14-day money-back guarantee</div>
+  </div>
+
+  <a href="product.html" class="featured-banner" style="color:inherit;" data-screen-label="Featured">
+    <div>
+      <span class="eyebrow no-rule">BESTSELLER</span>
+      <h2 class="t-h2" style="margin:14px 0 12px;">Violet Dark UI Kit</h2>
+      <p class="t-body" style="max-width:40ch;">The exact dark-charcoal, violet-accent design system powering this entire site — tokens, components and motion patterns included.</p>
+      <div class="row gap-4" style="margin-top:var(--sp-5);">
+        <span class="pdp-price-row" style="margin:0;"><span class="amt" style="font-size:1.5rem;">€59</span><span class="was">€79</span></span>
+        <span class="btn btn-primary btn-sm">View product <span class="arrow">→</span></span>
+      </div>
+    </div>
+    <div class="ph" style="aspect-ratio:16/10; border-radius:var(--r-lg);">screenshot · violet-ui-kit</div>
+  </a>
+
+  <div class="filter-row" data-screen-label="Toolbar">
+    <div class="row gap-4 wrap" style="flex:1;">
+      <div class="search-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="input" id="shopSearch" placeholder="Search products…">
+      </div>
+      <div class="filter-pills">
+        <button class="filter-pill active" data-filter="all">All</button>
+        <button class="filter-pill" data-filter="Freebies">Freebies</button>
+        <button class="filter-pill" data-filter="Templates">Templates</button>
+        <button class="filter-pill" data-filter="Design Systems">Design Systems</button>
+        <button class="filter-pill" data-filter="Others">Others</button>
+      </div>
+    </div>
+    <div class="sort-wrap">
+      <span class="result-count" id="resultCount">12 products</span>
+      <select class="select" id="shopSort">
+        <option value="popular">Sort: Popular</option>
+        <option value="newest">Newest</option>
+        <option value="price-asc">Price: low to high</option>
+        <option value="price-desc">Price: high to low</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="pgrid" data-screen-label="Product grid">
+    <article class="card card-hover pcard filterable" data-cat="Freebies" data-title="Astro Landing Starter Kit" data-price="0" data-date="4" data-popular="6">
+      <div class="thumb"><div class="ph">screenshot · starter-kit</div><div class="thumb-badges"><span class="badge badge-positive">Free</span></div><button class="wish-btn" data-wish="fb-starter"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></button></div>
+      <div class="body"><span class="cat">Freebies</span><h4 class="t-h4">Astro Landing Starter Kit</h4><p class="desc">A clean one-page Astro + Tailwind starter with hero, features and CTA sections.</p>
+        <div class="foot"><span class="price-free">Free</span><button class="btn btn-primary btn-add" data-add="fb-starter">Get it</button></div>
+      </div>
+    </article>
+    <article class="card card-hover pcard filterable" data-cat="Freebies" data-title="Tailwind Component Cheatsheet" data-price="0" data-date="2" data-popular="4">
+      <div class="thumb"><div class="ph">preview · cheatsheet</div><div class="thumb-badges"><span class="badge badge-positive">Free</span></div><button class="wish-btn" data-wish="fb-cheatsheet"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></button></div>
+      <div class="body"><span class="cat">Freebies</span><h4 class="t-h4">Tailwind Component Cheatsheet</h4><p class="desc">Copy-paste patterns for cards, forms, nav and modals — PDF + Figma.</p>
+        <div class="foot"><span class="price-free">Free</span><button class="btn btn-primary btn-add" data-add="fb-cheatsheet">Get it</button></div>
+      </div>
+    </article>
+    <article class="card card-hover pcard filterable" data-cat="Freebies" data-title="Cursor &amp; Claude Prompt Pack" data-price="0" data-date="1" data-popular="9">
+      <div class="thumb"><div class="ph">preview · prompt-pack</div><div class="thumb-badges"><span class="badge badge-positive">Free</span></div><button class="wish-btn" data-wish="fb-prompts"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></button></div>
+      <div class="body"><span class="cat">Freebies</span><h4 class="t-h4">Cursor &amp; Claude Prompt Pack</h4><p class="desc">40 tested prompts for scoping, debugging and refactoring AI-generated code.</p>
+        <div class="foot"><span class="price-free">Free</span><button class="btn btn-primary btn-add" data-add="fb-prompts">Get it</button></div>
+      </div>
+    </article>
+    <article class="card card-hover pcard filterable" data-cat="Templates" data-title="SaaS Marketing Template" data-price="39" data-date="8" data-popular="8">
+      <div class="thumb"><div class="ph">screenshot · saas-template</div><div class="thumb-badges"><span class="badge badge-accent"><span class="dot"></span>Popular</span></div><button class="wish-btn" data-wish="tpl-saas"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></button></div>
+      <div class="body"><span class="cat">Templates</span><h4 class="t-h4">SaaS Marketing Template</h4><p class="desc">Full landing page: hero, pricing, FAQ, testimonials — Astro, React &amp; Tailwind.</p>
+        <div class="foot"><span><span class="price-was">€59</span><span class="price-now">€39</span></span><button class="btn btn-primary btn-add" data-add="tpl-saas">Add to cart</button></div>
+      </div>
+    </article>
+    <article class="card card-hover pcard filterable" data-cat="Templates" data-title="Founder Portfolio Template" data-price="29" data-date="6" data-popular="5">
+      <div class="thumb"><div class="ph">screenshot · portfolio-template</div><button class="wish-btn" data-wish="tpl-portfolio"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></button></div>
+      <div class="body"><span class="cat">Templates</span><h4 class="t-h4">Founder Portfolio Template</h4><p class="desc">A minimal one-pager to showcase projects, services and a booking CTA.</p>
+        <div class="foot"><span class="price-now">€29</span><button class="btn btn-primary btn-add" data-add="tpl-portfolio">Add to cart</button></div>
+      </div>
+    </article>
+    <article class="card card-hover pcard filterable" data-cat="Templates" data-title="Docs &amp; Changelog Template" data-price="35" data-date="3" data-popular="3">
+      <div class="thumb"><div class="ph">screenshot · docs-template</div><button class="wish-btn" data-wish="tpl-docs"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></button></div>
+      <div class="body"><span class="cat">Templates</span><h4 class="t-h4">Docs &amp; Changelog Template</h4><p class="desc">Searchable docs layout with sidebar nav and a clean changelog feed.</p>
+        <div class="foot"><span class="price-now">€35</span><button class="btn btn-primary btn-add" data-add="tpl-docs">Add to cart</button></div>
+      </div>
+    </article>
+    <article class="card card-hover pcard filterable" data-cat="Design Systems" data-title="Violet Dark UI Kit" data-price="59" data-date="10" data-popular="10">
+      <div class="thumb"><div class="ph">screenshot · violet-ui-kit</div><div class="thumb-badges"><span class="badge badge-accent"><span class="dot"></span>Bestseller</span></div><button class="wish-btn" data-wish="ds-violet"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></button></div>
+      <div class="body"><span class="cat">Design Systems</span><h4 class="t-h4">Violet Dark UI Kit</h4><p class="desc">Tokens, components and motion patterns behind this exact site.</p>
+        <div class="foot"><span><span class="price-was">€79</span><span class="price-now">€59</span></span><a class="btn btn-primary btn-sm" href="product.html">View</a></div>
+      </div>
+    </article>
+    <article class="card card-hover pcard filterable" data-cat="Design Systems" data-title="Minimal SaaS Design System" data-price="49" data-date="7" data-popular="6">
+      <div class="thumb"><div class="ph">screenshot · minimal-ds</div><button class="wish-btn" data-wish="ds-minimal"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></button></div>
+      <div class="body"><span class="cat">Design Systems</span><h4 class="t-h4">Minimal SaaS Design System</h4><p class="desc">Light, airy tokens and components for SaaS marketing sites.</p>
+        <div class="foot"><span class="price-now">€49</span><button class="btn btn-primary btn-add" data-add="ds-minimal">Add to cart</button></div>
+      </div>
+    </article>
+    <article class="card card-hover pcard filterable" data-cat="Design Systems" data-title="Developer Blog Design System" data-price="45" data-date="5" data-popular="4">
+      <div class="thumb"><div class="ph">screenshot · blog-ds</div><button class="wish-btn" data-wish="ds-blog"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></button></div>
+      <div class="body"><span class="cat">Design Systems</span><h4 class="t-h4">Developer Blog Design System</h4><p class="desc">Type-first tokens and components for technical writing.</p>
+        <div class="foot"><span class="price-now">€45</span><button class="btn btn-primary btn-add" data-add="ds-blog">Add to cart</button></div>
+      </div>
+    </article>
+    <article class="card card-hover pcard filterable" data-cat="Others" data-title="AI Prompt Engineering Playbook" data-price="19" data-date="9" data-popular="7">
+      <div class="thumb"><div class="ph">preview · playbook</div><button class="wish-btn" data-wish="oth-playbook"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></button></div>
+      <div class="body"><span class="cat">Others</span><h4 class="t-h4">AI Prompt Engineering Playbook</h4><p class="desc">A practical ebook on structuring prompts for reliable code output.</p>
+        <div class="foot"><span class="price-now">€19</span><button class="btn btn-primary btn-add" data-add="oth-playbook">Add to cart</button></div>
+      </div>
+    </article>
+    <article class="card card-hover pcard filterable" data-cat="Others" data-title="Claude Code Workflow Pack" data-price="25" data-date="11" data-popular="8">
+      <div class="thumb"><div class="ph">preview · workflow-pack</div><button class="wish-btn" data-wish="oth-claude"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></button></div>
+      <div class="body"><span class="cat">Others</span><h4 class="t-h4">Claude Code Workflow Pack</h4><p class="desc">Reusable CLAUDE.md templates and review checklists for real projects.</p>
+        <div class="foot"><span class="price-now">€25</span><button class="btn btn-primary btn-add" data-add="oth-claude">Add to cart</button></div>
+      </div>
+    </article>
+    <article class="card card-hover pcard filterable" data-cat="Others" data-title="MVP Planning Notion Template" data-price="15" data-date="0" data-popular="2">
+      <div class="thumb"><div class="ph">preview · notion-template</div><button class="wish-btn" data-wish="oth-notion"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></button></div>
+      <div class="body"><span class="cat">Others</span><h4 class="t-h4">MVP Planning Notion Template</h4><p class="desc">Scope, roadmap and budget tracker to plan an MVP end to end.</p>
+        <div class="foot"><span class="price-now">€15</span><button class="btn btn-primary btn-add" data-add="oth-notion">Add to cart</button></div>
+      </div>
+    </article>
+  </div>
+</div>
+
+<footer class="site-footer" style="margin-top:var(--sp-9);">
+  <div class="container">
+    <div class="footer-bottom" style="margin-top:0; border-top:none;">
+      <span>© 2026 Christophe Crognier · fullstackchris.dev</span>
+      <span class="row gap-4"><a href="../Homepage.html">Home</a><a href="account.html">Account</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="shop.js"></script>
+</body>
+</html>

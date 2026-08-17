@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Booking — fullstackchris.dev</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../motion.css">
+<link rel="stylesheet" href="../service.css">
+<link rel="stylesheet" href="../shop/shop.css">
+<link rel="stylesheet" href="booking.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container"><nav class="nav" data-screen-label="Header"><a class="brand" href="../Homepage.html"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></a><a class="btn btn-secondary btn-sm" href="../Homepage.html">Back home</a></nav></div>
+</header>
+
+<section class="section" style="padding-top:var(--sp-7);" data-screen-label="Manage booking">
+  <div class="container" style="max-width:720px;">
+    <span class="eyebrow">MANAGE BOOKING</span>
+    <h1 class="t-h1" style="margin:var(--sp-4) 0 var(--sp-7);">Your upcoming session</h1>
+
+    <div class="card manage-card" id="manageCard">
+      <div class="manage-head">
+        <div><span class="cat" style="font-family:var(--font-mono); font-size:0.72rem; color:var(--accent-400); text-transform:uppercase; letter-spacing:0.08em;">Confirmation #BK-8823</span><h3 class="t-h3" style="margin-top:6px;">1-Hour Coaching</h3><p class="t-body" style="margin-top:6px;">Thursday, August 6 · 14:00 (Europe/Paris)</p></div>
+        <span class="badge badge-positive">Confirmed</span>
+      </div>
+
+      <div class="cutoff-note"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg><span>Free reschedule or cancellation until <strong>Aug 5, 14:00</strong> (24h before). After that, this session is non-refundable.</span></div>
+
+      <div class="manage-actions">
+        <a class="btn btn-primary" href="schedule.html">Reschedule <span class="arrow">→</span></a>
+        <button class="btn btn-secondary" id="cancelBtn">Cancel booking</button>
+        <a class="btn btn-ghost" href="mailto:hello@fullstackchris.dev">Contact me instead</a>
+      </div>
+    </div>
+
+    <div class="card cancel-confirm" id="cancelConfirm" style="display:none; margin-top:var(--sp-5);">
+      <h4 class="t-h4">Cancel this booking?</h4>
+      <p class="t-body">This can't be undone. Since it's more than 24h before your session, you'll be refunded in full within 5–7 business days.</p>
+      <div class="row gap-3"><button class="btn btn-primary" id="confirmCancel" style="background:var(--negative); box-shadow:none;">Yes, cancel booking</button><button class="btn btn-ghost" id="dismissCancel">Never mind</button></div>
+    </div>
+
+    <div class="card cancelled-state" id="cancelledState" style="display:none; margin-top:var(--sp-5);">
+      <div class="confirm-check bk" style="background:var(--bg-2); border-color:var(--border-strong); color:var(--text-mid); animation:none;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+      <h4 class="t-h4">Booking cancelled</h4>
+      <p class="t-body" style="margin-top:6px;">You'll receive a refund confirmation by email shortly.</p>
+      <a class="btn btn-primary" href="index.html" style="margin-top:var(--sp-5); display:inline-flex;">Book a new session</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer" style="padding:var(--sp-6) 0;">
+  <div class="container"><div class="footer-bottom" style="margin-top:0; border-top:none;"><span>© 2026 Christophe Crognier · fullstackchris.dev</span></div></div>
+</footer>
+
+<script>
+document.getElementById('cancelBtn').onclick = function(){ document.getElementById('cancelConfirm').style.display='flex'; };
+document.getElementById('dismissCancel').onclick = function(){ document.getElementById('cancelConfirm').style.display='none'; };
+document.getElementById('confirmCancel').onclick = function(){
+  document.getElementById('manageCard').style.display='none';
+  document.getElementById('cancelConfirm').style.display='none';
+  document.getElementById('cancelledState').style.display='block';
+};
+</script>
+</body>
+</html>

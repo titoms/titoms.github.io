@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Choose a Time — fullstackchris.dev</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../motion.css">
+<link rel="stylesheet" href="../service.css">
+<link rel="stylesheet" href="../shop/shop.css">
+<link rel="stylesheet" href="booking.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" data-screen-label="Header">
+      <a class="brand" href="../Homepage.html"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></a>
+      <span class="t-small mono">Booking</span>
+    </nav>
+  </div>
+</header>
+
+<div class="container" style="padding-top:var(--sp-6);">
+  <div class="booking-steps">
+    <div class="bk-step done"><span class="cnum">✓</span><span>Service</span></div><div class="bk-sep"></div>
+    <div class="bk-step active"><span class="cnum">2</span><span>Schedule</span></div><div class="bk-sep"></div>
+    <div class="bk-step"><span class="cnum">3</span><span>Details</span></div><div class="bk-sep"></div>
+    <div class="bk-step"><span class="cnum">4</span><span>Payment</span></div><div class="bk-sep"></div>
+    <div class="bk-step"><span class="cnum">5</span><span>Confirmed</span></div>
+  </div>
+
+  <h1 class="t-h1" style="margin-bottom:var(--sp-2);">Choose a date &amp; time</h1>
+  <p class="t-body" style="margin-bottom:var(--sp-6);">Availability updates in real time from my calendar.</p>
+
+  <div class="sched-grid" data-screen-label="Schedule">
+    <div class="sched-main">
+      <div class="card tz-bar">
+        <div class="tz-select"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>Times shown in <span class="tz-name">your timezone</span></div>
+        <select class="select" id="tzOverride" style="max-width:220px;">
+          <option>Auto-detected</option>
+          <option>Europe/Paris (CET)</option>
+          <option>Europe/London (GMT)</option>
+          <option>America/New_York (EST)</option>
+          <option>America/Los_Angeles (PST)</option>
+        </select>
+      </div>
+
+      <div class="card cal-card">
+        <div class="cal-head">
+          <h4 id="calLabel">Month</h4>
+          <div class="cal-nav"><button id="calPrev" aria-label="Previous month">←</button><button id="calNext" aria-label="Next month">→</button></div>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-legend">
+          <div class="lg"><span class="sw av"></span>Available</div>
+          <div class="lg"><span class="sw un"></span>Unavailable</div>
+          <div class="lg"><span class="sw sel"></span>Selected</div>
+        </div>
+      </div>
+
+      <div class="card slots-card">
+        <div class="slots-head"><h4 class="t-h4">Available times</h4><span class="t-small sum-date">Select a date</span></div>
+        <div id="slotsBody"><div class="empty-state"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><h4 class="t-h4">Pick a date first</h4><p>Available time slots will appear here once you select a day on the calendar.</p></div></div>
+      </div>
+    </div>
+
+    <div class="card summary-card" data-screen-label="Summary">
+      <h4 class="t-h4">Your booking</h4>
+      <div class="svc-line"><div><h4 class="sum-service-title">1-Hour Coaching</h4><span class="t-small sum-service-duration">1 hour</span></div><span class="price-tag sum-service-price">€90</span></div>
+      <div class="summary-row"><span>Date</span><strong class="sum-date">Select a date</strong></div>
+      <div class="summary-row"><span>Time</span><strong class="sum-time">—</strong></div>
+      <div class="summary-row"><span>Timezone</span><strong class="sum-tz"></strong></div>
+      <div class="summary-total"><span>Total</span><span class="sum-total">€90</span></div>
+      <a class="btn btn-primary btn-lg" id="scheduleContinue" href="details.html" style="width:100%;">Continue <span class="arrow">→</span></a>
+      <p class="t-small" style="text-align:center;">You won't be charged yet.</p>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer" style="margin-top:var(--sp-8); padding:var(--sp-6) 0;">
+  <div class="container"><div class="footer-bottom" style="margin-top:0; border-top:none;"><span>© 2026 Christophe Crognier · fullstackchris.dev</span></div></div>
+</footer>
+
+<script src="booking.js"></script>
+<script>document.getElementById('scheduleContinue').addEventListener('click', function(e){ if(this.hasAttribute('disabled')) e.preventDefault(); });</script>
+<style>#scheduleContinue[disabled]{opacity:.45; pointer-events:none;}</style>
+</body>
+</html>

@@ -1,0 +1,116 @@
+/* =====================================================================
+   booking.css — booking & scheduling layer, extends styles.css/motion.css
+   Pairs with booking.js. Payment step reuses shop/shop.css (cc-field, etc).
+   ===================================================================== */
+
+/* ---- Step progress ---- */
+.booking-steps { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; margin-bottom: var(--sp-7); }
+.bk-step { display: flex; align-items: center; gap: var(--sp-2); font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-low); }
+.bk-step .cnum { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-2); border: 1px solid var(--border-strong); display: grid; place-items: center; font-size: 0.72rem; flex-shrink: 0; }
+.bk-step.active { color: var(--text-hi); }
+.bk-step.active .cnum { background: var(--accent-400); border-color: var(--accent-400); color: var(--text-on-accent); }
+.bk-step.done .cnum { background: var(--positive); border-color: var(--positive); color: #0d1a13; }
+.bk-sep { width: 22px; height: 1px; background: var(--border-strong); flex-shrink: 0; }
+@media (max-width: 760px) { .bk-step span:not(.cnum) { display: none; } }
+
+/* ---- Service selection cards ---- */
+.svc-select { display: flex; flex-direction: column; gap: var(--sp-4); min-height: 100%; }
+.svc-select .dur-badge { font-family: var(--font-mono); font-size: 0.72rem; padding: 4px 10px; border-radius: var(--r-pill); background: var(--bg-3); color: var(--text-mid); border: 1px solid var(--border-strong); display: inline-flex; align-items: center; gap: 6px; width: fit-content; }
+.svc-select .dur-badge svg { color: var(--accent-400); }
+.svc-select h3 { font-size: 1.15rem; }
+.svc-select .desc { color: var(--text-mid); font-size: 0.9rem; flex: 1; }
+.svc-select .foot { display: flex; align-items: center; justify-content: space-between; padding-top: var(--sp-4); margin-top: auto; border-top: 1px solid var(--border); }
+.svc-select.featured { background: linear-gradient(160deg, var(--accent-soft), var(--bg-2) 60%); border-color: var(--border-accent); }
+
+/* ---- Trust strip ---- */
+.bk-trust { display: flex; gap: var(--sp-6); flex-wrap: wrap; padding: var(--sp-4) 0; border-block: 1px solid var(--border); margin: var(--sp-6) 0 var(--sp-8); }
+.bk-trust .t-item { display: flex; align-items: center; gap: 8px; color: var(--text-mid); font-size: 0.85rem; }
+.bk-trust .t-item svg { color: var(--accent-400); }
+
+/* ---- Schedule layout ---- */
+.sched-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: var(--sp-7); align-items: start; }
+.sched-main { display: flex; flex-direction: column; gap: var(--sp-6); }
+
+/* Timezone selector */
+.tz-bar { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); flex-wrap: wrap; }
+.tz-select { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-mid); }
+.tz-select select { background: none; border: none; color: var(--text-hi); font-family: var(--font-mono); font-size: 0.82rem; cursor: pointer; }
+.tz-select svg { color: var(--accent-400); }
+
+/* Calendar */
+.cal-card { padding: var(--sp-6); }
+.cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-5); }
+.cal-head h4 { font-size: 1.05rem; }
+.cal-nav { display: flex; gap: var(--sp-2); }
+.cal-nav button { width: 32px; height: 32px; border-radius: var(--r-sm); background: var(--bg-2); border: 1px solid var(--border-strong); color: var(--text-mid); cursor: pointer; display: grid; place-items: center; transition: border-color .15s ease, color .15s ease; }
+.cal-nav button:hover { border-color: var(--accent-400); color: var(--text-hi); }
+.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 6px; }
+.cal-dow { text-align: center; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em; color: var(--text-low); text-transform: uppercase; padding-bottom: 8px; }
+.cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: var(--r-md); font-family: var(--font-mono); font-size: 0.88rem; cursor: pointer; position: relative; color: var(--text-mid); background: transparent; border: 1px solid transparent; transition: background .15s ease, color .15s ease, border-color .15s ease, transform .15s ease; }
+.cal-day.empty { visibility: hidden; cursor: default; }
+.cal-day.avail:hover { background: var(--bg-3); color: var(--text-hi); border-color: var(--border-strong); }
+.cal-day.unavail { color: var(--text-low); opacity: 0.32; cursor: not-allowed; }
+.cal-day.today:not(.selected)::after { content: ""; position: absolute; bottom: 5px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent-400); }
+.cal-day.selected { background: var(--accent-400); color: var(--text-on-accent); font-weight: 600; box-shadow: var(--glow); transform: scale(1.04); }
+.cal-legend { display: flex; gap: var(--sp-5); margin-top: var(--sp-5); flex-wrap: wrap; }
+.cal-legend .lg { display: flex; align-items: center; gap: 7px; font-size: 0.8rem; color: var(--text-mid); }
+.cal-legend .sw { width: 12px; height: 12px; border-radius: 4px; }
+.cal-legend .sw.av { background: var(--bg-3); border: 1px solid var(--border-strong); }
+.cal-legend .sw.un { background: var(--bg-2); opacity: 0.4; border: 1px solid var(--border); }
+.cal-legend .sw.sel { background: var(--accent-400); }
+
+/* Slots */
+.slots-card { padding: var(--sp-6); }
+.slots-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-5); }
+.slot-groups { display: flex; flex-direction: column; gap: var(--sp-5); }
+.slot-group h5 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-low); margin-bottom: var(--sp-3); }
+.slot-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--sp-3); }
+.slot-btn { padding: 12px 8px; border-radius: var(--r-md); border: 1px solid var(--border-strong); background: var(--bg-2); color: var(--text-hi); font-family: var(--font-mono); font-size: 0.85rem; cursor: pointer; text-align: center; opacity: 0; transform: translateY(6px); animation: slotIn .35s ease forwards; transition: border-color .15s ease, background .15s ease, transform .15s ease, box-shadow .15s ease; }
+@keyframes slotIn { to { opacity: 1; transform: none; } }
+.slot-btn:hover:not(.unavail) { border-color: var(--accent-400); background: var(--bg-3); }
+.slot-btn.selected { background: var(--accent-400); color: var(--text-on-accent); border-color: var(--accent-400); box-shadow: var(--glow); }
+.slot-btn.unavail { opacity: 0.28 !important; cursor: not-allowed; text-decoration: line-through; animation: none; }
+
+/* Summary sidebar */
+.summary-card { position: sticky; top: 88px; display: flex; flex-direction: column; gap: var(--sp-4); }
+.summary-card .svc-line { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--sp-3); padding-bottom: var(--sp-4); border-bottom: 1px solid var(--border); }
+.summary-card .svc-line h4 { font-size: 1.05rem; margin-bottom: 4px; }
+.summary-row { display: flex; justify-content: space-between; gap: var(--sp-3); font-size: 0.9rem; color: var(--text-mid); }
+.summary-row strong { color: var(--text-hi); font-weight: 500; }
+.summary-row .edit { font-family: var(--font-mono); font-size: 0.76rem; color: var(--accent-400); cursor: pointer; }
+.summary-total { display: flex; justify-content: space-between; font-size: 1.05rem; color: var(--text-hi); font-weight: 600; padding-top: var(--sp-3); border-top: 1px solid var(--border); font-family: var(--font-mono); }
+
+/* Details form */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+.form-section { margin-bottom: var(--sp-6); padding-bottom: var(--sp-6); border-bottom: 1px solid var(--border); }
+.form-section:last-of-type { border-bottom: none; }
+.form-section h3 { font-size: 1.02rem; margin-bottom: var(--sp-4); }
+
+/* Confirmation */
+.confirm-hero.bk { padding: var(--sp-8) 0 var(--sp-6); }
+.confirm-check.bk { width: 80px; height: 80px; }
+.meeting-card { display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap; justify-content: space-between; }
+.meeting-card .info { display: flex; gap: var(--sp-4); align-items: center; }
+.meeting-card .ic { width: 44px; height: 44px; border-radius: var(--r-md); background: var(--accent-soft); border: 1px solid var(--border-accent); color: var(--accent-300); display: grid; place-items: center; flex-shrink: 0; }
+.cal-actions { display: flex; gap: var(--sp-3); flex-wrap: wrap; }
+.next-steps { display: flex; flex-direction: column; gap: 0; }
+
+/* Manage / reschedule */
+.manage-card { display: flex; flex-direction: column; gap: var(--sp-5); }
+.manage-head { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--sp-4); flex-wrap: wrap; }
+.manage-actions { display: flex; gap: var(--sp-3); flex-wrap: wrap; }
+.cutoff-note { display: flex; gap: 10px; align-items: flex-start; background: var(--bg-1); border: 1px solid var(--border); border-left: 2px solid var(--accent-500); border-radius: var(--r-md); padding: var(--sp-4) var(--sp-5); font-size: 0.88rem; color: var(--text-mid); }
+.cancel-confirm { display: flex; flex-direction: column; gap: var(--sp-4); align-items: flex-start; }
+.cancelled-state { text-align: center; padding: var(--sp-7) 0; }
+
+/* Error state */
+.error-banner { display: flex; align-items: center; gap: var(--sp-3); background: var(--negative-soft); border: 1px solid rgba(244,115,115,0.35); border-radius: var(--r-md); padding: var(--sp-4) var(--sp-5); color: var(--negative); font-size: 0.9rem; }
+
+@media (max-width: 980px) {
+  .sched-grid { grid-template-columns: 1fr; }
+  .summary-card { position: static; }
+  .form-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .slot-grid { grid-template-columns: repeat(2,1fr); }
+}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Cart | fullstackchris.dev</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../motion.css">
+<link rel="stylesheet" href="../service.css">
+<link rel="stylesheet" href="shop.css">
+<style>
+  .cart-page-line { display:grid; grid-template-columns:72px 1fr auto auto auto; gap:var(--sp-5); align-items:center; padding:var(--sp-5) 0; border-bottom:1px solid var(--border); }
+  .cart-page-line .thumb { width:72px; height:54px; border-radius:var(--r-sm); overflow:hidden; }
+  .cart-page-line .info h4 { font-size:1rem; margin-bottom:4px; }
+  .cart-page-line .info .cat { font-family:var(--font-mono); font-size:0.7rem; color:var(--accent-400); text-transform:uppercase; letter-spacing:0.06em; }
+  @media (max-width:640px){ .cart-page-line{ grid-template-columns:56px 1fr; grid-template-rows:auto auto; } }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" data-screen-label="Header">
+      <a class="brand" href="../Homepage.html"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></a>
+      <ul class="nav-links"><li><a href="../services/index.html">Services</a></li><li><a href="index.html">Shop</a></li><li><a href="account.html">Account</a></li></ul>
+      <button class="cart-btn" aria-label="Open cart"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="count cart-count" style="display:none;">0</span></button>
+    </nav>
+  </div>
+</header>
+
+<div class="container shop-crumb"><div class="breadcrumb"><a href="index.html">Shop</a><span class="sep">/</span><span>Cart</span></div></div>
+
+<section class="section" style="padding-top:var(--sp-6);" data-screen-label="Cart">
+  <div class="container">
+    <h1 class="t-h1" style="margin-bottom:var(--sp-7);">Your Cart</h1>
+    <div class="cart-page-grid">
+      <div id="cartPageBody"><!-- populated by JS --></div>
+      <div class="card order-summary" id="cartPageSummary"><!-- populated by JS --></div>
+    </div>
+
+    <section style="margin-top:var(--sp-9);" data-screen-label="Recommended">
+      <div class="sec-head"><span class="eyebrow">YOU MIGHT ALSO LIKE</span><h2 class="t-h2">Pairs well with your cart.</h2></div>
+      <div class="pgrid" style="grid-template-columns:repeat(3,1fr);">
+        <article class="card card-hover pcard"><div class="thumb"><div class="ph">preview · prompt-pack</div><div class="thumb-badges"><span class="badge badge-positive">Free</span></div></div><div class="body"><span class="cat">Freebies</span><h4 class="t-h4">Cursor &amp; Claude Prompt Pack</h4><p class="desc">40 tested prompts for AI-assisted development.</p><div class="foot"><span class="price-free">Free</span><button class="btn btn-primary btn-add" data-add="fb-prompts">Get it</button></div></div></article>
+        <article class="card card-hover pcard"><div class="thumb"><div class="ph">screenshot · minimal-ds</div></div><div class="body"><span class="cat">Design Systems</span><h4 class="t-h4">Minimal SaaS Design System</h4><p class="desc">Light, airy tokens for SaaS marketing sites.</p><div class="foot"><span class="price-now">€49</span><button class="btn btn-primary btn-add" data-add="ds-minimal">Add to cart</button></div></div></article>
+        <article class="card card-hover pcard"><div class="thumb"><div class="ph">preview · workflow-pack</div></div><div class="body"><span class="cat">Others</span><h4 class="t-h4">Claude Code Workflow Pack</h4><p class="desc">Reusable CLAUDE.md templates and checklists.</p><div class="foot"><span class="price-now">€25</span><button class="btn btn-primary btn-add" data-add="oth-claude">Add to cart</button></div></div></article>
+      </div>
+    </section>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container"><div class="footer-bottom" style="margin-top:0; border-top:none;"><span>© 2026 Christophe Crognier · fullstackchris.dev</span><span class="row gap-4"><a href="../Homepage.html">Home</a><a href="account.html">Account</a></span></div></div>
+</footer>
+
+<script src="shop.js"></script>
+<script>
+(function(){
+  function render(){
+    var lines = window.shop.cartLines();
+    var body = document.getElementById('cartPageBody');
+    var summary = document.getElementById('cartPageSummary');
+    if(!lines.length){
+      body.innerHTML = '<div class="card empty-state"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div><h4 class="t-h4">Your cart is empty</h4><p>Browse templates, design systems and free resources to get started.</p><a href="index.html" class="btn btn-primary">Browse shop</a></div>';
+      summary.innerHTML = '';
+      return;
+    }
+    body.innerHTML = '<div class="card">'+lines.map(function(l){
+      return '<div class="cart-page-line" data-line="'+l.id+'">'+
+        '<div class="thumb ph">img</div>'+
+        '<div class="info"><span class="cat">'+l.cat+'</span><h4>'+l.title+'</h4></div>'+
+        '<div class="qty-stepper"><button data-dec>−</button><span class="qv">'+l.qty+'</span><button data-inc>+</button></div>'+
+        '<span class="lprice">'+(l.price===0?'Free':window.shop.money(l.price*l.qty))+'</span>'+
+        '<button class="remove-line" data-remove>Remove</button>'+
+      '</div>';
+    }).join('')+'</div>';
+    var sub = window.shop.subtotal(), disc = window.shop.discount(), tot = window.shop.grandTotal(), coupon = window.shop.getCoupon();
+    summary.innerHTML = '<h3 class="t-h4">Order Summary</h3>'+
+      (coupon ? '<div class="coupon-applied"><span>'+coupon.code+' applied · -'+Math.round(coupon.rate*100)+'%</span><button data-uncoupon>✕</button></div>' :
+        '<div class="coupon-row"><input class="input" id="cpCouponInput" placeholder="Coupon code"><button class="btn btn-secondary btn-sm" id="cpCouponBtn">Apply</button></div>')+
+      '<div class="sum-row"><span>Subtotal</span><span>'+window.shop.money(sub)+'</span></div>'+
+      (disc ? '<div class="sum-row"><span>Discount</span><span>−'+window.shop.money(disc)+'</span></div>' : '')+
+      '<div class="sum-row total"><span>Total</span><span class="amt">'+window.shop.money(tot)+'</span></div>'+
+      '<a class="btn btn-primary btn-lg" href="checkout.html" style="width:100%;">Proceed to checkout <span class="arrow">→</span></a>'+
+      '<div class="secure-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Secure payment via Stripe</div>';
+    wire();
+  }
+  function wire(){
+    document.querySelectorAll('[data-inc]').forEach(function(b){ b.onclick=function(){ var id=b.closest('[data-line]').dataset.line; var l=JSON.parse(localStorage.getItem('fsc_cart')||'[]').find(function(x){return x.id===id;}); if(l){ window.shop.addToCart(id,0); l.qty++; localStorage.setItem('fsc_cart', JSON.stringify(JSON.parse(localStorage.getItem('fsc_cart')))); } render(); document.querySelectorAll('.cart-count').forEach(function(el){ el.textContent = JSON.parse(localStorage.getItem('fsc_cart')||'[]').reduce(function(s,x){return s+x.qty;},0); }); }; });
+    document.querySelectorAll('[data-dec]').forEach(function(b){ b.onclick=function(){ var id=b.closest('[data-line]').dataset.line; var cart=JSON.parse(localStorage.getItem('fsc_cart')||'[]'); var l=cart.find(function(x){return x.id===id;}); if(l){ l.qty=Math.max(1,l.qty-1); localStorage.setItem('fsc_cart', JSON.stringify(cart)); } render(); }; });
+    document.querySelectorAll('[data-remove]').forEach(function(b){ b.onclick=function(){ var id=b.closest('[data-line]').dataset.line; var cart=JSON.parse(localStorage.getItem('fsc_cart')||'[]').filter(function(x){return x.id!==id;}); localStorage.setItem('fsc_cart', JSON.stringify(cart)); render(); }; });
+    var cb = document.getElementById('cpCouponBtn');
+    if(cb) cb.onclick = function(){
+      var input = document.getElementById('cpCouponInput');
+      var code = (input.value||'').trim().toUpperCase();
+      var rates = {WELCOME10:0.10, LAUNCH20:0.20};
+      if(rates[code]){ localStorage.setItem('fsc_coupon', JSON.stringify({code:code, rate:rates[code]})); render(); }
+      else { input.style.borderColor='var(--negative)'; input.placeholder='Invalid code'; }
+    };
+    var ub = document.querySelector('[data-uncoupon]');
+    if(ub) ub.onclick = function(){ localStorage.removeItem('fsc_coupon'); render(); };
+  }
+  document.addEventListener('DOMContentLoaded', render);
+})();
+</script>
+</body>
+</html>

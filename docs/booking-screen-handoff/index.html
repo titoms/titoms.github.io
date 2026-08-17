@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Session — fullstackchris.dev</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../motion.css">
+<link rel="stylesheet" href="../service.css">
+<link rel="stylesheet" href="booking.css">
+<style>.bk-hero{padding:var(--sp-8) 0 var(--sp-6);}</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" data-screen-label="Header">
+      <a class="brand" href="../Homepage.html"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></a>
+      <ul class="nav-links"><li><a href="../services/index.html">Services</a></li><li><a href="../shop/index.html">Shop</a></li><li><a href="index.html" style="color:var(--text-hi);">Book</a></li></ul>
+      <a class="btn btn-secondary btn-sm" href="manage.html">Manage booking</a>
+    </nav>
+  </div>
+</header>
+
+<section class="bk-hero glow-bg grid-bg" data-screen-label="Booking hero">
+  <div class="container">
+    <span class="eyebrow">BOOK TIME WITH ME</span>
+    <h1 class="t-h1" style="margin:var(--sp-4) 0 var(--sp-4); max-width:22ch;">Pick a service, then a time that works for you.</h1>
+    <p class="t-lead" style="max-width:56ch;">Every session is 1:1 — no group calls. Choose the format below; you'll see live availability and a full summary before you pay.</p>
+  </div>
+</section>
+
+<div class="container">
+  <div class="bk-trust" data-screen-label="Trust bar">
+    <div class="t-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Synced to real availability</div>
+    <div class="t-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Secure payment via Stripe</div>
+    <div class="t-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Free reschedule up to 24h before</div>
+  </div>
+
+  <div class="grid grid-3" data-screen-label="Services" style="margin-bottom:var(--sp-9);">
+    <div class="card card-hover svc-select">
+      <span class="dur-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>1 hour</span>
+      <h3>1-Hour Coaching</h3>
+      <p class="desc">Debug, clarify and structure your React/Node/AI-generated project in a focused session.</p>
+      <div class="foot"><span class="price-tag">€90</span><button class="btn btn-primary btn-sm" data-select-service="coach-1h">Select <span class="arrow">→</span></button></div>
+    </div>
+    <div class="card card-hover svc-select">
+      <span class="dur-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>4 hours</span>
+      <h3>Half-Day Coaching / Consulting</h3>
+      <p class="desc">A focused half-day block to work through a specific technical or product problem.</p>
+      <div class="foot"><span class="price-tag">from €220</span><button class="btn btn-primary btn-sm" data-select-service="coach-half">Select <span class="arrow">→</span></button></div>
+    </div>
+    <div class="card card-hover svc-select">
+      <span class="dur-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>8 hours</span>
+      <h3>Full-Day Coaching / Consulting</h3>
+      <p class="desc">A full day of dedicated coaching across architecture, code review and planning.</p>
+      <div class="foot"><span class="price-tag">from €400</span><button class="btn btn-primary btn-sm" data-select-service="coach-full">Select <span class="arrow">→</span></button></div>
+    </div>
+    <div class="card card-hover svc-select">
+      <span class="dur-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>4 hours</span>
+      <h3>Half-Day Development</h3>
+      <p class="desc">Focused hands-on build time for a clear feature, bug fix or refactor.</p>
+      <div class="foot"><span class="price-tag">from €200</span><button class="btn btn-primary btn-sm" data-select-service="dev-half">Select <span class="arrow">→</span></button></div>
+    </div>
+    <div class="card card-hover svc-select">
+      <span class="dur-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>8 hours</span>
+      <h3>Full-Day Development</h3>
+      <p class="desc">A full day of hands-on development — a feature, dashboard or integration.</p>
+      <div class="foot"><span class="price-tag">from €350</span><button class="btn btn-primary btn-sm" data-select-service="dev-full">Select <span class="arrow">→</span></button></div>
+    </div>
+    <div class="card card-hover svc-select featured">
+      <span class="dur-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>1 day</span>
+      <h3>AI Clarity / Bootstrapping Workshop</h3>
+      <p class="desc">Turn an idea into a scoped MVP plan: user flows, stack, roadmap and budget.</p>
+      <div class="foot"><span class="price-tag">from €650</span><button class="btn btn-primary btn-sm" data-select-service="ai-workshop">Select <span class="arrow">→</span></button></div>
+    </div>
+  </div>
+
+  <div class="card" id="customQuote" data-screen-label="Custom service" style="margin-bottom:var(--sp-9); display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-7); align-items:start;">
+    <div>
+      <span class="eyebrow no-rule">SOMETHING ELSE?</span>
+      <h2 class="t-h2" style="margin:14px 0 12px;">Custom time-based service</h2>
+      <p class="t-body" style="max-width:38ch;">Ongoing retainers, multi-day engagements or anything that doesn't fit the boxes above. Describe it and I'll reply with a proposed scope and time within 1 business day — no calendar booking needed yet.</p>
+    </div>
+    <form onsubmit="event.preventDefault(); document.getElementById('customSuccess').style.display='flex'; this.style.display='none';" class="stack gap-4">
+      <div class="field"><label class="label">Email</label><input class="input" type="email" required placeholder="you@example.com"></div>
+      <div class="field"><label class="label">What do you need?</label><textarea class="textarea" required placeholder="Briefly describe the engagement, timeline and rough budget if you have one."></textarea></div>
+      <button class="btn btn-primary" type="submit" style="align-self:flex-start;">Send request <span class="arrow">→</span></button>
+    </form>
+    <div id="customSuccess" style="display:none; grid-column:1/-1; align-items:center; gap:var(--sp-3);" class="row">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--positive);"><polyline points="20 6 9 17 4 12"/></svg>
+      <span class="t-body">Thanks — I'll reply by email with a proposed scope within 1 business day.</span>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer" style="padding:var(--sp-6) 0;">
+  <div class="container"><div class="footer-bottom" style="margin-top:0; border-top:none;"><span>© 2026 Christophe Crognier · fullstackchris.dev</span></div></div>
+</footer>
+
+<script src="booking.js"></script>
+</body>
+</html>

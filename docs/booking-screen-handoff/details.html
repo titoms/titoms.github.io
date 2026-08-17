@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Details — fullstackchris.dev</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../motion.css">
+<link rel="stylesheet" href="../service.css">
+<link rel="stylesheet" href="../shop/shop.css">
+<link rel="stylesheet" href="booking.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container"><nav class="nav" data-screen-label="Header"><a class="brand" href="../Homepage.html"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></a><span class="t-small mono">Booking</span></nav></div>
+</header>
+
+<div class="container" style="padding-top:var(--sp-6);">
+  <div class="booking-steps">
+    <div class="bk-step done"><span class="cnum">✓</span><span>Service</span></div><div class="bk-sep"></div>
+    <div class="bk-step done"><span class="cnum">✓</span><span>Schedule</span></div><div class="bk-sep"></div>
+    <div class="bk-step active"><span class="cnum">3</span><span>Details</span></div><div class="bk-sep"></div>
+    <div class="bk-step"><span class="cnum">4</span><span>Payment</span></div><div class="bk-sep"></div>
+    <div class="bk-step"><span class="cnum">5</span><span>Confirmed</span></div>
+  </div>
+
+  <h1 class="t-h1" style="margin-bottom:var(--sp-6);">Your details</h1>
+
+  <div class="checkout-grid">
+    <form onsubmit="event.preventDefault(); window.location.href='checkout.html';">
+      <div class="form-section">
+        <h3>Contact</h3>
+        <div class="form-grid">
+          <div class="field"><label class="label">Full name</label><input class="input" required placeholder="Jane Doe"></div>
+          <div class="field"><label class="label">Email</label><input class="input" type="email" required placeholder="you@example.com"></div>
+        </div>
+        <div class="field" style="margin-top:var(--sp-4);"><label class="label">Company (optional)</label><input class="input" placeholder="Your company"></div>
+      </div>
+
+      <div class="form-section">
+        <h3>Project details</h3>
+        <div class="field"><label class="label">What do you want to work on?</label><textarea class="textarea" required placeholder="Share context, links, repo access notes or specific questions — the more detail, the more we get done in the session."></textarea></div>
+        <div class="field" style="margin-top:var(--sp-4);"><label class="label">Anything I should prepare beforehand?</label><textarea class="textarea" placeholder="Optional"></textarea></div>
+      </div>
+
+      <div class="form-section" style="border-bottom:none;">
+        <h3>Meeting</h3>
+        <div class="field"><label class="label">Preferred video platform</label><select class="select"><option>Google Meet</option><option>Zoom</option><option>Whereby</option></select></div>
+        <p class="t-small" style="margin-top:var(--sp-3);">A calendar invite with the meeting link will be sent to your email right after payment.</p>
+      </div>
+
+      <button class="btn btn-primary btn-lg" type="submit" style="width:100%;">Continue to payment <span class="arrow">→</span></button>
+    </form>
+
+    <div class="card summary-card">
+      <h4 class="t-h4">Your booking</h4>
+      <div class="svc-line"><div><h4 class="sum-service-title">1-Hour Coaching</h4><span class="t-small sum-service-duration">1 hour</span></div><span class="price-tag sum-service-price">€90</span></div>
+      <div class="summary-row"><span>Date</span><strong class="sum-date">—</strong></div>
+      <div class="summary-row"><span>Time</span><strong class="sum-time">—</strong></div>
+      <div class="summary-row"><span>Timezone</span><strong class="sum-tz"></strong></div>
+      <div class="summary-total"><span>Total</span><span class="sum-total">€90</span></div>
+      <a class="t-small" href="schedule.html" style="text-align:center;">Change date or time</a>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer" style="margin-top:var(--sp-8); padding:var(--sp-6) 0;">
+  <div class="container"><div class="footer-bottom" style="margin-top:0; border-top:none;"><span>© 2026 Christophe Crognier · fullstackchris.dev</span></div></div>
+</footer>
+
+<script src="booking.js"></script>
+</body>
+</html>
