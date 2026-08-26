@@ -1,0 +1,25 @@
+---
+import CommerceLayout from '../../components/layout/CommerceLayout.astro';
+import BookingCheckout from '../../components/islands/booking/BookingCheckout';
+import { SITE_FEATURES } from '../../config/constants';
+---
+
+<CommerceLayout
+  title="Payment — Booking"
+  description="Secure payment via Stripe."
+  noindex={!SITE_FEATURES.shopBooking}
+>
+  <div class="container" style="padding-top: calc(var(--sp-8) + 20px);">
+    <div class="booking-steps">
+      <div class="bk-step done"><span class="cnum">✓</span><span>Service</span></div><div class="bk-sep"></div>
+      <div class="bk-step done"><span class="cnum">✓</span><span>Schedule</span></div><div class="bk-sep"></div>
+      <div class="bk-step done"><span class="cnum">✓</span><span>Details</span></div><div class="bk-sep"></div>
+      <div class="bk-step active"><span class="cnum">4</span><span>Payment</span></div><div class="bk-sep"></div>
+      <div class="bk-step"><span class="cnum">5</span><span>Confirmed</span></div>
+    </div>
+
+    <h1 class="t-h1" style="margin-bottom: var(--sp-6);">Confirm &amp; pay</h1>
+
+    <BookingCheckout client:only="react" />
+  </div>
+</CommerceLayout>

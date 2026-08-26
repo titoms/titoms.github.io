@@ -5,6 +5,7 @@ const es: UiDictionary = {
     home: 'Inicio',
     about: 'Acerca de',
     services: 'Servicios',
+    shop: 'Tienda',
     projects: 'Proyectos',
     blog: 'Blog',
     contact: 'Contacto',

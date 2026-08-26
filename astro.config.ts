@@ -3,10 +3,21 @@ import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import { SITE_FEATURES } from './src/config/features.ts';
 
 export default defineConfig({
   output: 'static',
-  integrations: [react(), tailwind({ applyBaseStyles: false }), mdx(), sitemap()],
+  integrations: [
+    react(),
+    tailwind({ applyBaseStyles: false }),
+    mdx(),
+    sitemap({
+      // Soft-launch gate: keep commerce pages out of the sitemap until go-live.
+      filter: (page) =>
+        SITE_FEATURES.shopBooking ||
+        !(page.includes('/shop/') || page.includes('/booking/')),
+    }),
+  ],
   site: 'https://fullstackchris.dev',
   trailingSlash: 'always',
   i18n: {

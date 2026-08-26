@@ -12,6 +12,7 @@ interface Props {
   ogType?: string;
   jsonLd?: object | object[];
   gscVerification?: string;
+  noindex?: boolean;
 }
 
 const {
@@ -22,6 +23,7 @@ const {
   ogType = 'website',
   jsonLd,
   gscVerification,
+  noindex = false,
 } = Astro.props;
 
 const SITE_URL = 'https://fullstackchris.dev';
@@ -72,12 +74,14 @@ const xDefaultHref = new URL(getRelativeLocaleUrl(defaultLocale, barePath), SITE
     <meta name="generator" content={Astro.generator} />
 
     <!-- Security headers (meta-tag subset; GitHub Pages does not allow custom HTTP response headers) -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com https://assets.calendly.com; style-src 'self' 'unsafe-inline' https://assets.calendly.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://calendly.com; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com https://assets.calendly.com https://js.stripe.com; style-src 'self' 'unsafe-inline' https://assets.calendly.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://calendly.com https://js.stripe.com https://hooks.stripe.com; connect-src 'self' https://cloudflareinsights.com https://api.stripe.com; object-src 'none'; base-uri 'self'" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    {noindex
+      ? <meta name="robots" content="noindex, nofollow" />
+      : <meta name="robots" content="index, follow, max-image-preview:large" />}
     <link rel="canonical" href={canonicalHref} />
     {hreflangLinks.map(({ hreflang, href }) => (
       <link rel="alternate" hreflang={hreflang} href={href} />

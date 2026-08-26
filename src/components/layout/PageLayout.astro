@@ -13,9 +13,11 @@ interface Props {
   ogType?: string;
   jsonLd?: object | object[];
   gscVerification?: string;
+  noindex?: boolean;
+  showCart?: boolean;
 }
 
-const props = Astro.props;
+const { showCart = false, ...props } = Astro.props;
 const currentLocale = Astro.currentLocale ?? defaultLocale;
 const barePath = stripLocalePrefix(Astro.url.pathname).replace(/^\//, '');
 const languageLinks = locales.map((locale) => ({
@@ -27,7 +29,7 @@ const languageLinks = locales.map((locale) => ({
 
 <BaseLayout {...props}>
   <slot name="head" slot="head" />
-  <SiteHeader locale={currentLocale} languageLinks={languageLinks} currentPath={Astro.url.pathname} />
+  <SiteHeader locale={currentLocale} languageLinks={languageLinks} currentPath={Astro.url.pathname} showCart={showCart} />
   <main>
     <slot />
   </main>

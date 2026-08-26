@@ -1,0 +1,17 @@
+---
+import CommerceLayout from '../../components/layout/CommerceLayout.astro';
+import BookingConfirmation from '../../components/islands/booking/BookingConfirmation';
+import { SITE_FEATURES } from '../../config/constants';
+---
+
+<CommerceLayout
+  title="Booking Confirmed"
+  description="Your booking is confirmed."
+  noindex={!SITE_FEATURES.shopBooking}
+>
+  <section class="section" style="padding-top: calc(var(--sp-8) + 20px);">
+    <div class="container">
+      <BookingConfirmation client:only="react" />
+    </div>
+  </section>
+</CommerceLayout>

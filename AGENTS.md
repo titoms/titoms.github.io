@@ -4,60 +4,66 @@ Agent-level guidance for automated tools (Codex, Copilot Workspace, etc.) workin
 
 ## Project identity
 
-Personal portfolio and future service site for **Christophe Crognier** — full-stack developer, independent trainer (~7 000 h teaching), and AI-assisted development consultant. Live at `fullstackchris.dev`, deployed via Cloudflare Pages.
+Personal portfolio and service site for **Christophe Crognier** — full-stack developer, independent trainer (~7 000 h teaching), and AI-assisted development consultant. Live at `fullstackchris.dev`, deployed as a **Cloudflare Worker with static assets**.
 
-The business goal is to evolve the site from a classic portfolio into a **service-oriented site** that generates independent revenue through coaching, development days, MVP workshops, and a paid newsletter. See `REFONTE_COMPLETE.md` for the full brief and `ROADMAP.md` for the phased checklist.
+The business goal is to generate independent revenue through coaching, development days, MVP workshops, a paid newsletter, and a digital-products shop. See `REFONTE_COMPLETE.md` for the full brief and `ROADMAP.md` for the phased checklist (Phase 14 = shop + booking backend).
 
 ## Stack
 
 | Layer | Tech |
 |---|---|
-| Framework | React 18, Vite |
-| Styling | Tailwind CSS (JIT), custom tokens in `src/config/tokens.js` |
-| Animation | Framer Motion |
-| 3D | Three.js via `@react-three/fiber` + `@react-three/drei` |
-| Routing | React Router v6 (scroll/anchor only — no page routes active) |
-| State | Valtio (legacy, currently unused) |
-| Booking | Calendly (`react-calendly`) |
-| Deploy | Cloudflare Pages |
+| Framework | Astro 6 (`output: 'static'`) + React 18 islands, TypeScript |
+| Styling | Tailwind CSS + CSS variables in `src/styles/global.css` (Claude Design system) |
+| i18n | Astro i18n — en default (unprefixed), `/fr`, `/es`; UI strings in `src/i18n/locales/` |
+| Content | Blog via Astro content collections (MDX, Zod); services/projects via `src/config/{services,projects}/` content split |
+| Package manager | **pnpm** (never npm) |
+| Backend | Cloudflare Worker `src/worker.ts` + modules in `src/server/` |
+| Data | D1 (SQLite), KV (slot holds), R2 (product files) |
+| Payments | Stripe PaymentIntents (embedded Payment Element) + webhook |
+| Email | Resend (transactional), Beehiiv (newsletter) |
+| Calendar | Google Calendar via service account (free/busy + Meet links) |
+| Tests | `node --test` in `tests/*.mjs`, mocked env/fetch |
+| Deploy | `pnpm run cf:deploy` (build + `wrangler deploy`) |
 
 ## Key constraints
 
-- **No SSR.** Everything is a client-side SPA. Any SEO improvements must wait for the planned migration to Astro or Next.js static export.
-- **No test suite.** Verify behaviour in the browser.
-- **No linter config.** Follow existing code style.
-- **No backend.** All data is static in `src/config/constants.js`. External calls are limited to the Calendly widget.
-- **Cloudflare Pages static hosting.** Do not add server-side dependencies.
+- **Additive backend changes.** New API routes go under new `/api/*` prefixes; never change existing route behavior (newsletter) without explicit instruction.
+- **Never trust client prices.** Shop/booking amounts are recomputed server-side from `src/config/products.ts` / `src/config/bookingServices.ts`.
+- **Secrets stay out of the repo.** Local: `.dev.vars` (uncommitted). Prod: Worker secrets. `.dev.vars.example` documents names only. Never use `PUBLIC_` prefixes for secrets.
+- **Soft-launch flag.** Shop/booking pages and their nav links are gated behind `SITE_FEATURES.shopBooking` in `src/config/constants.ts` (noindex + sitemap exclusion while `false`). Flip only at go-live.
+- **Shop/booking are EN-first.** Do not add fr/es routes for them until translations are scheduled; other pages follow the per-locale content-split pattern.
+- **No breaking changes to production.** Phase 14 work happens on `feat/shop-booking`; go-live (P14d) is a separate manual step.
 
 ## Where things live
 
 | What | Where |
 |---|---|
-| All site content (nav, services, tech, experience, projects) | `src/config/constants.js` |
-| Design tokens (colors, shadows, fonts) | `src/config/tokens.js` |
+| Site content (nav, hero, services, tech, experience) | `src/config/constants.ts` + `src/components/pages/content/` |
+| Services/projects content (per-locale) | `src/config/services/`, `src/config/projects/` |
+| Shop catalog | `src/config/products.ts` |
+| Booking services (REFONTE prices) | `src/config/bookingServices.ts` |
+| Feature flags, Stripe links, Calendly URL | `src/config/constants.ts` |
+| Design tokens (CSS variables) | `src/styles/global.css` |
 | Tailwind color mappings | `tailwind.config.js` |
-| Global styles + gradient utilities | `src/index.css` |
-| Section animation HOC | `src/hoc/SectionWrapper.jsx` |
-| Three.js scenes | `src/canvas/` |
-| Target design system spec | `design/stitch/DESIGN.md` |
+| UI primitives (Button, Card, Badge…) | `src/components/ui/` |
+| React islands (hydrated) | `src/components/islands/` |
+| Worker entry | `src/worker.ts` |
+| API modules (newsletter, auth, shop, booking) | `src/server/` |
+| Server libs (db, tokens, tz, ics, mailer, stripe, gcal) | `src/server/lib/` |
+| D1 migrations | `migrations/` |
+| Worker tests | `tests/*.mjs` |
+| Screen prototypes to port | `docs/shop-screen-handoff/`, `docs/booking-screen-handoff/` |
 
 ## Content editing rules
 
-- To add or update a project: edit the `projects` array in `src/config/constants.js`. Each project needs `name`, `slug`, `description`, `tags[]`, `image`, and a `caseStudy` object. Images go in `src/assets/`.
-- To change the Calendly link: update `CALENDLY_URL` in `src/config/constants.js` only — it is imported everywhere else.
-- To add a color: add to `src/config/tokens.js` first, then expose via `tailwind.config.js`.
-
-## Design direction
-
-The **current** site uses a deep purple/dark palette (brand `#915eff`, bg `#050816`) with Poppins font and Three.js visuals.
-
-The **target** design (for the refonte) is "Elite Developer-Educator" — dark charcoal `#0A0A0B`, Electric Violet `#8B5CF6`, Geist (headlines) + Inter (body) + JetBrains Mono (labels/code). See `design/stitch/DESIGN.md` for the full spec. Do not start migrating colours or fonts until the framework migration decision (Astro vs Next.js) is settled.
+- **Products**: edit `src/config/products.ts` (prices in **cents**, EUR). Files for download go in the R2 bucket, never in the repo.
+- **Booking services**: edit `src/config/bookingServices.ts`. Prices are REFONTE-canonical; do not copy prices from the handoff prototype.
+- **Calendly link**: `CALENDLY_URL` in `constants.ts` only.
+- **Coupons**: live in D1 `coupons` table (seeded WELCOME10/LAUNCH20), not in code.
 
 ## Out of scope for the current codebase
 
-- Server-side rendering / static site generation
-- Blog (planned, not yet built)
-- Service landing pages (planned, not yet built)
-- Payment / Stripe integration (Phase 2+)
-- Newsletter backend (Phase 2+)
-- Admin dashboard or CRM (Phase 3)
+- Auto-refunds on booking cancellation (manual via Stripe dashboard for now)
+- Stripe Tax / EU VAT automation (flagged follow-up)
+- Blog article production (Phase 10 content)
+- Admin dashboard / CRM (Phase 13)

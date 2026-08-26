@@ -5,57 +5,45 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm run dev        # start Vite dev server (http://localhost:5173)
-npm run build      # production build → dist/
-npm run preview    # preview production build on port 80
+pnpm dev          # Astro dev server (http://localhost:4321)
+pnpm build        # production build → dist/
+pnpm preview      # preview Astro build
+pnpm test         # node --test tests/*.mjs (Worker API tests, mocked env/fetch)
+pnpm cf:dev       # build + wrangler dev (Worker + local D1/KV/R2 emulation)
+pnpm cf:deploy    # build + wrangler deploy (production — confirm before running)
 ```
 
-No test runner or linter is configured.
+Use **pnpm**, never npm. Run targeted tests (`node --test tests/shop.test.mjs`) before the full suite.
 
 ## Architecture overview
 
-**React 18 SPA** built with Vite, deployed to Cloudflare Pages (`dist/`). No SSR — the entire app renders client-side from `src/main.jsx` → `src/App.jsx`.
+**Astro 6 static site** (`output: 'static'`) + **Cloudflare Worker** backend, deployed together via `wrangler deploy`. The Worker (`src/worker.ts`) serves built assets through the `ASSETS` binding and owns all `/api/*` routes.
 
-### Section layout pattern
+### Frontend conventions
 
-Every full-page section (Who, TechSkills, Experience, Projects, Contact) is a React component wrapped with the `SectionWrapper` HOC (`src/hoc/SectionWrapper.jsx`). The HOC:
-- Wraps the component in a `framer-motion` section with `whileInView` reveal
-- Injects a `<span id={idName} className="hash-span">` for anchor nav — the `hash-span` class applies `-100px` top margin to compensate for the fixed header height
+- Pages: `src/pages/**/*.astro`; dynamic routes via `getStaticPaths` (see `services/[slug].astro`).
+- Interactivity: React islands in `src/components/islands/` hydrated with `client:*` directives; receive `locale` prop and use `useTranslations` from `src/i18n/ui.ts`.
+- i18n: `en` default (unprefixed), `/fr`, `/es`. Per-locale content split for services/projects (`src/config/{services,projects}/content/{en,fr,es}.ts` + shared `structural.ts`). Blog = MDX content collections with per-locale subfolders.
+- Layouts: `BaseLayout.astro` (head/SEO/JSON-LD/hreflang) → `PageLayout.astro` (+ SiteHeader/SiteFooter). Commerce pages pass `noindex` while the soft-launch flag is off.
+- Design tokens: CSS variables in `src/styles/global.css` (`--bg-*`, `--text-*`, `--accent-*`, `--r-*`), mapped in `tailwind.config.js`. Use Tailwind classes matching tokens; the handoff CSS in `docs/*-handoff/` is ported to these tokens, not copied verbatim.
 
-Usage: `export default SectionWrapper(MyComponent, "anchor-id")`
+### Backend conventions
 
-### Data / content model
+- `src/worker.ts` is a thin entry: canonical redirect → route dispatch → `ASSETS` fallback. Route modules live in `src/server/` (`newsletter.js`, `auth/`, `shop/`, `booking/`) with shared libs in `src/server/lib/` (`db`, `tokens`, `tz`, `ics`, `mailer`, `stripe`, `gcal`).
+- Data: **D1** (`DB`, migrations in `migrations/`), **KV** (`HOLDS`, booking slot holds with native TTL), **R2** (`DOWNLOADS`, product files streamed via HMAC-signed token URLs).
+- Integrations: Stripe PaymentIntents + `/api/stripe/webhook` (SubtleCrypto signature verify, `webhook_events` idempotency table), Google Calendar via service-account JWT (free/busy, events with Meet links), Resend for transactional email, Beehiiv for newsletter.
+- **Pricing is always recomputed server-side** from `src/config/products.ts` / `src/config/bookingServices.ts` (REFONTE prices; the handoff prototype's prices are stale).
+- Money is stored in **cents** (EUR). Booking slot times are generated server-side in `Europe/Paris` and rendered in the visitor's timezone client-side via `Intl`.
+- Secrets: `.dev.vars` locally (uncommitted), Worker secrets in prod; `.dev.vars.example` lists names only. Frontend-visible values use `PUBLIC_` prefix (e.g. `PUBLIC_STRIPE_PUBLISHABLE_KEY`) — never for secrets.
 
-All site content lives in `src/config/constants.js`: nav links, services cards, tech stack, experiences, testimonials, and the full `projects` array. Each project has a top-level `caseStudy` object with fields: `tagline`, `problem`, `context`, `technicalChallenges[]`, `architecture`, `implementation`, `results[]`, `lessonsLearned[]`. These fields are rendered one-to-one by `CaseStudyModal`.
+### Testing
 
-The Calendly booking URL is exported as `CALENDLY_URL` from `constants.js` — always import from there, never hardcode.
+`node --test` against `src/worker.ts` with a fake env (`ASSETS`, `DB`… mocked) and `globalThis.fetch` stubbed — see `tests/worker.test.mjs` for the pattern. Pure logic (pricing, slots, tokens) is extracted into modules and unit-tested directly.
 
-### Design token system
+## Feature flags & go-live
 
-Colors and shadows are defined in `src/config/tokens.js` and consumed in two ways:
-1. **Tailwind classes**: `tailwind.config.js` maps token values to Tailwind color names (`primary`, `secondary`, `tertiary`, `brand`, `brand-hover`, `surface`, `surface-deep`, `timeline`, `subtle`). Use these classes in JSX.
-2. **Inline styles / JS**: import `colors` directly from `tokens.js` when you need hex values at runtime (e.g., the Calendly widget `pageSettings`).
+`SITE_FEATURES` in `src/config/constants.ts` gates in-progress surfaces. `shopBooking: false` hides nav/footer links, adds `noindex` to `/shop/*` + `/booking/*`, and excludes them from the sitemap. Flip only at Phase 14d go-live (see `ROADMAP.md`).
 
-The font is Poppins (set globally in `src/index.css`). Text gradient utility classes (`blue-text-gradient`, `green-text-gradient`, `pink-text-gradient`, `orange-text-gradient`) are defined in `index.css` and used on project tags.
+## Reference docs
 
-### Canvas / Three.js components
-
-`src/canvas/` contains four Three.js scenes (`Earth`, `Ball`, `Computers`, `Stars`). They are heavy; `Stars` is rendered outside `<Suspense>` alongside `Contact`. The others are lazy-loaded. Do not add new Three.js work without considering the manual chunk splitting in `vite.config.js`.
-
-### CaseStudyModal
-
-Opens as a full-screen overlay via `createPortal(…, document.body)` with `z-index: 1000`. It manages its own scroll lock (`document.body.style.overflow = "hidden"`) and restores it on unmount. The lightbox layer sits at `z-index: 1100`. Escape key closes either the lightbox or the modal depending on state.
-
-### Projects infinite carousel
-
-`Projects.jsx` triplicates the `projects` array and uses a CSS `@keyframes loop-scroll` animation. Scroll distance is computed from `projects.length`. The `.paused` class (toggled by `group-hover`) stops the animation.
-
-### Routing
-
-`BrowserRouter` is present but no `<Routes>` exist in `App.jsx` — the app is scroll-based with anchor links. `src/pages/` contains older page stubs (`Home`, `Contact`, `Portfolio`) that are not currently used.
-
-The Valtio store (`src/store/index.js`) is a leftover from a removed customiser page and is currently unused by the main app.
-
-## Planned refonte
-
-`REFONTE_COMPLETE.md` contains the full brief for migrating this portfolio into a **service-oriented site** with dedicated landing pages for five services, a blog, SEO metadata, and structured data. `ROADMAP.md` has the phased implementation checklist. `design/stitch/DESIGN.md` contains the target design system (Geist + Inter + JetBrains Mono, Electric Violet `#8B5CF6` as brand, dark charcoal `#0A0A0B` base). The migration to Astro or Next.js static export is being evaluated — the current React SPA is not ideal for SEO or LLM crawlers.
+`REFONTE_COMPLETE.md` (business brief + canonical prices), `ROADMAP.md` (phases, Phase 14 = shop/booking), `TODO.md` (task list), `CLOUDFLARE_DEPLOYMENT.md` (deploy + secrets runbook), `docs/shop-screen-handoff/` + `docs/booking-screen-handoff/` (screen prototypes to port), `AGENTS.md` (editing rules).

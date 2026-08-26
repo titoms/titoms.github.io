@@ -5,6 +5,7 @@ const fr: UiDictionary = {
     home: 'Accueil',
     about: 'À propos',
     services: 'Services',
+    shop: 'Boutique',
     projects: 'Projets',
     blog: 'Blog',
     contact: 'Contact',

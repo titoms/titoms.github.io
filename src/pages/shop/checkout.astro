@@ -1,0 +1,38 @@
+---
+import CommerceLayout from '../../components/layout/CommerceLayout.astro';
+import ShopCheckout from '../../components/islands/shop/ShopCheckout';
+import { SITE_FEATURES } from '../../config/constants';
+---
+
+<CommerceLayout
+  title="Checkout — Shop"
+  description="Secure checkout via Stripe. Instant digital delivery."
+  noindex
+  showCart
+>
+  <div class="container shop-crumb">
+    <div class="breadcrumb">
+      <a href="/shop/">Shop</a><span class="sep">/</span>
+      <a href="/shop/cart/">Cart</a><span class="sep">/</span>
+      <span>Checkout</span>
+    </div>
+  </div>
+
+  <section class="section" style="padding-top: var(--sp-6);">
+    <div class="container">
+      <div class="checkout-steps">
+        <div class="co-step done"><span class="cnum">✓</span>Cart</div>
+        <div class="co-sep"></div>
+        <div class="co-step active"><span class="cnum">2</span>Checkout</div>
+        <div class="co-sep"></div>
+        <div class="co-step"><span class="cnum">3</span>Confirmation</div>
+      </div>
+
+      <h1 class="t-h1" style="margin-bottom: var(--sp-6);">Checkout</h1>
+
+      <div class="checkout-grid">
+        <ShopCheckout client:only="react" />
+      </div>
+    </div>
+  </section>
+</CommerceLayout>

@@ -1,0 +1,17 @@
+---
+import CommerceLayout from '../../components/layout/CommerceLayout.astro';
+import ManageBooking from '../../components/islands/booking/ManageBooking';
+import { SITE_FEATURES } from '../../config/constants';
+---
+
+<CommerceLayout
+  title="Manage Booking"
+  description="View, reschedule or cancel your booking."
+  noindex={!SITE_FEATURES.shopBooking}
+>
+  <section class="section" style="padding-top: calc(var(--sp-8) + 20px);">
+    <div class="container">
+      <ManageBooking client:only="react" />
+    </div>
+  </section>
+</CommerceLayout>

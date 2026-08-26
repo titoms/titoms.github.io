@@ -3,6 +3,7 @@ export interface UiDictionary {
     home: string;
     about: string;
     services: string;
+    shop: string;
     projects: string;
     blog: string;
     contact: string;
@@ -152,6 +153,7 @@ const en: UiDictionary = {
     home: 'Home',
     about: 'About',
     services: 'Services',
+    shop: 'Shop',
     projects: 'Projects',
     blog: 'Blog',
     contact: 'Contact',

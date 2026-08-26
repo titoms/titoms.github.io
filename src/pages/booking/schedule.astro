@@ -1,0 +1,37 @@
+---
+import CommerceLayout from '../../components/layout/CommerceLayout.astro';
+import ScheduleFlow from '../../components/islands/booking/ScheduleFlow';
+import { getBookingService } from '../../config/bookingServices';
+import { SITE_FEATURES } from '../../config/constants';
+
+interface Props {
+  service?: string;
+}
+
+const serviceId = Astro.url.searchParams.get('service') ?? '';
+---
+
+<CommerceLayout
+  title="Choose a Time — Booking"
+  description="Pick a slot from the live calendar."
+  noindex={!SITE_FEATURES.shopBooking}
+>
+  <div class="container" style="padding-top: calc(var(--sp-8) + 20px);">
+    <div class="booking-steps">
+      <div class="bk-step done"><span class="cnum">✓</span><span>Service</span></div><div class="bk-sep"></div>
+      <div class="bk-step active"><span class="cnum">2</span><span>Schedule</span></div><div class="bk-sep"></div>
+      <div class="bk-step"><span class="cnum">3</span><span>Details</span></div><div class="bk-sep"></div>
+      <div class="bk-step"><span class="cnum">4</span><span>Payment</span></div><div class="bk-sep"></div>
+      <div class="bk-step"><span class="cnum">5</span><span>Confirmed</span></div>
+    </div>
+
+    <h1 class="t-h1" style="margin-bottom: var(--sp-2);">Choose a date &amp; time</h1>
+    <p class="t-body" style="margin-bottom: var(--sp-6);">Availability updates in real time from my calendar.</p>
+
+    {Astro.url.searchParams.get('error') === 'slot' && (
+      <div class="error-banner">That slot was just taken or your hold expired — please pick another one.</div>
+    )}
+
+    <ScheduleFlow client:only="react" serviceId={serviceId} />
+  </div>
+</CommerceLayout>

@@ -572,4 +572,13 @@ export const STRIPE_PAYMENT_LINKS = {
 // Sourced from .env (PUBLIC_CF_ANALYTICS_TOKEN) — set in Cloudflare Pages for production
 export const CF_ANALYTICS_TOKEN = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN as string ?? "";
 
+// Stripe publishable key (safe for frontend). TEST key locally; live key at Phase 14d go-live.
+export const STRIPE_PUBLISHABLE_KEY = import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY as string ?? "";
+
+// Soft-launch feature flags. shopBooking=false hides nav/footer links and adds
+// noindex + sitemap exclusion for /shop and /booking until Phase 14d go-live.
+// Defined in features.ts (dependency-free) so astro.config.ts can read it too.
+import { SITE_FEATURES } from "./features";
+export { SITE_FEATURES };
+
 export { services, technologies, technologyCategories, featuredTechnologies, experiences, testimonials };
