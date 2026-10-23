@@ -2,7 +2,7 @@
 import '../../styles/global.css';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { CF_ANALYTICS_TOKEN, TWITTER_HANDLE } from '../../config/constants';
-import { locales, defaultLocale, stripLocalePrefix } from '../../i18n/ui';
+import { locales, defaultLocale, stripLocalePrefix, type Locale } from '../../i18n/ui';
 
 interface Props {
   title: string;
@@ -13,6 +13,7 @@ interface Props {
   jsonLd?: object | object[];
   gscVerification?: string;
   noindex?: boolean;
+  availableLocales?: Locale[];
 }
 
 const {
@@ -24,6 +25,7 @@ const {
   jsonLd,
   gscVerification,
   noindex = false,
+  availableLocales = locales,
 } = Astro.props;
 
 const SITE_URL = 'https://fullstackchris.dev';
@@ -59,11 +61,11 @@ const ogLocaleMap: Record<string, string> = { en: 'en_US', fr: 'fr_FR', es: 'es_
 const ogLocale = ogLocaleMap[locale] ?? 'en_US';
 
 const barePath = stripLocalePrefix(Astro.url.pathname).replace(/^\//, '');
-const hreflangLinks = locales.map((loc) => ({
+const hreflangLinks = availableLocales.map((loc) => ({
   hreflang: loc,
   href: new URL(getRelativeLocaleUrl(loc, barePath), SITE_URL).href,
 }));
-const xDefaultHref = new URL(getRelativeLocaleUrl(defaultLocale, barePath), SITE_URL).href;
+const xDefaultHref = new URL(getRelativeLocaleUrl(availableLocales.includes(defaultLocale) ? defaultLocale : availableLocales[0], barePath), SITE_URL).href;
 ---
 
 <!doctype html>

@@ -36,6 +36,18 @@ const CANONICAL_HOST = "fullstackchris.dev";
 const CANONICAL_HOSTNAMES = new Set([CANONICAL_HOST, `www.${CANONICAL_HOST}`]);
 const ROUTE_FILE_EXTENSION = /\.[^/]+$/;
 
+const getTemporaryLegacyRedirect = (request: Request) => {
+  if (request.method !== "GET" && request.method !== "HEAD") return null;
+  const url = new URL(request.url);
+  const match = url.pathname.match(/^(\/fr|\/es)?\/services\/ai-web-development-newsletter\/?$/);
+  if (!match) return null;
+  const localePrefix = match[1] ?? "";
+  const target = new URL(`${localePrefix}/services/`, request.url);
+  target.protocol = "https:";
+  target.hostname = CANONICAL_HOST;
+  return Response.redirect(target.toString(), 307);
+};
+
 const isStaticPagePath = (pathname: string) =>
   pathname !== "/" &&
   !pathname.startsWith("/api/") &&
@@ -371,6 +383,8 @@ const handleNewsletterSubscribe = async (request: Request, env: Env) => {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
+    const legacyRedirect = getTemporaryLegacyRedirect(request);
+    if (legacyRedirect) return legacyRedirect;
     const canonicalRedirect = getCanonicalRedirect(request);
     if (canonicalRedirect) return canonicalRedirect;
 

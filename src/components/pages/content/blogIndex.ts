@@ -30,8 +30,8 @@ export const blogIndex: Record<'en' | 'fr' | 'es', BlogIndexContent> = {
     newsletterCta: {
       getNotified: 'Get notified',
       h2: 'New articles in your inbox.',
-      lead: 'The AI web development newsletter covers tools, workflows and product ideas for developers and founders.',
-      joinNewsletter: 'Join the newsletter',
+      lead: 'Practical articles and professional training for developers and teams.',
+      joinNewsletter: 'Explore training',
     },
   },
   fr: {
@@ -51,8 +51,8 @@ export const blogIndex: Record<'en' | 'fr' | 'es', BlogIndexContent> = {
     newsletterCta: {
       getNotified: 'Soyez notifié',
       h2: 'De nouveaux articles dans votre boîte mail.',
-      lead: 'La newsletter dev web IA couvre les outils, les workflows et les idées produit pour développeurs et fondateurs.',
-      joinNewsletter: 'Rejoindre la newsletter',
+      lead: 'Des articles pratiques et des formations professionnelles pour développeurs et équipes.',
+      joinNewsletter: 'Découvrir les formations',
     },
   },
   es: {
@@ -72,8 +72,8 @@ export const blogIndex: Record<'en' | 'fr' | 'es', BlogIndexContent> = {
     newsletterCta: {
       getNotified: 'Recibe notificaciones',
       h2: 'Nuevos artículos en tu bandeja de entrada.',
-      lead: 'La newsletter de desarrollo web con IA cubre herramientas, flujos de trabajo e ideas de producto para desarrolladores y fundadores.',
-      joinNewsletter: 'Unirse a la newsletter',
+      lead: 'Artículos prácticos y formación profesional para desarrolladores y equipos.',
+      joinNewsletter: 'Ver formación',
     },
   },
 };

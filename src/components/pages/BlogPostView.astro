@@ -24,6 +24,11 @@ const slug = article.id.replace(/^(en|fr|es)\//, '');
 const sectionClass = "mx-auto w-full max-w-site px-6 py-20 sm:px-8 lg:px-10";
 const articleUrl = `https://fullstackchris.dev${localePrefix}/blog/${slug}/`;
 const pageTitle = article.data.metaTitle ?? article.data.title;
+const hasTranslatedVersions = ![
+  'auditer-application-generee-ia-production',
+  'typescript-6-react-node-changements',
+  'former-equipe-claude-code-codex-2026',
+].includes(slug);
 
 const formatDate = new Intl.DateTimeFormat(c.dateLocale, {
   month: 'long',
@@ -87,6 +92,7 @@ if (article.data.faqs.length > 0) {
   canonical={articleUrl}
   ogType="article"
   jsonLd={jsonLd}
+  availableLocales={hasTranslatedVersions ? undefined : ['fr']}
 >
   <!-- Hero -->
   <section class="site-hero hero-glow-field glow-bg grid-bg relative overflow-hidden border-b border-border mb-12 sm:mb-16">
@@ -130,7 +136,7 @@ if (article.data.faqs.length > 0) {
             {c.comingSoon.body}
           </p>
           <div class="flex flex-col gap-3 sm:flex-row">
-            <Button href={`${localePrefix}/services/ai-web-development-newsletter/`} variant="primary" size="lg">
+            <Button href={locale === 'fr' ? '/fr/formations/' : `${localePrefix}/services/web-project-coaching/`} variant="primary" size="lg">
               {c.comingSoon.joinNewsletter}
             </Button>
             <Button href={`${localePrefix}/blog/`} variant="secondary" size="lg">

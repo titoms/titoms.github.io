@@ -25,6 +25,7 @@ const bookCallUrl = getLocalizedPath(BOOK_CALL_URL, locale);
 const NAV_ORDER = [
   { id: "home", key: "nav.home", href: "/" },
   { id: "services", key: "nav.services", href: "/services/" },
+  ...(locale === "fr" ? [{ id: "formations", key: "nav.formations", href: "/formations/" }] : []),
   ...(SITE_FEATURES.shopBooking ? [{ id: "shop", key: "nav.shop", href: "/shop/" }] : []),
   { id: "projects", key: "nav.projects", href: "/projects/" },
   { id: "blog", key: "nav.blog", href: "/blog/" },

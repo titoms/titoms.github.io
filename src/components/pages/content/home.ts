@@ -75,9 +75,8 @@ export const home: Record<'en' | 'fr' | 'es', HomeContent> = {
       title: 'A clear path from first call to launched product.',
       description: 'Start wherever you are. Each service hands off cleanly to the next — clarity, then focused build, then a full MVP.',
       offers: [
-        { title: 'AI Web Dev Newsletter', description: 'A monthly, no-hype briefing on AI tools, coding workflows and MVP ideas worth testing.', price: 'from €9', priceUnit: '/mo', badge: 'Newsletter', ctaHref: '/services/ai-web-development-newsletter/', ctaLabel: 'Subscribe →' },
         { title: 'Web Project Coaching', description: 'One-on-one sessions to debug, clarify and structure your React / Node / AI-generated project.', price: '€90', priceUnit: '/ 1h', badge: 'Coaching', ctaHref: '/services/web-project-coaching/', ctaLabel: 'Learn more →' },
-        { title: 'Full-stack Development Day', description: 'Focused half- or full-day blocks for a clear feature, bug fix, dashboard or refactor.', price: 'from €350', priceUnit: '/ day', badge: 'Delivery', ctaHref: '/services/full-stack-development-day/', ctaLabel: 'Learn more →' },
+        { title: 'Full-stack Development Day', description: 'Focused half- or full-day blocks for a clear feature, bug fix, dashboard or refactor.', price: '€350 / €600', priceUnit: 'half-day / full day', badge: 'Delivery', ctaHref: '/services/full-stack-development-day/', ctaLabel: 'Learn more →' },
         { title: 'AI Clarity Bootstrap Workshop', description: 'Turn an idea into a realistic MVP plan: scope, user flows, stack, roadmap and budget.', price: 'from €650', priceUnit: '/ day', badge: 'Workshop', featured: true, ctaHref: '/services/mvp-bootstrapping-workshop/', ctaLabel: 'Learn more →' },
         { title: 'Custom MVP Development', description: 'A working web app from scope to deployment — frontend, backend, database and handover.', price: 'from €4,500', badge: 'MVP', ctaHref: '/services/mvp-development/', ctaLabel: 'Learn more →' },
       ],
@@ -177,9 +176,8 @@ export const home: Record<'en' | 'fr' | 'es', HomeContent> = {
       title: 'Un parcours clair, du premier appel au produit lancé.',
       description: "Commencez où vous en êtes. Chaque service passe le relais proprement au suivant — clarté, puis développement ciblé, puis MVP complet.",
       offers: [
-        { title: 'Newsletter Dev Web IA', description: 'Un briefing mensuel sans blabla sur les outils IA, les workflows de code et les idées de MVP qui valent le coup d\'être testées.', price: 'dès 9 €', priceUnit: '/mois', badge: 'Newsletter', ctaHref: '/services/ai-web-development-newsletter/', ctaLabel: "S'abonner →" },
         { title: 'Coaching Projet Web', description: 'Sessions individuelles pour déboguer, clarifier et structurer votre projet React / Node / généré par IA.', price: '90 €', priceUnit: '/ 1h', badge: 'Coaching', ctaHref: '/services/web-project-coaching/', ctaLabel: 'En savoir plus →' },
-        { title: 'Journée de Développement Full-Stack', description: 'Blocs ciblés d\'une demi-journée ou d\'une journée pour une fonctionnalité claire, un correctif, un dashboard ou un refactor.', price: 'dès 350 €', priceUnit: '/ jour', badge: 'Livraison', ctaHref: '/services/full-stack-development-day/', ctaLabel: 'En savoir plus →' },
+        { title: 'Journée de Développement Full-Stack', description: 'Blocs ciblés d\'une demi-journée ou d\'une journée pour une fonctionnalité claire, un correctif, un dashboard ou un refactor.', price: '350 € / 600 €', priceUnit: 'demi-journée / journée', badge: 'Livraison', ctaHref: '/services/full-stack-development-day/', ctaLabel: 'En savoir plus →' },
         { title: 'Atelier AI Clarity Bootstrap', description: 'Transformez une idée en plan MVP réaliste : cadrage, parcours utilisateur, stack, feuille de route et budget.', price: 'dès 650 €', priceUnit: '/ jour', badge: 'Atelier', featured: true, ctaHref: '/services/mvp-bootstrapping-workshop/', ctaLabel: 'En savoir plus →' },
         { title: 'Développement MVP sur mesure', description: 'Une application web fonctionnelle du cadrage au déploiement — frontend, backend, base de données et passation.', price: 'dès 4 500 €', badge: 'MVP', ctaHref: '/services/mvp-development/', ctaLabel: 'En savoir plus →' },
       ],
@@ -279,9 +277,8 @@ export const home: Record<'en' | 'fr' | 'es', HomeContent> = {
       title: 'Un camino claro, desde la primera llamada hasta el producto lanzado.',
       description: 'Empieza donde estés. Cada servicio da paso limpiamente al siguiente — claridad, luego construcción enfocada, luego un MVP completo.',
       offers: [
-        { title: 'Newsletter de Desarrollo Web con IA', description: 'Un resumen mensual sin exageraciones sobre herramientas de IA, flujos de trabajo de código e ideas de MVP que vale la pena probar.', price: 'desde 9 €', priceUnit: '/mes', badge: 'Newsletter', ctaHref: '/services/ai-web-development-newsletter/', ctaLabel: 'Suscribirse →' },
         { title: 'Coaching de Proyecto Web', description: 'Sesiones individuales para depurar, clarificar y estructurar tu proyecto React / Node / generado por IA.', price: '90 €', priceUnit: '/ 1h', badge: 'Coaching', ctaHref: '/services/web-project-coaching/', ctaLabel: 'Saber más →' },
-        { title: 'Jornada de Desarrollo Full-Stack', description: 'Bloques enfocados de medio día o día completo para una funcionalidad clara, corrección de errores, dashboard o refactor.', price: 'desde 350 €', priceUnit: '/ día', badge: 'Entrega', ctaHref: '/services/full-stack-development-day/', ctaLabel: 'Saber más →' },
+        { title: 'Jornada de Desarrollo Full-Stack', description: 'Bloques enfocados de medio día o día completo para una funcionalidad clara, corrección de errores, dashboard o refactor.', price: '350 € / 600 €', priceUnit: 'medio día / día completo', badge: 'Entrega', ctaHref: '/services/full-stack-development-day/', ctaLabel: 'Saber más →' },
         { title: 'Taller AI Clarity Bootstrap', description: 'Convierte una idea en un plan de MVP realista: alcance, flujos de usuario, stack, hoja de ruta y presupuesto.', price: 'desde 650 €', priceUnit: '/ día', badge: 'Taller', featured: true, ctaHref: '/services/mvp-bootstrapping-workshop/', ctaLabel: 'Saber más →' },
         { title: 'Desarrollo de MVP a Medida', description: 'Una aplicación web funcional desde el alcance hasta el despliegue — frontend, backend, base de datos y entrega.', price: 'desde 4500 €', badge: 'MVP', ctaHref: '/services/mvp-development/', ctaLabel: 'Saber más →' },
       ],

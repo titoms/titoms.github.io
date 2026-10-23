@@ -44,7 +44,6 @@ export const projectsStructural: ProjectStructural[] = [
     image: keevo_home,
     images: [keevo_home, keevo_home, keevo_studio],
     source_code_link: "https://github.com/",
-    live_link: "https://keevo.dev/",
     nextProjectSlug: "edumation",
   },
   {

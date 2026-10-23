@@ -14,6 +14,7 @@ const bookCallUrl = getLocalizedPath(BOOK_CALL_URL, locale);
 
 const footerLinkLabels: Record<string, string> = {
   'AI newsletter': t('footer.groups.services.links.aiNewsletter'),
+  'Professional training': t('footer.groups.formations.title'),
   'Project coaching': t('footer.groups.services.links.projectCoaching'),
   'Development day': t('footer.groups.services.links.developmentDay'),
   'MVP workshop': t('footer.groups.services.links.mvpWorkshop'),
@@ -37,13 +38,14 @@ const footerGroupTitles: Record<string, string> = {
   'Blog / resources': t('footer.groups.blog.title'),
   'Contact': t('footer.groups.contact.title'),
   'Legal': t('footer.groups.legal.title'),
+  'Formations': t('footer.groups.formations.title'),
 };
 ---
 
 <footer class="border-t border-border bg-surface/30">
   <div class="mx-auto w-full max-w-site px-6 py-16 sm:px-8 lg:px-10">
     <div class="grid gap-10 sm:grid-cols-2 lg:flex lg:items-start lg:justify-between lg:gap-12">
-      {footerGroups.map((group) => (
+      {footerGroups.filter((group) => group.title !== 'Formations' || locale === 'fr').map((group) => (
         <div class="lg:w-40">
           <p class="mb-4 font-mono text-xs uppercase tracking-[0.18em] text-accent">{footerGroupTitles[group.title] ?? group.title}</p>
           <ul class="space-y-2">

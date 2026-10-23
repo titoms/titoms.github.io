@@ -10,8 +10,6 @@ import { ServiceCard } from '../ui/ServiceCard';
 import { PricingCard } from '../ui/PricingCard';
 import ProjectsModal from '../islands/ProjectsModal';
 import FAQAccordion from '../islands/FAQAccordion';
-import NewsletterForm from '../islands/NewsletterForm';
-import NewsletterPreview from '../islands/NewsletterPreview';
 import ProcessStepper from '../islands/ProcessStepper';
 import { useTranslations, defaultLocale, getLocalizedPath } from '../../i18n/ui';
 import { home } from './content/home';
@@ -149,23 +147,26 @@ const jsonLd = [
     </div>
   </section>
 
-  <!-- Testimonials — social proof right after projects -->
-  <section class="border-y border-border bg-surface/40">
-    <div class={sectionClass}>
-      <SectionHeader eyebrow={c.testimonials.eyebrow} title={c.testimonials.title} data-reveal="fade" />
-      <div class="mt-10 grid gap-5 md:grid-cols-3" data-stagger="100" data-stagger-base="80">
-        {c.testimonials.cards.map((fb) => (
-          <Card class="flex flex-col gap-4" data-reveal="blur">
-            <p class="text-[0.95rem] leading-7 text-secondary italic">"{fb.testimonial}"</p>
-            <div class="mt-auto border-t border-border pt-4">
-              <p class="font-display text-sm font-semibold text-white">{fb.name}</p>
-              <p class="text-xs text-low">{fb.designation} · {fb.company}</p>
-            </div>
-          </Card>
-        ))}
+  {locale === 'fr' && (
+    <section class="border-y border-border bg-surface/40" id="formations">
+      <div class={sectionClass}>
+        <SectionHeader eyebrow="FORMATIONS PROFESSIONNELLES" title="Former vos équipes avec un développeur qui sait expliquer." description="Plus de 7 000 heures d'enseignement en développement web, du niveau licence au master, et une pratique professionnelle de React, Node.js, TypeScript, Docker, CI/CD, PHP/Symfony et des workflows IA." data-reveal="fade" />
+        <div class="mt-10 grid gap-5 md:grid-cols-3">
+          {[
+            ['React & TypeScript', 'Construire des interfaces robustes, typées et testables.'],
+            ['Node.js & backend', 'Concevoir des API, de la donnée et des déploiements fiables.'],
+            ['IA pour développeurs', 'Structurer Claude Code, Codex, les permissions, les tests et la revue humaine.'],
+          ].map(([title, description]) => (
+            <Card class="flex flex-col gap-3">
+              <h3 class="font-display text-lg font-semibold text-white">{title}</h3>
+              <p class="text-sm leading-6 text-secondary">{description}</p>
+            </Card>
+          ))}
+        </div>
+        <Button href="/fr/formations/" variant="primary" size="lg" class="mt-8">Découvrir les formations <span class="ml-1">→</span></Button>
       </div>
-    </div>
-  </section>
+    </section>
+  )}
 
   <!-- Tech stack — credibility builder before pricing -->
   <section id="tech-stack" class={sectionClass}>
@@ -194,47 +195,6 @@ const jsonLd = [
             />
           </div>
         ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Newsletter CTA -->
-  <section class="border-y border-border bg-surface/40" id="newsletter">
-    <div class={sectionClass}>
-      <div class="newsletter-outer-glow" data-reveal="zoom">
-        <Card class="border-accent/45 bg-gradient-to-br from-raised via-tertiary to-surface-deep p-8 sm:p-10 lg:p-14">
-          <div class="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
-            <div class="max-w-2xl">
-              <p class="mb-5 inline-flex items-center gap-3 font-mono text-xs font-semibold uppercase tracking-[0.22em] text-accent">
-                <span class="h-px w-5 bg-accent" aria-hidden="true"></span>
-                {c.newsletter.tag}
-              </p>
-              <h2 class="max-w-xl font-display text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.05] text-white">
-                {c.newsletter.h2}
-              </h2>
-              <p class="mt-5 max-w-xl text-[1.05rem] leading-8 text-secondary">
-                {c.newsletter.lead}
-              </p>
-              <div class="mt-8">
-                <NewsletterForm client:visible locale={locale} />
-              </div>
-              <p class="mt-4 text-sm leading-6 text-low">
-                {c.newsletter.note}
-              </p>
-            </div>
-            <div class="newsletter-terminal overflow-hidden rounded-xl border border-border bg-primary/80 font-mono text-sm text-secondary shadow-lg shadow-black/30">
-              <div class="flex items-center gap-3 border-b border-border bg-raised/60 px-5 py-4">
-                <span class="terminal-window-controls flex gap-2" aria-hidden="true">
-                  <span class="terminal-dot terminal-dot--close"></span>
-                  <span class="terminal-dot terminal-dot--minimize"></span>
-                  <span class="terminal-dot terminal-dot--maximize"></span>
-                </span>
-                <span class="text-low">june-issue.md</span>
-              </div>
-              <NewsletterPreview items={c.newsletter.issue} client:visible />
-            </div>
-          </div>
-        </Card>
       </div>
     </div>
   </section>

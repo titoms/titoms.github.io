@@ -1,0 +1,5 @@
+---
+import TrainingPageView from '../../../components/pages/TrainingPageView.astro';
+const training = { slug: 'node-backend', title: 'Formation Node.js et développement backend', description: 'Concevoir des API Node.js claires, testables et déployables.', audiences: ['Développeurs frontend', 'Équipes backend Node.js'], objectives: ['Concevoir une API', 'Gérer validation, auth et données', 'Préparer tests et déploiement'], prerequisites: ['JavaScript ou TypeScript', 'Notions HTTP et bases de données'], skills: ['Node.js, Express et TypeScript', 'API REST et validation', 'PostgreSQL, Docker et CI/CD'], programme: ['Architecture d’API', 'Persistance et authentification', 'Tests, conteneurs et pipeline'] };
+---
+<TrainingPageView training={training} />

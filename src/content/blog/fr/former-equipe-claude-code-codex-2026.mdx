@@ -1,0 +1,81 @@
+---
+title: "Former une équipe à Claude Code et Codex en 2026"
+metaTitle: "Former une équipe à Claude Code et Codex : méthode, garde-fous et pratiques"
+description: "Une approche pratique pour former une équipe à Claude Code et Codex : contexte, permissions, tests, revue humaine, PR et limites des agents de code."
+publishedAt: 2026-10-24
+tags: ["Claude Code", "Codex", "Formation", "Agents IA"]
+language: fr
+faqs:
+  - question: "Faut-il choisir Claude Code ou Codex pour toute l’équipe ?"
+    answer: "Pas nécessairement. Commencez par les tâches, les contraintes de sécurité, l’environnement et les preuves attendues ; l’outil vient ensuite."
+  - question: "Que doit savoir faire un développeur après la formation ?"
+    answer: "Donner du contexte, limiter les permissions, découper une tâche, lancer les tests, relire le diff et documenter les limites dans une PR."
+  - question: "Une formation de deux jours garantit-elle l’adoption ?"
+    answer: "Non. Elle peut donner un cadre de départ ; l’adoption dépend ensuite des conventions, de la revue humaine et des retours sur des tâches réelles."
+---
+
+Former une équipe à Claude Code et Codex ne revient pas à distribuer deux comptes et une liste de prompts. Le sujet est organisationnel : comment donner assez de contexte à un agent pour être utile, assez de limites pour rester contrôlable, et assez de tests pour rendre son travail vérifiable.
+
+Les données disponibles en 2026 montrent une adoption professionnelle forte des agents de code, mais aussi une confiance conditionnelle : les développeurs les utilisent surtout quand la sortie est compréhensible et vérifiable. [Stack Overflow 2026](https://survey.stackoverflow.co/2026/ai/data) et l’étude JetBrains 2026 donnent un contexte utile pour lancer la discussion, pas une promesse de productivité automatique.
+
+## 1. Commencer par le contexte du dépôt
+
+Un agent a besoin d’un objectif, des conventions, des commandes de test, des limites de périmètre et d’un état de départ propre. Une formation doit apprendre à écrire ce contexte dans les documents du projet, puis à vérifier que l’agent l’a effectivement utilisé.
+
+Exercice : donner une tâche verticale courte, demander un plan, faire citer les fichiers touchés, puis refuser toute modification tant que le plan et les critères de vérification ne sont pas compris.
+
+### Exemple de tâche
+
+Plutôt que « ajoute l’authentification », demandez : « ajoute la validation du corps de connexion, écris les tests d’erreur et limite le changement aux routes et modules indiqués ». L’équipe apprend ainsi à fournir un contexte vérifiable, pas un prompt spectaculaire.
+
+## 2. Enseigner les permissions comme une compétence
+
+Le modèle ne doit pas recevoir par défaut accès aux secrets, aux déploiements ou aux données de production. L’équipe distingue lecture, écriture, commandes locales, réseau et actions irréversibles. Les exceptions sont explicites et limitées à une tâche.
+
+## 3. Faire produire avec tests
+
+Le workflow pédagogique est court : comprendre, planifier, modifier, tester, relire. L’agent peut écrire un test ou proposer une correction, mais la commande de vérification est lancée et l’échec est interprété par un humain.
+
+```text
+Contexte → Plan → Petit changement → Test ciblé → Revue du diff → PR
+```
+
+Une PR générée par un agent doit rester lisible : objectif, fichiers modifiés, tests exécutés, limites connues et points à revoir.
+
+## 4. Organiser la revue humaine
+
+La revue vérifie les contrats métier, les permissions, les erreurs, les migrations, les dépendances et les coûts d’exploitation. Elle ne se limite pas à demander à un second agent si le premier a raison. Pour un changement sensible, un membre de l’équipe rejoue le parcours critique depuis un environnement propre.
+
+## Proposition pédagogique illustrative sur deux jours
+
+Cette proposition sert de point de départ, pas de durée ou de tarif annoncé :
+
+### Jour 1 — Comprendre et cadrer
+
+- modèles mentaux des agents, contexte et limites ;
+- configuration d’un projet et règles de permissions ;
+- découpage d’une tâche et production d’un plan ;
+- exercice React ou Node avec tests ciblés.
+
+### Jour 2 — Intégrer dans l’équipe
+
+- revue de diff et revue de PR ;
+- tests, sécurité, dépendances et observabilité ;
+- conventions d’équipe, documentation et partage des apprentissages ;
+- simulation d’un changement risqué et décision de rollback.
+
+## Les limites à dire clairement
+
+Un agent peut mal comprendre le domaine, reproduire un pattern fragile, modifier trop de fichiers, ignorer une contrainte de déploiement ou produire une réponse convaincante mais fausse. Il ne remplace ni l’expertise métier, ni la responsabilité de mise en production, ni la revue de sécurité.
+
+La bonne question n’est donc pas « quel agent code le plus vite ? », mais « quelle partie du workflow voulons-nous rendre plus rapide tout en gardant une preuve de correction ? »
+
+## Erreurs fréquentes
+
+- donner accès aux secrets ou à la production par défaut ;
+- accepter une grosse PR générée sans découpage ni tests ciblés ;
+- demander à l’agent de valider sa propre sécurité sans revue indépendante ;
+- mesurer uniquement la vitesse de génération et pas le temps de correction ;
+- ne pas documenter les tâches où l’agent reste interdit ou peu fiable.
+
+Pour préparer cette adoption avec votre équipe, [découvrez la formation IA pour développeurs](/fr/formations/ia-developpeurs/) ou [demandez une formation intra-entreprise](/fr/formations/).

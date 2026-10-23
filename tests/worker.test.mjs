@@ -77,6 +77,17 @@ test("redirects extensionless static routes to trailing-slash canonicals", async
   assert.equal(response.headers.get("Location"), "https://fullstackchris.dev/services/mvp-development/");
 });
 
+test("temporarily redirects the retired newsletter route to services", async () => {
+  const response = await worker.fetch(
+    makeGetRequest("/fr/services/ai-web-development-newsletter/"),
+    makeEnv(),
+    {},
+  );
+
+  assert.equal(response.status, 307);
+  assert.equal(response.headers.get("Location"), "https://fullstackchris.dev/fr/services/");
+});
+
 test("does not add trailing slashes to asset URLs", async () => {
   const response = await worker.fetch(
     new Request("https://fullstackchris.dev/og-image.png"),

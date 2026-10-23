@@ -15,8 +15,8 @@ export const blogPost: Record<'en' | 'fr' | 'es', BlogPostContent> = {
     comingSoonBadge: 'Coming soon',
     comingSoon: {
       title: 'This article is in progress.',
-      body: 'I am working on this article. Subscribe to the AI web development newsletter to get notified when it publishes.',
-      joinNewsletter: 'Join the newsletter',
+      body: 'I am working on this article. Explore the coaching and technical training options while it is in progress.',
+      joinNewsletter: 'Explore training',
       backToBlog: 'Back to blog',
     },
     imagePlaceholder: 'Image placeholder',
@@ -34,8 +34,8 @@ export const blogPost: Record<'en' | 'fr' | 'es', BlogPostContent> = {
     comingSoonBadge: 'Bientôt disponible',
     comingSoon: {
       title: 'Cet article est en cours de rédaction.',
-      body: "Je travaille sur cet article. Abonnez-vous à la newsletter dev web IA pour être notifié de sa publication.",
-      joinNewsletter: 'Rejoindre la newsletter',
+      body: "Je travaille sur cet article. Découvrez les formations et le coaching technique pendant sa rédaction.",
+      joinNewsletter: 'Découvrir les formations',
       backToBlog: 'Retour au blog',
     },
     imagePlaceholder: "Emplacement d'image",
@@ -53,8 +53,8 @@ export const blogPost: Record<'en' | 'fr' | 'es', BlogPostContent> = {
     comingSoonBadge: 'Próximamente',
     comingSoon: {
       title: 'Este artículo está en progreso.',
-      body: 'Estoy trabajando en este artículo. Suscríbete a la newsletter de desarrollo web con IA para recibir una notificación cuando se publique.',
-      joinNewsletter: 'Unirse a la newsletter',
+      body: 'Estoy trabajando en este artículo. Descubre las opciones de formación y coaching técnico mientras lo termino.',
+      joinNewsletter: 'Ver formación',
       backToBlog: 'Volver al blog',
     },
     imagePlaceholder: 'Marcador de imagen',
