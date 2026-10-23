@@ -1,0 +1,113 @@
+---
+title: "Securing coding agents: the OpenCode isolation mistakes I encountered"
+metaTitle: "AI agent isolation: an OpenCode field report"
+description: "A cautious field report on inherited configuration, OpenCode worker isolation and the checks needed before claiming security."
+publishedAt: 2026-10-24
+tags: ["OpenCode", "Security", "Isolation", "AI agents"]
+language: "en"
+faqs:
+  - question: "Does replacing a configuration file isolate an agent?"
+    answer: "No. Configuration may be merged from global, remote or managed sources. You must inspect effective configuration, data, credentials, plugins and permissions."
+  - question: "Is an application sandbox the same as a system sandbox?"
+    answer: "No. Application restrictions do not replace process, user, filesystem, network and secret separation at the system boundary."
+  - question: "How can a confinement test avoid overclaiming?"
+    answer: "Define the exact property, test plausible escape paths and document what remains outside the test. A green test proves only the covered scenario."
+---
+
+The word “sandbox” often creates a stronger security impression than the configuration actually provides. I saw this while working on OpenCode worker isolation in a multi-agent environment. A worker can look constrained while inheriting global configuration, organizational data or plugins that were never intended for it.
+
+This article describes an incident and a diagnostic method, not a universal security guarantee. Environment names, private paths and credentials are intentionally omitted.
+
+## The incident: a worker was not as neutral as expected
+
+The symptom was unwanted inheritance of global configuration and organizational data in an OpenCode worker. The intention was to start it with a dedicated configuration. The observed result showed that supplying or replacing a local file did not prove that other sources were gone.
+
+The important diagnosis is not “OpenCode is unsafe”. It is that a modern application may aggregate several configuration layers, so the team must inspect the effective configuration at execution time.
+
+The [OpenCode configuration documentation](https://dev.opencode.ai/docs/config/) says that configuration is merged and lists remote, global, custom, project, `.opencode`, inline and managed sources depending on the environment. It also documents separate tool and permission controls. Replacing one local file therefore does not automatically cancel every other source.
+
+## Why replacing one file is not isolation
+
+Isolation covers several categories:
+
+- **Configuration**: global, project, environment, remote and managed settings;
+- **Data**: history, caches, sessions, indexes, workspaces and external files;
+- **Credentials**: keys, agent sockets, Git helpers, inherited variables and injected tokens;
+- **Plugins and tools**: extensions, MCP servers, scripts and binaries;
+- **Permissions**: read, write, shell, network, external directories and destructive actions.
+
+OpenCode documents permission modes such as `allow`, `ask` and `deny`, and approval for some `.env` or external-directory access. These controls reduce risk, but an application rule is not a system boundary.
+
+## The diagnostic I recommend
+
+Make behavior observable before changing it. A useful preflight can record, without secrets:
+
+1. effective process and user identity;
+2. working directory and target repository;
+3. configuration paths considered;
+4. enabled providers, plugins and tools;
+5. effective permissions;
+6. presence of sensitive variables as booleans only;
+7. allowed network connectivity;
+8. filesystem boundaries visible to the worker.
+
+The preflight must never print token contents, private configuration or organizational data. Its output should compare expected configuration with effective configuration and report the delta.
+
+## Experimental fixes
+
+The fixes explored around this incident follow three lines.
+
+### Controlled configuration
+
+Providing a dedicated configuration is not enough. Decide which sources are accepted, disable unnecessary external components and make the final configuration inspectable.
+
+### Separate data and credentials
+
+A worker should use a dedicated data area, dedicated credentials and a limited lifetime. It should not automatically reuse another organization’s history, caches or Git helpers. A missing secret should remain missing rather than being filled from an inherited environment variable.
+
+### Stop on mismatch
+
+If the preflight finds an unexpected provider, plugin, inherited data or overly broad permission, the experimental policy is to refuse worker startup. That is fail-closed admission control, not proof that every escape path is covered.
+
+## System sandbox versus application restriction
+
+An OpenCode permission can prevent a tool from writing or ask for approval. A system sandbox limits what the process can see or do regardless of what the application believes it allows: separate user, filesystem, network, processes and mounted secrets.
+
+Both layers complement each other. A bad system sandbox will not be repaired by a prompt. An overly broad application permission remains risky inside a separated environment. The useful question is: “Which resource is protected by which mechanism, and how was that verified?”
+
+## What confinement tests prove
+
+Confinement tests should cover concrete attempts: read outside the worktree, use an inherited credential, load a forbidden plugin, contact an unauthorized endpoint, run a destructive command or escape the working directory.
+
+A passing test proves that one scenario was blocked in one environment. It does not prove general security, and it does not automatically cover a new provider, CLI version, plugin or operating system.
+
+The OpenCode, Claude and Codex isolation work therefore includes preflights, confinement tests and stop-on-anomaly behavior. Full validation is still in progress; I do not present it as certification or a production guarantee.
+
+## What I would still verify
+
+- behavior with active remote configuration;
+- environment-variable merging in every launch mode;
+- globally and locally installed plugins;
+- caches and sessions after restart;
+- symlinks and external mounts;
+- actual network permissions, not just declarations;
+- future CLI and provider versions;
+- clean shutdown of an already-running worker.
+
+For the orchestration layer, read [harness engineering for reliable agents](/blog/harness-engineering-agents-ia-fiables/). For the wider setup, see [my multi-provider Linux workstation](/blog/setup-developpement-ia-omarchy-codex-claude-opencode/).
+
+If you need to audit an AI-assisted development workflow, start with [technical coaching](/services/web-project-coaching/) or the [AI developer training page](/fr/formations/ia-developpeurs/).
+
+## FAQ
+
+### Can a local `opencode.json` cancel global configuration?
+
+Not necessarily. OpenCode documents merged sources, so inspect the precedence rules and effective runtime configuration.
+
+### Should every plugin be disabled?
+
+Not always, but each plugin needs a known source, a clear purpose and permissions compatible with the worker. Sensitive workers should start with fewer components.
+
+### Why keep confinement tests if a system sandbox exists?
+
+They validate the agent-level contract. System boundaries and application tests cover different classes of failure; neither covers everything.

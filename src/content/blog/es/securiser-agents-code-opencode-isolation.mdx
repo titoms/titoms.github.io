@@ -1,0 +1,85 @@
+---
+title: "Seguridad de los agentes de código: los errores de aislamiento que encontré con OpenCode"
+metaTitle: "Aislamiento de agentes IA: experiencia con OpenCode"
+description: "Una experiencia prudente sobre configuración heredada, aislamiento de workers OpenCode y las comprobaciones necesarias antes de hablar de seguridad."
+publishedAt: 2026-10-24
+tags: ["OpenCode", "Seguridad", "Aislamiento", "Agentes IA"]
+language: "es"
+faqs:
+  - question: "¿Sustituir un archivo de configuración aísla un agente?"
+    answer: "No. La configuración puede fusionarse desde fuentes globales, remotas o administradas. Hay que inspeccionar configuración efectiva, datos, credenciales, plugins y permisos."
+  - question: "¿Una sandbox de aplicación equivale a una sandbox del sistema?"
+    answer: "No. Las restricciones de la aplicación no sustituyen la separación de proceso, usuario, filesystem, red y secretos a nivel del sistema."
+  - question: "¿Cómo evitar exagerar el resultado de un test de confinamiento?"
+    answer: "Define la propiedad exacta, prueba posibles escapes y documenta lo que queda fuera. Un test verde solo demuestra el escenario cubierto."
+---
+
+La palabra «sandbox» suele transmitir una seguridad mayor que la configuración real. Lo comprobé al trabajar en el aislamiento de workers OpenCode dentro de un entorno multi-agent. Un worker puede parecer limitado y, sin embargo, heredar configuración global, datos organizativos o plugins que no estaban previstos.
+
+Este artículo describe un incidente y un método de diagnóstico, no una garantía universal. Se omiten nombres de entorno, rutas privadas y credenciales.
+
+## El incidente: un worker no era tan neutro como esperábamos
+
+El síntoma fue la herencia no deseada de configuración global y datos organizativos en un worker OpenCode. La intención era arrancarlo con una configuración dedicada. El resultado mostró que proporcionar o sustituir un archivo local no demostraba que las demás fuentes hubieran desaparecido.
+
+El diagnóstico importante no es «OpenCode es inseguro». Es que una aplicación moderna puede combinar varias capas de configuración y el equipo debe inspeccionar la configuración efectiva en el punto de ejecución.
+
+La [documentación de configuración de OpenCode](https://dev.opencode.ai/docs/config/) explica que la configuración se fusiona y enumera fuentes remotas, globales, personalizadas, de proyecto, `.opencode`, inline y administradas según el entorno. También documenta controles separados para herramientas y permisos. Sustituir un archivo local no cancela automáticamente las demás fuentes.
+
+## Por qué un archivo no es aislamiento
+
+El aislamiento cubre varias categorías:
+
+- **Configuración**: ajustes globales, del proyecto, variables de entorno, remotos y administrados;
+- **Datos**: historial, cachés, sesiones, índices, workspaces y archivos externos;
+- **Credenciales**: claves, sockets, helpers de Git, variables heredadas y tokens inyectados;
+- **Plugins y herramientas**: extensiones, MCP, scripts y binarios;
+- **Permisos**: lectura, escritura, shell, red, directorios externos y acciones destructivas.
+
+OpenCode documenta modos de permiso como `allow`, `ask` y `deny`, y aprobaciones para ciertos archivos `.env` o directorios externos. Esto reduce el riesgo, pero una regla de aplicación no es una frontera del sistema.
+
+## Diagnóstico recomendado
+
+Haz observable el comportamiento antes de corregirlo. Un preflight puede registrar, sin secretos, la identidad efectiva del proceso y usuario, directorio de trabajo, repositorio, rutas de configuración, providers, plugins, herramientas, permisos, presencia booleana de variables sensibles, conectividad permitida y límites del filesystem.
+
+El preflight nunca debe imprimir tokens, configuración privada o datos organizativos. Debe comparar la configuración esperada con la configuración efectiva y mostrar la diferencia.
+
+## Correcciones experimentales
+
+Los correctivos estudiados siguen tres líneas: controlar las fuentes de configuración y desactivar componentes externos innecesarios; separar datos y credenciales con espacios dedicados y duración limitada; y rechazar el arranque si el preflight detecta provider, plugin, dato heredado o permiso no autorizado.
+
+Este último punto es fail-closed aplicado a la admisión del worker, no una prueba de que todos los escapes estén cubiertos.
+
+## Sandbox del sistema frente a restricción de aplicación
+
+Un permiso de OpenCode puede impedir que una herramienta escriba o pedir aprobación. Una sandbox del sistema limita lo que el proceso puede ver o hacer independientemente de lo que crea la aplicación: usuario, filesystem, red, procesos y secretos montados separados.
+
+Ambas capas se complementan. Una mala sandbox del sistema no se arregla con un prompt, y un permiso demasiado amplio sigue siendo arriesgado dentro de un entorno separado. La pregunta útil es: «¿Qué recurso protege cada mecanismo y cómo se verificó?»
+
+## Qué demuestran los tests de confinamiento
+
+Los tests deben intentar leer fuera del worktree, usar una credencial heredada, cargar un plugin prohibido, contactar un endpoint no autorizado, ejecutar un comando destructivo o escapar del directorio de trabajo.
+
+Un test correcto demuestra que un escenario fue bloqueado en un entorno concreto. No demuestra seguridad general ni cubre automáticamente otro provider, versión del CLI, plugin o sistema operativo.
+
+El trabajo de aislamiento de workers OpenCode, Claude y Codex incluye preflights, tests de confinamiento y parada ante anomalías. La validación completa sigue en curso; no lo presento como certificación ni garantía de producción.
+
+Todavía verificaría la configuración remota, la fusión de variables en cada modo de lanzamiento, plugins globales y locales, cachés después de reiniciar, symlinks, montajes externos, permisos de red reales, nuevas versiones y la parada limpia de un worker activo.
+
+Para la orquestación, lee [harness engineering para agentes fiables](/es/blog/harness-engineering-agents-ia-fiables/). Para el setup completo, consulta [mi workstation multi-provider](/es/blog/setup-developpement-ia-omarchy-codex-claude-opencode/).
+
+Si necesitas auditar un workflow asistido por IA, empieza con [acompañamiento técnico](/es/services/web-project-coaching/) o la [formación IA para desarrolladores](/fr/formations/ia-developpeurs/).
+
+## FAQ
+
+### ¿Un `opencode.json` local cancela la configuración global?
+
+No necesariamente. OpenCode documenta fuentes fusionadas; revisa la prioridad y la configuración efectiva del proceso.
+
+### ¿Hay que desactivar todos los plugins?
+
+No siempre, pero cada plugin necesita origen conocido, propósito claro y permisos compatibles. Un worker sensible debería comenzar con menos componentes.
+
+### ¿Por qué mantener tests de confinamiento si existe una sandbox del sistema?
+
+Porque validan el contrato del agente. Los límites del sistema y los tests de aplicación cubren fallos distintos.
