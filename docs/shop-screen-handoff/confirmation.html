@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Confirmed | fullstackchris.dev</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../motion.css">
+<link rel="stylesheet" href="../service.css">
+<link rel="stylesheet" href="shop.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" data-screen-label="Header">
+      <a class="brand" href="../Homepage.html"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></a>
+      <a class="btn btn-secondary btn-sm" href="index.html">Back to shop</a>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+  <div class="checkout-steps" style="margin-top:var(--sp-6);">
+    <div class="co-step done"><span class="cnum">✓</span>Cart</div><div class="co-sep"></div>
+    <div class="co-step done"><span class="cnum">✓</span>Checkout</div><div class="co-sep"></div>
+    <div class="co-step active"><span class="cnum">3</span>Confirmation</div>
+  </div>
+</div>
+
+<section class="confirm-hero glow-bg" data-screen-label="Confirmation hero">
+  <div class="container">
+    <div class="confirm-check"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <h1 class="t-h1">Thank you — your order is confirmed.</h1>
+    <p class="t-lead" style="max-width:48ch; margin:var(--sp-4) auto 0;">Order <span class="order-num">#FSC-20487</span> is ready. Download links are below and in your inbox.</p>
+  </div>
+</section>
+
+<div class="container" style="max-width:720px;">
+  <div class="card" style="margin-bottom:var(--sp-6);" data-screen-label="Downloads">
+    <span class="eyebrow no-rule" style="margin-bottom:var(--sp-4); display:inline-flex;">YOUR DOWNLOADS</span>
+    <div class="download-list">
+      <div class="card download-row"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div class="meta"><h5>Violet Dark UI Kit</h5><span>ZIP · 4.2 MB · v1.3</span></div><a class="btn btn-secondary btn-sm" href="#">Download</a></div>
+      <div class="card download-row"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div class="meta"><h5>Cursor &amp; Claude Prompt Pack</h5><span>PDF · 1.1 MB</span></div><a class="btn btn-secondary btn-sm" href="#">Download</a></div>
+    </div>
+    <p class="t-small" style="margin-top:var(--sp-5);">A copy of these links was also sent to your email — they never expire.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:var(--sp-8); display:flex; align-items:center; justify-content:space-between; gap:var(--sp-5); flex-wrap:wrap; background:linear-gradient(135deg,var(--accent-soft),var(--bg-2) 60%); border-color:var(--border-accent);" data-screen-label="Account nudge">
+    <div><h4 class="t-h4" style="margin-bottom:6px;">Save this order to an account</h4><p class="t-body">Access downloads anytime without digging through email.</p></div>
+    <a class="btn btn-primary btn-sm" href="account.html">Create account</a>
+  </div>
+
+  <section style="margin-bottom:var(--sp-9);" data-screen-label="Related">
+    <div class="sec-head"><span class="eyebrow">WHAT'S NEXT</span><h2 class="t-h2">You might also like.</h2></div>
+    <div class="pgrid" style="grid-template-columns:repeat(3,1fr);">
+      <article class="card card-hover pcard"><div class="thumb"><div class="ph">screenshot · saas-template</div></div><div class="body"><span class="cat">Templates</span><h4 class="t-h4">SaaS Marketing Template</h4><div class="foot"><span class="price-now">€39</span><a class="btn btn-secondary btn-sm" href="product.html">View</a></div></div></article>
+      <article class="card card-hover pcard"><div class="thumb"><div class="ph">preview · workflow-pack</div></div><div class="body"><span class="cat">Others</span><h4 class="t-h4">Claude Code Workflow Pack</h4><div class="foot"><span class="price-now">€25</span><a class="btn btn-secondary btn-sm" href="product.html">View</a></div></div></article>
+      <article class="card card-hover pcard"><div class="thumb"><div class="ph">screenshot · minimal-ds</div></div><div class="body"><span class="cat">Design Systems</span><h4 class="t-h4">Minimal SaaS Design System</h4><div class="foot"><span class="price-now">€49</span><a class="btn btn-secondary btn-sm" href="product.html">View</a></div></div></article>
+    </div>
+  </section>
+</div>
+
+<footer class="site-footer" style="padding:var(--sp-6) 0;">
+  <div class="container"><div class="footer-bottom" style="margin-top:0; border-top:none;"><span>© 2026 Christophe Crognier · fullstackchris.dev</span></div></div>
+</footer>
+
+<script>
+  // Clear cart after a completed order (mock)
+  localStorage.removeItem('fsc_cart');
+  localStorage.removeItem('fsc_coupon');
+</script>
+</body>
+</html>

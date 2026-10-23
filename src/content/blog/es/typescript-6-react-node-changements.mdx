@@ -1,0 +1,103 @@
+---
+title: "TypeScript 6.0: los cambios importantes para React y Node.js"
+metaTitle: "TypeScript 6.0 para React y Node.js: migración y preparación para TypeScript 7"
+description: "Qué cambia TypeScript 6.0 en proyectos React y Node.js: configuración, deprecaciones, migración y preparación para TypeScript 7."
+publishedAt: 2026-10-24
+tags: ["TypeScript", "React", "Node.js", "Migración"]
+language: es
+faqs:
+  - question: "¿TypeScript 6.0 exige reescribir un proyecto React?"
+    answer: "No. Empieza por la versión del compilador, la configuración y los errores que revele una comprobación estricta."
+  - question: "¿Por qué importa TypeScript 6.0 antes de TypeScript 7?"
+    answer: "TypeScript 6.0 sirve de puente hacia la siguiente generación del compilador y ayuda a tratar deprecaciones y supuestos de configuración."
+  - question: "¿Debo usar TypeScript 7 en producción ahora?"
+    answer: "No. Puedes probar previews para compatibilidad, pero producción debe usar una versión soportada y validada por tus propios controles."
+---
+
+TypeScript 6.0 es una versión de transición. El anuncio oficial la presenta como puente entre 5.9 y la siguiente generación de TypeScript, basada en un nuevo código en Go. Para equipos React y Node.js, lo importante no es adoptar cada novedad, sino reducir sorpresas de configuración antes de TypeScript 7.
+
+[Lee el anuncio oficial de TypeScript 6.0](https://devblogs.microsoft.com/typescript/announcing-typescript-6-0/).
+
+## Haz explícita la migración
+
+Actualiza TypeScript en una rama dedicada y comprueba qué compilador utiliza realmente CI.
+
+```bash
+pnpm add -D typescript@6
+pnpm exec tsc --version
+pnpm exec tsc --noEmit
+```
+
+En un monorepo revisa versiones transitivas y herramientas que invoquen su propio compilador.
+
+## React: la inferencia puede revelar supuestos ocultos
+
+TypeScript 6.0 ajusta la inferencia en algunas llamadas genéricas, incluidas expresiones JSX genéricas. Un código que antes compilaba puede necesitar un argumento de tipo explícito. Corrige el contrato en lugar de usar `any`.
+
+```tsx
+function Select<T>(props: { value: T; render: (value: T) => React.ReactNode }) {
+  return <div>{props.render(props.value)}</div>;
+}
+
+<Select value={42} render={(value) => <strong>{value.toFixed(0)}</strong>} />
+```
+
+Si un caso complejo se convierte en `unknown`, haz visible el tipo esperado en el componente o la llamada. Añade un test de compilación o renderizado que documente el contrato.
+
+## Node.js: busca import assertions deprecadas
+
+La deprecación de `import ... assert {}` también cubre llamadas dinámicas a `import()`. Busca en servicios y scripts de build.
+
+```ts
+// Forma antigua que debes localizar
+const config = await import('./config.json', { assert: { type: 'json' } });
+```
+
+No la sustituyas mecánicamente. Comprueba runtime, bundler y formato de módulos (`NodeNext`, ESM o CommonJS), y ejecuta los scripts con la versión de Node de producción.
+
+## Mantén portable la configuración
+
+Un proyecto moderno puede usar una configuración como esta, adaptada a su framework y runtime:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noEmit": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true
+  }
+}
+```
+
+En React, JSX depende de la cadena de build. En Node.js, módulos y resolución deben coincidir con `package.json`, bundler y modo de ejecución.
+
+### Una decisión práctica
+
+En un paquete Node ejecutado directamente por Node, revisaría primero `package.json`, extensiones y `module: "NodeNext"`. En una aplicación React con Vite, conservaría la configuración esperada por el bundler y centraría la migración en strictness, inferencia y tipos compartidos.
+
+## Prepárate para TypeScript 7 sin especular
+
+Mantén limpio el lockfile, elimina atajos de tipos, trata deprecaciones y documenta supuestos de módulos. Prueba previews oficiales solo si el proyecto puede absorber el riesgo; no las confundas con soporte de producción.
+
+### Errores frecuentes
+
+- actualizar TypeScript sin comprobar el compilador de CI;
+- añadir `any` para ocultar un error de inferencia;
+- migrar imports JSON sin probar el runtime Node real;
+- mezclar configuración del bundler frontend y del paquete backend;
+- probar solo el build y olvidar scripts de producción.
+
+## Checklist de migración
+
+- [ ] Versión TypeScript verificada en local y CI
+- [ ] `tsc --noEmit` ejecutado en paquetes React y Node
+- [ ] Expresiones JSX genéricas revisadas
+- [ ] Import assertions buscadas
+- [ ] Módulos alineados con el runtime
+- [ ] Tests de build y ejecución en scripts sensibles
+
+¿Quieres aplicar esto a un equipo real? Explora la [formación de React y TypeScript](/es/formations/react-typescript/).

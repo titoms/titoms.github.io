@@ -1,0 +1,104 @@
+---
+title: "Harness engineering: cómo construir agentes de desarrollo con IA fiables"
+metaTitle: "Harness engineering: arquitectura y controles para agentes de IA"
+description: "Guía práctica para distinguir modelo, agente y harness, y diseñar flujos de desarrollo asistido por IA observables, verificables y supervisados."
+publishedAt: 2026-10-24
+tags: ["Harness engineering", "Agentes IA", "Codex", "Arquitectura"]
+language: "es"
+faqs:
+  - question: "¿Un modelo mejor hace fiable a un agente por sí solo?"
+    answer: "No. El modelo propone decisiones y acciones; el harness aporta contexto, herramientas, permisos, estado y comprobaciones para controlar esas acciones."
+  - question: "¿Un harness debe buscar autonomía completa?"
+    answer: "No necesariamente. Para muchos equipos, un agente supervisado con checkpoints explícitos es más útil y auditable que uno completamente autónomo."
+  - question: "¿Cómo empezar sin construir una plataforma?"
+    answer: "Empieza con un repositorio claro, un comando de tests reproducible, permisos mínimos y revisión humana obligatoria. Añade orquestación cuando un problema observado lo justifique."
+---
+
+Un agente de código puede leer un repositorio, modificar varios archivos y ejecutar comandos. Eso no significa que pueda trabajar solo de forma fiable. La diferencia entre una demo impresionante y una herramienta utilizable por un equipo suele estar alrededor del modelo: en el **harness**.
+
+Este artículo propone una definición práctica y la compara con lo que he experimentado en un Control Plane V2 para coordinar workers de desarrollo. Es un experimento de arquitectura, no una prueba de autonomía segura en producción.
+
+## Modelo, agente y harness: tres niveles
+
+Un **modelo** genera texto, código o una decisión a partir del contexto. No conoce automáticamente el estado real del repositorio, los permisos del proceso ni el resultado de un comando.
+
+Un **agente** añade un ciclo: recibe un objetivo, elige una acción, usa una herramienta, observa el resultado y continúa. Codex, Claude Code y OpenCode pueden leer un repositorio, escribir archivos, ejecutar tests y preparar una pull request. La [documentación de Claude Code](https://code.claude.com/docs/en/overview) describe esta superficie agentiva.
+
+Un **harness** es el entorno que hace operativo el ciclo: contexto inicial, herramientas, permisos, aislamiento, orquestación, estado durable, observabilidad y criterios de parada. El modelo es el motor de razonamiento; el agente es el ciclo de ejecución; el harness define cuándo puede actuar.
+
+El artículo de [OpenAI sobre harness engineering](https://openai.com/index/harness-engineering/) describe un desplazamiento del trabajo de ingeniería hacia la legibilidad del repositorio, la intención explícita y los ciclos de feedback. El artículo de Google sobre [evaluaciones de comportamiento](https://developers.googleblog.com/en/the-anatomy-of-harness-engineering-how-to-evaluate-iterate-and-guard-ai-coding-agents/) añade una idea importante: los comportamientos observables pueden ser más útiles que una única puntuación global.
+
+## Qué debe controlar el harness
+
+Antes de que actúe un worker, un harness útil debería responder:
+
+1. ¿Qué objetivo exacto persigue?
+2. ¿Qué contexto recibió realmente?
+3. ¿Qué herramientas puede usar y sobre qué recursos?
+4. ¿Qué acciones necesitan aprobación?
+5. ¿Qué estado sobrevive a un reinicio?
+6. ¿Qué evidencia decide que el trabajo es aceptable?
+
+Sin estas respuestas, el agente rellena los huecos con suposiciones. Puede tocar demasiados archivos, cargar configuración heredada, omitir una validación o declarar que terminó sin haber ejecutado el comando esperado.
+
+## Control Plane V2 como caso de estudio
+
+En mi experiencia con `agentic-workstation`, Control Plane V2 se diseñó como una capa de orquestación, no como un agente omnipotente. Los elementos confirmados son:
+
+- un modelo de lectura no mutante para inspeccionar el estado sin efectos secundarios;
+- aislamiento de errores para que un worker fallido no vuelva ilegible todo el plan;
+- caché single-flight para evitar lecturas concurrentes duplicadas;
+- supervisión y una cola de admisión para controlar cuándo empieza el trabajo;
+- checkpoints durables, un journal y mecanismos de replay/reconciliación.
+
+Estas piezas resuelven un problema cotidiano: un agente no solo produce una respuesta, sino acciones dentro de un sistema que puede reiniciarse, recibir peticiones concurrentes, perder un provider o quedar en un estado parcialmente escrito.
+
+## Checkpoints, replay y recuperación
+
+Un worker puede detenerse después de crear una rama y antes de ejecutar los tests. Si el sistema solo guarda la última respuesta de texto, hay que adivinar lo ocurrido. Un checkpoint durable puede guardar el objetivo, el contexto de admisión, el worker y provider, las acciones y resultados, las validaciones completadas y el estado esperado de recuperación.
+
+El journal no hace correcta una acción. Permite reconstruir la secuencia y evita reintentos ciegos. Replay repite un escenario de control; reconciliación compara el estado registrado con el repositorio, la rama o el worker real. Esto importa porque una ejecución agentiva no es atómica.
+
+## Probar comportamientos, no solo el texto final
+
+Un test del harness no debería limitarse a comprobar que el mensaje final dice «listo». Puede comprobar que una petición ambigua pide aclaración, que un cambio de configuración ejecuta el validador, que un permiso sensible espera aprobación, que un worker fallido no consume silenciosamente el siguiente elemento de la cola y que un recurso externo indisponible provoca una parada explícita.
+
+Son tests de comportamiento. Son más pequeños que un benchmark end-to-end, pero responden mejor a la pregunta: «¿Qué comportamiento operativo rompí al cambiar este prompt, provider o esquema de herramienta?»
+
+## Agente autónomo o supervisado
+
+| Modo | Ventaja | Riesgo principal |
+| --- | --- | --- |
+| Autónomo | Menos interrupciones para tareas acotadas | Errores silenciosos y costes difíciles de detener |
+| Supervisado | Permisos, checkpoints y decisiones humanas explícitas | Más lento y dependiente de la atención del equipo |
+| Híbrido | Automatiza lo reversible y aprueba lo sensible | Exige clasificar bien las acciones |
+
+En un repositorio real prefiero el modelo híbrido: lectura, análisis y tests locales pueden automatizarse; secretos, despliegues, borrados, migraciones y cambios de política requieren aprobación humana.
+
+## Límites actuales
+
+Control Plane V2 aporta estructura de supervisión, no una prueba de fiabilidad completa. El aislamiento de workers OpenCode, Claude y Codex, los preflights y la parada ante anomalías todavía necesitan validación con tests de confinamiento y escenarios de fallo. Un journal completo también puede registrar una mala decisión con mucha precisión.
+
+No presento esta arquitectura como una frontera de seguridad garantizada ni como autonomía de producción demostrada. La pregunta sigue siendo: ¿qué propiedad se probó, en qué entorno y con qué límites?
+
+## Una primera versión razonable
+
+La mayoría de equipos no necesita un Control Plane el primer día. Un repositorio con un archivo de contexto corto, comandos de test documentados, permisos mínimos, un worktree por tarea y revisión humana ya forma un harness útil. Añade colas, checkpoints o replay cuando hayas observado el fallo que resuelven.
+
+Lee también [las lecciones de aislamiento con OpenCode](/es/blog/securiser-agents-code-opencode-isolation/) y [mi setup multi-agent en Linux](/es/blog/setup-developpement-ia-omarchy-codex-claude-opencode/).
+
+Si quieres introducir este workflow sin sobre-ingeniería, consulta la [formación IA para desarrolladores](/fr/formations/ia-developpeurs/) o solicita [acompañamiento técnico](/es/services/web-project-coaching/).
+
+## FAQ
+
+### ¿El harness sustituye al ingeniero?
+
+No. Traslada parte del trabajo al contexto, las interfaces, los permisos, los tests y las decisiones de parada. La responsabilidad sigue siendo humana.
+
+### ¿Un checkpoint es una copia de seguridad completa?
+
+No automáticamente. Hay que definir qué es durable: estado, eventos, referencias Git, resultados de tests e información de recuperación. Copiar la última respuesta no basta.
+
+### ¿Los benchmarks dejan de servir?
+
+No. Comparan capacidades generales; las evaluaciones de comportamiento explican regresiones operativas en tu propio entorno.

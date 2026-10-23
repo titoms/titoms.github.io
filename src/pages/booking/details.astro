@@ -1,0 +1,26 @@
+---
+import CommerceLayout from '../../components/layout/CommerceLayout.astro';
+import DetailsForm from '../../components/islands/booking/DetailsForm';
+import { SITE_FEATURES } from '../../config/constants';
+---
+
+<CommerceLayout
+  title="Your Details — Booking"
+  description="Tell me about your project before the session."
+  noindex={!SITE_FEATURES.shopBooking}
+>
+  <div class="container" style="padding-top: calc(var(--sp-8) + 20px);">
+    <div class="booking-steps">
+      <div class="bk-step done"><span class="cnum">✓</span><span>Service</span></div><div class="bk-sep"></div>
+      <div class="bk-step done"><span class="cnum">✓</span><span>Schedule</span></div><div class="bk-sep"></div>
+      <div class="bk-step active"><span class="cnum">3</span><span>Details</span></div><div class="bk-sep"></div>
+      <div class="bk-step"><span class="cnum">4</span><span>Payment</span></div><div class="bk-sep"></div>
+      <div class="bk-step"><span class="cnum">5</span><span>Confirmed</span></div>
+    </div>
+
+    <h1 class="t-h1" style="margin-bottom: var(--sp-2);">Your details</h1>
+    <p class="t-body" style="margin-bottom: var(--sp-6);">A little context makes the session far more effective.</p>
+
+    <DetailsForm client:only="react" />
+  </div>
+</CommerceLayout>

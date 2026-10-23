@@ -5,9 +5,12 @@
   "compatibility_date": "2026-06-13",
   "assets": {
     "binding": "ASSETS",
-    "directory": "./dist"
+    "directory": "./dist",
+    "run_worker_first": ["/api/*"]
   },
   "observability": {
     "enabled": true
-  }
+  },
+  // Shop and booking are disabled until their real Cloudflare resources are
+  // configured. Re-add D1/KV/R2 bindings with production IDs at go-live.
 }

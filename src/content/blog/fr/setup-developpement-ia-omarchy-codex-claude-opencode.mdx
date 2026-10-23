@@ -1,0 +1,104 @@
+---
+title: "Mon setup de développement IA : Codex, Claude et OpenCode sous Linux"
+metaTitle: "Setup agentic development sous Linux : Codex, Claude et OpenCode"
+description: "Retour d'expérience sur mon environnement Omarchy et agentic-workstation : worktrees, multi-provider, supervision, limites et alternatives plus simples."
+publishedAt: 2026-10-24
+tags: ["Agentic development", "Codex", "Claude Code", "OpenCode", "Linux"]
+language: "fr"
+faqs:
+  - question: "Faut-il un Control Plane pour commencer avec les agents de code ?"
+    answer: "Non. Un CLI, un dépôt propre, des worktrees et une CI peuvent suffire longtemps. Un Control Plane devient pertinent quand la coordination, la reprise et l'isolation deviennent des problèmes observés."
+  - question: "Pourquoi utiliser plusieurs providers ?"
+    answer: "Pour comparer des comportements, répartir les usages et éviter de dépendre d'un seul outil. Cela ajoute toutefois de la configuration, des différences de permissions et des coûts de coordination."
+  - question: "Le setup garantit-il une autonomie de production ?"
+    answer: "Non. Il facilite l'expérimentation et la supervision. Les validations actuelles ne prouvent pas encore une autonomie complète et fiable en production."
+---
+
+J'ai voulu dépasser le modèle « un assistant dans l'éditeur, un prompt, une réponse ». Pas parce que chaque projet mérite une plateforme d'agents, mais parce que les tâches réelles se ressemblent : explorer un dépôt, préparer un plan, modifier une branche, exécuter des validations, ouvrir une PR et laisser une trace de ce qui s'est passé.
+
+Mon environnement `agentic-workstation`, développé sous Linux Omarchy, est une expérience pour organiser ces boucles avec Codex, Claude Code et OpenCode. Le but de cet article n'est pas de vendre une recette universelle. C'est un retour sur les choix, les erreurs et le coût de la complexité.
+
+## Un poste de travail, pas une infrastructure magique
+
+Le setup repose sur un environnement Linux orienté terminal, Git, worktrees et outils CLI. Les providers sont utilisés comme des workers spécialisés, avec des contextes et des permissions qui doivent rester explicites. Les noms des machines, chemins privés, credentials et détails d'organisation ne sont pas nécessaires pour comprendre l'architecture ; ils ne sont pas reproduits ici.
+
+Claude Code se présente officiellement comme un outil agentique capable de lire un codebase, modifier des fichiers et lancer des commandes. Codex est utilisé ici comme un autre worker de développement ; sa [documentation CLI officielle](https://developers.openai.com/codex/cli/) et la [documentation Claude Code](https://code.claude.com/docs/en/overview) restent les références pour leurs surfaces respectives. OpenCode offre une surface configurable pour les providers, outils et permissions. Ces documents restent la référence pour leurs options, pas mon abstraction personnelle.
+
+## Pourquoi plusieurs providers ?
+
+Le multi-provider apporte trois avantages pratiques :
+
+- comparer les comportements sur une même tâche ;
+- choisir un outil adapté au contexte ou au type de revue ;
+- éviter que tout le workflow dépende d'une seule interface.
+
+Il ajoute aussi des problèmes : modèles de permissions différents, formats de sortie différents, quotas séparés, installation et configuration multipliées, et plus de points de panne. Trois CLIs ne forment pas automatiquement une équipe cohérente.
+
+La [configuration OpenCode](https://dev.opencode.ai/docs/config/) rappelle notamment que plusieurs sources sont fusionnées et que les outils ont leurs propres permissions. Cette réalité a directement influencé mon approche : chaque worker doit être traité comme un processus qui mérite un préflight, pas comme une simple variante d'un prompt.
+
+## Worktrees : l'incident du SHA de départ
+
+Un worker ne devrait pas modifier le même checkout que les autres. Les worktrees permettent de donner à chaque tâche un répertoire et une branche dédiés. Mais un worktree créé depuis un `main` local peut partir d'un état obsolète.
+
+Dans mon expérience, la PR #312 a corrigé ce point en créant les worktrees depuis le SHA de `origin/main` plutôt que depuis un `main` local potentiellement en retard. La leçon est simple : l'automatisation doit choisir explicitement sa référence de départ et vérifier qu'elle existe avant de lancer le worker.
+
+Le principe ressemble à ceci, à adapter au workflow réel :
+
+```bash
+git fetch origin main
+git worktree add ../worktrees/task-123 -b task/123 origin/main
+```
+
+Ce fragment ne garantit ni la sécurité ni la qualité du changement. Il réduit seulement une classe de divergence de base. Les tests, la revue et la vérification de la branche restent nécessaires.
+
+## Control Plane et workers
+
+Le Control Plane V2 sert à coordonner les workers plutôt qu'à leur donner une autonomie illimitée. Les éléments confirmés de l'expérience sont : lecture non mutante de l'état, isolation des erreurs, cache single-flight, supervision, file d'admission, checkpoints durables, journal et replay/réconciliation.
+
+Le flux recherché est lisible : une demande est admise, un worker reçoit un contexte borné, les actions sont enregistrées, les validations sont exécutées, puis une personne examine la PR. Si le worker s'arrête, le checkpoint aide à reprendre ou à déclarer l'état incertain au lieu de relancer aveuglément.
+
+Une partie importante du travail consiste à ne pas confondre « le worker a répondu » avec « le travail est validé ». Le harness doit vérifier les commandes attendues, les fichiers touchés, le statut Git, les tests et les conditions d'arrêt.
+
+## Ce qui a cassé et ce qui reste expérimental
+
+L'incident OpenCode a révélé un héritage indésirable de configuration globale et de données organisationnelles dans un worker. Les correctifs expérimentés portent sur la configuration maîtrisée, la séparation des données et credentials, la désactivation de composants externes et les préflights de confinement.
+
+Les travaux d'isolation des workers OpenCode, Claude et Codex incluent des tests de confinement et une politique fail-closed en cas d'anomalie. Ils restent toutefois des validations techniques dans un environnement donné. Ils ne prouvent pas une isolation parfaite, encore moins une autonomie fiable en production.
+
+Le coût de cette prudence est réel : plus de logs, plus de scénarios à tester, plus de temps passé à maintenir les wrappers et les quotas. Une plateforme d'agents peut devenir un produit à maintenir avant de devenir un accélérateur.
+
+## Quand un setup simple est meilleur
+
+Pour beaucoup de projets, je commencerais avec :
+
+1. un seul CLI Codex ou Claude Code ;
+2. un fichier de contexte court et versionné ;
+3. un worktree par tâche ;
+4. une CI GitHub qui lance lint, tests et build ;
+5. une revue humaine obligatoire avant merge et déploiement.
+
+Ce setup couvre déjà une grande partie de la valeur. Il évite de construire une file d'admission alors qu'il n'y a qu'un développeur, un worker et deux PR par semaine. Il rend aussi les erreurs plus faciles à comprendre.
+
+J'ajouterais un Control Plane quand les problèmes deviennent observables : trop de tâches concurrentes, reprises manuelles fréquentes, état difficile à reconstruire, providers qui échouent différemment ou besoin de comparer des politiques d'isolation. Avant cela, la simplicité est une fonctionnalité.
+
+## Pour commencer sans sur-ingénierie
+
+Choisissez une tâche réversible, par exemple documenter un module ou ajouter un test. Donnez au CLI le contexte du dépôt, demandez un plan, limitez les permissions, exécutez la CI et relisez la PR. Notez où le workflow ralentit réellement.
+
+Ensuite seulement, améliorez le harness : règles de permission, préflight, journal, checkpoint ou worker séparé. Pour le cadre conceptuel, lisez [harness engineering et agents fiables](/fr/blog/harness-engineering-agents-ia-fiables/). Pour l'isolation, consultez [les erreurs OpenCode que j'ai rencontrées](/fr/blog/securiser-agents-code-opencode-isolation/).
+
+Si vous souhaitez former une équipe ou auditer son workflow, la [formation IA pour développeurs](/fr/formations/ia-developpeurs/) et l'[accompagnement technique](/fr/services/web-project-coaching/) sont les points d'entrée adaptés.
+
+## FAQ
+
+### Omarchy est-il nécessaire pour ce type de workflow ?
+
+Non. Omarchy est mon environnement de travail. Les principes utiles — Git, worktrees, permissions, tests et revue — sont indépendants de cette distribution ou de cette interface.
+
+### Plusieurs agents produisent-ils forcément plus de code ?
+
+Ils peuvent produire plus d'actions, mais cela ne signifie pas plus de valeur. La coordination, les quotas, les conflits et la revue peuvent annuler le gain.
+
+### Qu'est-ce qui fonctionne déjà ?
+
+La séparation des tâches par worktree, la supervision et les validations explicites sont des pratiques utiles dans ce setup. L'autonomie complète et fiable reste expérimentale et non démontrée.

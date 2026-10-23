@@ -1,0 +1,30 @@
+---
+import CommerceLayout from '../../components/layout/CommerceLayout.astro';
+import CartDrawer from '../../components/islands/shop/CartDrawer';
+import CartPage from '../../components/islands/shop/CartPage';
+import { SITE_FEATURES } from '../../config/constants';
+---
+
+<CommerceLayout
+  title="Your Cart — Shop"
+  description="Review your cart and check out securely."
+  noindex={!SITE_FEATURES.shopBooking}
+  showCart
+>
+  <div class="container shop-crumb">
+    <div class="breadcrumb">
+      <a href="/shop/">Shop</a><span class="sep">/</span>
+      <a href="/shop/cart/">Cart</a>
+    </div>
+  </div>
+
+  <section class="section" style="padding-top: var(--sp-6);">
+    <div class="container">
+      <h1 class="t-h1" style="margin-bottom: var(--sp-6);">Your cart</h1>
+      <div class="cart-page-grid">
+        <CartPage client:only="react" />
+      </div>
+    </div>
+  </section>
+</CommerceLayout>
+<CartDrawer client:only="react" />

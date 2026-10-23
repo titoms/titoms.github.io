@@ -3,3 +3,20 @@ BEEHIIV_PUBLICATION_ID=replace_me
 BEEHIIV_API_BASE_URL=https://api.beehiiv.com
 DEBUG_BEEHIIV=false
 BEEHIIV_CUSTOM_FIELDS_ENABLED=false
+
+# Phase 14 — shop + booking
+# Stripe (use TEST keys locally)
+STRIPE_SECRET_KEY=sk_test_replace_me
+STRIPE_WEBHOOK_SECRET=whsec_replace_me
+# HMAC key for signed download/manage links (any long random string)
+TOKEN_SECRET=replace_with_long_random_string
+# Resend transactional email
+RESEND_API_KEY=re_replace_me
+EMAIL_FROM="Full Stack Chris <hello@fullstackchris.dev>"
+ADMIN_EMAIL=christophe.crognier@gmail.com
+# Google Calendar service account (pkcs8 private key, base64-encoded, single line)
+GOOGLE_SERVICE_ACCOUNT_EMAIL=replace_me@project.iam.gserviceaccount.com
+GOOGLE_PRIVATE_KEY_B64=replace_me
+GOOGLE_CALENDAR_ID=primary
+# Dev convenience: print magic links / download links to wrangler console instead of only emailing
+DEBUG_EMAIL_LINKS=true

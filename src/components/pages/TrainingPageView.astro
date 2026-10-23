@@ -1,0 +1,58 @@
+---
+import PageLayout from '../layout/PageLayout.astro';
+import { Button } from '../ui/Button';
+import { Card } from '../ui/Card';
+
+interface Training {
+  slug: string;
+  title: string;
+  description: string;
+  audiences: string[];
+  objectives: string[];
+  prerequisites: string[];
+  skills: string[];
+  programme: string[];
+}
+
+interface Props { training?: Training; index?: boolean; }
+const { training, index = false } = Astro.props;
+const sectionClass = 'mx-auto w-full max-w-site px-6 py-16 sm:px-8 lg:px-10';
+const trainings: Training[] = [
+  { slug: 'react-typescript', title: 'Formation React et TypeScript', description: 'Construire des interfaces React maintenables, typées et testables, avec une approche directement applicable à un projet d’équipe.', audiences: ['Développeurs JavaScript souhaitant professionnaliser leur pratique React', 'Équipes frontend qui veulent harmoniser leurs patterns et leur qualité de code'], objectives: ['Structurer une application React', 'Modéliser les données et les props avec TypeScript', 'Tester les composants et les parcours utiles'], prerequisites: ['Bases solides de JavaScript moderne', 'Avoir déjà développé une interface web'], skills: ['React et hooks', 'TypeScript pratique', 'Tests et qualité frontend', 'Architecture de composants'], programme: ['Modélisation TypeScript et contrats de composants', 'État, formulaires, appels API et gestion des erreurs', 'Tests, revue de code et refactoring guidé'] },
+  { slug: 'node-backend', title: 'Formation Node.js et développement backend', description: 'Concevoir des API backend claires, testables et déployables avec Node.js, la donnée et les pratiques d’ingénierie adaptées.', audiences: ['Développeurs frontend qui veulent prendre en charge un backend', 'Équipes qui construisent ou reprennent une API Node.js'], objectives: ['Concevoir une API et ses contrats', 'Gérer validation, erreurs, authentification et données', 'Préparer les tests et le déploiement'], prerequisites: ['JavaScript ou TypeScript opérationnel', 'Notions HTTP et bases de données'], skills: ['Node.js, Express et TypeScript', 'API REST et validation', 'PostgreSQL, migrations et sécurité', 'Tests, Docker et CI/CD'], programme: ['Architecture d’API et séparation des responsabilités', 'Persistance, authentification et observabilité', 'Tests d’intégration, conteneurisation et pipeline CI/CD'] },
+  { slug: 'ia-developpeurs', title: 'Formation IA pour développeurs', description: 'Mettre Claude Code, Codex et les workflows agentiques au service d’une équipe sans abandonner les permissions, les tests ni la revue humaine.', audiences: ['Développeurs et référents techniques', 'Équipes qui veulent cadrer l’usage des agents de code'], objectives: ['Donner un contexte utile à un agent', 'Définir permissions, limites et étapes vérifiables', 'Organiser tests, revue humaine et PR'], prerequisites: ['Savoir utiliser Git et lancer les tests du projet', 'Aucune expérience préalable avec Claude Code ou Codex'], skills: ['Contexte projet et instructions d’agents', 'Workflows Claude Code et Codex', 'Permissions et réduction des risques', 'Revue, tests et intégration en équipe'], programme: ['Configurer un contexte fiable et découper une tâche', 'Faire produire, tester et corriger avec des garde-fous', 'Revue humaine, PR, limites et plan d’adoption'] },
+];
+const current = training;
+---
+
+<PageLayout title={current ? `${current.title} — Christophe Crognier` : 'Formations professionnelles — Christophe Crognier'} description={current?.description ?? 'Formations professionnelles React, TypeScript, Node.js et IA pour développeurs, avec plus de 7 000 heures d’enseignement.'} canonical={`https://fullstackchris.dev/fr/formations${current ? `/${current.slug}` : ''}/`} availableLocales={['fr']}>
+  <section class="site-hero hero-glow-field glow-bg grid-bg relative overflow-hidden border-b border-border">
+    <div class={sectionClass}>
+      <nav class="mb-6 font-mono text-xs text-low"><a href="/fr/">Accueil</a> <span class="mx-2">/</span><span>Formations professionnelles</span>{current && <><span class="mx-2">/</span><span class="text-secondary">{current.title}</span></>}</nav>
+      <p class="font-mono text-xs uppercase tracking-[0.18em] text-accent">FORMATIONS PROFESSIONNELLES</p>
+      <h1 class="mt-4 max-w-4xl font-display text-[clamp(2.2rem,5vw,4.2rem)] font-bold leading-[1.02] text-white">{current?.title ?? 'Former pour mieux construire.'}</h1>
+      <p class="mt-6 max-w-3xl text-[clamp(1rem,1.6vw,1.2rem)] leading-8 text-secondary">{current?.description ?? 'Des formations concrètes pour les équipes qui veulent progresser sur React, TypeScript, Node.js, Docker, CI/CD et les workflows IA. Plus de 7 000 heures d’enseignement, du niveau licence au master.'}</p>
+      <Button href="/fr/contact/#schedule" variant="primary" size="lg" class="mt-8">Demander une formation <span class="ml-1">→</span></Button>
+    </div>
+  </section>
+
+  {index ? (
+    <>
+      <section class={sectionClass}>
+        <div class="grid gap-5 md:grid-cols-3">
+          {trainings.map((item) => <Card hover class="flex flex-col gap-4"><span class="font-mono text-xs uppercase tracking-widest text-accent">Formation</span><h2 class="font-display text-xl font-semibold text-white">{item.title}</h2><p class="text-sm leading-6 text-secondary">{item.description}</p><Button href={`/fr/formations/${item.slug}/`} variant="secondary" size="sm" class="mt-auto w-fit">Voir le programme →</Button></Card>)}
+        </div>
+      </section>
+      <section class="border-y border-border bg-surface/40"><div class={`${sectionClass} grid gap-8 md:grid-cols-2`}><div><p class="font-mono text-xs uppercase tracking-widest text-accent">RÉFÉRENCE PROFESSIONNELLE</p><h2 class="mt-3 font-display text-3xl font-semibold text-white">Human Coders</h2><p class="mt-4 leading-7 text-secondary">Profil de formateur et formations référencées publiquement chez Human Coders. Les sujets visibles incluent React, Node.js, TypeScript, Docker, GitHub Actions, PostgreSQL et IA pour les développeurs.</p></div><div class="flex items-center"><a class="btn btn-secondary inline-flex rounded-md border border-strong px-5 py-3 font-display font-semibold text-secondary no-underline" href="https://www-eu.humancoders.com/formateurs/christophe-crognier" target="_blank" rel="noopener noreferrer">Voir le profil Human Coders ↗</a></div></div></section>
+    </>
+  ) : current && (
+    <section class={sectionClass}>
+      <div class="grid gap-10 lg:grid-cols-2">
+        {([
+          ['Publics concernés', current.audiences], ['Objectifs', current.objectives], ['Prérequis', current.prerequisites], ['Compétences développées', current.skills], ['Exemple de programme', current.programme],
+        ] as [string, string[]][]).map(([heading, items]) => <Card><h2 class="font-display text-xl font-semibold text-white">{heading}</h2><ul class="mt-5 space-y-3">{items.map((item) => <li class="flex gap-3 text-secondary"><span class="text-accent">→</span><span>{item}</span></li>)}</ul></Card>)}
+      </div>
+      <div class="mt-10 rounded-xl border border-accent/40 bg-accent-soft p-8"><h2 class="font-display text-2xl font-semibold text-white">Modalités intra-entreprise</h2><p class="mt-3 max-w-3xl leading-7 text-secondary">Format adapté au niveau de l’équipe, à votre stack et à vos objectifs. Le contenu, les exercices et les exemples sont cadrés ensemble ; aucune durée ni aucun tarif n’est annoncé sans échange préalable.</p><Button href="/fr/contact/#schedule" variant="primary" size="lg" class="mt-6">Demander une formation →</Button></div>
+    </section>
+  )}
+</PageLayout>

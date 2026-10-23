@@ -26,7 +26,7 @@ export const servicesIndex: Record<'en' | 'fr' | 'es', ServicesIndexContent> = {
   en: {
     meta: {
       title: 'Services — Web Project Coaching, Full-Stack Development, MVP Workshop and Custom MVP | fullstackchris.dev',
-      description: 'Web project coaching, full-stack development days, the AI Clarity Bootstrap Workshop, custom MVP development and a practical AI web development newsletter — React, Node.js, TypeScript and AI-assisted workflows for founders, freelancers and small teams.',
+      description: 'Web project coaching, full-stack development days, the AI Clarity Bootstrap Workshop and custom MVP development — React, Node.js, TypeScript and AI-assisted workflows for founders, freelancers and small teams.',
     },
     jsonLd: { description: 'Coaching, development days, MVP workshops and custom MVP development.' },
     breadcrumbCurrent: 'Services',
@@ -34,7 +34,7 @@ export const servicesIndex: Record<'en' | 'fr' | 'es', ServicesIndexContent> = {
     h1Lead: 'Five ways to move your web project ',
     h1Accent: 'forward.',
     lead: "Whether you have a blurry idea, a blocked codebase or a product to launch — there's an entry point sized to exactly where you are right now.",
-    primaryCta: 'Book a 15-min call',
+    primaryCta: 'Book a 30-minute call',
     secondaryCta: 'See how it fits together',
     ladder: {
       eyebrow: 'HOW IT FITS TOGETHER',
@@ -78,7 +78,7 @@ export const servicesIndex: Record<'en' | 'fr' | 'es', ServicesIndexContent> = {
   fr: {
     meta: {
       title: 'Services — Coaching projet web, développement full-stack, atelier MVP et MVP sur mesure | fullstackchris.dev',
-      description: "Coaching de projet web, journées de développement full-stack, l'atelier AI Clarity Bootstrap, développement MVP sur mesure et une newsletter dev web IA concrète — React, Node.js, TypeScript et workflows assistés par IA pour fondateurs, freelances et petites équipes.",
+      description: "Coaching de projet web, journées de développement full-stack, l'atelier AI Clarity Bootstrap et développement MVP sur mesure — React, Node.js, TypeScript et workflows assistés par IA pour fondateurs, freelances et petites équipes.",
     },
     jsonLd: { description: 'Coaching, journées de développement, ateliers MVP et développement MVP sur mesure.' },
     breadcrumbCurrent: 'Services',
@@ -86,7 +86,7 @@ export const servicesIndex: Record<'en' | 'fr' | 'es', ServicesIndexContent> = {
     h1Lead: 'Cinq façons de faire avancer votre projet web',
     h1Accent: '.',
     lead: "Que vous ayez une idée floue, un code bloqué ou un produit à lancer — il y a un point d'entrée à la taille exacte de votre situation actuelle.",
-    primaryCta: 'Réserver un appel de 15 min',
+    primaryCta: 'Réserver un appel de 30 minutes',
     secondaryCta: 'Voir comment ça s\'articule',
     ladder: {
       eyebrow: "COMMENT ÇA S'ARTICULE",
@@ -130,7 +130,7 @@ export const servicesIndex: Record<'en' | 'fr' | 'es', ServicesIndexContent> = {
   es: {
     meta: {
       title: 'Servicios — Coaching de proyecto web, desarrollo full-stack, taller MVP y MVP a medida | fullstackchris.dev',
-      description: 'Coaching de proyecto web, jornadas de desarrollo full-stack, el Taller AI Clarity Bootstrap, desarrollo de MVP a medida y una newsletter práctica de desarrollo web con IA — React, Node.js, TypeScript y flujos asistidos por IA para fundadores, freelancers y equipos pequeños.',
+      description: 'Coaching de proyecto web, jornadas de desarrollo full-stack, el Taller AI Clarity Bootstrap y desarrollo de MVP a medida — React, Node.js, TypeScript y flujos asistidos por IA para fundadores, freelancers y equipos pequeños.',
     },
     jsonLd: { description: 'Coaching, jornadas de desarrollo, talleres MVP y desarrollo de MVP a medida.' },
     breadcrumbCurrent: 'Servicios',
@@ -138,7 +138,7 @@ export const servicesIndex: Record<'en' | 'fr' | 'es', ServicesIndexContent> = {
     h1Lead: 'Cinco formas de avanzar en tu proyecto web',
     h1Accent: '.',
     lead: 'Ya sea que tengas una idea difusa, un código bloqueado o un producto que lanzar — hay un punto de entrada del tamaño exacto de tu situación actual.',
-    primaryCta: 'Reservar una llamada de 15 min',
+    primaryCta: 'Reservar una llamada de 30 minutos',
     secondaryCta: 'Ver cómo encaja todo',
     ladder: {
       eyebrow: 'CÓMO ENCAJA TODO',

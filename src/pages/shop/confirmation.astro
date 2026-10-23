@@ -1,0 +1,17 @@
+---
+import CommerceLayout from '../../components/layout/CommerceLayout.astro';
+import OrderConfirmation from '../../components/islands/shop/OrderConfirmation';
+import { SITE_FEATURES } from '../../config/constants';
+---
+
+<CommerceLayout
+  title="Order Confirmation — Shop"
+  description="Your order is confirmed."
+  noindex
+>
+  <section class="section" style="padding-top: calc(var(--sp-8) + 20px);">
+    <div class="container">
+      <OrderConfirmation client:only="react" />
+    </div>
+  </section>
+</CommerceLayout>

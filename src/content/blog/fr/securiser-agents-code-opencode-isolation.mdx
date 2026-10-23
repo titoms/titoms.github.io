@@ -1,0 +1,113 @@
+---
+title: "Sécuriser les agents de code : les erreurs d'isolation rencontrées avec OpenCode"
+metaTitle: "Isolation des agents IA : retour d'expérience OpenCode"
+description: "Un retour d'expérience prudent sur l'héritage de configuration, l'isolation des workers OpenCode et les vérifications nécessaires avant de parler de sécurité."
+publishedAt: 2026-10-24
+tags: ["OpenCode", "Sécurité", "Isolation", "Agents IA"]
+language: "fr"
+faqs:
+  - question: "Remplacer le fichier de configuration suffit-il à isoler un agent ?"
+    answer: "Non. La configuration peut être fusionnée avec des sources globales, distantes ou gérées. Il faut vérifier la configuration effectivement chargée, les données accessibles, les credentials, les plugins et les permissions."
+  - question: "Une sandbox applicative est-elle une sandbox système ?"
+    answer: "Non. Une restriction de l'application ne remplace pas une séparation de processus, d'utilisateur, de filesystem, de réseau et de secrets au niveau du système."
+  - question: "Comment éviter de surestimer un test de confinement ?"
+    answer: "Définissez précisément la propriété testée, testez les chemins d'évasion plausibles et documentez ce qui reste hors périmètre. Un test vert ne prouve que le scénario couvert."
+---
+
+Le mot « sandbox » donne souvent une impression de sécurité plus forte que la configuration réellement appliquée. Je l'ai constaté en travaillant sur l'isolation de workers OpenCode dans un environnement multi-agent. Un worker peut sembler limité tout en héritant d'une configuration globale, de données organisationnelles ou de plugins qui n'étaient pas prévus pour lui.
+
+Ce texte décrit un incident et une méthode de diagnostic, pas une garantie de sécurité universelle. Les détails de l'environnement sont volontairement réduits à ce qui est nécessaire pour comprendre le problème.
+
+## L'incident : un worker n'était pas aussi neutre que prévu
+
+Le symptôme était un héritage indésirable de configuration globale et de données organisationnelles dans un worker OpenCode. L'intention était de lancer un worker avec une configuration dédiée. Le résultat observé montrait que remplacer ou fournir un fichier local ne suffisait pas à prouver que le processus ne voyait plus les autres sources.
+
+Le diagnostic important n'est pas « OpenCode est dangereux ». C'est plutôt : une application moderne peut agréger plusieurs couches de configuration, et l'équipe doit vérifier la configuration finale au point d'exécution.
+
+La [documentation OpenCode sur la configuration](https://dev.opencode.ai/docs/config/) précise que les configurations sont fusionnées et qu'il existe plusieurs emplacements : configuration distante, globale, personnalisée, projet, répertoire `.opencode`, configuration inline et fichiers administrés selon l'environnement. Elle indique aussi que les outils et permissions se configurent séparément. Remplacer un fichier local n'annule donc pas automatiquement toutes les autres sources.
+
+## Pourquoi remplacer un fichier ne suffit pas
+
+Une isolation réelle concerne plusieurs catégories :
+
+- **Configuration** : fichiers globaux, projet, variables d'environnement, configuration distante et paramètres administrés ;
+- **Données** : historique, caches, sessions, index, répertoires de travail et fichiers hors dépôt ;
+- **Credentials** : clés, sockets d'agents, helpers Git, variables héritées et tokens injectés ;
+- **Plugins et outils** : extensions, MCP, scripts, binaires et serveurs accessibles ;
+- **Permissions** : lecture, écriture, shell, réseau, répertoires externes et actions destructives.
+
+La documentation officielle montre par exemple que les permissions peuvent être `allow`, `ask` ou `deny`, et que l'accès à des fichiers `.env` ou à des répertoires externes peut demander une approbation. Cela aide à réduire le risque, mais ne transforme pas une règle applicative en frontière système.
+
+## Le diagnostic que je recommande
+
+Avant de corriger, il faut rendre le comportement observable. Un préflight utile peut enregistrer, sans secret :
+
+1. l'identité effective du processus et de l'utilisateur ;
+2. le répertoire de travail et le dépôt ciblé ;
+3. les chemins de configuration considérés ;
+4. les providers, plugins et outils activés ;
+5. les permissions effectives ;
+6. la présence ou l'absence de variables sensibles, uniquement sous forme booléenne ;
+7. la connectivité réseau autorisée ;
+8. les limites de filesystem visibles par le worker.
+
+Le préflight ne doit pas imprimer le contenu des tokens, des fichiers de configuration privés ou des données d'organisation. Il doit produire une réponse exploitable : configuration attendue, configuration effectivement chargée, écart détecté.
+
+## Correctifs expérimentés
+
+Les correctifs étudiés autour de cet incident suivent trois axes :
+
+### 1. Configuration maîtrisée
+
+Fournir une configuration dédiée ne suffit pas ; il faut aussi décider explicitement quelles sources sont acceptées. L'objectif est de limiter la fusion implicite, de désactiver les composants externes non nécessaires et de rendre la configuration finale inspectable.
+
+### 2. Données et credentials séparés
+
+Un worker doit utiliser un espace de données dédié, avec des credentials dédiés et une durée de vie limitée. Il ne devrait pas réutiliser automatiquement l'historique, les caches ou les helpers d'une autre organisation. L'absence d'un secret doit rester visible comme une absence, pas être compensée par une variable héritée.
+
+### 3. Arrêt par défaut en cas d'écart
+
+Si le préflight détecte un provider inattendu, un plugin non autorisé, une donnée héritée ou une permission trop large, la politique expérimentée est de refuser le démarrage du worker. C'est le principe fail-closed appliqué au contrôle d'admission, pas la promesse que tous les chemins d'évasion sont couverts.
+
+## Sandbox système et restriction applicative
+
+Une restriction dans OpenCode peut empêcher un outil d'écrire ou demander une approbation. Une sandbox système cherche à limiter ce que le processus peut voir ou faire indépendamment de ce que l'application pense autoriser : utilisateur distinct, filesystem séparé, réseau filtré, processus isolés, secrets non montés.
+
+Les deux niveaux se complètent. Une sandbox système mal configurée ne sera pas réparée par un prompt. Une permission applicative trop ouverte reste dangereuse même dans un environnement séparé. La bonne question n'est donc pas « l'agent est-il sandboxé ? », mais « quelle ressource est protégée par quel mécanisme, et comment l'ai-je vérifié ? »
+
+## Tests de confinement : ce qu'ils prouvent vraiment
+
+Les tests de confinement doivent couvrir des tentatives concrètes : lire un fichier hors worktree, utiliser un credential hérité, charger un plugin interdit, contacter un endpoint non autorisé, exécuter une commande destructive ou contourner le répertoire de travail.
+
+Un test réussi prouve que le scénario précis a été bloqué dans l'environnement précis. Il ne prouve pas une sécurité générale, et il ne couvre pas automatiquement un nouveau provider, une nouvelle version du CLI, un nouveau plugin ou une autre plateforme.
+
+Pour cette raison, les travaux d'isolation des workers OpenCode, Claude et Codex incluent des préflights, des tests de confinement et une politique d'arrêt en cas d'anomalie. La validation complète reste en cours ; je ne présente pas ces travaux comme une certification ni comme une garantie de production.
+
+## Ce que je vérifierais encore
+
+- le comportement avec une configuration distante active ;
+- la fusion de variables d'environnement dans chaque mode de lancement ;
+- les plugins installés globalement et dans le projet ;
+- les caches et sessions après redémarrage ;
+- les chemins symboliques et montages externes ;
+- les permissions réseau réelles, pas seulement leur déclaration ;
+- les versions futures des CLIs et des providers ;
+- la capacité à arrêter proprement un worker déjà lancé.
+
+Pour comprendre la couche d'orchestration autour de ces contrôles, lisez [ce que le harness engineering ajoute aux agents](/fr/blog/harness-engineering-agents-ia-fiables/). Pour voir comment ces décisions s'insèrent dans un setup multi-provider, consultez [mon environnement Linux multi-agent](/fr/blog/setup-developpement-ia-omarchy-codex-claude-opencode/).
+
+Si vous devez auditer un workflow de développement assisté par IA, je peux vous accompagner sur le [coaching projet web](/fr/services/web-project-coaching/) ou dans la [formation IA pour développeurs](/fr/formations/ia-developpeurs/).
+
+## FAQ
+
+### Un fichier `opencode.json` local peut-il annuler la configuration globale ?
+
+Pas nécessairement. OpenCode documente une fusion de plusieurs sources. Il faut vérifier l'ordre de priorité et la configuration finale observée par le processus.
+
+### Faut-il désactiver tous les plugins ?
+
+Pas toujours, mais chaque plugin doit avoir une raison d'être, une provenance connue et des permissions compatibles avec le worker. Dans le doute, un worker sensible doit démarrer avec moins de composants.
+
+### Pourquoi conserver des tests de confinement si la sandbox système existe ?
+
+Parce qu'ils vérifient le contrat attendu au niveau de l'agent. La sandbox système et les tests applicatifs détectent des classes de problèmes différentes ; aucun des deux ne couvre tout le risque.

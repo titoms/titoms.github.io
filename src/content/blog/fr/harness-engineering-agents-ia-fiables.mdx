@@ -1,0 +1,119 @@
+---
+title: "Harness engineering : construire des agents IA de développement fiables"
+metaTitle: "Harness engineering : architecture et garde-fous pour agents IA"
+description: "Un guide pratique pour distinguer modèle, agent et harness, puis concevoir un système de développement assisté par IA observable, testable et supervisé."
+publishedAt: 2026-10-24
+tags: ["Harness engineering", "Agents IA", "Codex", "Architecture"]
+language: "fr"
+faqs:
+  - question: "Un meilleur modèle suffit-il à rendre un agent fiable ?"
+    answer: "Non. Le modèle produit des décisions et des actions possibles ; le harness fournit le contexte, les outils, les permissions, l'état et les vérifications qui rendent ces actions contrôlables."
+  - question: "Un harness doit-il viser l'autonomie complète ?"
+    answer: "Pas nécessairement. Pour beaucoup d'équipes, un agent supervisé avec des checkpoints explicites est plus utile et plus sûr qu'un agent autonome difficile à auditer."
+  - question: "Comment commencer sans construire une plateforme ?"
+    answer: "Commencez par un dépôt clair, une commande de test reproductible, des permissions minimales et une revue humaine obligatoire. Ajoutez l'orchestration seulement quand un problème réel le justifie."
+---
+
+Un agent de code peut lire un dépôt, modifier plusieurs fichiers et lancer des commandes. Cela ne signifie pas qu'il sait travailler seul de manière fiable. La différence entre une démonstration impressionnante et un outil utilisable en équipe se trouve souvent autour du modèle : dans le **harness**.
+
+Cet article propose une définition pratique, puis la compare à ce que j'ai expérimenté avec un Control Plane V2 pour orchestrer des workers de développement. Le système décrit ici est une expérience d'architecture, pas une preuve d'autonomie sûre en production.
+
+## Modèle, agent, harness : trois niveaux différents
+
+Un **modèle** génère du texte, du code ou une décision à partir d'un contexte. Il ne connaît pas automatiquement l'état réel du dépôt, les permissions du processus ou le résultat d'une commande.
+
+Un **agent** ajoute une boucle : il reçoit un objectif, choisit une action, utilise un outil, observe le résultat et continue. Un CLI comme Codex, Claude Code ou OpenCode peut ainsi lire un dépôt, écrire un fichier, exécuter les tests et proposer une PR. La [documentation Claude Code](https://code.claude.com/docs/en/overview) décrit précisément ce type d'outil agentique capable de lire le code, modifier des fichiers et lancer des commandes.
+
+Un **harness** est l'environnement qui rend cette boucle opérable : contexte initial, outils disponibles, permissions, isolation, orchestration, état durable, observabilité et critères d'arrêt. Le modèle est le moteur de raisonnement ; l'agent est la boucle d'exécution ; le harness est le système qui décide dans quelles conditions cette boucle peut agir.
+
+L'article d'[OpenAI sur le harness engineering](https://openai.com/index/harness-engineering/) insiste sur un déplacement du travail humain : rendre le dépôt lisible, expliciter l'intention et construire des boucles de feedback. Le billet de Google sur [l'évaluation comportementale des agents](https://developers.googleblog.com/en/the-anatomy-of-harness-engineering-how-to-evaluate-iterate-and-guard-ai-coding-agents/) ajoute un point essentiel : vérifier des comportements observables est souvent plus instructif qu'un score global.
+
+## Ce que le harness doit contrôler
+
+Un harness utile répond à six questions avant de laisser un worker agir :
+
+1. Quel objectif précis poursuit-il ?
+2. Quel contexte a-t-il réellement reçu ?
+3. Quels outils peut-il utiliser et sur quelles ressources ?
+4. Quelle autorisation est nécessaire pour chaque action ?
+5. Quel état conserve-t-on si le processus s'arrête ?
+6. Quelle preuve permet de décider que le travail est acceptable ?
+
+Sans réponse claire, l'agent compense avec des suppositions. Il peut alors modifier trop de fichiers, utiliser une configuration héritée, oublier une validation ou déclarer « terminé » après une commande qui n'a jamais été exécutée.
+
+## Le Control Plane V2 comme étude de cas
+
+Dans mon expérience sur `agentic-workstation`, le Control Plane V2 a été conçu comme une couche d'orchestration plutôt que comme un agent omnipotent. Les éléments confirmés dans ce contexte sont les suivants :
+
+- un modèle de lecture non mutant pour inspecter l'état sans provoquer d'effet de bord ;
+- une isolation des erreurs afin qu'un worker défaillant ne rende pas tout le plan illisible ;
+- un cache single-flight pour éviter de recalculer plusieurs fois la même lecture concurrente ;
+- une supervision et une file d'admission pour contrôler quand un travail peut démarrer ;
+- des checkpoints durables, un journal et des mécanismes de replay/réconciliation.
+
+Cette architecture répond à un problème banal mais coûteux : un agent ne se contente pas de produire une réponse. Il produit une suite d'actions dans un système qui peut redémarrer, recevoir deux demandes concurrentes, perdre un provider ou revenir avec un état partiellement écrit.
+
+Le modèle de lecture non mutant est particulièrement important. Une vue de contrôle devrait pouvoir répondre « où en est ce travail ? » sans déclencher une nouvelle exécution, modifier une file ou masquer une erreur. Le cache single-flight a le même objectif de discipline : plusieurs observateurs peuvent partager une lecture en cours au lieu de lancer plusieurs opérations concurrentes.
+
+## Checkpoints, replay et reprise après échec
+
+Un worker peut s'arrêter après avoir créé une branche mais avant d'avoir lancé les tests. Si le système ne garde que la dernière réponse textuelle, il faut deviner ce qui s'est passé. Un checkpoint durable peut au contraire conserver :
+
+- l'objectif et le contexte d'admission ;
+- le worker et le provider utilisés ;
+- les actions demandées et leurs résultats ;
+- les validations déjà passées ;
+- l'état de reprise attendu.
+
+Le journal ne rend pas l'action correcte par magie. Il permet de reconstruire la séquence et d'éviter une reprise aveugle. Le replay sert à rejouer un scénario de contrôle ; la réconciliation sert à comparer l'état enregistré avec l'état réel du dépôt, de la branche ou du worker. Ces mécanismes sont utiles précisément parce qu'une exécution agentique n'est pas atomique.
+
+## Tester des comportements, pas seulement la réponse finale
+
+Un test de harness ne devrait pas seulement vérifier que le texte final contient « terminé ». Il peut vérifier que :
+
+- une demande ambiguë déclenche une clarification ;
+- un changement de configuration lance le validateur prévu ;
+- une permission sensible attend une approbation ;
+- un worker en erreur ne consomme pas silencieusement la file suivante ;
+- une reprise utilise le checkpoint attendu ;
+- une ressource externe indisponible provoque un arrêt explicite.
+
+Ce sont des tests comportementaux. Ils sont plus petits qu'un benchmark de bout en bout, mais ils répondent mieux à la question : « quelle garantie opérationnelle ai-je cassée en changeant ce prompt, ce provider ou ce schéma d'outil ? »
+
+## Agent autonome ou agent supervisé ?
+
+| Mode | Avantage | Risque principal |
+| --- | --- | --- |
+| Autonome | Moins d'interruptions, utile pour des tâches bornées | Erreur silencieuse, contexte mal compris, coût difficile à arrêter |
+| Supervisé | Permissions, checkpoints et décisions humaines explicites | Plus lent, demande une attention organisée |
+| Hybride | Autonomie sur les tâches réversibles, approbation sur les actions sensibles | Demande une bonne classification des actions |
+
+Dans un dépôt réel, je privilégie l'hybride : lecture, analyse, tests locaux et proposition de patch peuvent être automatisés ; accès aux secrets, déploiement, suppression, migration ou modification de politique restent soumis à une validation humaine.
+
+## Limites actuelles de l'expérience
+
+Le Control Plane V2 apporte une structure de supervision, pas une preuve de fiabilité complète. Les travaux d'isolation des workers OpenCode, Claude et Codex, les préflights et la politique d'arrêt en cas d'anomalie restent des sujets à valider avec des tests de confinement et des scénarios de panne. Un journal complet peut même enregistrer une mauvaise décision avec beaucoup de précision.
+
+Je ne présente donc pas cette architecture comme une sécurité garantie ni comme une autonomie de production acquise. La prochaine question est toujours la même : quelle propriété est testée, dans quel environnement, avec quelles limites ?
+
+## Une première version raisonnable
+
+Pour une petite équipe, il n'est pas nécessaire de commencer par un Control Plane. Un dépôt avec un fichier de contexte court, des commandes de test documentées, des permissions minimales, un worktree par tâche et une revue humaine constitue déjà un harness utile. Ajoutez ensuite une file, des checkpoints ou du replay quand vous avez observé le problème qu'ils résolvent.
+
+Pour approfondir, lisez aussi [sécuriser les agents de code avec OpenCode](/fr/blog/securiser-agents-code-opencode-isolation/) et [mon setup multi-agent sous Linux](/fr/blog/setup-developpement-ia-omarchy-codex-claude-opencode/).
+
+Si vous voulez mettre en place ce type de workflow sans sur-architecturer votre équipe, découvrez la [formation IA pour développeurs](/fr/formations/ia-developpeurs/) ou demandez un [accompagnement technique](/fr/services/web-project-coaching/).
+
+## FAQ
+
+### Le harness remplace-t-il l'ingénieur ?
+
+Non. Il déplace une partie du travail vers la conception du contexte, des interfaces, des permissions, des tests et des décisions d'arrêt. La responsabilité du résultat reste humaine.
+
+### Un checkpoint est-il une sauvegarde complète ?
+
+Pas forcément. Il faut définir ce qui est durable : état métier, événements, références Git, résultats de tests et informations nécessaires à la reprise. Une simple copie de la dernière réponse ne suffit pas.
+
+### Les benchmarks ne servent-ils plus à rien ?
+
+Ils peuvent comparer des capacités globales, mais ils expliquent mal une régression opérationnelle. Les évaluations comportementales complètent les benchmarks en observant les étapes et décisions qui comptent dans votre environnement.

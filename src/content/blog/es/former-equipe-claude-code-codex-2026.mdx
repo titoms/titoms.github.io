@@ -1,0 +1,81 @@
+---
+title: "Formar a un equipo en Claude Code y Codex en 2026"
+metaTitle: "Formar un equipo en Claude Code y Codex: método y límites"
+description: "Enfoque práctico para formar equipos en Claude Code y Codex: contexto, permisos, tests, revisión humana, pull requests y límites."
+publishedAt: 2026-10-24
+tags: ["Claude Code", "Codex", "Formación", "Agentes IA"]
+language: es
+faqs:
+  - question: "¿Debe todo el equipo elegir Claude Code o Codex?"
+    answer: "No necesariamente. Empieza por tareas, restricciones de seguridad, entorno y pruebas esperadas; elige la herramienta después."
+  - question: "¿Qué debe saber hacer un desarrollador después de la formación?"
+    answer: "Dar contexto, limitar permisos, dividir una tarea, ejecutar tests, revisar el diff y documentar límites en una pull request."
+  - question: "¿Un taller de dos días garantiza la adopción?"
+    answer: "No. Crea un marco inicial; la adopción depende de convenciones, revisión humana y feedback de tareas reales."
+---
+
+Formar a un equipo en Claude Code y Codex no consiste en repartir cuentas y una lista de prompts. Es un tema de ingeniería y organización: dar a un agente contexto suficiente para ser útil, límites suficientes para seguir siendo controlable y tests suficientes para verificar su trabajo.
+
+Los estudios de Stack Overflow y JetBrains de 2026 aportan contexto sobre la adopción profesional, pero no prometen productividad automática. [Datos de Stack Overflow sobre IA](https://survey.stackoverflow.co/2026/ai/data) y [estudio de adopción de JetBrains](https://blog.jetbrains.com/research/2026/08/ai-coding-agent-adoption-2026/) respaldan un enfoque práctico y basado en evidencias.
+
+## Empieza por el contexto del repositorio
+
+Un agente necesita objetivo, convenciones, comandos de test, límites de alcance y un estado inicial limpio. Enseña al equipo a poner ese contexto en documentos del proyecto y después comprueba que el agente lo haya utilizado.
+
+Ejercicio: entrega una tarea vertical pequeña, pide un plan, exige los archivos y comprobaciones que tocará y rechaza cambios hasta que el plan y los criterios de verificación estén claros.
+
+### Ejemplo de tarea
+
+En lugar de «añade autenticación», pide: «valida el cuerpo del login, añade tests de error y limita el cambio a estas rutas y módulos». El equipo aprende a dar contexto verificable, no un prompt espectacular.
+
+## Trata los permisos como una competencia
+
+Los agentes no deberían recibir secretos, producción o comandos irreversibles por defecto. Separa lectura, escritura, comandos locales, red y acciones destructivas. Las excepciones deben ser explícitas y estar limitadas a una tarea.
+
+## Produce con tests
+
+El ciclo pedagógico es breve: entender, planificar, cambiar, probar, revisar y abrir la PR. El agente puede proponer un test o una corrección, pero el comando debe ejecutarse y una persona debe interpretar el resultado.
+
+```text
+Contexto → Plan → Cambio pequeño → Test dirigido → Revisión del diff → PR
+```
+
+Una PR generada debe seguir siendo legible: objetivo, archivos modificados, tests ejecutados, límites conocidos y puntos de revisión.
+
+## Organiza la revisión humana
+
+Revisa contratos de negocio, permisos, errores, migraciones, dependencias y costes operativos. No preguntes únicamente a un segundo agente si el primero tiene razón. En cambios sensibles, una persona debe repetir el recorrido crítico desde un entorno limpio.
+
+## Propuesta ilustrativa de dos días
+
+Es una forma de empezar, no una duración ni un precio anunciado.
+
+### Día 1 — Comprender y encuadrar
+
+- modelos mentales de agentes, contexto y límites;
+- configuración del proyecto y reglas de permisos;
+- división de tareas y producción de planes;
+- ejercicio React o Node con tests dirigidos.
+
+### Día 2 — Integrar en el equipo
+
+- revisión de diff y pull request;
+- tests, seguridad, dependencias y observabilidad;
+- convenciones, documentación y aprendizaje compartido;
+- simulación de un cambio arriesgado y decisión de rollback.
+
+## Explica los límites con claridad
+
+Un agente puede entender mal el dominio, repetir un patrón frágil, modificar demasiados archivos, ignorar restricciones de despliegue o producir una respuesta convincente pero falsa. No sustituye experiencia de dominio, responsabilidad de producción ni revisión de seguridad.
+
+### Errores frecuentes
+
+- dar acceso a secretos o producción por defecto;
+- aceptar una PR grande sin tests dirigidos;
+- pedir al agente que valide su propia seguridad sin revisión independiente;
+- medir velocidad de generación y no tiempo de corrección;
+- no documentar tareas donde el agente sigue prohibido o no es fiable.
+
+La pregunta no es «¿qué agente programa más rápido?», sino «¿qué parte del workflow podemos acelerar manteniendo una prueba de que el resultado es correcto?»
+
+Para preparar la adopción en tu equipo, descubre la [formación de IA para desarrolladores](/es/formations/ia-developpeurs/) o [solicita una formación para empresas](/es/formations/).

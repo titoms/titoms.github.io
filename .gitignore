@@ -3,6 +3,7 @@
 .env.local
 .env.production
 .dev.vars
+.wrangler
 
 # Logs
 logs

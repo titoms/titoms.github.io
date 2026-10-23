@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout | fullstackchris.dev</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../motion.css">
+<link rel="stylesheet" href="../service.css">
+<link rel="stylesheet" href="shop.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" data-screen-label="Header">
+      <a class="brand" href="../Homepage.html"><span class="glyph">▍</span>fullstackchris<span class="text-low">.dev</span></a>
+      <span class="t-small mono">Secure Checkout</span>
+    </nav>
+  </div>
+</header>
+
+<div class="container shop-crumb"><div class="breadcrumb"><a href="index.html">Shop</a><span class="sep">/</span><a href="cart.html">Cart</a><span class="sep">/</span><span>Checkout</span></div></div>
+
+<section class="section" style="padding-top:var(--sp-6);" data-screen-label="Checkout">
+  <div class="container">
+    <div class="checkout-steps">
+      <div class="co-step done"><span class="cnum">✓</span>Cart</div>
+      <div class="co-sep"></div>
+      <div class="co-step active"><span class="cnum">2</span>Checkout</div>
+      <div class="co-sep"></div>
+      <div class="co-step"><span class="cnum">3</span>Confirmation</div>
+    </div>
+
+    <div class="checkout-grid">
+      <form onsubmit="event.preventDefault(); window.location.href='confirmation.html';">
+        <div class="co-section">
+          <h3>Contact</h3>
+          <div class="field"><label class="label">Email</label><input class="input" type="email" placeholder="you@example.com" required></div>
+          <div class="acct-toggle" style="margin-top:var(--sp-4);">
+            <div class="sw" id="acctSwitch"></div>
+            <p>Create an account to access downloads anytime. <strong>Optional</strong> — a guest link works too.</p>
+          </div>
+          <div class="field" id="acctPasswordField" style="display:none; margin-top:var(--sp-4);"><label class="label">Password</label><input class="input" type="password" placeholder="Choose a password"></div>
+        </div>
+
+        <div class="co-section">
+          <h3>Payment</h3>
+          <div class="row" style="justify-content:space-between; margin-bottom:var(--sp-4);">
+            <span class="t-small">Card details</span>
+            <span class="card-brands"><span>VISA</span><span>MC</span><span>AMEX</span></span>
+          </div>
+          <div class="field" style="margin-bottom:var(--sp-4);">
+            <label class="label">Card number</label>
+            <div class="cc-field"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><input class="input" placeholder="4242 4242 4242 4242" required></div>
+          </div>
+          <div class="field-grid">
+            <div class="field"><label class="label">Expiry</label><input class="input" placeholder="MM / YY" required></div>
+            <div class="field"><label class="label">CVC</label><input class="input" placeholder="123" required></div>
+          </div>
+          <div class="field" style="margin-top:var(--sp-4);"><label class="label">Name on card</label><input class="input" placeholder="Full name" required></div>
+          <div class="secure-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Payments are processed securely by Stripe. Your card details never touch our servers.</div>
+        </div>
+
+        <div class="co-section" style="border-bottom:none;">
+          <h3>Billing</h3>
+          <div class="field-grid">
+            <div class="field"><label class="label">Country</label><select class="select"><option>France</option><option>Belgium</option><option>Germany</option><option>United States</option><option>Other</option></select></div>
+            <div class="field"><label class="label">VAT number (optional)</label><input class="input" placeholder="For business invoices"></div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-lg" type="submit" style="width:100%; margin-top:var(--sp-3);">Pay &amp; get instant access <span class="arrow">→</span></button>
+        <p class="t-small" style="text-align:center; margin-top:var(--sp-4);">By completing this purchase you agree to the <a href="#">Terms</a> and <a href="#">Refund Policy</a>.</p>
+      </form>
+
+      <div class="card order-summary" id="checkoutSummary"><!-- populated by JS --></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer" style="padding:var(--sp-6) 0;">
+  <div class="container"><div class="footer-bottom" style="margin-top:0; border-top:none;"><span>© 2026 Christophe Crognier · fullstackchris.dev</span></div></div>
+</footer>
+
+<script src="shop.js"></script>
+<script>
+(function(){
+  var lines = window.shop.cartLines();
+  var summary = document.getElementById('checkoutSummary');
+  if(!lines.length){
+    summary.innerHTML = '<div class="empty-state"><h4 class="t-h4">No items in cart</h4><p>Add something from the shop before checking out.</p><a href="index.html" class="btn btn-primary btn-sm">Browse shop</a></div>';
+  } else {
+    var sub = window.shop.subtotal(), disc = window.shop.discount(), tot = window.shop.grandTotal(), coupon = window.shop.getCoupon();
+    summary.innerHTML = '<h3 class="t-h4">Order Summary</h3>'+
+      lines.map(function(l){ return '<div class="cart-line"><div class="thumb ph">img</div><div class="info"><span class="cat">'+l.cat+'</span><h5 class="t-h4">'+l.title+'</h5><div class="row-bottom"><span></span><span class="lprice">'+(l.price===0?'Free':window.shop.money(l.price*l.qty))+'</span></div></div></div>'; }).join('')+
+      (coupon ? '<div class="coupon-applied"><span>'+coupon.code+' applied · -'+Math.round(coupon.rate*100)+'%</span></div>' : '')+
+      '<div class="sum-row"><span>Subtotal</span><span>'+window.shop.money(sub)+'</span></div>'+
+      (disc ? '<div class="sum-row"><span>Discount</span><span>−'+window.shop.money(disc)+'</span></div>' : '')+
+      '<div class="sum-row total"><span>Total due</span><span class="amt">'+window.shop.money(tot)+'</span></div>';
+  }
+})();
+</script>
+</body>
+</html>

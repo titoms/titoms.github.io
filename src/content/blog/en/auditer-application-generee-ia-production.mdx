@@ -1,0 +1,84 @@
+---
+title: "How to Audit an AI-Generated Application Before Production"
+metaTitle: "AI-Generated React/Node App Audit: A Production Checklist"
+description: "A practical React, Node.js and TypeScript checklist for auditing an AI-generated or AI-assisted application before production."
+publishedAt: 2026-10-24
+tags: ["React", "Node.js", "TypeScript", "AI", "Security"]
+language: en
+faqs:
+  - question: "Is a successful build enough for production?"
+    answer: "No. You must also verify business tests, authentication, authorization, inputs, dependencies, secrets, deployment and rollback."
+  - question: "What should I audit first in a React/Node application?"
+    answer: "Replay the critical user journey from a clean environment, then inspect server contracts, permissions and their tests."
+  - question: "Can an AI assistant perform the audit alone?"
+    answer: "It can help explore the code and suggest checks, but risk decisions and the production sign-off remain human responsibilities."
+---
+
+An application can look finished long before it has the guarantees required for production. The point of an audit is not to judge whether AI was used. It is to verify what the software actually does, under which conditions, and with which risks.
+
+## Start with the critical path
+
+Install the project from a clean environment, run the documented commands and replay the main journey: sign-up, login, core action, failure and logout.
+
+```bash
+pnpm install --frozen-lockfile
+pnpm test
+pnpm run build
+```
+
+A green build proves only that this technical scenario works. It does not prove security or business correctness.
+
+## Audit by risk, not by file order
+
+Start with identity, permissions, money, sensitive data and irreversible actions. A broken visual state is usually less urgent than an endpoint that lets user A read user B’s data.
+
+For a React screen that creates an invoice through a Node API, check that the price is recalculated on the server, the user owns the account, duplicate submissions are safe and a failed payment cannot leave the invoice marked as paid.
+
+## Verify tests that protect contracts
+
+For React, cover loading, empty, error and success states. For Node.js, cover validation, authorization, errors and persistence. Add integration tests around every critical flow.
+
+Ask: would a test fail if authorization disappeared? Are network failures covered? Does CI run the database migration? Can the test suite run without developer-only secrets?
+
+## Authentication is not authorization
+
+Hiding a button does not protect an endpoint. Verify identity, ownership, role, session expiry and replay protection on the server. Test explicitly that one user cannot access another user’s resource.
+
+Keep dependencies under review as well. React’s security page currently lists 2026 advisories, including critical and high-severity issues around Server Components. [Review React security advisories](https://github.com/react/react/security).
+
+## Inspect inputs, secrets and dependencies
+
+Validate JSON bodies, URL parameters, files and headers on the server. Limit sizes, reject unexpected formats and keep tokens out of bundles, logs and Git. Read the lockfile, remove unused packages and inspect installation scripts.
+
+An audit command is a signal, not a risk assessment. Identify which vulnerable package is actually reachable and whether the runtime is exposed.
+
+## Read the architecture
+
+Look for database access inside UI components, duplicated business rules, fetch calls without timeouts, swallowed errors, `any` used to silence the compiler and fallbacks that turn failures into apparent success.
+
+AI-generated code can be locally plausible and systemically inconsistent. Review module boundaries, error ownership, data contracts and the deployment assumptions together.
+
+## Check deployment and rollback
+
+The pipeline should build from a lockfile, run tests and produce an identifiable artifact. Verify migrations, environment variables, headers, logs, health checks, rollback and data restoration. Run a deployment rehearsal before real traffic.
+
+### Common mistakes
+
+- reviewing only visible React components and forgetting server routes;
+- trusting prices, roles or identifiers sent by the browser;
+- confusing test coverage with proof of business behavior;
+- letting an agent change deployment configuration without a dedicated review;
+- fixing a dependency warning without checking its execution path.
+
+## Exit checklist
+
+- [ ] Critical path replayed from a clean environment
+- [ ] Unit and integration tests cover sensitive contracts
+- [ ] Authentication and authorization tested server-side
+- [ ] Inputs, secrets, logs and dependencies reviewed
+- [ ] Architecture and failure modes documented
+- [ ] Build, migrations, observability and rollback verified
+
+The 2026 Stack Overflow AI survey describes common use around code generation, debugging, testing and understanding unfamiliar code, with trust depending on whether output can be verified. [Read the Stack Overflow 2026 AI survey](https://survey.stackoverflow.co/2026/ai).
+
+Need help reviewing a React/Node codebase? Explore [web project coaching](/services/web-project-coaching/) or request a focused technical audit.

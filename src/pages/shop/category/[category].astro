@@ -1,0 +1,46 @@
+---
+import CommerceLayout from '../../../components/layout/CommerceLayout.astro';
+import ProductGrid from '../../../components/islands/shop/ProductGrid';
+import { PRODUCT_CATEGORIES, categoryToSlug, slugToCategory, productsByCategory } from '../../../config/products';
+import { SITE_FEATURES } from '../../../config/constants';
+
+export function getStaticPaths() {
+  return PRODUCT_CATEGORIES.map((category) => ({
+    params: { category: categoryToSlug(category) },
+    props: { category },
+  }));
+}
+
+const { category } = Astro.props;
+const slug = categoryToSlug(category);
+const count = productsByCategory(category).length;
+
+const descriptions: Record<string, string> = {
+  'Freebies': 'Free starter kits, cheatsheets and prompt packs. Drop your email, get the download link.',
+  'Templates': 'Production-ready Astro + Tailwind site templates with SEO wired in.',
+  'Design Systems': 'Token scales, Figma libraries and matching component code.',
+  'Others': 'Playbooks, workflows and planning tools from real projects.',
+};
+---
+
+<CommerceLayout
+  title={`${category} — Shop`}
+  description={descriptions[category]}
+  noindex={!SITE_FEATURES.shopBooking}
+  showCart
+>
+  <section class="cat-hero glow-bg">
+    <div class="container">
+      <div class="breadcrumb" style="margin-bottom: var(--sp-5);">
+        <a href="/shop/">Shop</a><span class="sep">/</span><span>{category}</span>
+      </div>
+      <span class="eyebrow">{count} item{count === 1 ? '' : 's'}</span>
+      <h1 class="t-h1" style="margin: var(--sp-4) 0;">{category}</h1>
+      <p class="t-lead" style="max-width: 56ch;">{descriptions[category]}</p>
+    </div>
+  </section>
+
+  <div class="container section" style="padding-top: var(--sp-6);">
+    <ProductGrid client:only="react" categorySlug={slug} />
+  </div>
+</CommerceLayout>

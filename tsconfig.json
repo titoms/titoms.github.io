@@ -4,7 +4,9 @@
     "baseUrl": ".",
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true
   },
   "include": ["src", "astro.config.ts"]
 }

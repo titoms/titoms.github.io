@@ -102,8 +102,8 @@ const jsonLd = {
     </div>
   </section>
 
-  <!-- Newsletter CTA -->
-  <section class="border-t border-border bg-surface/55">
+  <!-- Training CTA -->
+  {locale === 'fr' && <section class="border-t border-border bg-surface/55">
     <div class={sectionClass}>
       <Card glow class="overflow-hidden p-8 sm:p-10 lg:p-12" data-reveal="zoom">
         <div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
@@ -116,11 +116,11 @@ const jsonLd = {
               {c.newsletterCta.lead}
             </p>
           </div>
-          <Button href={`${localePrefix}/services/ai-web-development-newsletter/`} variant="primary" size="lg">
+          <Button href={locale === 'fr' ? '/fr/formations/' : `${localePrefix}/services/web-project-coaching/`} variant="primary" size="lg">
             {c.newsletterCta.joinNewsletter}
           </Button>
         </div>
       </Card>
     </div>
-  </section>
+  </section>}
 </PageLayout>

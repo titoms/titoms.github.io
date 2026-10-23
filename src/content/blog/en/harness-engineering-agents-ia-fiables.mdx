@@ -1,0 +1,119 @@
+---
+title: "Harness engineering: how to build reliable AI development agents"
+metaTitle: "Harness engineering: architecture and guardrails for AI agents"
+description: "A practical guide to separating models, agents and harnesses, then building observable, testable and supervised AI-assisted development workflows."
+publishedAt: 2026-10-24
+tags: ["Harness engineering", "AI agents", "Codex", "Architecture"]
+language: "en"
+faqs:
+  - question: "Can a better model make an agent reliable by itself?"
+    answer: "No. The model proposes decisions and actions; the harness supplies context, tools, permissions, state and checks that make those actions controllable."
+  - question: "Should a harness aim for full autonomy?"
+    answer: "Not necessarily. For many teams, a supervised agent with explicit checkpoints is more useful and easier to audit than a fully autonomous one."
+  - question: "How can a team start without building a platform?"
+    answer: "Start with a clear repository, a reproducible test command, minimal permissions and mandatory human review. Add orchestration when an observed problem justifies it."
+---
+
+An AI coding agent can read a repository, edit several files and run commands. That does not mean it can work independently and reliably. The difference between an impressive demo and a tool a team can trust often sits around the model: in the **harness**.
+
+This article gives a practical definition and compares it with what I have been experimenting with in a Control Plane V2 for development workers. It is an architecture experiment, not proof of safe production autonomy.
+
+## Model, agent, harness: three different layers
+
+A **model** generates text, code or a decision from context. It does not automatically know the actual repository state, process permissions or the result of a command.
+
+An **agent** adds a loop: it receives a goal, chooses an action, uses a tool, observes the result and continues. Codex, Claude Code and OpenCode can read a repository, write files, run tests and prepare a pull request. The [Claude Code documentation](https://code.claude.com/docs/en/overview) describes this agentic surface: reading a codebase, editing files and running commands.
+
+A **harness** is the environment that makes the loop operational: initial context, tools, permissions, isolation, orchestration, durable state, observability and stopping criteria. The model is the reasoning engine; the agent is the execution loop; the harness defines the conditions under which the loop may act.
+
+The [OpenAI harness engineering article](https://openai.com/index/harness-engineering/) describes a shift in engineering work toward repository legibility, explicit intent and feedback loops. Google’s article on [behavioral evaluation](https://developers.googleblog.com/en/the-anatomy-of-harness-engineering-how-to-evaluate-iterate-and-guard-ai-coding-agents/) adds an important idea: observable behaviors can be more useful than one global score.
+
+## What the harness should control
+
+Before a worker acts, a useful harness should answer six questions:
+
+1. What exact goal is it pursuing?
+2. What context did it actually receive?
+3. Which tools can it use, and on which resources?
+4. Which actions require approval?
+5. What state survives a restart?
+6. What evidence decides whether the work is acceptable?
+
+Without these answers, the agent fills gaps with assumptions. It may touch too many files, load an inherited configuration, skip a validation or declare success after a command that never ran.
+
+## The Control Plane V2 as a case study
+
+In my `agentic-workstation` experience, Control Plane V2 was designed as an orchestration layer rather than an omnipotent agent. The confirmed elements in that context are:
+
+- a non-mutating read model for inspecting state without side effects;
+- error isolation so one failing worker does not make the whole plan unreadable;
+- a single-flight cache to avoid duplicate concurrent reads;
+- supervision and an admission queue to control when work starts;
+- durable checkpoints, an event journal and replay/reconciliation mechanisms.
+
+These structures address a mundane but expensive problem: an agent does not only produce an answer. It produces actions in a system that can restart, receive concurrent requests, lose a provider or return with partially written state.
+
+A non-mutating read model matters because asking “where is this task?” should not trigger a new execution, mutate a queue or hide an error. Single-flight caching applies the same discipline to concurrent observers: they can share an in-flight read instead of launching several operations.
+
+## Checkpoints, replay and recovery
+
+A worker may stop after creating a branch but before running tests. If the system only keeps the last text response, someone has to guess what happened. A durable checkpoint can retain:
+
+- the goal and admission context;
+- the worker and provider used;
+- requested actions and their results;
+- validations already completed;
+- the expected recovery state.
+
+A journal does not make an action correct. It makes the sequence reconstructable and avoids blind retries. Replay reruns a control scenario; reconciliation compares recorded state with the real repository, branch or worker state. These mechanisms matter because agentic execution is not atomic.
+
+## Test behaviors, not only final prose
+
+A harness test should not only check that the final message says “done”. It can check that:
+
+- an ambiguous request triggers a clarification;
+- a configuration change runs the expected validator;
+- a sensitive permission waits for approval;
+- a failed worker does not silently consume the next queue item;
+- recovery uses the expected checkpoint;
+- an unavailable external resource causes an explicit stop.
+
+These are behavioral tests. They are smaller than an end-to-end benchmark, but they answer a more useful question: “Which operational behavior did I break by changing this prompt, provider or tool schema?”
+
+## Autonomous or supervised agent?
+
+| Mode | Benefit | Main risk |
+| --- | --- | --- |
+| Autonomous | Fewer interruptions for bounded tasks | Silent mistakes and difficult-to-stop costs |
+| Supervised | Explicit permissions, checkpoints and human decisions | Slower and dependent on organized attention |
+| Hybrid | Automation for reversible work, approval for sensitive actions | Requires good action classification |
+
+For a real repository, I prefer the hybrid model: local reading, analysis and tests can be automated; secrets, deployment, deletion, migrations and policy changes require human approval.
+
+## Current limits
+
+Control Plane V2 provides supervision structure, not proof of complete reliability. Isolation work for OpenCode, Claude and Codex workers, preflights and stop-on-anomaly policies still need validation through confinement tests and failure scenarios. A complete journal can record a bad decision very accurately.
+
+I therefore do not present this architecture as a guaranteed security boundary or as proven production autonomy. The question remains: which property was tested, in which environment, with which limits?
+
+## A reasonable first version
+
+Most teams do not need a Control Plane on day one. A repository with a short context file, documented test commands, minimal permissions, one worktree per task and human review is already a useful harness. Add queues, checkpoints or replay when you have observed the failure they solve.
+
+For the isolation angle, read [the OpenCode security lessons](/blog/securiser-agents-code-opencode-isolation/). For the complete workstation, see [my multi-agent Linux setup](/blog/setup-developpement-ia-omarchy-codex-claude-opencode/).
+
+If you want help introducing this workflow without over-engineering it, see the [AI developer training page](/fr/formations/ia-developpeurs/) or request [technical coaching](/services/web-project-coaching/).
+
+## FAQ
+
+### Does a harness replace the engineer?
+
+No. It moves part of the work toward context, interfaces, permissions, tests and stopping decisions. Human responsibility remains.
+
+### Is a checkpoint a complete backup?
+
+Not automatically. You must define what is durable: domain state, events, Git references, test results and the information needed for recovery. A copy of the last response is not enough.
+
+### Are benchmarks useless?
+
+No. They can compare broad capabilities, while behavioral evaluations explain operational regressions in your own environment.

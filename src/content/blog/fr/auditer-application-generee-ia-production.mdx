@@ -1,0 +1,86 @@
+---
+title: "Auditer une application générée par IA avant sa mise en production"
+metaTitle: "Audit d’une application React/Node générée par IA : checklist production"
+description: "Une checklist pratique pour auditer une application React, Node.js et TypeScript générée ou accélérée par IA avant sa mise en production."
+publishedAt: 2026-10-24
+tags: ["React", "Node.js", "TypeScript", "IA", "Sécurité"]
+language: fr
+faqs:
+  - question: "Un build réussi suffit-il pour mettre une application IA en production ?"
+    answer: "Non. Il faut aussi vérifier les tests métier, l'authentification, les entrées, les dépendances, les secrets, le déploiement et le rollback."
+  - question: "Que faut-il auditer en premier dans une application React/Node ?"
+    answer: "Reproduisez le parcours critique depuis un environnement propre, puis contrôlez les contrats serveur, les permissions et les tests associés."
+  - question: "L’IA peut-elle réaliser l’audit seule ?"
+    answer: "Elle peut aider à explorer et proposer des contrôles, mais la validation des risques et la décision de mise en production restent humaines."
+---
+
+Une application générée rapidement peut donner une impression de finition avant d’avoir les garanties nécessaires pour la production. L’audit ne consiste pas à juger l’outil utilisé : il consiste à vérifier ce que le logiciel fait réellement, dans quelles conditions et avec quel risque.
+
+## 1. Reproduire le parcours critique
+
+Commencez par installer le projet depuis un environnement propre. Lancez les commandes documentées, vérifiez les variables d’environnement attendues et rejouez le parcours principal : inscription, connexion, action métier, erreur et déconnexion.
+
+```bash
+pnpm install --frozen-lockfile
+pnpm test
+pnpm run build
+```
+
+Un build vert ne prouve pas la sécurité ni la pertinence métier. Il prouve seulement que ce scénario technique précis fonctionne.
+
+## Pourquoi l’audit doit rester orienté risque
+
+Le temps d’audit est limité : commencez par les données sensibles, l’argent, l’identité, les permissions et les actions irréversibles. Une page imparfaite est généralement moins urgente qu’un endpoint qui accepte un identifiant appartenant à un autre utilisateur.
+
+## 2. Vérifier les tests utiles
+
+Cherchez les tests qui protègent les contrats, pas seulement les snapshots. Pour React, testez les états chargement, erreur, vide et succès. Pour Node.js, testez validation, permissions, erreurs et persistance. Ajoutez au moins un test d’intégration sur chaque flux critique.
+
+Questions rapides : les tests échouent-ils réellement si l’autorisation disparaît ? Les erreurs réseau sont-elles testées ? Une migration de base est-elle exécutée dans la CI ?
+
+### Exemple pratique
+
+Pour une interface React qui crée une facture via une API Node, je vérifierais d’abord que le prix est recalculé côté serveur, que l’utilisateur possède le compte ciblé, que les doubles soumissions sont sûres et qu’un échec de paiement ne laisse pas une facture marquée comme payée.
+
+## 3. Auditer authentification et autorisation
+
+Une interface qui masque un bouton ne protège rien. Vérifiez chaque endpoint côté serveur : identité, propriété de la ressource, rôle, expiration de session et protection contre la réutilisation d’un identifiant. Testez explicitement l’accès d’un utilisateur A aux données de B.
+
+Ne validez pas une dépendance ou un composant de sécurité uniquement parce qu’il apparaît dans le code généré. La page sécurité de React montre encore des avis publiés en 2026, dont des problèmes critiques et élevés autour de Server Components : les dépendances et leurs avis doivent être surveillés au moment du déploiement. [Consulter la sécurité de React](https://github.com/react/react/security).
+
+## 4. Contrôler les entrées et les secrets
+
+Validez côté serveur les corps JSON, paramètres d’URL, fichiers et en-têtes. Refusez les formats inattendus, limitez les tailles et journalisez sans exposer de tokens, mots de passe ou données personnelles. Vérifiez que les secrets ne sont ni dans le bundle client, ni dans Git, ni dans les logs.
+
+## 5. Examiner les dépendances et la surface d’exécution
+
+Lisez le lockfile, supprimez les paquets inutilisés et examinez les scripts d’installation. Lancez l’audit du gestionnaire de paquets, mais ne vous arrêtez pas à son score : identifiez les chemins réellement exposés, les packages transitoifs et les versions compatibles avec votre runtime.
+
+## 6. Lire l’architecture, pas seulement les composants
+
+Repérez les responsabilités mélangées : accès base de données dans une route UI, règles métier dupliquées, fetch sans timeout, erreurs avalées, types contournés par `any`, ou fallback qui transforme une panne en succès apparent. Un code généré peut être correct localement et incohérent à l’échelle du système.
+
+## 7. Vérifier le déploiement et le retour arrière
+
+Le pipeline doit construire depuis un lockfile, exécuter les tests et produire un artefact identifiable. Vérifiez migrations, variables d’environnement, headers, logs, healthcheck, stratégie de rollback et restauration des données. Faites un déploiement de répétition avant le trafic réel.
+
+## Erreurs fréquentes
+
+- relire uniquement les composants visibles et oublier les routes serveur ;
+- accepter les prix, rôles ou identifiants envoyés par le navigateur ;
+- confondre couverture de tests et preuve de comportement métier ;
+- laisser l’agent modifier la configuration de déploiement sans revue dédiée ;
+- corriger un avertissement de dépendance sans vérifier son chemin d’exécution.
+
+## Checklist de sortie
+
+- [ ] Parcours critique rejoué depuis un environnement propre
+- [ ] Tests unitaires et d’intégration sur les contrats sensibles
+- [ ] Authentification et autorisation testées côté serveur
+- [ ] Entrées, secrets, logs et dépendances vérifiés
+- [ ] Architecture relue avec les erreurs et limites explicites
+- [ ] Build, migrations, observabilité et rollback vérifiés
+
+Les assistants de code sont utiles pour accélérer l’exploration et proposer des tests, mais la décision de mise en production reste humaine. L’enquête Stack Overflow 2026 décrit d’ailleurs un usage largement centré sur la génération, le débogage, les tests et la compréhension de code, avec une confiance conditionnée par la possibilité de vérifier la sortie. [Voir les données Stack Overflow 2026 sur l’IA](https://survey.stackoverflow.co/2026/ai).
+
+Si vous avez une base React/Node à sécuriser ou à remettre en ordre, je peux vous aider avec un [coaching projet web](/fr/services/web-project-coaching/) ou un audit technique ciblé.

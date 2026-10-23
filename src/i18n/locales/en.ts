@@ -3,6 +3,8 @@ export interface UiDictionary {
     home: string;
     about: string;
     services: string;
+    formations: string;
+    shop: string;
     projects: string;
     blog: string;
     contact: string;
@@ -46,6 +48,7 @@ export interface UiDictionary {
         termsOfService: string;
         cookies: string;
       };
+      formations: { title: string };
     };
     copyright: string;
   };
@@ -152,6 +155,8 @@ const en: UiDictionary = {
     home: 'Home',
     about: 'About',
     services: 'Services',
+    formations: 'Professional training',
+    shop: 'Shop',
     projects: 'Projects',
     blog: 'Blog',
     contact: 'Contact',
@@ -199,6 +204,7 @@ const en: UiDictionary = {
         termsOfService: 'Terms of service',
         cookies: 'Cookies',
       },
+      formations: { title: 'Professional training' },
     },
     copyright: 'fullstackchris.dev — Christophe Crognier',
   },

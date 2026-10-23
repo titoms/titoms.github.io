@@ -16,9 +16,6 @@ const sectionMax = "mx-auto w-full max-w-site px-6 sm:px-8 lg:px-10";
 
 // SVG inner paths for each service icon
 const serviceIcons: Record<string, string> = {
-  "ai-web-development-newsletter":
-    `<path d="M4 19V5a2 2 0 0 1 2-2h10l4 4v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/>
-     <path d="M8 9h6M8 13h8M8 17h5"/>`,
   "web-project-coaching":
     `<path d="M21 12a9 9 0 1 1-3.5-7.1L21 4l-1 4h-4"/>
      <path d="M8 12h6"/>`,
@@ -113,6 +110,19 @@ const ladderNodes = c.ladder.nodes.map((node, i) => ({ ...node, step: String(i),
       </div>
     </div>
   </section>
+
+  {locale === 'fr' && (
+    <section class="section border-y border-border bg-surface/40">
+      <div class={sectionMax}>
+        <div class="mx-auto max-w-3xl text-center" data-reveal="fade">
+          <span class="font-mono text-[0.62rem] tracking-[0.18em] uppercase text-accent">FORMATIONS PROFESSIONNELLES</span>
+          <h2 class="font-display font-semibold leading-tight mt-3 mb-3" style="font-size:clamp(1.7rem,2.8vw,2.3rem);">Des formations directement reliées aux réalités du code.</h2>
+          <p class="text-secondary text-[0.96rem] leading-relaxed">React, TypeScript, Node.js, IA pour développeurs, Docker, CI/CD, PHP/Symfony et plus de 7 000 heures d'enseignement.</p>
+          <a class="btn btn-primary-animated inline-flex items-center gap-2 rounded-md border px-6 py-3 mt-6 font-display font-semibold text-[0.95rem] no-underline" href="/fr/formations/">Voir les formations →</a>
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- ── LADDER ─────────────────────────────────────────────────────────── -->
   <section class="section border-y border-border" id="ladder" style="background:var(--bg-1);">

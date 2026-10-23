@@ -1,0 +1,98 @@
+---
+title: "My AI development setup: Codex, Claude and OpenCode on Linux"
+metaTitle: "Agentic development on Linux: Codex, Claude and OpenCode"
+description: "A realistic account of my Omarchy and agentic-workstation environment: worktrees, multiple providers, supervision, limits and simpler alternatives."
+publishedAt: 2026-10-24
+tags: ["Agentic development", "Codex", "Claude Code", "OpenCode", "Linux"]
+language: "en"
+faqs:
+  - question: "Do you need a Control Plane to start with coding agents?"
+    answer: "No. A CLI, a clean repository, worktrees and GitHub CI can be enough for a long time. Add a Control Plane when coordination, recovery or isolation become observed problems."
+  - question: "Why use multiple providers?"
+    answer: "To compare behavior, distribute work and avoid dependence on one interface. The trade-off is more configuration, permission differences and coordination cost."
+  - question: "Does this setup guarantee production autonomy?"
+    answer: "No. It supports experimentation and supervision. Current technical validation does not prove complete and reliable production autonomy."
+---
+
+I wanted to go beyond “one assistant in the editor, one prompt, one answer”. Not because every project deserves an agent platform, but because real tasks repeat: explore a repository, plan a change, modify a branch, run checks, open a pull request and leave a trace.
+
+My `agentic-workstation`, developed under Linux Omarchy, is an experiment for organizing those loops with Codex, Claude Code and OpenCode. This is not a universal recipe. It is a report on decisions, failures and complexity cost.
+
+## A workstation, not magic infrastructure
+
+The setup is a Linux environment centered on the terminal, Git, worktrees and CLI tools. Providers act as development workers with explicit context and permissions. Machine names, private paths, credentials and organization details are intentionally omitted.
+
+Claude Code is officially described as an agentic coding tool that reads a codebase, edits files and runs commands. Codex is another development worker in this setup; the [official Codex CLI documentation](https://developers.openai.com/codex/cli/) and [Claude Code documentation](https://code.claude.com/docs/en/overview) remain the references for their respective surfaces. OpenCode provides a configurable surface for providers, tools and permissions. Official documentation remains the reference for each tool’s options, not my abstraction.
+
+## Why multiple providers?
+
+Multiple providers make it possible to compare behavior on the same task, choose a tool for a review style and avoid depending on one interface. They also multiply failure modes: different permission models, output formats, quotas, installations and configuration layers.
+
+The [OpenCode configuration documentation](https://dev.opencode.ai/docs/config/) notes that sources are merged and that tools have their own permissions. That directly shaped my approach: treat each worker as a process that deserves a preflight, not as a prompt variant.
+
+## Worktrees and the starting SHA incident
+
+A worker should not edit the same checkout as another worker. Git worktrees give each task a directory and branch. But creating a worktree from a stale local `main` can start the task from the wrong state.
+
+In my experience, PR #312 fixed this by creating worktrees from the `origin/main` SHA rather than from a potentially outdated local `main`. The lesson is simple: automation must choose its starting reference explicitly and verify it before starting a worker.
+
+The principle looks like this, adapted to the real workflow:
+
+```bash
+git fetch origin main
+git worktree add ../worktrees/task-123 -b task/123 origin/main
+```
+
+This reduces one class of branch divergence. It does not guarantee security or quality; tests, review and branch verification remain necessary.
+
+## Control Plane and workers
+
+Control Plane V2 coordinates workers instead of giving them unlimited autonomy. The confirmed elements of the experience are a non-mutating read model, error isolation, single-flight caching, supervision, an admission queue, durable checkpoints, a journal and replay/reconciliation.
+
+The intended flow is explicit: admit a request, give a worker bounded context, record actions, run validations and have a human review the pull request. If a worker stops, the checkpoint helps resume or declare uncertainty rather than blindly retrying.
+
+The important distinction is between “the worker replied” and “the work is validated”. The harness should check expected commands, changed files, Git state, tests and stop conditions.
+
+## What broke and what remains experimental
+
+The OpenCode incident exposed unwanted inheritance of global configuration and organizational data in a worker. The fixes explored include controlled configuration, separate data and credentials, disabling unnecessary external components and confinement preflights.
+
+Isolation work for OpenCode, Claude and Codex includes confinement tests and fail-closed behavior when an anomaly is detected. It remains technical validation in a specific environment. It does not prove perfect isolation or reliable production autonomy.
+
+The cost is real: more logs, more failure scenarios, more wrapper maintenance and quota management. An agent platform can become a system to maintain before it becomes an accelerator.
+
+## When a simpler setup is better
+
+For many projects I would start with:
+
+1. one Codex or Claude Code CLI;
+2. a short versioned context file;
+3. one worktree per task;
+4. GitHub CI running lint, tests and build;
+5. mandatory human review before merge and deployment.
+
+That already captures much of the value. It avoids building an admission queue for one developer, one worker and two pull requests a week. It also makes failures easier to understand.
+
+Add a Control Plane when the problems become observable: too many concurrent tasks, frequent manual recovery, difficult-to-reconstruct state, provider-specific failures or a need to compare isolation policies. Until then, simplicity is a feature.
+
+## Starting without over-engineering
+
+Choose a reversible task, such as documenting a module or adding a test. Give the CLI repository context, ask for a plan, limit permissions, run CI and review the pull request. Record where the workflow actually slows down.
+
+Only then add a preflight, journal, checkpoint or separate worker. For the conceptual frame, read [harness engineering and reliable agents](/blog/harness-engineering-agents-ia-fiables/). For isolation, see [the OpenCode lessons](/blog/securiser-agents-code-opencode-isolation/).
+
+If you want to train a team or audit its workflow, the [AI developer training page](/fr/formations/ia-developpeurs/) and [technical coaching](/services/web-project-coaching/) are the relevant entry points.
+
+## FAQ
+
+### Is Omarchy required for this workflow?
+
+No. Omarchy is my working environment. The useful principles—Git, worktrees, permissions, tests and review—are independent of the distribution.
+
+### Do multiple agents automatically produce more value?
+
+They can produce more actions, but not necessarily more value. Coordination, quotas, conflicts and review can cancel the gain.
+
+### What works today?
+
+Task separation with worktrees, supervision and explicit validations are useful in this setup. Complete and reliable autonomy remains experimental and unproven.

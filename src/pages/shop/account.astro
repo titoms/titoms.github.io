@@ -1,0 +1,28 @@
+---
+import CommerceLayout from '../../components/layout/CommerceLayout.astro';
+import AccountView from '../../components/islands/shop/AccountView';
+import { SITE_FEATURES } from '../../config/constants';
+---
+
+<CommerceLayout
+  title="My Account — Shop"
+  description="Your orders, downloads and wishlist."
+  noindex
+>
+  <section class="section" style="padding-top: calc(var(--sp-8) + 20px);">
+    <div class="container">
+      <AccountView client:only="react" />
+    </div>
+  </section>
+</CommerceLayout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.acct-tab').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.acct-tab').forEach((t) => t.classList.remove('active'));
+      document.querySelectorAll('.acct-panel').forEach((p) => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab ?? '')?.classList.add('active');
+    });
+  });
+</script>

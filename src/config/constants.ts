@@ -32,7 +32,6 @@ import type {
   Service,
   ServiceOffer,
   Technology,
-  Testimonial,
   WorkMode,
 } from "../types";
 import { colors } from "./tokens";
@@ -143,14 +142,6 @@ export const buildStats: BuildStat[] = [
 
 export const serviceOffers: ServiceOffer[] = [
   {
-    title: "AI Web Dev Newsletter",
-    description:
-      "A monthly, no-hype briefing on AI tools, coding workflows and MVP ideas worth testing.",
-    price: "from €9",
-    priceUnit: "/mo",
-    badge: "Newsletter",
-  },
-  {
     title: "Web Project Coaching",
     description:
       "One-on-one sessions to debug, clarify and structure your React / Node / AI-generated project.",
@@ -162,8 +153,8 @@ export const serviceOffers: ServiceOffer[] = [
     title: "Full-stack Development Day",
     description:
       "Focused half- or full-day blocks for a clear feature, bug fix, dashboard or refactor.",
-    price: "from €350",
-    priceUnit: "/ day",
+    price: "€350 half-day / €600 full day",
+    priceUnit: "",
     badge: "Delivery",
   },
   {
@@ -242,33 +233,6 @@ export const newsletterIssue = [
   "What to ignore this month",
 ];
 
-export const feedbackCards: Testimonial[] = [
-  {
-    testimonial:
-      "Placeholder for founder feedback on turning an unclear product idea into a realistic build plan.",
-    name: "Founder",
-    designation: "MVP workshop client",
-    company: "Coming soon",
-    image: "",
-  },
-  {
-    testimonial:
-      "Placeholder for developer feedback on debugging, architecture guidance and understanding AI-generated code.",
-    name: "Developer",
-    designation: "Coaching client",
-    company: "Coming soon",
-    image: "",
-  },
-  {
-    testimonial:
-      "Placeholder for business feedback on a focused development day that shipped a scoped feature.",
-    name: "Team lead",
-    designation: "Development day client",
-    company: "Coming soon",
-    image: "",
-  },
-];
-
 export const faqs: FAQ[] = [
   {
     question: "Do I need to be technical?",
@@ -296,7 +260,6 @@ export const footerGroups: FooterGroup[] = [
   {
     title: "Services",
     links: [
-      { id: "services", title: "AI newsletter", href: "/services/ai-web-development-newsletter/" },
       { id: "services", title: "Project coaching", href: "/services/web-project-coaching/" },
       { id: "services", title: "Development day", href: "/services/full-stack-development-day/" },
       { id: "services", title: "MVP workshop", href: "/services/mvp-bootstrapping-workshop/" },
@@ -309,6 +272,12 @@ export const footerGroups: FooterGroup[] = [
       { id: "projects", title: "RailGuessr", href: "/projects/railguessr/" },
       { id: "projects", title: "Singuessr", href: "/projects/singuessr/" },
       { id: "projects", title: "Fresh.win", href: "/projects/fresh-win/" },
+    ],
+  },
+  {
+    title: "Formations",
+    links: [
+      { id: "formations", title: "Professional training", href: "/formations/" },
     ],
   },
   {
@@ -526,33 +495,6 @@ const experiences: Experience[] = [
   },
 ];
 
-const testimonials: Testimonial[] = [
-  {
-    testimonial:
-      "I thought it was impossible to make a website as beautiful as our product, but Rick proved me wrong.",
-    name: "Sara Lee",
-    designation: "CFO",
-    company: "Acme Co",
-    image: "https://randomuser.me/api/portraits/women/4.jpg",
-  },
-  {
-    testimonial:
-      "I've never met a web developer who truly cares about their clients' success like Rick does.",
-    name: "Chris Brown",
-    designation: "COO",
-    company: "DEF Corp",
-    image: "https://randomuser.me/api/portraits/men/5.jpg",
-  },
-  {
-    testimonial:
-      "After Rick optimized our website, our traffic increased by 50%. We can't thank them enough!",
-    name: "Lisa Wang",
-    designation: "CTO",
-    company: "456 Enterprises",
-    image: "https://randomuser.me/api/portraits/women/6.jpg",
-  },
-];
-
 export const CALENDLY_URL = "https://calendly.com/fullstackchris/30min";
 
 /** Internal URL — navigates to the embedded Calendly on the contact page */
@@ -572,4 +514,13 @@ export const STRIPE_PAYMENT_LINKS = {
 // Sourced from .env (PUBLIC_CF_ANALYTICS_TOKEN) — set in Cloudflare Pages for production
 export const CF_ANALYTICS_TOKEN = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN as string ?? "";
 
-export { services, technologies, technologyCategories, featuredTechnologies, experiences, testimonials };
+// Stripe publishable key (safe for frontend). TEST key locally; live key at Phase 14d go-live.
+export const STRIPE_PUBLISHABLE_KEY = import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY as string ?? "";
+
+// Soft-launch feature flags. shopBooking=false hides nav/footer links and adds
+// noindex + sitemap exclusion for /shop and /booking until Phase 14d go-live.
+// Defined in features.ts (dependency-free) so astro.config.ts can read it too.
+import { SITE_FEATURES } from "./features";
+export { SITE_FEATURES };
+
+export { services, technologies, technologyCategories, featuredTechnologies, experiences };

@@ -29,8 +29,8 @@ Primary audience:
 Current product direction:
 
 - Continue the Astro static site as the implementation target.
-- Keep GitHub Pages as the current deployment target.
-- Keep Cloudflare as the domain and DNS management layer.
+- Deployment target: Cloudflare Workers with static assets (`wrangler.jsonc`, `src/worker.ts`) serving `fullstackchris.dev` — migration done (see `CLOUDFLARE_DEPLOYMENT.md`).
+- The same Worker owns `/api/*` backend routes (newsletter today; shop, booking, auth, Stripe webhook in Phase 14) backed by D1, KV and R2.
 - Use the Claude Design system from `design/claude-design/` as the visual source of truth.
 - Use the Relume homepage structure as the homepage source of truth.
 - Prioritize service conversion, SEO content, free lead magnets, and newsletter capture before adding a custom backend.
@@ -240,7 +240,7 @@ Current context:
 
 ```txt
 [x] Framework target: Astro static site.
-[x] Deployment target: GitHub Pages.
+[x] Deployment target: Cloudflare Workers (static assets + API routes).
 [x] Domain management: Cloudflare.
 [x] Newsletter provider: Beehiiv.
 [x] English remains the default language.
@@ -517,6 +517,68 @@ Budget ranges to preserve:
 [ ] Add course or private resource area if validated by revenue.
 ```
 
+## Phase 14 - Shop And Booking (Backend + Screens)
+
+First custom backend. Handoff prototypes live in `docs/shop-screen-handoff/` and `docs/booking-screen-handoff/`. All work on branch `feat/shop-booking`, additive-only (new routes/tables/bindings, zero changes to existing behavior), Stripe test keys. Decisions locked 2026-08-18: embedded Stripe Elements, Google Calendar + Meet via service account, Resend for transactional email, magic-link auth, EN-first (fr/es later), REFONTE prices canonical (booking services: 90/300/550 coaching, 350/600 dev, 650 workshop).
+
+### Phase 14a - Backend Foundation
+
+```txt
+[x] D1 database + KV namespace + R2 bucket bound in wrangler.jsonc as DB / HOLDS / DOWNLOADS.
+[x] migrations/0001_init.sql: customers, sessions, magic_tokens, coupons, orders, order_lines, wishlists, bookings, webhook_events (+ slot_holds, custom_quotes).
+[x] src/worker.ts additive dispatch; existing /api/health + /api/newsletter/* behavior byte-identical (covered by pre-existing tests).
+[x] src/server/lib/: tokens.ts (HMAC sign/verify), tz.ts (Europe/Paris working hours -> UTC slots, DST-safe), ics.ts, mailer.ts (Resend), stripe.ts (fetch client + SubtleCrypto webhook verify), gcal.ts (service-account JWT -> free/busy + events.insert with Meet).
+[x] Magic-link auth: POST /api/auth/magic-link, GET /api/auth/verify (sets HttpOnly Secure SameSite=Lax session cookie), POST /api/auth/logout, GET /api/auth/me.
+[x] New secrets documented in .dev.vars.example (never committed): STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, TOKEN_SECRET, RESEND_API_KEY, EMAIL_FROM, ADMIN_EMAIL, GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY_B64, GOOGLE_CALENDAR_ID. Frontend: PUBLIC_STRIPE_PUBLISHABLE_KEY.
+[x] Tests: tests/auth.test.mjs, tests/tokens.test.mjs, tests/tz.test.mjs (real SQL via node:sqlite fake D1; same mocked-env node:test pattern).
+```
+
+Note: slot holds ended up in a dedicated D1 `slot_holds` table (UNIQUE(date,start_time) gives atomicity across isolates); the HOLDS KV namespace stays bound for future rate limiting.
+
+### Phase 14b - Shop
+
+```txt
+[x] src/config/products.ts: 12 products across Freebies / Templates / Design Systems / Others; prices in cents; server is the only source of truth for pricing.
+[x] API: GET /api/shop/products, POST /api/shop/coupon/validate, POST /api/shop/payment-intent, GET /api/shop/orders (auth), GET|PUT /api/shop/wishlist (auth), GET /api/shop/download/{token} (HMAC-signed, streams from R2), GET /api/shop/order/{uuid}.
+[x] Stripe webhook payment_intent.succeeded -> order paid + signed download links + Resend confirmation email.
+[x] EUR 0 freebies skip Stripe: email capture -> Beehiiv subscribe (reuse newsletter module) + signed download link.
+[x] Screens (EN): /shop/, /shop/category/[category]/, /shop/product/[slug]/, /shop/cart/, /shop/checkout/, /shop/confirmation/, /shop/account/.
+[x] Cart + wishlist in localStorage with a tiny pub/sub store (no new dep); wishlist merges to D1 on login.
+[x] Stripe Payment Element mounted into the handoff .cc-field wrappers, styled via tokens.
+[x] Tests: tests/shop.test.mjs.
+```
+
+### Phase 14c - Booking
+
+```txt
+[x] src/config/bookingServices.ts with REFONTE prices; 'custom' service -> quote form, no calendar.
+[x] API: GET /api/booking/availability (working hours - gcal busy - confirmed bookings - slot holds), POST /api/booking/hold, POST /api/booking/payment-intent, GET /api/booking/manage (HMAC token), POST /api/booking/reschedule, POST /api/booking/cancel, POST /api/booking/custom-quote (D1 lead + email to ADMIN_EMAIL).
+[x] Webhook -> booking confirmed: Google Calendar event with Meet link + Resend confirmation (.ics attachment + manage link).
+[x] 24h reschedule/cancel cutoff enforced server-side; v1 cancels without auto-refund (manual in Stripe dashboard).
+[x] Screens (EN): /booking/, /booking/schedule/, /booking/details/, /booking/checkout/, /booking/confirmation/, /booking/manage/.
+[x] Slot-taken-mid-checkout -> redirect to schedule with .error-banner per handoff states.
+[x] Tests: tests/booking.test.mjs.
+```
+
+### Phase 14d - Go-Live (manual, separate commit)
+
+```txt
+[ ] Flip SITE_FEATURES.shopBooking in src/config/constants.ts (nav/footer links appear, noindex removed, sitemap filter lifted).
+[ ] wrangler d1 migrations apply --remote; upload product files to R2.
+[ ] Set live Stripe secret/publishable keys + live webhook endpoint; verify Resend sending domain.
+[ ] Production smoke tests: freebie download, paid test purchase, full booking flow with calendar event.
+[ ] Keep Calendly for free intro calls; booking flow is for paid time-based services only.
+```
+
+### Deferred beyond Phase 14
+
+```txt
+[ ] fr/es translations for shop + booking (same content-split pattern as projects/services).
+[ ] Stripe Tax / EU digital VAT (MOSS) automation.
+[ ] Auto-refund on booking cancellation (needs policy decision).
+[ ] Turnstile on shop/booking forms; rate limiting on magic-link endpoint.
+```
+
 ## Verification Checklist
 
 ```txt
@@ -536,7 +598,8 @@ Budget ranges to preserve:
 Assumptions:
 
 - The current implementation target is Astro static output.
-- The current deployment target is GitHub Pages, with the domain managed through Cloudflare.
+- The current deployment target is Cloudflare Workers with static assets; the domain is managed through Cloudflare.
 - The sitemap may include future URLs before their pages exist when it is part of the planned SEO architecture.
 - Existing React islands should remain limited to interaction that needs client-side JavaScript.
 - Newsletter signup, analytics data attributes, and static lead-generation pages should be implemented before adding any custom backend.
+- Shop and booking (Phase 14) are the first custom backend features, running in the same Worker with D1/KV/R2.

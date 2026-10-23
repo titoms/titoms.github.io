@@ -1,0 +1,23 @@
+---
+// Layout for /shop and /booking pages: standard chrome + commerce.css + cart.
+import '../../styles/commerce.css';
+import PageLayout from './PageLayout.astro';
+import CartDrawer from '../islands/shop/CartDrawer';
+
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+  jsonLd?: object | object[];
+  /** Show the cart button in the header (shop pages). */
+  showCart?: boolean;
+}
+
+const { showCart = false, ...props } = Astro.props;
+---
+
+<PageLayout {...props} showCart={showCart}>
+  <slot name="head" slot="head" />
+  <slot />
+</PageLayout>
+{showCart && <CartDrawer client:only="react" />}

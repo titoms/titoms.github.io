@@ -1,0 +1,84 @@
+---
+title: "Cómo auditar una aplicación generada por IA antes de producción"
+metaTitle: "Auditoría de una app React/Node generada por IA: checklist de producción"
+description: "Checklist práctico para auditar una aplicación React, Node.js y TypeScript generada o acelerada por IA antes de llevarla a producción."
+publishedAt: 2026-10-24
+tags: ["React", "Node.js", "TypeScript", "IA", "Seguridad"]
+language: es
+faqs:
+  - question: "¿Un build correcto basta para pasar a producción?"
+    answer: "No. También hay que verificar tests de negocio, autenticación, autorización, entradas, dependencias, secretos, despliegue y rollback."
+  - question: "¿Qué debo auditar primero en una aplicación React/Node?"
+    answer: "Reproduce el recorrido crítico desde un entorno limpio y revisa después los contratos del servidor, los permisos y sus tests."
+  - question: "¿Puede un asistente de IA hacer la auditoría por sí solo?"
+    answer: "Puede ayudar a explorar el código y proponer comprobaciones, pero la decisión de riesgo y la aprobación de producción siguen siendo humanas."
+---
+
+Una aplicación puede parecer terminada mucho antes de tener las garantías necesarias para producción. Auditarla no consiste en juzgar si se utilizó IA, sino en comprobar qué hace realmente el software, en qué condiciones y con qué riesgos.
+
+## Empieza por el recorrido crítico
+
+Instala el proyecto desde un entorno limpio, ejecuta los comandos documentados y repite el flujo principal: registro, login, acción principal, error y logout.
+
+```bash
+pnpm install --frozen-lockfile
+pnpm test
+pnpm run build
+```
+
+Un build verde solo demuestra que ese escenario técnico funciona. No demuestra seguridad ni corrección de negocio.
+
+## Audita por riesgo, no por orden de archivos
+
+Empieza por identidad, permisos, dinero, datos sensibles y acciones irreversibles. Un estado visual imperfecto suele ser menos urgente que un endpoint que permite a un usuario leer los datos de otro.
+
+Por ejemplo, en una interfaz React que crea una factura mediante una API Node, comprueba que el precio se recalcula en el servidor, que el usuario es propietario de la cuenta, que los envíos duplicados son seguros y que un pago fallido no deja la factura como pagada.
+
+## Verifica tests que protejan contratos
+
+En React cubre estados de carga, vacío, error y éxito. En Node.js cubre validación, autorización, errores y persistencia. Añade tests de integración para cada flujo crítico.
+
+Preguntas rápidas: ¿fallaría un test si desaparece la autorización? ¿Se prueban los errores de red? ¿CI ejecuta la migración de base de datos? ¿La suite funciona sin secretos locales?
+
+## Autenticación no es autorización
+
+Ocultar un botón no protege un endpoint. Comprueba identidad, propiedad, rol, caducidad de sesión y protección contra repetición en el servidor. Prueba explícitamente que un usuario no puede acceder al recurso de otro.
+
+Mantén también las dependencias bajo control. La página de seguridad de React recoge avisos publicados en 2026, incluidos problemas críticos y altos alrededor de Server Components. [Revisa los avisos de seguridad de React](https://github.com/react/react/security).
+
+## Revisa entradas, secretos y dependencias
+
+Valida cuerpos JSON, parámetros, archivos y headers en el servidor. Limita tamaños, rechaza formatos inesperados y mantén tokens fuera del bundle, logs y Git. Lee el lockfile, elimina paquetes sin uso y revisa los scripts de instalación.
+
+Un comando de auditoría es una señal, no un análisis de riesgo. Identifica qué paquete vulnerable es realmente accesible y qué runtime queda expuesto.
+
+## Lee la arquitectura
+
+Busca acceso a base de datos dentro de componentes UI, reglas de negocio duplicadas, fetch sin timeout, errores ignorados, `any` usado para silenciar el compilador y fallbacks que convierten un fallo en un éxito aparente.
+
+El código generado por IA puede ser plausible en local e inconsistente a nivel de sistema. Revisa límites de módulos, errores, contratos de datos y despliegue como un conjunto.
+
+## Comprueba despliegue y rollback
+
+El pipeline debe construir desde un lockfile, ejecutar tests y producir un artefacto identificable. Verifica migraciones, variables, headers, logs, health checks, rollback y restauración de datos. Haz una prueba de despliegue antes del tráfico real.
+
+### Errores frecuentes
+
+- revisar solo componentes React visibles y olvidar las rutas del servidor;
+- confiar en precios, roles o identificadores enviados por el navegador;
+- confundir cobertura de tests con prueba de comportamiento de negocio;
+- dejar que el agente cambie la configuración de despliegue sin revisión;
+- corregir un aviso de dependencias sin revisar su ruta de ejecución.
+
+## Checklist final
+
+- [ ] Recorrido crítico repetido desde un entorno limpio
+- [ ] Tests unitarios y de integración para contratos sensibles
+- [ ] Autenticación y autorización verificadas en el servidor
+- [ ] Entradas, secretos, logs y dependencias revisados
+- [ ] Arquitectura y fallos documentados
+- [ ] Build, migraciones, observabilidad y rollback comprobados
+
+La encuesta de IA de Stack Overflow de 2026 describe usos habituales en generación, debugging, tests y comprensión de código, con una confianza condicionada a poder verificar la salida. [Consulta los datos de Stack Overflow 2026](https://survey.stackoverflow.co/2026/ai).
+
+¿Necesitas revisar una base React/Node? Explora el [coaching de proyectos web](/es/services/web-project-coaching/) o solicita una auditoría técnica.

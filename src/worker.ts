@@ -5,15 +5,14 @@ import {
   normalizeSignupInput,
   validateSignupInput,
 } from "./server/newsletter.js";
+import type { Env } from "./server/env.ts";
+import { handleAuthRequest } from "./server/auth.ts";
+import { handleShopRequest } from "./server/shop.ts";
+import { handleBookingRequest } from "./server/booking.ts";
+import { handleStripeWebhook } from "./server/stripeWebhook.ts";
+import { SITE_FEATURES } from "./config/features.ts";
 
-export interface Env {
-  ASSETS: Fetcher;
-  BEEHIIV_API_KEY?: string;
-  BEEHIIV_PUBLICATION_ID?: string;
-  BEEHIIV_API_BASE_URL?: string;
-  DEBUG_BEEHIIV?: string;
-  BEEHIIV_CUSTOM_FIELDS_ENABLED?: string;
-}
+export type { Env };
 
 const JSON_HEADERS = {
   "Content-Type": "application/json; charset=utf-8",
@@ -33,7 +32,22 @@ const ALLOWED_CORS_ORIGINS = new Set([
 ]);
 
 const CANONICAL_HOST = "fullstackchris.dev";
+// Hostnames that should be canonized to https + apex. Local dev hosts
+// (localhost, 127.0.0.1, *.workers.dev previews) must pass through untouched.
+const CANONICAL_HOSTNAMES = new Set([CANONICAL_HOST, `www.${CANONICAL_HOST}`]);
 const ROUTE_FILE_EXTENSION = /\.[^/]+$/;
+
+const getTemporaryLegacyRedirect = (request: Request) => {
+  if (request.method !== "GET" && request.method !== "HEAD") return null;
+  const url = new URL(request.url);
+  const match = url.pathname.match(/^(\/fr|\/es)?\/services\/ai-web-development-newsletter\/?$/);
+  if (!match) return null;
+  const localePrefix = match[1] ?? "";
+  const target = new URL(`${localePrefix}/services/`, request.url);
+  target.protocol = "https:";
+  target.hostname = CANONICAL_HOST;
+  return Response.redirect(target.toString(), 307);
+};
 
 const isStaticPagePath = (pathname: string) =>
   pathname !== "/" &&
@@ -46,14 +60,16 @@ const getCanonicalRedirect = (request: Request) => {
   const url = new URL(request.url);
   let changed = false;
 
-  if (url.protocol !== "https:") {
-    url.protocol = "https:";
-    changed = true;
-  }
+  if (CANONICAL_HOSTNAMES.has(url.hostname)) {
+    if (url.protocol !== "https:") {
+      url.protocol = "https:";
+      changed = true;
+    }
 
-  if (url.hostname === "www.fullstackchris.dev") {
-    url.hostname = CANONICAL_HOST;
-    changed = true;
+    if (url.hostname === `www.${CANONICAL_HOST}`) {
+      url.hostname = CANONICAL_HOST;
+      changed = true;
+    }
   }
 
   if ((request.method === "GET" || request.method === "HEAD") && isStaticPagePath(url.pathname) && !url.pathname.endsWith("/")) {
@@ -368,6 +384,8 @@ const handleNewsletterSubscribe = async (request: Request, env: Env) => {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
+    const legacyRedirect = getTemporaryLegacyRedirect(request);
+    if (legacyRedirect) return legacyRedirect;
     const canonicalRedirect = getCanonicalRedirect(request);
     if (canonicalRedirect) return canonicalRedirect;
 
@@ -394,6 +412,28 @@ export default {
 
     if (url.pathname === "/api/newsletter/subscribe") {
       return handleNewsletterSubscribe(request, env);
+    }
+
+    const commerceRuntimeAvailable = Boolean(env.DB || env.HOLDS || env.DOWNLOADS);
+    if (!SITE_FEATURES.shopBooking && !commerceRuntimeAvailable && (url.pathname.startsWith("/api/shop/") || url.pathname.startsWith("/api/booking/"))) {
+      return jsonResponse({ ok: false, message: "Commerce and booking are not available yet." }, 404);
+    }
+
+    // Phase 14 — shop + booking (additive routes; behavior above is unchanged)
+    if (url.pathname.startsWith("/api/auth/")) {
+      return handleAuthRequest(request, env, url);
+    }
+
+    if (url.pathname.startsWith("/api/shop/")) {
+      return handleShopRequest(request, env, url);
+    }
+
+    if (url.pathname.startsWith("/api/booking/")) {
+      return handleBookingRequest(request, env, url);
+    }
+
+    if (url.pathname === "/api/stripe/webhook") {
+      return handleStripeWebhook(request, env);
     }
 
     return env.ASSETS.fetch(request);
