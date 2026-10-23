@@ -10,6 +10,7 @@ import { handleAuthRequest } from "./server/auth.ts";
 import { handleShopRequest } from "./server/shop.ts";
 import { handleBookingRequest } from "./server/booking.ts";
 import { handleStripeWebhook } from "./server/stripeWebhook.ts";
+import { SITE_FEATURES } from "./config/features.ts";
 
 export type { Env };
 
@@ -411,6 +412,11 @@ export default {
 
     if (url.pathname === "/api/newsletter/subscribe") {
       return handleNewsletterSubscribe(request, env);
+    }
+
+    const commerceRuntimeAvailable = Boolean(env.DB || env.HOLDS || env.DOWNLOADS);
+    if (!SITE_FEATURES.shopBooking && !commerceRuntimeAvailable && (url.pathname.startsWith("/api/shop/") || url.pathname.startsWith("/api/booking/"))) {
+      return jsonResponse({ ok: false, message: "Commerce and booking are not available yet." }, 404);
     }
 
     // Phase 14 — shop + booking (additive routes; behavior above is unchanged)

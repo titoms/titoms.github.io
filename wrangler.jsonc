@@ -11,24 +11,6 @@
   "observability": {
     "enabled": true
   },
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "fullstackchris-db",
-      "database_id": "00000000-0000-0000-0000-000000000000",
-      "migrations_dir": "migrations"
-    }
-  ],
-  "kv_namespaces": [
-    {
-      "binding": "HOLDS",
-      "id": "00000000000000000000000000000000"
-    }
-  ],
-  "r2_buckets": [
-    {
-      "binding": "DOWNLOADS",
-      "bucket_name": "fullstackchris-downloads"
-    }
-  ]
+  // Shop and booking are disabled until their real Cloudflare resources are
+  // configured. Re-add D1/KV/R2 bindings with production IDs at go-live.
 }

@@ -1,0 +1,103 @@
+---
+title: "TypeScript 6.0: The Changes That Matter for React and Node.js"
+metaTitle: "TypeScript 6.0 for React and Node.js: Migration and TypeScript 7 Preparation"
+description: "What TypeScript 6.0 changes for React and Node.js projects: configuration, deprecations, migration and preparation for TypeScript 7."
+publishedAt: 2026-10-24
+tags: ["TypeScript", "React", "Node.js", "Migration"]
+language: en
+faqs:
+  - question: "Does TypeScript 6.0 require a React rewrite?"
+    answer: "No. Start with the compiler version, configuration and the errors revealed by a strict type check."
+  - question: "Why does TypeScript 6.0 matter before TypeScript 7?"
+    answer: "TypeScript 6.0 is the bridge to the next compiler generation and helps projects address deprecations and configuration assumptions."
+  - question: "Should TypeScript 7 previews run in production?"
+    answer: "No. Previews can be used for compatibility checks, while production should use a supported version validated by your own controls."
+---
+
+TypeScript 6.0 is a transition release. The official announcement describes it as a bridge between 5.9 and the next generation of TypeScript, built on a new Go codebase. For React and Node.js teams, the important work is not adopting every feature. It is removing configuration surprises before TypeScript 7.
+
+[Read the official TypeScript 6.0 announcement](https://devblogs.microsoft.com/typescript/announcing-typescript-6-0/).
+
+## Make the migration explicit
+
+Update TypeScript in a dedicated branch and check which compiler CI actually uses.
+
+```bash
+pnpm add -D typescript@6
+pnpm exec tsc --version
+pnpm exec tsc --noEmit
+```
+
+In a monorepo, inspect transitive versions and tools that invoke their own compiler.
+
+## React: inference can expose hidden assumptions
+
+TypeScript 6.0 adjusts inference for some generic calls, including generic JSX expressions. A call that used to compile may now need an explicit type argument. Fix the contract instead of reaching for `any`.
+
+```tsx
+function Select<T>(props: { value: T; render: (value: T) => React.ReactNode }) {
+  return <div>{props.render(props.value)}</div>;
+}
+
+<Select value={42} render={(value) => <strong>{value.toFixed(0)}</strong>} />
+```
+
+If a complex case becomes `unknown`, make the expected type visible in the component or call site. Add a compile-time or rendering test that documents the contract.
+
+## Node.js: search for deprecated import assertions
+
+The deprecation of `import ... assert {}` also covers dynamic `import()` calls. Search services and build scripts before upgrading.
+
+```ts
+// Legacy form to locate
+const config = await import('./config.json', { assert: { type: 'json' } });
+```
+
+Do not replace it mechanically. Check the runtime, bundler and module format (`NodeNext`, ESM or CommonJS), then run the affected scripts with the production Node version.
+
+## Keep configuration portable
+
+A modern project may use a configuration like this, adapted to its framework and runtime:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noEmit": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true
+  }
+}
+```
+
+React JSX settings depend on the build chain. For Node.js, module settings must match `package.json`, the bundler and execution mode.
+
+### A practical decision
+
+For a Node package executed directly by Node, check `package.json`, file extensions and `module: "NodeNext"` first. For a Vite React application, keep the bundler’s expected setup and focus migration on strictness, inference and shared types.
+
+## Prepare for TypeScript 7 without speculation
+
+Keep the lockfile clean, remove type workarounds, handle deprecations and document module assumptions. Test critical packages with official previews only when the project can absorb the risk; do not confuse previews with production support.
+
+### Common mistakes
+
+- upgrading TypeScript without checking the CI compiler;
+- adding `any` to hide an inference error;
+- migrating JSON imports without testing the real Node runtime;
+- mixing frontend bundler settings with backend package settings;
+- testing only the build and forgetting production scripts.
+
+## Migration checklist
+
+- [ ] TypeScript version verified locally and in CI
+- [ ] `tsc --noEmit` run for React and Node packages
+- [ ] Generic JSX expressions reviewed
+- [ ] Import assertions searched
+- [ ] Module settings aligned with the runtime
+- [ ] Build and execution tests added around sensitive scripts
+
+Need to apply this to a real team codebase? Explore [React and TypeScript training](/formations/react-typescript/).

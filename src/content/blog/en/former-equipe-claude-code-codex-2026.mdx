@@ -1,0 +1,81 @@
+---
+title: "How to Train a Team on Claude Code and Codex in 2026"
+metaTitle: "Training a Team on Claude Code and Codex: Guardrails and Practice"
+description: "A practical approach to training teams on Claude Code and Codex: context, permissions, tests, human review, pull requests and limits."
+publishedAt: 2026-10-24
+tags: ["Claude Code", "Codex", "Training", "AI Agents"]
+language: en
+faqs:
+  - question: "Should a team standardize on Claude Code or Codex?"
+    answer: "Not automatically. Start with tasks, security constraints, environment and expected evidence; choose tools after that."
+  - question: "What should developers be able to do after training?"
+    answer: "Provide context, limit permissions, break down a task, run tests, review the diff and document limits in a pull request."
+  - question: "Does a two-day workshop guarantee adoption?"
+    answer: "No. It creates a starting framework; adoption depends on conventions, human review and feedback from real tasks."
+---
+
+Training a team on Claude Code and Codex is not handing out accounts and a prompt list. It is an engineering and organizational topic: give an agent enough context to be useful, enough limits to remain controllable and enough tests to make its work verifiable.
+
+The 2026 Stack Overflow and JetBrains research gives useful context on professional adoption, but not a promise of automatic productivity. [Stack Overflow AI data](https://survey.stackoverflow.co/2026/ai/data) and [JetBrains’ 2026 adoption research](https://blog.jetbrains.com/research/2026/08/ai-coding-agent-adoption-2026/) both support a practical, evidence-led approach.
+
+## Start with repository context
+
+An agent needs an objective, conventions, test commands, scope boundaries and a clean starting state. Teach the team to put that context in project documents, then verify that the agent used it.
+
+Exercise: give a small vertical task, ask for a plan, require the files and checks it expects to touch, then reject changes until the plan and verification criteria are clear.
+
+### Example task
+
+Instead of “add authentication”, ask: “validate the login body, add error tests and limit the change to these routes and modules.” The team learns to provide verifiable context, not a spectacular prompt.
+
+## Treat permissions as a skill
+
+Agents should not receive secrets, production access or irreversible commands by default. Separate reading, writing, local commands, network access and destructive actions. Make exceptions explicit and task-scoped.
+
+## Produce with tests
+
+The teaching loop is short: understand, plan, change, test, review, pull request. An agent can propose a test or fix, but the command must run and a human must interpret the result.
+
+```text
+Context → Plan → Small change → Targeted test → Diff review → PR
+```
+
+A generated PR should remain readable: objective, changed files, tests run, known limits and review points.
+
+## Organize human review
+
+Review business contracts, permissions, errors, migrations, dependencies and operating costs. Do not ask a second agent only whether the first agent is correct. For sensitive changes, a team member should replay the critical path from a clean environment.
+
+## An illustrative two-day proposal
+
+This is a starting shape, not a promised duration or price.
+
+### Day 1 — Understand and frame
+
+- agent mental models, context and limits;
+- project setup and permission rules;
+- task decomposition and plan production;
+- a React or Node exercise with targeted tests.
+
+### Day 2 — Integrate with the team
+
+- diff and pull request review;
+- tests, security, dependencies and observability;
+- team conventions, documentation and shared learning;
+- a risky-change simulation and rollback decision.
+
+## State the limits plainly
+
+An agent can misunderstand the domain, reproduce a fragile pattern, change too many files, ignore deployment constraints or produce a convincing but false answer. It does not replace domain expertise, production responsibility or security review.
+
+### Common mistakes
+
+- granting secrets or production access by default;
+- accepting a large generated PR without focused tests;
+- asking the agent to validate its own security without independent review;
+- measuring generation speed but not correction time;
+- failing to document tasks where agents remain prohibited or unreliable.
+
+The right question is not “which agent codes fastest?” It is “which part of the workflow can we make faster while keeping proof that the result is correct?”
+
+For a team rollout, explore [AI training for developers](/formations/ia-developpeurs/) or [request an in-company training session](/formations/).

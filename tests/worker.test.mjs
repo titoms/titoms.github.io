@@ -44,6 +44,14 @@ test("health endpoint returns service status JSON", async () => {
   });
 });
 
+test("disabled shop and booking APIs fail closed", async () => {
+  const shop = await worker.fetch(makeGetRequest("/api/shop/products"), makeEnv(), {});
+  const booking = await worker.fetch(makeGetRequest("/api/booking/availability"), makeEnv(), {});
+
+  assert.equal(shop.status, 404);
+  assert.equal(booking.status, 404);
+});
+
 test("falls back to static assets for canonical non-api routes", async () => {
   const response = await worker.fetch(
     new Request("https://fullstackchris.dev/projects/"),
