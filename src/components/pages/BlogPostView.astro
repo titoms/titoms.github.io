@@ -160,7 +160,7 @@ if (article.data.faqs.length > 0) {
             <h3 class="font-display text-lg font-semibold text-white">{service.title}</h3>
             <p class="text-sm leading-6 text-secondary">{service.description}</p>
             <Button href={`${localePrefix}/services/${service.slug}/`} variant="secondary" size="sm" class="mt-auto w-fit">
-              {c.learnMore}
+              {c.learnMore}: {service.title}
             </Button>
           </Card>
         ))}
