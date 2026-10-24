@@ -131,8 +131,7 @@ export const servicesContentEs: Record<string, ServiceContent> = {
     ],
     pricing: [
       { label: "Coaching de 1 hora", price: "90 EUR" },
-      { label: "Coaching de medio día", price: "300 EUR", featured: true },
-      { label: "Coaching de día completo", price: "550 EUR" },
+      { label: "Coaching técnico", price: "90 EUR / hora", featured: true },
     ],
     faqs: [
       { question: "¿Necesito ser técnico?", answer: "No. La sesión puede adaptarse a fundadores no técnicos, principiantes o desarrolladores." },
@@ -216,9 +215,6 @@ export const servicesContentEs: Record<string, ServiceContent> = {
     pricing: [
       { label: "Medio día", price: "350 EUR" },
       { label: "Día completo", price: "600 EUR", featured: true },
-      { label: "Paquete de 3 días", price: "1650 EUR" },
-      { label: "Paquete de 5 días", price: "2600 EUR" },
-      { label: "Paquete de 10 días", price: "5000 EUR" },
     ],
     goodFit: [
       "Bug o funcionalidad clara con una definición de \"terminado\"",
@@ -301,8 +297,6 @@ export const servicesContentEs: Record<string, ServiceContent> = {
     ],
     pricing: [
       { label: "Taller de Claridad MVP de 1 día", price: "650 EUR" },
-      { label: "Sprint de MVP de 5 días", price: "2800 EUR", featured: true },
-      { label: "Sprint Premium de 5 días + prototipo / spec", price: "3500 EUR" },
     ],
     goodFit: [
       "Fundadores no técnicos con una idea de producto",

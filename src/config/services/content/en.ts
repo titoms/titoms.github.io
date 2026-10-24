@@ -133,8 +133,7 @@ export const servicesContentEn: Record<string, ServiceContent> = {
     ],
     pricing: [
       { label: "1-hour coaching", price: "90 EUR" },
-      { label: "Half-day coaching", price: "300 EUR", featured: true },
-      { label: "Full-day coaching", price: "550 EUR" },
+      { label: "Technical coaching", price: "90 EUR / hour", featured: true },
     ],
     faqs: [
       { question: "Do I need to be technical?", answer: "No. The session can be adapted to non-technical founders, beginners or developers." },
@@ -218,9 +217,6 @@ export const servicesContentEn: Record<string, ServiceContent> = {
     pricing: [
       { label: "Half-day", price: "350 EUR" },
       { label: "Full day", price: "600 EUR", featured: true },
-      { label: "3-day pack", price: "1,650 EUR" },
-      { label: "5-day pack", price: "2,600 EUR" },
-      { label: "10-day pack", price: "5,000 EUR" },
     ],
     goodFit: [
       "Clear bug or feature with a definition of done",
@@ -303,8 +299,6 @@ export const servicesContentEn: Record<string, ServiceContent> = {
     ],
     pricing: [
       { label: "1-day MVP Clarity Workshop", price: "650 EUR" },
-      { label: "5-day MVP Sprint", price: "2,800 EUR", featured: true },
-      { label: "5-day Premium Sprint + prototype / spec", price: "3,500 EUR" },
     ],
     goodFit: [
       "Non-technical founders with a product idea",

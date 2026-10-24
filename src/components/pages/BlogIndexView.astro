@@ -2,8 +2,6 @@
 import { getCollection } from 'astro:content';
 import PageLayout from '../layout/PageLayout.astro';
 import { Badge } from '../ui/Badge';
-import { Button } from '../ui/Button';
-import { Card } from '../ui/Card';
 import { SectionHeader } from '../ui/SectionHeader';
 import { defaultLocale } from '../../i18n/ui';
 import { blogIndex } from './content/blogIndex';
@@ -77,7 +75,7 @@ const jsonLd = {
       {articles.map((article) => {
         const slug = article.id.replace(/^(en|fr|es)\//, '');
         return (
-          <Card hover class="flex h-full flex-col gap-4" data-reveal={article.data.comingSoon ? 'zoom' : 'blur'}>
+          <a href={`${localePrefix}/blog/${slug}/`} class="article-card group flex h-full flex-col gap-4 rounded-xl border border-border bg-surface/60 p-6 no-underline transition-[border-color,background,transform] duration-200 hover:-translate-y-0.5 hover:border-strong hover:bg-surface/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent" data-reveal={article.data.comingSoon ? 'zoom' : 'blur'}>
             <div class="font-mono text-xs uppercase tracking-[0.16em] text-low mb-4">
               {article.data.comingSoon ? c.plannedArticle : formatDate.format(article.data.publishedAt)}
             </div>
@@ -92,35 +90,12 @@ const jsonLd = {
             </h2>
             <p class="text-[0.95rem] leading-7 text-secondary mb-4">{article.data.description}</p>
             <div class="mt-auto border-t border-border pt-4">
-              <Button href={`${localePrefix}/blog/${slug}/`} variant="outline" size="sm">
-                {article.data.comingSoon ? c.previewArticle : c.readArticle}
-              </Button>
+              <span class="inline-flex items-center rounded-md border border-strong px-4 py-2 text-sm font-semibold text-secondary transition-colors group-hover:text-white">{article.data.comingSoon ? c.previewArticle : c.readArticle} →</span>
             </div>
-          </Card>
+          </a>
         );
       })}
     </div>
   </section>
 
-  <!-- Training CTA -->
-  {locale === 'fr' && <section class="border-t border-border bg-surface/55">
-    <div class={sectionClass}>
-      <Card glow class="overflow-hidden p-8 sm:p-10 lg:p-12" data-reveal="zoom">
-        <div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
-          <div>
-            <p class="font-mono text-xs uppercase tracking-[0.18em] text-accent">{c.newsletterCta.getNotified}</p>
-            <h2 class="mt-4 max-w-2xl font-display text-[clamp(1.8rem,3.5vw,3rem)] font-semibold leading-tight text-white">
-              {c.newsletterCta.h2}
-            </h2>
-            <p class="mt-4 max-w-prose text-lg leading-8 text-secondary">
-              {c.newsletterCta.lead}
-            </p>
-          </div>
-          <Button href={locale === 'fr' ? '/fr/formations/' : `${localePrefix}/services/web-project-coaching/`} variant="primary" size="lg">
-            {c.newsletterCta.joinNewsletter}
-          </Button>
-        </div>
-      </Card>
-    </div>
-  </section>}
 </PageLayout>

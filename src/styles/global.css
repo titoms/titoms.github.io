@@ -1564,6 +1564,28 @@ html.no-js .reveal {
   color: var(--text-hi);
 }
 
+.article-content pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  background: #111116;
+  color: var(--text-hi);
+  font-family: var(--font-mono);
+  font-size: .86rem;
+  line-height: 1.65;
+  white-space: pre;
+  tab-size: 2;
+  -webkit-overflow-scrolling: touch;
+}
+.article-content pre code { display: block; min-width: max-content; padding: 0; background: transparent; color: inherit; font: inherit; white-space: inherit; }
+.article-content code:not(pre code) { padding: .12rem .35rem; border-radius: .3rem; background: var(--bg-2); color: var(--accent-300); font-family: var(--font-mono); font-size: .9em; }
+.article-content blockquote { border-left: 3px solid var(--accent-500); padding-left: 1rem; color: var(--text-hi); font-style: italic; }
+.article-content table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
+.article-content th, .article-content td { border: 1px solid var(--border); padding: .65rem .8rem; text-align: left; }
+.article-content th { color: var(--text-hi); background: var(--bg-2); }
+
 .legal-prose {
   color: var(--text-mid);
   font-size: 1rem;
