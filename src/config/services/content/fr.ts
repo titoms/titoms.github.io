@@ -1,4 +1,5 @@
 import type { ServiceContent } from './en';
+import { COMMERCIAL_PRICING } from '../../../config/commercialPricing';
 
 export const servicesContentFr: Record<string, ServiceContent> = {
   'ai-web-development-newsletter': {
@@ -296,7 +297,7 @@ export const servicesContentFr: Record<string, ServiceContent> = {
       { title: "Carte des risques", description: "Risques connus, hypothèses et comment réduire l'incertitude avant de construire." },
     ],
     pricing: [
-      { label: "Atelier Clarity MVP 1 jour", price: "650 EUR" },
+      { label: "Atelier Clarity MVP 1 jour", price: `${COMMERCIAL_PRICING.aiClarityDayFromCents / 100} EUR` },
     ],
     goodFit: [
       "Fondateurs non techniques avec une idée de produit",
@@ -325,17 +326,17 @@ export const servicesContentFr: Record<string, ServiceContent> = {
     meta: {
       title: "Développement MVP pour Applications Web et Produits SaaS",
       description:
-        "Développement MVP sur mesure pour fondateurs et petites équipes. Construisez une application web React, Node.js et TypeScript du cadrage produit au déploiement.",
+        "Prototypes et MVP très cadrés pour fondateurs et petites équipes ; les MVP web plus complets sont chiffrés séparément à partir d'un budget indicatif autour de 7 500 €.",
     },
     badge: "MVP",
     hero: {
       h1: "Construisez votre MVP avec un développeur full-stack qui vous aide aussi à réfléchir au produit",
       subtitle:
-        "J'aide fondateurs et petites équipes à transformer une idée de produit claire en application web fonctionnelle avec React, Node.js, TypeScript et des workflows de développement assisté par IA concrets.",
+        "J'aide fondateurs et petites équipes à transformer une idée claire en prototype ou tranche de MVP définie ; les MVP web plus complets sont cadrés et chiffrés séparément.",
       primaryCta: "Demander un devis",
     },
     answer:
-      "Développement de bout en bout d'une première version de votre application web — de la clarification produit et de l'architecture au frontend, backend, base de données, déploiement et passation. Construit par un seul développeur full-stack qui peut aussi vous aider à prendre des décisions produit, pour que le périmètre reste raisonnable et que la première version soit réellement livrée.",
+      "Un prototype ou MVP très cadré peut commencer à 4 500 €. Un MVP web plus complet est proposé sur devis, avec un budget de départ indicatif autour de 7 500 €. Le périmètre, les intégrations et les conditions de livraison déterminent ce qui est inclus.",
     useCases: [
       "MVP SaaS",
       "Outils internes",
@@ -352,7 +353,7 @@ export const servicesContentFr: Record<string, ServiceContent> = {
       type: "info",
       title: "CE QUE C'EST",
       description:
-        "Développement de bout en bout de la première version de votre application web — clarification produit, architecture, frontend, backend, déploiement et passation, livré par un seul développeur full-stack qui peut aussi vous aider à prendre des décisions produit.",
+        "Un prototype ou MVP très cadré peut commencer à 4 500 €. Un MVP web plus complet est proposé sur devis, avec un budget de départ indicatif autour de 7 500 € ; il ne s'agit pas d'un forfait garanti ni d'une application SaaS complète incluse au prix d'entrée.",
       whenTitle: "QUAND L'UTILISER",
       whenItems: [
         "Vous avez une idée de produit claire et devez livrer la première version",
@@ -361,10 +362,10 @@ export const servicesContentFr: Record<string, ServiceContent> = {
         "Vous voulez lancer vite sans accumuler de dette technique",
       ],
       leaveWithItems: [
-        "Une application web fonctionnelle en production",
-        "Un périmètre produit clarifié en cours de route",
-        "Un code livré avec documentation",
-        "Des fondations prêtes pour la phase suivante",
+        "Un prototype ou une tranche MVP fonctionnelle et définie",
+        "Un périmètre produit clarifié avant le développement",
+        "Un code et des notes remis",
+        "Une suite clairement définie si nécessaire",
       ],
     },
     painPoints: [
@@ -386,11 +387,14 @@ export const servicesContentFr: Record<string, ServiceContent> = {
       { title: "Frontend", description: "UI React ou Next.js construite selon votre structure produit et votre direction design." },
       { title: "Backend", description: "API Node.js avec Express, authentification, logique métier et intégrations." },
       { title: "Base de données", description: "Conception de schéma PostgreSQL ou Supabase, migrations et optimisation de requêtes." },
-      { title: "Déploiement et passation", description: "Déploiement en production sur Cloudflare Pages, Vercel ou votre hébergeur préféré, plus documentation complète du code." },
+      { title: "Déploiement et passation", description: "Déploiement et documentation lorsqu'ils sont inclus dans le périmètre convenu ; les besoins d'exploitation plus larges sont chiffrés séparément." },
     ],
-    pricing: [{ label: "Développement MVP sur mesure", price: "dès 4 500 EUR", featured: true }],
+    pricing: [
+      { label: "Prototype / MVP très cadré", price: "dès 4 500 EUR", featured: true },
+      { label: "MVP web plus complet", price: "Sur devis — budget de départ indicatif autour de 7 500 EUR" },
+    ],
     pricingNote:
-      "Fourchette typique : 6 000 EUR – 15 000 EUR selon le périmètre. Devis sur mesure fourni après un appel de découverte.",
+      "Le point d'entrée à 4 500 € couvre une première tranche très définie, pas une application SaaS complète avec toutes ses fonctionnalités. Un périmètre plus large, des intégrations, la sécurité et l'exploitation sont chiffrés séparément ; 7 500 € est un budget de départ indicatif, pas un forfait garanti.",
     goodFit: [
       "Vous avez un problème clair à résoudre",
       "Vous pouvez prioriser et réduire le périmètre",
@@ -406,13 +410,13 @@ export const servicesContentFr: Record<string, ServiceContent> = {
     ],
     processSteps: [
       { title: "Découverte", description: "Je cartographie avec vous l'idée produit, les utilisateurs cibles, les fonctionnalités indispensables, les contraintes et les risques." },
-      { title: "Périmètre et proposition", description: "Je rédige un document de périmètre clair avec jalons, calendrier et proposition à prix fixe." },
+      { title: "Périmètre et proposition", description: "Je rédige un document clair avec jalons, hypothèses, calendrier et proposition." },
       { title: "Sprint de construction", description: "Le développement se déroule en sprints ciblés avec points d'étape et mises à jour régulières." },
       { title: "Revue", description: "Vous testez le produit fonctionnel et donnez votre retour avant la livraison finale." },
       { title: "Déploiement et passation", description: "Le produit est déployé en production et transmis avec une documentation complète." },
     ],
     faqs: [
-      { question: "Combien coûte un MVP ?", answer: "Le développement MVP démarre à 4 500 EUR. La plupart des projets se situent entre 6 000 EUR et 15 000 EUR selon le périmètre." },
+      { question: "Combien coûte un MVP ?", answer: "Un prototype ou MVP très cadré commence à 4 500 EUR. Un MVP web plus complet est sur devis, avec un budget de départ indicatif autour de 7 500 EUR ; le périmètre détermine le devis réel." },
       { question: "Combien de temps cela prend-il ?", answer: "Cela dépend du périmètre. Un petit MVP peut prendre quelques semaines. Un MVP plus complexe nécessite une feuille de route par étapes." },
       { question: "Pouvez-vous aider à définir le périmètre d'abord ?", answer: "Oui. L'Atelier AI Clarity Bootstrap est recommandé avant le développement si l'idée n'est pas encore claire." },
       { question: "Pouvez-vous inclure des fonctionnalités IA ?", answer: "Oui, si elles sont utiles et réalistes pour la première version." },

@@ -1,3 +1,5 @@
+import { COMMERCIAL_PRICING } from '../../../config/commercialPricing';
+
 export interface HomeContent {
   meta: { title: string; description: string };
   jsonLd: { jobTitle: string; websiteDescription: string };
@@ -77,8 +79,8 @@ export const home: Record<'en' | 'fr' | 'es', HomeContent> = {
       offers: [
         { title: 'Web Project Coaching', description: 'One-on-one sessions to debug, clarify and structure your React / Node / AI-generated project.', price: '€90', priceUnit: '/ 1h', badge: 'Coaching', ctaHref: '/services/web-project-coaching/', ctaLabel: 'Learn more →' },
         { title: 'Full-stack Development Day', description: 'Focused half- or full-day blocks for a clear feature, bug fix, dashboard or refactor.', price: '€350 / €600', priceUnit: 'half-day / full day', badge: 'Delivery', ctaHref: '/services/full-stack-development-day/', ctaLabel: 'Learn more →' },
-        { title: 'AI Clarity Bootstrap Workshop', description: 'Turn an idea into a realistic MVP plan: scope, user flows, stack, roadmap and budget.', price: 'from €650', priceUnit: '/ day', badge: 'Workshop', featured: true, ctaHref: '/services/mvp-bootstrapping-workshop/', ctaLabel: 'Learn more →' },
-        { title: 'Custom MVP Development', description: 'A working web app from scope to deployment — frontend, backend, database and handover.', price: 'from €4,500', badge: 'MVP', ctaHref: '/services/mvp-development/', ctaLabel: 'Learn more →' },
+        { title: 'AI Clarity Bootstrap Workshop', description: 'Turn an idea into a realistic MVP plan: scope, user flows, stack, roadmap and budget.', price: `from €${COMMERCIAL_PRICING.aiClarityDayFromCents / 100}`, priceUnit: '/ day', badge: 'Workshop', featured: true, ctaHref: '/services/mvp-bootstrapping-workshop/', ctaLabel: 'Learn more →' },
+        { title: 'Custom MVP Development', description: 'A narrowly scoped prototype or MVP from €4,500; broader web MVPs are quoted separately.', price: `from €${(COMMERCIAL_PRICING.scopedMvpFromCents / 100).toLocaleString('en-US')}`, badge: 'MVP', ctaHref: '/services/mvp-development/', ctaLabel: 'Learn more →' },
       ],
       notSure: { title: 'Not sure where to start?', body: "Book a free 30-minute call. I'll help you figure out the right next step for your project.", askQuestion: 'Ask a question' },
     },
@@ -115,7 +117,7 @@ export const home: Record<'en' | 'fr' | 'es', HomeContent> = {
       plans: [
         { title: 'Coaching Session', description: 'For a blocker, review or technical decision.', price: '90 EUR', period: '/hour', features: ['Project diagnosis', 'Architecture advice', 'AI-generated code review', 'Written next steps'], ctaHref: '/services/web-project-coaching/', ctaLabel: 'See plans →' },
         { title: 'Development Day', description: 'For a scoped feature, bug or cleanup.', price: '600 EUR', period: '/day', features: ['Focused implementation', 'React and Node.js work', 'Delivery notes', 'Optional follow-up session'], featured: true, ctaHref: '/services/full-stack-development-day/', ctaLabel: 'See plans →' },
-        { title: 'MVP Workshop', description: 'For founders who need a realistic product plan.', price: '650 EUR', period: '/day', features: ['MVP scope', 'Feature priorities', 'Tech stack recommendation', 'Roadmap and risk map'], ctaHref: '/services/mvp-bootstrapping-workshop/', ctaLabel: 'See plans →' },
+        { title: 'MVP Workshop', description: 'For founders who need a realistic product plan.', price: '750 EUR', period: '/day', features: ['MVP scope', 'Feature priorities', 'Tech stack recommendation', 'Roadmap and risk map'], ctaHref: '/services/mvp-bootstrapping-workshop/', ctaLabel: 'See plans →' },
       ],
     },
     newsletter: {
@@ -139,7 +141,7 @@ export const home: Record<'en' | 'fr' | 'es', HomeContent> = {
       description: 'Still not sure? Book a free 30-minute call.',
       items: [
         { question: 'Do I need to be technical?', answer: 'No. Every service adapts to non-technical founders, beginners or developers. The goal is that you always leave knowing what to build and why.' },
-        { question: 'How much does an MVP cost?', answer: 'MVP development starts at €4,500, with most projects landing between €6,000 and €15,000 depending on scope. I confirm a fixed quote after a short discovery.' },
+        { question: 'How much does an MVP cost?', answer: 'A very scoped prototype or MVP starts at €4,500. A broader web MVP is quoted separately, with an indicative starting budget around €7,500; the scope determines the actual quote.' },
         { question: 'Can you help with AI-generated code?', answer: 'Yes — understanding, debugging and cleaning up code from ChatGPT, Claude, Cursor or Copilot is one of the most common reasons people book a session.' },
         { question: 'Can coaching turn into a full build?', answer: 'Often. If the scope becomes clear, we move from coaching to development days or a custom MVP project — no need to start over with someone new.' },
       ],
@@ -178,8 +180,8 @@ export const home: Record<'en' | 'fr' | 'es', HomeContent> = {
       offers: [
         { title: 'Coaching Projet Web', description: 'Sessions individuelles pour déboguer, clarifier et structurer votre projet React / Node / généré par IA.', price: '90 €', priceUnit: '/ 1h', badge: 'Coaching', ctaHref: '/services/web-project-coaching/', ctaLabel: 'En savoir plus →' },
         { title: 'Journée de Développement Full-Stack', description: 'Blocs ciblés d\'une demi-journée ou d\'une journée pour une fonctionnalité claire, un correctif, un dashboard ou un refactor.', price: '350 € / 600 €', priceUnit: 'demi-journée / journée', badge: 'Livraison', ctaHref: '/services/full-stack-development-day/', ctaLabel: 'En savoir plus →' },
-        { title: 'Atelier AI Clarity Bootstrap', description: 'Transformez une idée en plan MVP réaliste : cadrage, parcours utilisateur, stack, feuille de route et budget.', price: 'dès 650 €', priceUnit: '/ jour', badge: 'Atelier', featured: true, ctaHref: '/services/mvp-bootstrapping-workshop/', ctaLabel: 'En savoir plus →' },
-        { title: 'Développement MVP sur mesure', description: 'Une application web fonctionnelle du cadrage au déploiement — frontend, backend, base de données et passation.', price: 'dès 4 500 €', badge: 'MVP', ctaHref: '/services/mvp-development/', ctaLabel: 'En savoir plus →' },
+        { title: 'Atelier AI Clarity Bootstrap', description: 'Transformez une idée en plan MVP réaliste : cadrage, parcours utilisateur, stack, feuille de route et budget.', price: 'dès 750 €', priceUnit: '/ jour', badge: 'Atelier', featured: true, ctaHref: '/services/mvp-bootstrapping-workshop/', ctaLabel: 'En savoir plus →' },
+        { title: 'Développement MVP sur mesure', description: 'Prototype ou MVP très cadré dès 4 500 € ; MVP web plus complet sur devis, avec un budget de départ indicatif autour de 7 500 €.', price: 'dès 4 500 €', badge: 'MVP', ctaHref: '/services/mvp-development/', ctaLabel: 'En savoir plus →' },
       ],
       notSure: { title: 'Pas sûr par où commencer ?', body: "Réservez un appel gratuit de 30 minutes. Je vous aide à trouver la bonne prochaine étape pour votre projet.", askQuestion: 'Poser une question' },
     },
@@ -216,7 +218,7 @@ export const home: Record<'en' | 'fr' | 'es', HomeContent> = {
       plans: [
         { title: 'Session de Coaching', description: 'Pour un blocage, une revue ou une décision technique.', price: '90 EUR', period: '/heure', features: ['Diagnostic de projet', "Conseils d'architecture", 'Revue de code généré par IA', 'Prochaines étapes écrites'], ctaHref: '/services/web-project-coaching/', ctaLabel: 'Voir les formules →' },
         { title: 'Journée de Développement', description: 'Pour une fonctionnalité cadrée, un bug ou un nettoyage.', price: '600 EUR', period: '/jour', features: ['Implémentation ciblée', 'Travail React et Node.js', 'Notes de livraison', 'Session de suivi optionnelle'], featured: true, ctaHref: '/services/full-stack-development-day/', ctaLabel: 'Voir les formules →' },
-        { title: 'Atelier MVP', description: 'Pour les fondateurs qui ont besoin d\'un plan produit réaliste.', price: '650 EUR', period: '/jour', features: ['Cadrage MVP', 'Priorités des fonctionnalités', 'Recommandation de stack technique', 'Feuille de route et carte des risques'], ctaHref: '/services/mvp-bootstrapping-workshop/', ctaLabel: 'Voir les formules →' },
+        { title: 'Atelier MVP', description: 'Pour les fondateurs qui ont besoin d\'un plan produit réaliste.', price: '750 EUR', period: '/jour', features: ['Cadrage MVP', 'Priorités des fonctionnalités', 'Recommandation de stack technique', 'Feuille de route et carte des risques'], ctaHref: '/services/mvp-bootstrapping-workshop/', ctaLabel: 'Voir les formules →' },
       ],
     },
     newsletter: {
@@ -240,7 +242,7 @@ export const home: Record<'en' | 'fr' | 'es', HomeContent> = {
       description: 'Toujours pas sûr ? Réservez un appel gratuit de 30 minutes.',
       items: [
         { question: 'Dois-je être technique ?', answer: "Non. Chaque service s'adapte aux fondateurs non techniques, débutants ou développeurs. L'objectif est que vous repartiez toujours en sachant quoi construire et pourquoi." },
-        { question: 'Combien coûte un MVP ?', answer: 'Le développement MVP démarre à 4 500 €, la plupart des projets se situant entre 6 000 € et 15 000 € selon le périmètre. Je confirme un devis fixe après une courte découverte.' },
+        { question: 'Combien coûte un MVP ?', answer: 'Un prototype ou MVP très cadré commence à 4 500 €. Un MVP web plus complet est sur devis, avec un budget de départ indicatif autour de 7 500 € ; le périmètre détermine le devis réel.' },
         { question: 'Pouvez-vous aider avec du code généré par IA ?', answer: "Oui — comprendre, déboguer et nettoyer du code venant de ChatGPT, Claude, Cursor ou Copilot est l'une des raisons les plus courantes de réserver une session." },
         { question: 'Le coaching peut-il se transformer en développement complet ?', answer: 'Souvent. Si le périmètre devient clair, on passe du coaching à des journées de développement ou un projet MVP sur mesure — pas besoin de repartir de zéro avec quelqu\'un d\'autre.' },
       ],
@@ -279,8 +281,8 @@ export const home: Record<'en' | 'fr' | 'es', HomeContent> = {
       offers: [
         { title: 'Coaching de Proyecto Web', description: 'Sesiones individuales para depurar, clarificar y estructurar tu proyecto React / Node / generado por IA.', price: '90 €', priceUnit: '/ 1h', badge: 'Coaching', ctaHref: '/services/web-project-coaching/', ctaLabel: 'Saber más →' },
         { title: 'Jornada de Desarrollo Full-Stack', description: 'Bloques enfocados de medio día o día completo para una funcionalidad clara, corrección de errores, dashboard o refactor.', price: '350 € / 600 €', priceUnit: 'medio día / día completo', badge: 'Entrega', ctaHref: '/services/full-stack-development-day/', ctaLabel: 'Saber más →' },
-        { title: 'Taller AI Clarity Bootstrap', description: 'Convierte una idea en un plan de MVP realista: alcance, flujos de usuario, stack, hoja de ruta y presupuesto.', price: 'desde 650 €', priceUnit: '/ día', badge: 'Taller', featured: true, ctaHref: '/services/mvp-bootstrapping-workshop/', ctaLabel: 'Saber más →' },
-        { title: 'Desarrollo de MVP a Medida', description: 'Una aplicación web funcional desde el alcance hasta el despliegue — frontend, backend, base de datos y entrega.', price: 'desde 4500 €', badge: 'MVP', ctaHref: '/services/mvp-development/', ctaLabel: 'Saber más →' },
+        { title: 'Taller AI Clarity Bootstrap', description: 'Convierte una idea en un plan de MVP realista: alcance, flujos de usuario, stack, hoja de ruta y presupuesto.', price: 'desde 750 €', priceUnit: '/ día', badge: 'Taller', featured: true, ctaHref: '/services/mvp-bootstrapping-workshop/', ctaLabel: 'Saber más →' },
+        { title: 'Desarrollo de MVP a Medida', description: 'Prototipo o MVP muy acotado desde 4 500 €; un MVP web más completo se presupuesta aparte, con un presupuesto inicial orientativo de unos 7 500 €.', price: 'desde 4 500 €', badge: 'MVP', ctaHref: '/services/mvp-development/', ctaLabel: 'Saber más →' },
       ],
       notSure: { title: '¿No sabes por dónde empezar?', body: 'Reserva una llamada gratuita de 30 minutos. Te ayudo a encontrar el siguiente paso adecuado para tu proyecto.', askQuestion: 'Hacer una pregunta' },
     },
@@ -317,7 +319,7 @@ export const home: Record<'en' | 'fr' | 'es', HomeContent> = {
       plans: [
         { title: 'Sesión de Coaching', description: 'Para un bloqueo, revisión o decisión técnica.', price: '90 EUR', period: '/hora', features: ['Diagnóstico de proyecto', 'Asesoría de arquitectura', 'Revisión de código generado por IA', 'Próximos pasos por escrito'], ctaHref: '/services/web-project-coaching/', ctaLabel: 'Ver planes →' },
         { title: 'Jornada de Desarrollo', description: 'Para una funcionalidad acotada, un bug o una limpieza.', price: '600 EUR', period: '/día', features: ['Implementación enfocada', 'Trabajo en React y Node.js', 'Notas de entrega', 'Sesión de seguimiento opcional'], featured: true, ctaHref: '/services/full-stack-development-day/', ctaLabel: 'Ver planes →' },
-        { title: 'Taller MVP', description: 'Para fundadores que necesitan un plan de producto realista.', price: '650 EUR', period: '/día', features: ['Alcance del MVP', 'Prioridades de funcionalidades', 'Recomendación de stack tecnológico', 'Hoja de ruta y mapa de riesgos'], ctaHref: '/services/mvp-bootstrapping-workshop/', ctaLabel: 'Ver planes →' },
+        { title: 'Taller MVP', description: 'Para fundadores que necesitan un plan de producto realista.', price: '750 EUR', period: '/día', features: ['Alcance del MVP', 'Prioridades de funcionalidades', 'Recomendación de stack tecnológico', 'Hoja de ruta y mapa de riesgos'], ctaHref: '/services/mvp-bootstrapping-workshop/', ctaLabel: 'Ver planes →' },
       ],
     },
     newsletter: {
@@ -341,7 +343,7 @@ export const home: Record<'en' | 'fr' | 'es', HomeContent> = {
       description: '¿Aún no estás seguro? Reserva una llamada gratuita de 30 minutos.',
       items: [
         { question: '¿Necesito ser técnico?', answer: 'No. Cada servicio se adapta a fundadores no técnicos, principiantes o desarrolladores. El objetivo es que siempre te vayas sabiendo qué construir y por qué.' },
-        { question: '¿Cuánto cuesta un MVP?', answer: 'El desarrollo de MVP empieza en 4500 €, con la mayoría de proyectos entre 6000 € y 15 000 € según el alcance. Confirmo un presupuesto fijo tras un breve descubrimiento.' },
+        { question: '¿Cuánto cuesta un MVP?', answer: 'Un prototipo o MVP muy acotado empieza en 4 500 €. Un MVP web más completo se presupuesta aparte, con un presupuesto inicial orientativo de unos 7 500 €; el alcance determina el presupuesto real.' },
         { question: '¿Puedes ayudar con código generado por IA?', answer: 'Sí — entender, depurar y limpiar código de ChatGPT, Claude, Cursor o Copilot es una de las razones más comunes para reservar una sesión.' },
         { question: '¿El coaching puede convertirse en un desarrollo completo?', answer: 'A menudo. Si el alcance se aclara, pasamos del coaching a jornadas de desarrollo o a un proyecto de MVP a medida — sin necesidad de empezar de cero con otra persona.' },
       ],

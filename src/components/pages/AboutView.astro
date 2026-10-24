@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import PageLayout from '../layout/PageLayout.astro';
 import TechStackGrouped from '../ui/TechStackGrouped.astro';
+import TrainingLegalNotice from '../ui/TrainingLegalNotice.astro';
 import { Button } from '../ui/Button';
 import { experiences, BOOK_CALL_URL, technologyCategories, SITE_ALIASES, SOCIAL_LINKS } from '../../config/constants';
 import chrisPortrait from '../../assets/chris-portrait.webp';
@@ -239,6 +240,16 @@ const jsonLd = {
         <h2 class="ab-h2">{locale === 'fr' ? 'Formateur référencé chez Human Coders.' : locale === 'es' ? 'Formador referenciado en Human Coders.' : 'Trainer listed with Human Coders.'}</h2>
         <p class="ab-section-lead">{locale === 'fr' ? 'Une fiche publique de formateur chez Human Coders. Cette mention factuelle ne constitue ni une certification ni un partenariat exclusif.' : locale === 'es' ? 'Un perfil público de formador en Human Coders. Esta mención factual no constituye una certificación ni una colaboración exclusiva.' : 'A publicly listed trainer profile with Human Coders. This is a factual listing, not a certification or an exclusive partnership.'}</p>
         <a class="btn btn-secondary inline-flex rounded-md border border-strong px-5 py-3 mt-5 font-display font-semibold text-secondary no-underline" href="https://www-eu.humancoders.com/formateurs/christophe-crognier" target="_blank" rel="noopener noreferrer">{locale === 'fr' ? 'Voir le profil Human Coders →' : locale === 'es' ? 'Ver el perfil de Human Coders →' : 'View the Human Coders profile →'}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ab-section ab-section-tint">
+    <div class="about-container ab-narrow">
+      <div class="s-head" data-reveal="fade">
+        <span class="ab-eyebrow">{locale === 'fr' ? 'FORMATION PROFESSIONNELLE' : locale === 'es' ? 'FORMACIÓN PROFESIONAL' : 'PROFESSIONAL TRAINING'}</span>
+        <h2 class="ab-h2">{locale === 'fr' ? 'Une activité de formation déclarée.' : locale === 'es' ? 'Una actividad de formación declarada.' : 'A registered training activity.'}</h2>
+        <TrainingLegalNotice locale={locale} />
       </div>
     </div>
   </section>

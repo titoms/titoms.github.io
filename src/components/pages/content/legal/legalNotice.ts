@@ -42,6 +42,10 @@ export const legalNotice: Record<'en' | 'fr' | 'es', LegalPageContent> = {
       <h2>Director of publication</h2>
       <p>Christophe Crognier.</p>
 
+      <h2>Professional training registration</h2>
+      <p lang="fr"><strong>Déclaration d’activité enregistrée sous le numéro 11757736975 auprès du préfet de la région Île-de-France. Cet enregistrement ne vaut pas agrément de l’État.</strong></p>
+      <p>This activity registration is not Qualiopi certification, a state approval, CPF eligibility or a guarantee of OPCO funding. The courses are not presented as certifying programmes.</p>
+
       <h2>Hosting providers</h2>
       <p>The Website is currently hosted and served through:</p>
       <ul>
@@ -136,6 +140,10 @@ export const legalNotice: Record<'en' | 'fr' | 'es', LegalPageContent> = {
       <h2>Directeur de la publication</h2>
       <p>Christophe Crognier.</p>
 
+      <h2>Déclaration d’activité de formation</h2>
+      <p><strong>Déclaration d’activité enregistrée sous le numéro 11757736975 auprès du préfet de la région Île-de-France. Cet enregistrement ne vaut pas agrément de l’État.</strong></p>
+      <p>Cette déclaration d’activité ne constitue ni une certification Qualiopi, ni un agrément de l’État, ni une éligibilité au CPF ou une garantie de prise en charge par un OPCO. Les formations ne sont pas présentées comme certifiantes.</p>
+
       <h2>Hébergeurs</h2>
       <p>Le Site est actuellement hébergé et servi par :</p>
       <ul>
@@ -229,6 +237,10 @@ export const legalNotice: Record<'en' | 'fr' | 'es', LegalPageContent> = {
 
       <h2>Director de publicación</h2>
       <p>Christophe Crognier.</p>
+
+      <h2>Declaración de actividad de formación</h2>
+      <p lang="fr"><strong>Déclaration d’activité enregistrée sous le numéro 11757736975 auprès du préfet de la région Île-de-France. Cet enregistrement ne vaut pas agrément de l’État.</strong></p>
+      <p>Esta declaración de actividad no constituye una certificación Qualiopi, una autorización estatal, una elegibilidad para el CPF ni una garantía de financiación por un OPCO. Las formaciones no se presentan como certificantes.</p>
 
       <h2>Proveedores de hosting</h2>
       <p>El Sitio está actualmente alojado y servido a través de:</p>
