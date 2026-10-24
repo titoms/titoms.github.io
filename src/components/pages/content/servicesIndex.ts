@@ -1,3 +1,5 @@
+import { COMMERCIAL_PRICING } from '../../../config/commercialPricing';
+
 export interface ServicesIndexContent {
   meta: { title: string; description: string };
   jsonLd: { description: string };
@@ -45,7 +47,7 @@ export const servicesIndex: Record<'en' | 'fr' | 'es', ServicesIndexContent> = {
         { label: 'Clarify', name: 'Coaching', desc: 'Diagnose the blocker, pick the next move.' },
         { label: 'Plan', name: 'Clarity bootstrap', desc: 'Scope, flows, stack and a real roadmap.' },
         { label: 'Build', name: 'Dev days', desc: 'Focused blocks that ship features.' },
-        { label: 'Launch', name: 'Custom MVP', desc: 'Full build, deploy and handover.' },
+        { label: 'Launch', name: 'Custom MVP', desc: 'Broader web MVP delivery, scoped and quoted.' },
       ],
     },
     serviceSteps: {
@@ -59,8 +61,8 @@ export const servicesIndex: Record<'en' | 'fr' | 'es', ServicesIndexContent> = {
       'ai-web-development-newsletter': 'from €9 / mo',
       'web-project-coaching': 'from €90 / 1h',
       'full-stack-development-day': '€350 half-day · €600 full day',
-      'mvp-bootstrapping-workshop': 'from €650 / day',
-      'mvp-development': 'from €4,500',
+      'mvp-bootstrapping-workshop': `from €${COMMERCIAL_PRICING.aiClarityDayFromCents / 100} / day`,
+      'mvp-development': `from €${(COMMERCIAL_PRICING.scopedMvpFromCents / 100).toLocaleString('en-US')}`,
     },
     serviceCtaLabels: {
       'ai-web-development-newsletter': 'Subscribe',
@@ -97,7 +99,7 @@ export const servicesIndex: Record<'en' | 'fr' | 'es', ServicesIndexContent> = {
         { label: 'Clarifier', name: 'Coaching', desc: 'Diagnostiquer le blocage, choisir la prochaine action.' },
         { label: 'Planifier', name: 'Clarity bootstrap', desc: 'Cadrage, parcours, stack et une vraie feuille de route.' },
         { label: 'Construire', name: 'Journées de dev', desc: 'Des blocs ciblés qui livrent des fonctionnalités.' },
-        { label: 'Lancer', name: 'MVP sur mesure', desc: 'Construction complète, déploiement et passation.' },
+        { label: 'Lancer', name: 'MVP sur mesure', desc: 'MVP web plus complet, cadré et chiffré.' },
       ],
     },
     serviceSteps: {
@@ -111,7 +113,7 @@ export const servicesIndex: Record<'en' | 'fr' | 'es', ServicesIndexContent> = {
       'ai-web-development-newsletter': 'dès 9 € / mois',
       'web-project-coaching': 'dès 90 € / 1h',
       'full-stack-development-day': '350 € demi-journée · 600 € journée',
-      'mvp-bootstrapping-workshop': 'dès 650 € / jour',
+      'mvp-bootstrapping-workshop': `dès ${COMMERCIAL_PRICING.aiClarityDayFromCents / 100} € / jour`,
       'mvp-development': 'dès 4 500 €',
     },
     serviceCtaLabels: {
@@ -149,7 +151,7 @@ export const servicesIndex: Record<'en' | 'fr' | 'es', ServicesIndexContent> = {
         { label: 'Clarificar', name: 'Coaching', desc: 'Diagnosticar el bloqueo, elegir el siguiente paso.' },
         { label: 'Planificar', name: 'Clarity bootstrap', desc: 'Alcance, flujos, stack y una hoja de ruta real.' },
         { label: 'Construir', name: 'Jornadas de desarrollo', desc: 'Bloques enfocados que entregan funcionalidades.' },
-        { label: 'Lanzar', name: 'MVP a medida', desc: 'Construcción completa, despliegue y entrega.' },
+        { label: 'Lanzar', name: 'MVP a medida', desc: 'MVP web más completo, definido y presupuestado.' },
       ],
     },
     serviceSteps: {
@@ -163,8 +165,8 @@ export const servicesIndex: Record<'en' | 'fr' | 'es', ServicesIndexContent> = {
       'ai-web-development-newsletter': 'desde 9 € / mes',
       'web-project-coaching': 'desde 90 € / 1h',
       'full-stack-development-day': '350 € medio día · 600 € día completo',
-      'mvp-bootstrapping-workshop': 'desde 650 € / día',
-      'mvp-development': 'desde 4500 €',
+      'mvp-bootstrapping-workshop': `desde ${COMMERCIAL_PRICING.aiClarityDayFromCents / 100} € / día`,
+      'mvp-development': 'desde 4 500 €',
     },
     serviceCtaLabels: {
       'ai-web-development-newsletter': 'Suscribirse',

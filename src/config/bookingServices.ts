@@ -1,6 +1,7 @@
 // Bookable services — REFONTE prices are canonical (the handoff prototype's
 // prices are stale; do not copy them). Prices in EUR cents. The server
 // re-derives amounts and durations from this file for every booking.
+import { COMMERCIAL_PRICING } from './commercialPricing.ts';
 
 export interface BookingService {
   id: string;
@@ -20,7 +21,7 @@ export const BOOKING_SERVICES: BookingService[] = [
     title: '1-Hour Coaching',
     durationMin: 60,
     durationLabel: '1 hour',
-    priceCents: 9000,
+    priceCents: COMMERCIAL_PRICING.coachingHourlyCents,
     description: 'Debug, clarify and structure your React/Node/AI-generated project.',
     category: 'coaching',
   },
@@ -47,7 +48,7 @@ export const BOOKING_SERVICES: BookingService[] = [
     title: 'Half-Day Development',
     durationMin: 240,
     durationLabel: '4 hours',
-    priceCents: 35000,
+    priceCents: COMMERCIAL_PRICING.developmentHalfDayCents,
     description: 'Focused hands-on build time for a clear feature, fix or refactor.',
     category: 'development',
   },
@@ -56,7 +57,7 @@ export const BOOKING_SERVICES: BookingService[] = [
     title: 'Full-Day Development',
     durationMin: 480,
     durationLabel: '8 hours',
-    priceCents: 60000,
+    priceCents: COMMERCIAL_PRICING.developmentDayCents,
     description: 'A full day of hands-on development — feature, dashboard or integration.',
     category: 'development',
   },
@@ -65,7 +66,7 @@ export const BOOKING_SERVICES: BookingService[] = [
     title: 'AI Clarity / Bootstrapping Workshop',
     durationMin: 480,
     durationLabel: '1 day',
-    priceCents: 65000,
+    priceCents: COMMERCIAL_PRICING.aiClarityDayFromCents,
     description: 'Turn an idea into a scoped MVP plan: user flows, stack, roadmap and budget.',
     category: 'workshop',
     featured: true,

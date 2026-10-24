@@ -1,0 +1,40 @@
+---
+import type { Locale } from '../../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  compact?: boolean;
+}
+
+const { locale, compact = false } = Astro.props;
+const frenchLegalWording = 'Déclaration d’activité enregistrée sous le numéro 11757736975 auprès du préfet de la région Île-de-France. Cet enregistrement ne vaut pas agrément de l’État.';
+const explanation = {
+  fr: 'Cette déclaration d’activité ne constitue ni une certification Qualiopi, ni un agrément de l’État, ni une éligibilité au CPF ou une garantie de prise en charge par un OPCO. Les formations ne sont pas présentées comme certifiantes.',
+  en: 'This activity registration is not Qualiopi certification, a state approval, CPF eligibility or a guarantee of OPCO funding. The courses are not presented as certifying programmes.',
+  es: 'Esta declaración de actividad no constituye una certificación Qualiopi, una autorización estatal, una elegibilidad para el CPF ni una garantía de financiación por un OPCO. Las formaciones no se presentan como certificantes.',
+} as const;
+---
+
+<aside class:list={['training-legal-notice', compact && 'training-legal-notice-compact']}>
+  <p><strong>{locale === 'fr' ? 'Déclaration d’activité' : locale === 'es' ? 'Declaración de actividad' : 'Activity registration'}</strong></p>
+  <p lang="fr">{frenchLegalWording}</p>
+  {locale !== 'fr' && <p>{explanation[locale]}</p>}
+  {locale === 'fr' && <p>{explanation.fr}</p>}
+</aside>
+
+<style>
+  .training-legal-notice {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    background: color-mix(in srgb, var(--bg-2) 78%, transparent);
+    color: var(--text-low);
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+  .training-legal-notice p { margin: 0.35rem 0 0; }
+  .training-legal-notice p:first-child { margin-top: 0; color: var(--text-mid); }
+  .training-legal-notice strong { color: var(--text-hi); }
+  .training-legal-notice-compact { margin-top: 1rem; }
+</style>

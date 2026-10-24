@@ -21,20 +21,41 @@ test('training catalogue exposes 12 localized routes and Human Coders reference'
 test('commercial copy uses validated prices and no newsletter service step', async () => {
   const index = await read('src/components/pages/content/servicesIndex.ts');
   const services = await read('src/components/pages/ServicesIndexView.astro');
+  const pricing = await read('src/config/commercialPricing.ts');
   const content = await Promise.all(['fr', 'en', 'es'].map((locale) => read(`src/config/services/content/${locale}.ts`)));
   assert.match(index, /Four ways/);
   assert.match(index, /Quatre façons/);
   assert.match(index, /Cuatro formas/);
   assert.match(index, /350 .*half-day|350 .*demi-journée|350 .*medio día/);
+  assert.match(pricing, /aiClarityDayFromCents: 75000/);
   assert.doesNotMatch(services, /ai-web-development-newsletter.*map/);
   for (const source of content) {
     assert.match(source, /90 EUR/);
     assert.match(source, /350 EUR/);
     assert.match(source, /600 EUR/);
-    assert.match(source, /650 EUR/);
+    assert.match(source, /COMMERCIAL_PRICING\.aiClarityDayFromCents/);
     assert.match(source, /4500 EUR|4 500 EUR|4,500 EUR/);
+    assert.match(source, /7500 EUR|7 500 EUR|7,500 EUR/);
     assert.doesNotMatch(source, /300 EUR|550 EUR/);
   }
+});
+
+test('training registration is explicit and does not imply certification or funding', async () => {
+  const view = await read('src/components/pages/TrainingPageView.astro');
+  const notice = await read('src/components/ui/TrainingLegalNotice.astro');
+  const legal = await read('src/components/pages/content/legal/legalNotice.ts');
+  for (const source of [notice, legal]) {
+    assert.match(source, /11757736975/);
+    assert.match(source, /Île-de-France/);
+    assert.match(source, /ne vaut pas agrément de l’État/);
+    assert.match(source, /Qualiopi/);
+    assert.match(source, /CPF/);
+    assert.match(source, /OPCO/);
+  }
+  assert.match(view, /TrainingLegalNotice/);
+  assert.match(notice, /lang="fr"/);
+  assert.match(notice, /This activity registration/);
+  assert.match(notice, /Esta declaración de actividad/);
 });
 
 test('MVP article metadata is current and does not expose image prompts', async () => {

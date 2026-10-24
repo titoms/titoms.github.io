@@ -1,4 +1,5 @@
 import type { ServicePageData } from '../../../types';
+import { COMMERCIAL_PRICING } from '../../../config/commercialPricing';
 
 export type ServiceContent = Omit<ServicePageData, 'slug' | 'stripeLink'>;
 
@@ -298,7 +299,7 @@ export const servicesContentEn: Record<string, ServiceContent> = {
       { title: "Risk map", description: "Known risks, assumptions and how to reduce uncertainty before building." },
     ],
     pricing: [
-      { label: "1-day MVP Clarity Workshop", price: "650 EUR" },
+      { label: "1-day MVP Clarity Workshop", price: `${COMMERCIAL_PRICING.aiClarityDayFromCents / 100} EUR` },
     ],
     goodFit: [
       "Non-technical founders with a product idea",
@@ -327,17 +328,17 @@ export const servicesContentEn: Record<string, ServiceContent> = {
     meta: {
       title: "MVP Development for Web Apps and SaaS Products",
       description:
-        "Custom MVP development for founders and small teams. Build a React, Node.js and TypeScript web application from product scope to deployment.",
+        "Very scoped prototype and MVP development for founders and small teams, with broader web MVPs quoted separately from an indicative budget around €7,500.",
     },
     badge: "MVP",
     hero: {
       h1: "Build your MVP with a full-stack developer who can also help you think through the product",
       subtitle:
-        "I help founders and small teams turn a clear product idea into a working web application using React, Node.js, TypeScript and practical AI-assisted development workflows.",
+        "I help founders and small teams turn a clear product idea into a defined prototype or MVP slice, with broader web MVPs scoped and quoted separately.",
       primaryCta: "Request a quote",
     },
     answer:
-      "End-to-end development of a first version of your web app — from product clarification and architecture through frontend, backend, database, deployment and handover. Built by one full-stack developer who can also help you make product decisions, so scope stays sane and the first version actually ships.",
+      "A very scoped prototype or MVP slice can start at €4,500. A broader web MVP is quoted separately, with an indicative starting budget around €7,500. The actual scope, integrations and delivery conditions determine what is included.",
     useCases: [
       "SaaS MVPs",
       "Internal tools",
@@ -354,7 +355,7 @@ export const servicesContentEn: Record<string, ServiceContent> = {
       type: "info",
       title: "WHAT THIS IS",
       description:
-        "End-to-end development of the first version of your web app — product clarification, architecture, frontend, backend, deployment and handover, delivered by one full-stack developer who can also help you make product decisions.",
+        "A very scoped prototype or MVP can start at €4,500. A broader web MVP is quoted separately, with an indicative starting budget around €7,500; this is not a guaranteed fixed package or a promise of a complete SaaS product at the entry price.",
       whenTitle: "WHEN TO USE",
       whenItems: [
         "You have a clear product idea and need to ship the first version",
@@ -363,10 +364,10 @@ export const servicesContentEn: Record<string, ServiceContent> = {
         "You want to launch fast without accumulating tech debt",
       ],
       leaveWithItems: [
-        "A working web application in production",
-        "Product scope clarified along the way",
-        "Codebase handed over with docs",
-        "Foundations ready for the next phase",
+        "A defined working prototype or MVP slice",
+        "Product scope clarified before build",
+        "Code and notes handed over",
+        "A clear next phase, if needed",
       ],
     },
     painPoints: [
@@ -388,11 +389,14 @@ export const servicesContentEn: Record<string, ServiceContent> = {
       { title: "Frontend", description: "React or Next.js UI built to your product structure and design direction." },
       { title: "Backend", description: "Node.js API with Express, authentication, business logic and integrations." },
       { title: "Database", description: "PostgreSQL or Supabase schema design, migrations and query optimization." },
-      { title: "Deployment and handover", description: "Production deployment to Cloudflare Pages, Vercel or your preferred host, plus full codebase documentation." },
+      { title: "Deployment and handover", description: "Deployment and documentation when included in the agreed scope; broader operational requirements are quoted separately." },
     ],
-    pricing: [{ label: "Custom MVP development", price: "from 4,500 EUR", featured: true }],
+    pricing: [
+      { label: "Very scoped prototype / MVP", price: "from 4,500 EUR", featured: true },
+      { label: "Broader web MVP", price: "Quote — indicative starting budget around 7,500 EUR" },
+    ],
     pricingNote:
-      "Typical range: 6,000 EUR – 15,000 EUR depending on scope. Custom quote provided after a discovery call.",
+      "The €4,500 entry point covers a tightly defined first slice, not a complete SaaS application with every feature. Broader scope, integrations, security and operational requirements are quoted separately; a starting budget around €7,500 is indicative, not a guaranteed package.",
     goodFit: [
       "You have a clear problem to solve",
       "You can prioritize and reduce scope",
@@ -408,13 +412,13 @@ export const servicesContentEn: Record<string, ServiceContent> = {
     ],
     processSteps: [
       { title: "Discovery", description: "I'll map the product idea, target users, must-have features, constraints and risks with you." },
-      { title: "Scope and proposal", description: "I write a clear scope document with milestones, timeline and a fixed-price proposal." },
+      { title: "Scope and proposal", description: "I write a clear scope document with milestones, assumptions, timeline and a proposal." },
       { title: "Build sprint", description: "Development happens in focused sprints with regular check-ins and progress updates." },
       { title: "Review", description: "You test the working product and provide feedback before the final delivery." },
       { title: "Deployment and handover", description: "The product is deployed to production and handed over with full documentation." },
     ],
     faqs: [
-      { question: "How much does an MVP cost?", answer: "MVP development starts at 4,500 EUR. Most projects range between 6,000 EUR and 15,000 EUR depending on scope." },
+      { question: "How much does an MVP cost?", answer: "A very scoped prototype or MVP starts at 4,500 EUR. A broader web MVP is quoted separately, with an indicative starting budget around 7,500 EUR; the scope determines the actual quote." },
       { question: "How long does it take?", answer: "It depends on the scope. A small MVP may take a few weeks. A more complex MVP needs a staged roadmap." },
       { question: "Can you help define the scope first?", answer: "Yes. The AI Clarity Bootstrap Workshop is recommended before development if the idea is still unclear." },
       { question: "Can you include AI features?", answer: "Yes, if they are useful and realistic for the first version." },

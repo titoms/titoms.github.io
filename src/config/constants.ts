@@ -35,6 +35,7 @@ import type {
   WorkMode,
 } from "../types";
 import { colors } from "./tokens";
+import { COMMERCIAL_PRICING, formatEur } from "./commercialPricing.ts";
 
 export const navLinks: NavLink[] = [
   {
@@ -153,7 +154,7 @@ export const serviceOffers: ServiceOffer[] = [
     title: "Full-stack Development Day",
     description:
       "Focused half- or full-day blocks for a clear feature, bug fix, dashboard or refactor.",
-    price: "€350 half-day / €600 full day",
+    price: `${formatEur(COMMERCIAL_PRICING.developmentHalfDayCents)} half-day / ${formatEur(COMMERCIAL_PRICING.developmentDayCents)} full day`,
     priceUnit: "",
     badge: "Delivery",
   },
@@ -161,7 +162,7 @@ export const serviceOffers: ServiceOffer[] = [
     title: "AI Clarity Bootstrap Workshop",
     description:
       "Turn an idea into a realistic MVP plan: scope, user flows, stack, roadmap and budget.",
-    price: "from €650",
+    price: `from ${formatEur(COMMERCIAL_PRICING.aiClarityDayFromCents)}`,
     priceUnit: "/ day",
     badge: "Workshop",
     featured: true,
@@ -169,8 +170,8 @@ export const serviceOffers: ServiceOffer[] = [
   {
     title: "Custom MVP Development",
     description:
-      "A working web app from scope to deployment — frontend, backend, database and handover.",
-    price: "from €4,500",
+      "A defined prototype or MVP slice; broader web MVPs are scoped and quoted separately.",
+    price: `from ${formatEur(COMMERCIAL_PRICING.scopedMvpFromCents)}`,
     badge: "MVP",
   },
 ];
@@ -217,7 +218,7 @@ export const pricingPlans: PricingPlan[] = [
   {
     title: "MVP Workshop",
     description: "For founders who need a realistic product plan.",
-    price: "650 EUR",
+    price: `${COMMERCIAL_PRICING.aiClarityDayFromCents / 100} EUR`,
     period: "/day",
     features: ["MVP scope", "Feature priorities", "Tech stack recommendation", "Roadmap and risk map"],
   },
@@ -242,7 +243,7 @@ export const faqs: FAQ[] = [
   {
     question: "How much does an MVP cost?",
     answer:
-      "MVP development starts at €4,500, with most projects landing between €6,000 and €15,000 depending on scope. I confirm a fixed quote after a short discovery.",
+      "A very scoped prototype or MVP starts at €4,500. A broader web MVP is quoted separately, with an indicative starting budget around €7,500; scope, integrations and delivery conditions determine the quote.",
   },
   {
     question: "Can you help with AI-generated code?",
@@ -508,7 +509,8 @@ export const STRIPE_PAYMENT_LINKS = {
   coachingFullDay:     "https://buy.stripe.com/test_9B6fZh7158B2fiX6k52kw02",  // €550
   developmentDay:      "https://buy.stripe.com/test_aFa5kDbhl18Agn1fUF2kw04",  // €600
   developmentHalfDay:  "https://buy.stripe.com/test_00weVd85904w3AfgYJ2kw03",  // €350
-  mvpWorkshop:         "https://buy.stripe.com/test_eVq6oHclpeZq2wb0ZL2kw05",  // €650
+  // Disabled until the external Stripe Payment Link is checked against the €750 commercial price.
+  mvpWorkshop:         "",
 } as const;
 
 // Sourced from .env (PUBLIC_CF_ANALYTICS_TOKEN) — set in Cloudflare Pages for production
