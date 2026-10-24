@@ -25,7 +25,7 @@ const bookCallUrl = getLocalizedPath(BOOK_CALL_URL, locale);
 const NAV_ORDER = [
   { id: "home", key: "nav.home", href: "/" },
   { id: "services", key: "nav.services", href: "/services/" },
-  ...(locale === "fr" ? [{ id: "formations", key: "nav.formations", href: "/formations/" }] : []),
+  { id: "formations", key: "nav.formations", href: "/formations/" },
   ...(SITE_FEATURES.shopBooking ? [{ id: "shop", key: "nav.shop", href: "/shop/" }] : []),
   { id: "projects", key: "nav.projects", href: "/projects/" },
   { id: "blog", key: "nav.blog", href: "/blog/" },
@@ -55,7 +55,7 @@ const mobileNavLabel = t("nav.mobileNavigation") === "nav.mobileNavigation" ? "M
 
 <header class="fixed top-0 z-50 w-full border-b border-border bg-primary/85 backdrop-blur-xl">
   <div class="mx-auto flex w-full max-w-site items-center justify-between px-6 py-4 sm:px-8 lg:px-10">
-    <a href={localePrefix || "/"} class="flex items-center gap-3 font-display text-lg font-bold text-white">
+    <a href={localePrefix ? `${localePrefix}/` : "/"} class="flex items-center gap-3 font-display text-lg font-bold text-white">
       <img src="/favicon-32x32.png" alt="" width="32" height="32" decoding="async" class="h-9 w-9 shrink-0 object-contain" />
       <span>fullstackchris<span class="text-accent">.dev</span></span>
     </a>

@@ -131,8 +131,7 @@ export const servicesContentFr: Record<string, ServiceContent> = {
     ],
     pricing: [
       { label: "Coaching 1 heure", price: "90 EUR" },
-      { label: "Coaching demi-journée", price: "300 EUR", featured: true },
-      { label: "Coaching journée complète", price: "550 EUR" },
+      { label: "Coaching technique", price: "90 EUR / heure", featured: true },
     ],
     faqs: [
       { question: "Dois-je être technique ?", answer: "Non. La session peut être adaptée aux fondateurs non techniques, débutants ou développeurs." },
@@ -216,9 +215,6 @@ export const servicesContentFr: Record<string, ServiceContent> = {
     pricing: [
       { label: "Demi-journée", price: "350 EUR" },
       { label: "Journée complète", price: "600 EUR", featured: true },
-      { label: "Pack 3 jours", price: "1 650 EUR" },
-      { label: "Pack 5 jours", price: "2 600 EUR" },
-      { label: "Pack 10 jours", price: "5 000 EUR" },
     ],
     goodFit: [
       "Bug ou fonctionnalité clair avec une définition du « terminé »",
@@ -301,8 +297,6 @@ export const servicesContentFr: Record<string, ServiceContent> = {
     ],
     pricing: [
       { label: "Atelier Clarity MVP 1 jour", price: "650 EUR" },
-      { label: "Sprint MVP 5 jours", price: "2 800 EUR", featured: true },
-      { label: "Sprint Premium 5 jours + prototype / spec", price: "3 500 EUR" },
     ],
     goodFit: [
       "Fondateurs non techniques avec une idée de produit",
