@@ -39,7 +39,7 @@ const sizes: Record<ButtonSize, string> = {
 };
 
 const base =
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap border font-body font-semibold leading-none no-underline transition-[transform,background,border-color,box-shadow,color] duration-150 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand active:translate-y-px disabled:pointer-events-none disabled:opacity-50";
+  "mt-6 inline-flex items-center justify-center gap-2 whitespace-nowrap border font-body font-semibold leading-none no-underline transition-[transform,background,border-color,box-shadow,color] duration-150 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand active:translate-y-px disabled:pointer-events-none disabled:opacity-50";
 
 export const Button = (props: ButtonProps) => {
   const { variant = "primary", size = "md", className, children } = props;
